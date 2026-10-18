@@ -1,0 +1,19 @@
+{
+  "model": "qwen3.7-plus-2026-05-26",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Speech Reference Producer. Interpret full transcript, expression spans, actual event timestamps and prior binding without pixels. Return ONLY compact JSON {intent:string,expressions:[{expression_id,kind,count:integer|null,relation:'designated_by_cue'|'within_region'|'explicit_ids'|'relative_position'|'correction'|'retain_prior'|'other',cue_ids:[event_id],explicit_target_ids:[IDs literally stated in speech],unresolved:[strings],meaning:string}],coverage:{complete:bool,unknown:[strings]}}. Every expression exactly once. Intent MUST describe the user requested action/topic/scope from the full transcript, never your internal reference detection or binding operation. Preserve any explicit speech count for mandatory final checking; singular designated item has count1. Connect cues using wording and time interval, not time alone; distinguish later navigation. For partial correction preserve retained/replaced scope. Intent max120characters, meaning max100characters; no final targets, invented visible IDs or chain-of-thought. Relation/event contract (same for all roles): point_inside means a raw pointer_move event's (x,y) point lies INSIDE the TARGET bbox [x1,y1,x2,y2]; it does NOT mean a plotted sample point lies inside a loop. within_region means a raw pointer_path event is a CLOSED polygon (at least4points, final endpoint within2pixels of first) and each selected TARGET bbox CENTER lies inside that raw polygon. For a loop-enclosed set of plotted points use within_region, never point_inside. designated_by_cue is the speech producer's generic designation and follows the cited raw event type: pointer_move checks pointer-in-target-bbox, pointer_path checks target-center-in-closed-polygon. Use only relations allowed by your role's output schema. Read event.type and original frame coordinates; do not infer type from a cue ID's spelling. If a path is open or its designation is ambiguous, request owner evidence or return unresolved; do not use other/relative_position to evade a geometric claim. This contract supplies no target IDs or target geometry. Return valid JSON only."
+    },
+    {
+      "role": "user",
+      "content": "{\"contract_errors\": [], \"original\": {\"events\": [], \"expressions\": [{\"end_ms\": 2500, \"expression_id\": \"keep-first\", \"start_ms\": 2000, \"text\": \"첫 그래프는 그대로\", \"time_uncertainty_ms\": 20}, {\"end_ms\": 3600, \"expression_id\": \"change-second\", \"start_ms\": 2700, \"text\": \"두 번째는 가운데 말고 오른쪽 그래프\", \"time_uncertainty_ms\": 20}], \"prior\": {\"adoptions\": [{\"count\": 1, \"cue_ids\": [], \"evidence\": \"Consistency validation failed after bounded source rejudgment\", \"expression_id\": \"keep-first\", \"extents\": [], \"relation\": \"other\", \"revision\": 1, \"status\": \"need_evidence\", \"targets\": []}, {\"count\": 1, \"cue_ids\": [], \"evidence\": \"Consistency validation failed after bounded source rejudgment\", \"expression_id\": \"change-second\", \"extents\": [], \"relation\": \"other\", \"revision\": 1, \"status\": \"need_evidence\", \"targets\": []}], \"original_transcript\": \"왼쪽 그래프와 가운데 그래프를 비교해줘.\", \"revision\": 1}, \"revision\": 2, \"transcript\": \"첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.\"}, \"previous_attempt\": null}"
+    }
+  ],
+  "enable_thinking": false,
+  "temperature": 0,
+  "max_tokens": 1400,
+  "response_format": {
+    "type": "json_object"
+  }
+}

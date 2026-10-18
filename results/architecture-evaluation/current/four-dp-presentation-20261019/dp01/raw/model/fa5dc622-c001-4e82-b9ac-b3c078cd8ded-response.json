@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-4e71786e-0554-98cf-8b25-e92c8ac39885",
+  "object": "chat.completion",
+  "created": 1792345060,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"records\": [\n    {\n      \"record_id\": \"rec_001\",\n      \"subject\": \"explained-criteria\",\n      \"predicate\": \"delivered_content_span\",\n      \"object\": \"lines 1-3\",\n      \"explanation\": \"The source activity confirms that only lines 1 through 3 of the 'explained-criteria' document were delivered, corresponding to the section '실제 설명한 기준'. Lines 4-5 were prepared but not delivered.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_002\",\n      \"subject\": \"vendor-quote\",\n      \"predicate\": \"delivery_status\",\n      \"object\": \"undelivered\",\n      \"explanation\": \"The 'vendor-quote' source has 'delivered_lines': null in the catalog and is marked as 'actual_delivery_only': false in observed evidence, indicating it was not part of the actual delivery to the user in this context.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"vendor-quote\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_003\",\n      \"subject\": \"explained-criteria (delivered)\",\n      \"predicate\": \"states_evaluation_criteria\",\n      \"object\": \"compare VAT-included price and maintenance period; prefer longer maintenance if prices are equal\",\n      \"explanation\": \"The delivered text explicitly defines the comparison criteria: looking at VAT-included price and maintenance period together, and prioritizing the product with the longer maintenance period if prices are identical.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 2\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_004\",\n      \"subject\": \"explained-criteria (delivered)\",\n      \"predicate\": \"states_purchase_status\",\n      \"object\": \"undecided\",\n      \"explanation\": \"The delivered content states that the purchase decision has not yet been made and requires verification of the latest version of the quote.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 3,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_005\",\n      \"subject\": \"vendor-quote (undelivered content)\",\n      \"predicate\": \"contains_price_info\",\n      \"object\": \"Aster A: 1,250,000 KRW per unit (VAT included), 36 months maintenance\",\n      \"explanation\": \"Although undelivered, the observed evidence text for vendor-quote contains specific pricing and maintenance details for Aster A. This information exists in the source but was not part of the delivered interaction.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"vendor-quote\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 1\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_006\",\n      \"subject\": \"vendor-quote (undelivered content)\",\n      \"predicate\": \"contains_logistics_info\",\n      \"object\": \"Delivery: Oct 29; Installation fee: 80,000 KRW separate\",\n      \"explanation\": \"The undelivered source text specifies the delivery date and separate installation costs. This distinguishes prepared content from what was actually shown to the user.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"vendor-quote\",\n          \"revision\": 1,\n          \"start_line\": 2,\n          \"end_line\": 2\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_007\",\n      \"subject\": \"vendor-quote (undelivered content)\",\n      \"predicate\": \"states_contract_status\",\n      \"object\": \"not yet signed\",\n      \"explanation\": \"The source text notes that the contract or purchase has not yet been concluded, providing context to the quote's validity status.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"vendor-quote\",\n          \"revision\": 1,\n          \"start_line\": 3,\n          \"end_line\": 3\n        }\n      ]\n    }\n  ],\n  \"coverage\": {\n    \"source_ids\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"gaps\": []\n  }\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 736,
+    "total_tokens": 1860,
+    "completion_tokens": 1124,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 736
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-42d8ad88-da0c-91c6-b39e-25bc254c7336",
+  "object": "chat.completion",
+  "created": 1792344795,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"Summarize the actually delivered evaluation criteria and the received vendor quote, explicitly excluding any assumption about installation explanation in the criteria.\"\n  },\n  \"mode\": \"COMPLETE\",\n  \"answer\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"text\": \"The actually delivered evaluation criteria focus on comparing the price including VAT and the maintenance period, with a tie-breaker rule preferring the longer maintenance period if prices are equal. It also notes that the purchase decision is pending and requires checking the latest quote version. The received vendor quote for Aster A specifies a unit price of 1,250,000 KRW (including VAT) for 12 units, with a 36-month maintenance period. The delivery date is October 29, and the installation fee is 80,000 KRW separate from the unit price. The contract has not yet been concluded.\",\n    \"facts\": [\n      {\n        \"statement\": \"The delivered criteria state that price including VAT and maintenance period will be considered together for comparison.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\"\n      },\n      {\n        \"statement\": \"If prices are equal, the product with the longer maintenance period is preferred.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\"\n      },\n      {\n        \"statement\": \"The purchase decision is not yet made, and the latest version of the quote must be checked.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\"\n      },\n      {\n        \"statement\": \"The Aster A quote lists a unit price of 1,250,000 KRW including VAT and a 36-month maintenance period.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.\"\n      },\n      {\n        \"statement\": \"The delivery date is October 29, and the installation fee is 80,000 KRW separate.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"납기 10월 29일. 설치비는 80,000원 별도다.\"\n      },\n      {\n        \"statement\": \"The quantity is 12 units, and the contract or purchase has not yet been concluded.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"수량은 12대이며 계약이나 구매는 아직 체결하지 않았다.\"\n      }\n    ],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1\n      }\n    ],\n    \"conditions\": [\n      \"Do not assume installation was explained in the criteria.\"\n    ],\n    \"uncertainties\": []\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requested a summary of two specific sources: the 'actually explained criteria' (explained-criteria) and the 'received quote' (vendor-quote). The instruction explicitly forbids assuming installation was part of the explained criteria. I have extracted all relevant facts from the delivered lines of 'explained-criteria' (lines 1-3) and all lines of 'vendor-quote' (lines 1-3) to provide a complete summary without inventing information.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 3041,
+    "total_tokens": 4138,
+    "completion_tokens": 1097,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 3041
+    }
+  }
+}

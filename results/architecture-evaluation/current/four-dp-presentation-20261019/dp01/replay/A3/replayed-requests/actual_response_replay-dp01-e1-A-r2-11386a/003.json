@@ -1,0 +1,157 @@
+{
+  "source_call_uuid": "2d2ee265-4332-438f-aa54-272155804a02",
+  "payload": {
+    "input": {
+      "available_evidence": [
+        {
+          "actual_delivery_only": false,
+          "end_line": 4,
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 1,
+          "text": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.\nAster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.\nBoreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+          "unit": "one_based_line_inclusive"
+        },
+        {
+          "end_line": 2,
+          "kind": "ACTUALLY_DELIVERED_ANSWER",
+          "original_source_provenance": {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 2
+          },
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 2,
+          "text": "Aster A는 1,250,000원, Boreal B는 1,190,000원입니다."
+        },
+        {
+          "end_line": 3,
+          "kind": "ACTUALLY_DELIVERED_ANSWER",
+          "original_source_provenance": {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 3
+          },
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 3,
+          "text": "Aster A는 1,250,000원, Boreal B는 1,190,000원입니다."
+        }
+      ],
+      "catalog": [
+        {
+          "conversation": "c1",
+          "delivered_lines": null,
+          "id": "desk-compare",
+          "kind": "public_result",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                4
+              ],
+              "section": "가격과 유지보수"
+            },
+            {
+              "lines": [
+                2,
+                5
+              ],
+              "section": "일정과 미확인"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "업무용 PC 교체 비교표"
+        }
+      ],
+      "expression": "그 표",
+      "published_relations": null,
+      "recent_conversation": [
+        {
+          "adopted_targets": [
+            "desk-compare"
+          ],
+          "facts": [
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 2
+            },
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 3
+            }
+          ],
+          "source_revisions": [
+            {
+              "revision": 1,
+              "source_id": "desk-compare"
+            }
+          ],
+          "text": "Aster A는 1,250,000원, Boreal B는 1,190,000원입니다.",
+          "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+        }
+      ],
+      "utterance": "그 표의 납기와 유지보수 기간도 알려줘."
+    },
+    "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "adoption": {
+      "targets": [
+        "desk-compare"
+      ],
+      "intent": "extract_delivery_and_maintenance_info"
+    },
+    "mode": "COMPLETE",
+    "answer": {
+      "targets": [
+        "desk-compare"
+      ],
+      "text": "Aster A의 납기는 10월 29일이며 유지보수 기간은 36개월입니다. Boreal B의 납기는 11월 3일이며 유지보수 기간은 24개월입니다.",
+      "facts": [
+        {
+          "statement": "Aster A has a delivery date of October 29 and a maintenance period of 36 months.",
+          "source_id": "desk-compare",
+          "revision": 1,
+          "start_line": 2,
+          "end_line": 2,
+          "quote": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일."
+        },
+        {
+          "statement": "Boreal B has a delivery date of November 3 and a maintenance period of 24 months.",
+          "source_id": "desk-compare",
+          "revision": 1,
+          "start_line": 3,
+          "end_line": 3,
+          "quote": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일."
+        }
+      ],
+      "source_revisions": [
+        {
+          "source_id": "desk-compare",
+          "revision": 1
+        }
+      ],
+      "conditions": [],
+      "uncertainties": []
+    },
+    "reads": [
+      {
+        "source_id": "desk-compare",
+        "start_line": 2,
+        "end_line": 3
+      }
+    ],
+    "reason": "The user refers to 'that table' (그 표), which contextually resolves to the previously discussed 'desk-compare' source. The request is for delivery dates (납기) and maintenance periods (유지보수 기간). These details are found in lines 2 and 3 of the 'desk-compare' source. Since the evidence is available and sufficient, the mode is COMPLETE."
+  }
+}

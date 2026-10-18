@@ -1,0 +1,281 @@
+{
+  "original_trace_sha256": "ceaf99ed52c234dd7ce7a32156cbedd55b8a021d92bd6e374aa9c8072b8a3d58",
+  "calls": [
+    {
+      "original_call_uuid": "52224e87-5237-46bb-9c61-322e15410769",
+      "terminal_order": 10,
+      "required_barriers": [
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "CALL_PREPARED:497040aa-e9c1-408b-b934-c68676c056b1",
+        "CALL_PREPARED:52224e87-5237-46bb-9c61-322e15410769"
+      ]
+    },
+    {
+      "original_call_uuid": "497040aa-e9c1-408b-b934-c68676c056b1",
+      "terminal_order": 25,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:U2-0",
+        "ADOPTION_COMMITTED:U2-1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "CALL_PREPARED:497040aa-e9c1-408b-b934-c68676c056b1",
+        "CALL_PREPARED:52224e87-5237-46bb-9c61-322e15410769"
+      ]
+    },
+    {
+      "original_call_uuid": "1a39a149-0fa5-4d38-a064-c02af2b8874a",
+      "terminal_order": 42,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "ADOPTION_COMMITTED:U2-0",
+        "ADOPTION_COMMITTED:U2-1",
+        "GOAL_COMPLETE:U2:1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "CALL_PREPARED:497040aa-e9c1-408b-b934-c68676c056b1",
+        "CALL_PREPARED:52224e87-5237-46bb-9c61-322e15410769",
+        "CALL_PREPARED:1a39a149-0fa5-4d38-a064-c02af2b8874a"
+      ]
+    },
+    {
+      "original_call_uuid": "858306cb-58b4-42cf-b155-8fe1a30f468e",
+      "terminal_order": 47,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "ADOPTION_COMMITTED:U2-0",
+        "ADOPTION_COMMITTED:U2-1",
+        "GOAL_COMPLETE:U2:1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "CALL_PREPARED:497040aa-e9c1-408b-b934-c68676c056b1",
+        "CALL_PREPARED:52224e87-5237-46bb-9c61-322e15410769",
+        "CALL_PREPARED:1a39a149-0fa5-4d38-a064-c02af2b8874a",
+        "CALL_PREPARED:858306cb-58b4-42cf-b155-8fe1a30f468e"
+      ]
+    }
+  ],
+  "original_callbacks": [
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "U2-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": null,
+          "handling_text": "Continue the detailed comparison of Plan A and Plan B regarding cost, recovery checkpoints, and capacity limits using the provided stress test data.",
+          "question_id": null,
+          "relation": "CONTINUE",
+          "scope": "Plan A vs Plan B comparison on cost, recovery, and capacity with evidence and tradeoffs",
+          "source_claims": [],
+          "source_revisions": {},
+          "target_request_id": "R1",
+          "targets": [
+            "R1"
+          ],
+          "task_id": null
+        },
+        "goal_id": "R1",
+        "handling": "CONTINUE",
+        "raw_utterance": "Continue that work. Separately explain the difference between TCP and UDP in two sentences.",
+        "resolved": true,
+        "revision": 1,
+        "scope": "Plan A vs Plan B comparison on cost, recovery, and capacity with evidence and tradeoffs",
+        "source_revisions": {},
+        "stimulus_id": "U2",
+        "targets": [
+          "R1"
+        ],
+        "text": "Continue the detailed comparison of Plan A and Plan B regarding cost, recovery checkpoints, and capacity limits using the provided stress test data."
+      }
+    },
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "U2-1",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": "TCP is a connection-oriented protocol that guarantees reliable, ordered delivery of data through error checking and retransmission. UDP is a connectionless protocol that prioritizes speed and low latency by sending data without establishing a connection or ensuring delivery.",
+          "handling_text": "Explain the difference between TCP and UDP in two sentences.",
+          "question_id": null,
+          "relation": "NEW",
+          "scope": "Difference between TCP and UDP",
+          "source_claims": [],
+          "source_revisions": {},
+          "target_request_id": null,
+          "targets": [
+            "TCP",
+            "UDP"
+          ],
+          "task_id": null
+        },
+        "goal_id": "U2",
+        "handling": "NEW",
+        "raw_utterance": "Continue that work. Separately explain the difference between TCP and UDP in two sentences.",
+        "resolved": true,
+        "revision": 1,
+        "scope": "Difference between TCP and UDP",
+        "source_revisions": {},
+        "stimulus_id": "U2",
+        "targets": [
+          "TCP",
+          "UDP"
+        ],
+        "text": "Explain the difference between TCP and UDP in two sentences."
+      }
+    },
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "R1-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": null,
+          "handling_text": "Compare Plan A and Plan B regarding cost, recovery frequency, and capacity limits, explaining the evidence from the stress test ledger and the resulting tradeoffs.",
+          "question_id": null,
+          "relation": "NEW",
+          "scope": "comparison",
+          "source_claims": [
+            {
+              "quote": "Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Trial 17: 25 active requests; ... Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ],
+          "source_revisions": {
+            "D1": 1,
+            "D2": 1
+          },
+          "target_request_id": null,
+          "targets": [
+            "Plan A",
+            "Plan B"
+          ],
+          "task_id": null
+        },
+        "goal_id": "R1",
+        "handling": "NEW",
+        "raw_utterance": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+        "resolved": true,
+        "revision": 1,
+        "scope": "comparison",
+        "source_revisions": {
+          "D1": 1,
+          "D2": 1
+        },
+        "stimulus_id": "R1",
+        "targets": [
+          "Plan A",
+          "Plan B"
+        ],
+        "text": "Compare Plan A and Plan B regarding cost, recovery frequency, and capacity limits, explaining the evidence from the stress test ledger and the resulting tradeoffs."
+      }
+    },
+    {
+      "kind": "GOAL_COMPLETE",
+      "data": {
+        "checks": [
+          "nonempty detailed sections",
+          "current goal revision",
+          "actual supplied quote checks"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "U2",
+        "goal_scope": "USER_REQUEST",
+        "result": {
+          "answer": "TCP is a connection-oriented protocol that guarantees reliable, ordered delivery of data through error checking and retransmission. UDP is a connectionless protocol that prioritizes speed and low latency by sending data without establishing a connection or ensuring delivery.",
+          "applied_revision": 1,
+          "path": "VALID_COMPLETE_ANSWER_FROM_ADOPTION",
+          "sections": [
+            {
+              "id": "main",
+              "text": "TCP is a connection-oriented protocol that guarantees reliable, ordered delivery of data through error checking and retransmission. UDP is a connectionless protocol that prioritizes speed and low latency by sending data without establishing a connection or ensuring delivery."
+            }
+          ],
+          "source_claims": []
+        },
+        "revision": 1,
+        "stimulus_id": "U2",
+        "text": "TCP is a connection-oriented protocol that guarantees reliable, ordered delivery of data through error checking and retransmission. UDP is a connectionless protocol that prioritizes speed and low latency by sending data without establishing a connection or ensuring delivery."
+      }
+    },
+    {
+      "kind": "GOAL_COMPLETE",
+      "data": {
+        "checks": [
+          "nonempty detailed sections",
+          "current goal revision",
+          "actual supplied quote checks"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "R1",
+        "goal_scope": "USER_REQUEST",
+        "result": {
+          "_provider_usage": {
+            "input_tokens": 4628,
+            "output_tokens": 772
+          },
+          "answer": "Plan A costs $120 per month, supports 40 concurrent requests, and performs recovery checkpoints every 10 seconds. Plan B costs $75 per month, supports 24 concurrent requests, and performs checkpoints every 30 seconds. Evidence from the stress test ledger indicates that while both plans performed within capacity up to 24 active requests (Trial 16), Plan B saturated at its declared limit in Trial 17 (25 active requests), failing to process additional load beyond 960 completed requests in all subsequent trials. In contrast, Plan A continued to scale linearly with load, handling up to 44 active requests (Trial 36) without saturation. Although Plan B offers a lower monthly cost, it incurs higher latency (e.g., p95 657 ms vs 504 ms at 40 requests in Trial 32) and risks data loss due to less frequent checkpoints. The tradeoff confirms that lower monthly cost alone does not establish superior user response latency or system stability under load.",
+          "applied_revision": 1,
+          "sections": [
+            {
+              "id": "cost_and_specs",
+              "text": "Plan A is priced at $120 per month with a 10-second recovery checkpoint interval and a capacity of 40 concurrent requests. Plan B is priced at $75 per month with a 30-second recovery checkpoint interval and a capacity of 24 concurrent requests."
+            },
+            {
+              "id": "stress_test_evidence",
+              "text": "The stress test ledger shows that Plan B saturated above its declared capacity starting at Trial 17 with 25 active requests, maintaining a flat completion count of 960 requests thereafter. Plan A successfully handled increasing loads up to its limit, completing 1600 requests at 40 active requests in Trial 32."
+            },
+            {
+              "id": "tradeoffs",
+              "text": "The primary tradeoff is between cost and performance reliability. Plan B saves $45 monthly but suffers from capacity saturation and higher latency under load. As noted in the product trial conclusion, lower monthly cost alone does not establish superior user response latency."
+            }
+          ],
+          "source_claims": [
+            {
+              "quote": "Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Trial 17: 25 active requests; Plan A p95 408 ms, peak RSS 761 MB, completed 1000 requests; Plan B p95 507 ms, peak RSS 474 MB, completed 960 requests. Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ]
+        },
+        "revision": 1,
+        "stimulus_id": "R1",
+        "text": "Plan A costs $120 per month, supports 40 concurrent requests, and performs recovery checkpoints every 10 seconds. Plan B costs $75 per month, supports 24 concurrent requests, and performs checkpoints every 30 seconds. Evidence from the stress test ledger indicates that while both plans performed within capacity up to 24 active requests (Trial 16), Plan B saturated at its declared limit in Trial 17 (25 active requests), failing to process additional load beyond 960 completed requests in all subsequent trials. In contrast, Plan A continued to scale linearly with load, handling up to 44 active requests (Trial 36) without saturation. Although Plan B offers a lower monthly cost, it incurs higher latency (e.g., p95 657 ms vs 504 ms at 40 requests in Trial 32) and risks data loss due to less frequent checkpoints. The tradeoff confirms that lower monthly cost alone does not establish superior user response latency or system stability under load."
+      }
+    }
+  ],
+  "version": "ORIGINAL_CALL_PREPARATION_AND_HOST_END_V2"
+}

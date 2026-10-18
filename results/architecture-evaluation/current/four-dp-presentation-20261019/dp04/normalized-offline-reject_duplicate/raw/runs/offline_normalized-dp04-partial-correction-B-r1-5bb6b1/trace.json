@@ -1,0 +1,5813 @@
+{
+  "schema_version": 2,
+  "run_id": "offline_normalized-dp04-partial-correction-B-r1-5bb6b1",
+  "dp": "04",
+  "episode": "dp04-partial-correction",
+  "variant": "B",
+  "repetition": 1,
+  "phase": "OFFLINE_NORMALIZED",
+  "tactic": null,
+  "candidate_binary_sha256": "d165ee786eeed523a5ecc38b54ebcc973823fcaa2f4ec1167b955333a8223704",
+  "postrun_binary_sha256": "d165ee786eeed523a5ecc38b54ebcc973823fcaa2f4ec1167b955333a8223704",
+  "candidate_binary_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/normalized-offline-reject_duplicate/frozen/bin/four_dp_poc",
+  "freeze_sha256": "4f86dde7d061f79661d19ddf68bc0427e6a17c6430dbb12fa987fdff0d717a4b",
+  "start_ns": 1921723869115833,
+  "end_ns": 1921723890841916,
+  "events": [
+    {
+      "data": {
+        "dp": "04",
+        "id": "dp04-partial-correction",
+        "variant": "B"
+      },
+      "elapsed_ns": 25250,
+      "event_id": "event-1",
+      "goal_ids": [],
+      "kind": "EPISODE_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723874877416
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 47166,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 55125,
+      "event_id": "event-2",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723874902291
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 47166,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 73916,
+      "event_id": "event-3",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723874914000
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "parent_ids": [],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 104083,
+      "event_id": "event-4",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723874943916
+    },
+    {
+      "data": {
+        "bytes": 27303,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+      },
+      "elapsed_ns": 145375,
+      "event_id": "event-5",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723874992458
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27303,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 165208,
+      "event_id": "event-6",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723875007875
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 177666,
+      "event_id": "event-7",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723875026416
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 189166,
+      "event_id": "event-8",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723875042750
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r1-\"correction\""
+        ]
+      },
+      "elapsed_ns": 198875,
+      "event_id": "event-9",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875059791
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 816,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 235125,
+      "event_id": "event-10",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875079458
+    },
+    {
+      "data": {
+        "held_previous": false,
+        "revision": 1
+      },
+      "elapsed_ns": 266666,
+      "event_id": "event-11",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875102083
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_producer"
+      },
+      "elapsed_ns": 293041,
+      "event_id": "event-13",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875134666
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 3985,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 406916,
+      "event_id": "event-14",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875246750
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 795250,
+      "event_id": "event-15",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875643833
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "response_logical_bytes": 715,
+        "role": "VIA",
+        "stage": "dp04.screen_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 847833,
+      "event_id": "event-16",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723875691500
+    },
+    {
+      "data": {
+        "error": "AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE",
+        "owner": "screen"
+      },
+      "elapsed_ns": 881000,
+      "event_id": "event-17",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723875728291
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 1059,
+        "name": "dp04_screen_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 936166,
+      "event_id": "event-18",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723875776666
+    },
+    {
+      "data": {
+        "generation": 1,
+        "revision": 1,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "bbox_2d": [
+                40,
+                169,
+                335,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+          ],
+          "producer_generation": 1,
+          "revision": 1,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 962458,
+      "event_id": "event-19",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723875848666
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-20",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "role": "VIA",
+        "stage": "dp04.speech_producer"
+      },
+      "elapsed_ns": 1037916,
+      "event_id": "event-21",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723875894166
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 2688,
+        "name": "model_request_20",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1122083,
+      "event_id": "event-22",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723875969125
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_20",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1307541,
+      "event_id": "event-23",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876153583
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-20",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "response_logical_bytes": 533,
+        "role": "VIA",
+        "stage": "dp04.speech_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 1347625,
+      "event_id": "event-24",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876211541
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 570,
+        "name": "dp04_speech_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1395625,
+      "event_id": "event-25",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876262750
+    },
+    {
+      "data": {
+        "revision": 1,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "왼쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1
+        }
+      },
+      "elapsed_ns": 1417500,
+      "event_id": "event-26",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SPEECH_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876320000
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-27",
+        "parent_ids": [
+          "operation-20"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 1478666,
+      "event_id": "event-28",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876375916
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 4218,
+        "name": "model_request_27",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1613500,
+      "event_id": "event-29",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876453375
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_27",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1909000,
+      "event_id": "event-30",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876757416
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-27",
+        "parent_ids": [
+          "operation-20"
+        ],
+        "response_logical_bytes": 982,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 1966250,
+      "event_id": "event-31",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876829375
+    },
+    {
+      "data": {
+        "binding_request": false,
+        "consistency_errors": [
+          "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+        ],
+        "previous_screen": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "bbox_2d": [
+                40,
+                169,
+                335,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+          ],
+          "producer_generation": 1,
+          "revision": 1,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        },
+        "producer_peer_revision": 1,
+        "repair_feedback": {
+          "actual_consistency_errors": [
+            "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+          ],
+          "instruction": "Use the shared relation/event contract in your instruction. Correct the relation interpretation and/or extents only from the same raw evidence. A type mismatch is not a hint about which target is correct. Keep uncertainty unresolved if the source does not support a complete binding."
+        },
+        "speech": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "왼쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1
+        }
+      },
+      "elapsed_ns": 2050083,
+      "event_id": "event-32",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "PRODUCER_EXPANSION_REQUEST",
+      "parent_ids": [
+        "operation-27"
+      ],
+      "type": "event",
+      "observed_ns": 1921723876973916
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-33",
+        "parent_ids": [
+          "operation-27"
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_source_expansion"
+      },
+      "elapsed_ns": 2201875,
+      "event_id": "event-34",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-27"
+      ],
+      "type": "event",
+      "observed_ns": 1921723877055208
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 6135,
+        "name": "model_request_33",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2384833,
+      "event_id": "event-35",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-27"
+      ],
+      "type": "event",
+      "observed_ns": 1921723877225333
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_33",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2864166,
+      "event_id": "event-36",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-27"
+      ],
+      "type": "event",
+      "observed_ns": 1921723877709833
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-33",
+        "parent_ids": [
+          "operation-27"
+        ],
+        "response_logical_bytes": 715,
+        "role": "VIA",
+        "stage": "dp04.screen_source_expansion",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 2914750,
+      "event_id": "event-37",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-27"
+      ],
+      "type": "event",
+      "observed_ns": 1921723877793750
+    },
+    {
+      "data": {
+        "error": "AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE",
+        "owner": "screen"
+      },
+      "elapsed_ns": 2948833,
+      "event_id": "event-38",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723877871083
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 1059,
+        "name": "dp04_screen_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 3004000,
+      "event_id": "event-39",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723877959375
+    },
+    {
+      "data": {
+        "generation": 2,
+        "revision": 1,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "bbox_2d": [
+                40,
+                169,
+                335,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+          ],
+          "producer_generation": 2,
+          "revision": 1,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 3029500,
+      "event_id": "event-40",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878047375
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-41",
+        "parent_ids": [
+          "operation-33"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 3127750,
+      "event_id": "event-42",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878135125
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 4218,
+        "name": "model_request_41",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 3257125,
+      "event_id": "event-43",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878228666
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_41",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 3640375,
+      "event_id": "event-44",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878484333
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-41",
+        "parent_ids": [
+          "operation-33"
+        ],
+        "response_logical_bytes": 982,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 3694416,
+      "event_id": "event-45",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-33"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878592541
+    },
+    {
+      "data": {
+        "issues": [
+          "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+        ],
+        "owner": "candidate_binding",
+        "proposal": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "keep-first",
+              "extents": [
+                {
+                  "bbox": [
+                    40.0,
+                    110.0,
+                    335.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    40,
+                    169,
+                    335,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C1"
+              ]
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    360,
+                    169,
+                    655,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "need_evidence": false,
+          "need_expansion": false
+        }
+      },
+      "elapsed_ns": 3781166,
+      "event_id": "event-46",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GROUNDING_CONSISTENCY_REJECTED",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878700250
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Consistency validation failed after bounded source rejudgment",
+        "expression_id": "keep-first",
+        "extents": [],
+        "relation": "relative_position",
+        "revision": 1,
+        "status": "need_evidence",
+        "targets": []
+      },
+      "elapsed_ns": 3887000,
+      "event_id": "event-47",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878802541
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Consistency validation failed after bounded source rejudgment",
+        "expression_id": "change-second",
+        "extents": [],
+        "relation": "relative_position",
+        "revision": 1,
+        "status": "need_evidence",
+        "targets": []
+      },
+      "elapsed_ns": 3903833,
+      "event_id": "event-48",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723878904708
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "proposal": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Consistency validation failed after bounded source rejudgment",
+              "expression_id": "keep-first",
+              "extents": [],
+              "relation": "relative_position",
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Consistency validation failed after bounded source rejudgment",
+              "expression_id": "change-second",
+              "extents": [],
+              "relation": "relative_position",
+              "status": "need_evidence",
+              "targets": []
+            }
+          ],
+          "candidate_read_set": {
+            "screen_generation": 2,
+            "screen_source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_revision": 1
+          },
+          "contract_failures": [
+            "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1,
+          "screen_state": {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "candidates": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              },
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              },
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "coordinate_wire_valid": false,
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "cue_relations": [],
+            "geometry_issues": [
+              "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+            ],
+            "producer_generation": 2,
+            "revision": 1,
+            "source_refs": [
+              "correction"
+            ],
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ],
+          "speech_state": {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "coverage": {
+              "complete": true,
+              "unknown": []
+            },
+            "expressions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "keep-first",
+                "kind": "item",
+                "meaning": "왼쪽 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "change-second",
+                "kind": "item",
+                "meaning": "가운데 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 1
+          }
+        },
+        "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 3967500,
+      "event_id": "event-49",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_FAILED",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723879023791
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4099166,
+      "event_id": "event-50",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723879141833
+    },
+    {
+      "data": {
+        "action": "RETAIN",
+        "bytes": 560,
+        "name": "dp04_prior_binding",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4129250,
+      "event_id": "event-51",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723879260666
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 2673,
+        "name": "dp04_retained_proposal_trace",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4219541,
+      "event_id": "event-52",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723879383333
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 4235625,
+        "kind": "user_grounding_input",
+        "raw_text": "첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 4237916,
+      "event_id": "event-53",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723879504291
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 4235625,
+        "kind": "user_grounding_input",
+        "raw_text": "첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 4252833,
+      "event_id": "event-54",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723879630458
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r2-\"correction\"",
+        "parent_ids": [
+          "operation-41"
+        ],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 4277166,
+      "event_id": "event-55",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723879755750
+    },
+    {
+      "data": {
+        "bytes": 27303,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+      },
+      "elapsed_ns": 4314958,
+      "event_id": "event-56",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723879882708
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27303,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4334083,
+      "event_id": "event-57",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723880044958
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4346416,
+      "event_id": "event-58",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723880185375
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r2-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 4358250,
+      "event_id": "event-59",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [
+        "operation-41"
+      ],
+      "type": "event",
+      "observed_ns": 1921723880324125
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r2-\"correction\""
+        ]
+      },
+      "elapsed_ns": 4368000,
+      "event_id": "event-60",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723880461583
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 903,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4404958,
+      "event_id": "event-61",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723880599666
+    },
+    {
+      "data": {
+        "held_previous": true,
+        "revision": 2
+      },
+      "elapsed_ns": 4432875,
+      "event_id": "event-62",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723880741416
+    },
+    {
+      "data": {
+        "accepted": false,
+        "kind": "LATE_MODEL_RESULT_PUBLICATION_ATTEMPT",
+        "proposal": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Consistency validation failed after bounded source rejudgment",
+              "expression_id": "keep-first",
+              "extents": [],
+              "relation": "relative_position",
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Consistency validation failed after bounded source rejudgment",
+              "expression_id": "change-second",
+              "extents": [],
+              "relation": "relative_position",
+              "status": "need_evidence",
+              "targets": []
+            }
+          ],
+          "candidate_read_set": {
+            "screen_generation": 2,
+            "screen_source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_revision": 1
+          },
+          "contract_failures": [
+            "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1,
+          "screen_state": {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "candidates": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              },
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              },
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "coordinate_wire_valid": false,
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "cue_relations": [],
+            "geometry_issues": [
+              "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+            ],
+            "producer_generation": 2,
+            "revision": 1,
+            "source_refs": [
+              "correction"
+            ],
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ],
+          "speech_state": {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "coverage": {
+              "complete": true,
+              "unknown": []
+            },
+            "expressions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "keep-first",
+                "kind": "item",
+                "meaning": "왼쪽 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "change-second",
+                "kind": "item",
+                "meaning": "가운데 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 1
+          }
+        },
+        "reason": "STALE_INPUT_REVISION",
+        "source": "actual earlier revision model proposal held and replayed; no model/network delay injected"
+      },
+      "elapsed_ns": 4471875,
+      "event_id": "event-63",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REPLAYED_CONTROL_EVENT",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723880990833
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-64",
+        "parent_ids": [
+          "dp04-source-r2-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_producer"
+      },
+      "elapsed_ns": 4609375,
+      "event_id": "event-65",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723881164750
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 3985,
+        "name": "model_request_64",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4715958,
+      "event_id": "event-66",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723881357375
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_64",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 6905458,
+      "event_id": "event-67",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723881752708
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-64",
+        "parent_ids": [
+          "dp04-source-r2-\"correction\""
+        ],
+        "response_logical_bytes": 715,
+        "role": "VIA",
+        "stage": "dp04.screen_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 6953958,
+      "event_id": "event-68",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921723881928000
+    },
+    {
+      "data": {
+        "error": "AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE",
+        "owner": "screen"
+      },
+      "elapsed_ns": 6980875,
+      "event_id": "event-69",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723882083000
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 1059,
+        "name": "dp04_screen_candidates_r2",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 7031458,
+      "event_id": "event-70",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723882241333
+    },
+    {
+      "data": {
+        "generation": 1,
+        "revision": 2,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "bbox_2d": [
+                40,
+                169,
+                335,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+          ],
+          "producer_generation": 1,
+          "revision": 2,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 7055708,
+      "event_id": "event-71",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723882399625
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-72",
+        "parent_ids": [
+          "operation-64"
+        ],
+        "role": "VIA",
+        "stage": "dp04.speech_producer"
+      },
+      "elapsed_ns": 7135625,
+      "event_id": "event-73",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723882562333
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 3331,
+        "name": "model_request_72",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 7230083,
+      "event_id": "event-74",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723882730583
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_72",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 8192875,
+      "event_id": "event-75",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723883036208
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-72",
+        "parent_ids": [
+          "operation-64"
+        ],
+        "response_logical_bytes": 569,
+        "role": "VIA",
+        "stage": "dp04.speech_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 8229708,
+      "event_id": "event-76",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-64"
+      ],
+      "type": "event",
+      "observed_ns": 1921723883221250
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 606,
+        "name": "dp04_speech_candidates_r2",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 8275916,
+      "event_id": "event-77",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-72"
+      ],
+      "type": "event",
+      "observed_ns": 1921723883398875
+    },
+    {
+      "data": {
+        "revision": 2,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "첫 그래프는 그대로",
+              "relation": "retain_prior",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "두 번째는 가운데 말고 오른쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 2
+        }
+      },
+      "elapsed_ns": 8294208,
+      "event_id": "event-78",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SPEECH_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-72"
+      ],
+      "type": "event",
+      "observed_ns": 1921723883581416
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-79",
+        "parent_ids": [
+          "operation-72"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 8356291,
+      "event_id": "event-80",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-72"
+      ],
+      "type": "event",
+      "observed_ns": 1921723883752333
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 4810,
+        "name": "model_request_79",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 8497291,
+      "event_id": "event-81",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-72"
+      ],
+      "type": "event",
+      "observed_ns": 1921723883943500
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_79",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 9472541,
+      "event_id": "event-82",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-72"
+      ],
+      "type": "event",
+      "observed_ns": 1921723884325333
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-79",
+        "parent_ids": [
+          "operation-72"
+        ],
+        "response_logical_bytes": 976,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 9534375,
+      "event_id": "event-83",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-72"
+      ],
+      "type": "event",
+      "observed_ns": 1921723884532250
+    },
+    {
+      "data": {
+        "binding_request": false,
+        "consistency_errors": [
+          "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+        ],
+        "previous_screen": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "bbox_2d": [
+                40,
+                169,
+                335,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+          ],
+          "producer_generation": 1,
+          "revision": 2,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        },
+        "producer_peer_revision": 2,
+        "repair_feedback": {
+          "actual_consistency_errors": [
+            "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+          ],
+          "instruction": "Use the shared relation/event contract in your instruction. Correct the relation interpretation and/or extents only from the same raw evidence. A type mismatch is not a hint about which target is correct. Keep uncertainty unresolved if the source does not support a complete binding."
+        },
+        "speech": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "첫 그래프는 그대로",
+              "relation": "retain_prior",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "두 번째는 가운데 말고 오른쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 2
+        }
+      },
+      "elapsed_ns": 9620291,
+      "event_id": "event-84",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "PRODUCER_EXPANSION_REQUEST",
+      "parent_ids": [
+        "operation-79"
+      ],
+      "type": "event",
+      "observed_ns": 1921723884727708
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-85",
+        "parent_ids": [
+          "operation-79"
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_source_expansion"
+      },
+      "elapsed_ns": 9761833,
+      "event_id": "event-86",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-79"
+      ],
+      "type": "event",
+      "observed_ns": 1921723884922500
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 6171,
+        "name": "model_request_85",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 9932541,
+      "event_id": "event-87",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-79"
+      ],
+      "type": "event",
+      "observed_ns": 1921723885113625
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_85",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 10750000,
+      "event_id": "event-88",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-79"
+      ],
+      "type": "event",
+      "observed_ns": 1921723885598250
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-85",
+        "parent_ids": [
+          "operation-79"
+        ],
+        "response_logical_bytes": 715,
+        "role": "VIA",
+        "stage": "dp04.screen_source_expansion",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 10798958,
+      "event_id": "event-89",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-79"
+      ],
+      "type": "event",
+      "observed_ns": 1921723885801583
+    },
+    {
+      "data": {
+        "error": "AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE",
+        "owner": "screen"
+      },
+      "elapsed_ns": 10830541,
+      "event_id": "event-90",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723885995041
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 1059,
+        "name": "dp04_screen_candidates_r2",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 10880958,
+      "event_id": "event-91",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723886187250
+    },
+    {
+      "data": {
+        "generation": 2,
+        "revision": 2,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox": [
+                40.0,
+                110.0,
+                335.0,
+                530.0
+              ],
+              "bbox_2d": [
+                40,
+                169,
+                335,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox": [
+                360.0,
+                110.0,
+                655.0,
+                530.0
+              ],
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox": [
+                680.0,
+                110.0,
+                975.0,
+                530.0
+              ],
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+          ],
+          "producer_generation": 2,
+          "revision": 2,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 10904500,
+      "event_id": "event-92",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723886380166
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-93",
+        "parent_ids": [
+          "operation-85"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 11000291,
+      "event_id": "event-94",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723886581458
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 4810,
+        "name": "model_request_93",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 11139250,
+      "event_id": "event-95",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723886783833
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_93",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 12329958,
+      "event_id": "event-96",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723887176500
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-93",
+        "parent_ids": [
+          "operation-85"
+        ],
+        "response_logical_bytes": 976,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 12382458,
+      "event_id": "event-97",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-85"
+      ],
+      "type": "event",
+      "observed_ns": 1921723887423416
+    },
+    {
+      "data": {
+        "issues": [
+          "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+        ],
+        "owner": "candidate_binding",
+        "proposal": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "keep-first",
+              "extents": [
+                {
+                  "bbox": [
+                    40.0,
+                    110.0,
+                    335.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    40,
+                    169,
+                    335,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                }
+              ],
+              "relation": "retain_prior",
+              "status": "ready",
+              "targets": [
+                "C1"
+              ]
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    680.0,
+                    110.0,
+                    975.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    680,
+                    169,
+                    975,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C3 / Recovery",
+                  "target_id": "C3"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C3"
+              ]
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "need_evidence": false,
+          "need_expansion": false
+        }
+      },
+      "elapsed_ns": 12450333,
+      "event_id": "event-98",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GROUNDING_CONSISTENCY_REJECTED",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723887650666
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Consistency validation failed after bounded source rejudgment",
+        "expression_id": "keep-first",
+        "extents": [],
+        "relation": "retain_prior",
+        "revision": 2,
+        "status": "need_evidence",
+        "targets": []
+      },
+      "elapsed_ns": 12555458,
+      "event_id": "event-99",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723887893166
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Consistency validation failed after bounded source rejudgment",
+        "expression_id": "change-second",
+        "extents": [],
+        "relation": "relative_position",
+        "revision": 2,
+        "status": "need_evidence",
+        "targets": []
+      },
+      "elapsed_ns": 12570791,
+      "event_id": "event-100",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723888118250
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "proposal": {
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Consistency validation failed after bounded source rejudgment",
+              "expression_id": "keep-first",
+              "extents": [],
+              "relation": "retain_prior",
+              "status": "need_evidence",
+              "targets": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Consistency validation failed after bounded source rejudgment",
+              "expression_id": "change-second",
+              "extents": [],
+              "relation": "relative_position",
+              "status": "need_evidence",
+              "targets": []
+            }
+          ],
+          "candidate_read_set": {
+            "screen_generation": 2,
+            "screen_source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_revision": 2
+          },
+          "contract_failures": [
+            "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 2,
+          "screen_state": {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "candidates": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              },
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              },
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "coordinate_wire_valid": false,
+            "coverage": {
+              "competing": [],
+              "complete": true,
+              "unknown": []
+            },
+            "cue_relations": [],
+            "geometry_issues": [
+              "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+            ],
+            "producer_generation": 2,
+            "revision": 2,
+            "source_refs": [
+              "correction"
+            ],
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ]
+          },
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ],
+          "speech_state": {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "coverage": {
+              "complete": true,
+              "unknown": []
+            },
+            "expressions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "keep-first",
+                "kind": "item",
+                "meaning": "첫 그래프는 그대로",
+                "relation": "retain_prior",
+                "unresolved": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "explicit_target_ids": [],
+                "expression_id": "change-second",
+                "kind": "item",
+                "meaning": "두 번째는 가운데 말고 오른쪽 그래프",
+                "relation": "relative_position",
+                "unresolved": []
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 2
+          }
+        },
+        "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 12632791,
+      "event_id": "event-101",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_FAILED",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723888366666
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 12759458,
+      "event_id": "event-102",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723888595000
+    },
+    {
+      "data": {
+        "action": "RETAIN",
+        "bytes": 598,
+        "name": "dp04_prior_binding",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 12787958,
+      "event_id": "event-103",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723888822958
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 5376,
+        "name": "dp04_retained_proposal_trace",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 12948500,
+      "event_id": "event-104",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-93"
+      ],
+      "type": "event",
+      "observed_ns": 1921723889051666
+    },
+    {
+      "data": {
+        "adoptions": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "keep-first",
+            "extents": [],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "need_evidence",
+            "targets": []
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "change-second",
+            "extents": [],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "need_evidence",
+            "targets": []
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "keep-first",
+            "extents": [],
+            "relation": "retain_prior",
+            "revision": 2,
+            "status": "need_evidence",
+            "targets": []
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Consistency validation failed after bounded source rejudgment",
+            "expression_id": "change-second",
+            "extents": [],
+            "relation": "relative_position",
+            "revision": 2,
+            "status": "need_evidence",
+            "targets": []
+          }
+        ],
+        "outputs": [],
+        "proposals": [
+          {
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "keep-first",
+                "extents": [],
+                "relation": "relative_position",
+                "status": "need_evidence",
+                "targets": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "change-second",
+                "extents": [],
+                "relation": "relative_position",
+                "status": "need_evidence",
+                "targets": []
+              }
+            ],
+            "candidate_read_set": {
+              "screen_generation": 2,
+              "screen_source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_revision": 1
+            },
+            "contract_failures": [
+              "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 1,
+            "screen_state": {
+              "_provider_usage": {
+                "input_tokens": null,
+                "output_tokens": null
+              },
+              "candidates": [
+                {
+                  "bbox": [
+                    40.0,
+                    110.0,
+                    335.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    40,
+                    169,
+                    335,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                },
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    360,
+                    169,
+                    655,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                },
+                {
+                  "bbox": [
+                    680.0,
+                    110.0,
+                    975.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    680,
+                    169,
+                    975,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C3 / Recovery",
+                  "target_id": "C3"
+                }
+              ],
+              "coordinate_wire_valid": false,
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "geometry_issues": [
+                "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+              ],
+              "producer_generation": 2,
+              "revision": 1,
+              "source_refs": [
+                "correction"
+              ],
+              "source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ]
+            },
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_state": {
+              "_provider_usage": {
+                "input_tokens": null,
+                "output_tokens": null
+              },
+              "coverage": {
+                "complete": true,
+                "unknown": []
+              },
+              "expressions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "keep-first",
+                  "kind": "item",
+                  "meaning": "왼쪽 그래프",
+                  "relation": "relative_position",
+                  "unresolved": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "change-second",
+                  "kind": "item",
+                  "meaning": "가운데 그래프",
+                  "relation": "relative_position",
+                  "unresolved": []
+                }
+              ],
+              "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+              "revision": 1
+            }
+          },
+          {
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "keep-first",
+                "extents": [],
+                "relation": "retain_prior",
+                "status": "need_evidence",
+                "targets": []
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Consistency validation failed after bounded source rejudgment",
+                "expression_id": "change-second",
+                "extents": [],
+                "relation": "relative_position",
+                "status": "need_evidence",
+                "targets": []
+              }
+            ],
+            "candidate_read_set": {
+              "screen_generation": 2,
+              "screen_source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_revision": 2
+            },
+            "contract_failures": [
+              "NORMALIZED_SCREEN_WIRE_NOT_ADMISSIBLE"
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "revision": 2,
+            "screen_state": {
+              "_provider_usage": {
+                "input_tokens": null,
+                "output_tokens": null
+              },
+              "candidates": [
+                {
+                  "bbox": [
+                    40.0,
+                    110.0,
+                    335.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    40,
+                    169,
+                    335,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                },
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    360,
+                    169,
+                    655,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                },
+                {
+                  "bbox": [
+                    680.0,
+                    110.0,
+                    975.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    680,
+                    169,
+                    975,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C3 / Recovery",
+                  "target_id": "C3"
+                }
+              ],
+              "coordinate_wire_valid": false,
+              "coverage": {
+                "competing": [],
+                "complete": true,
+                "unknown": []
+              },
+              "cue_relations": [],
+              "geometry_issues": [
+                "NORMALIZED_WIRE:AMBIGUOUS_DUPLICATE_PIXEL_BBOX_ON_NORMALIZED_WIRE"
+              ],
+              "producer_generation": 2,
+              "revision": 2,
+              "source_refs": [
+                "correction"
+              ],
+              "source_snapshot": [
+                {
+                  "frame_id": "correction",
+                  "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ]
+            },
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "speech_state": {
+              "_provider_usage": {
+                "input_tokens": null,
+                "output_tokens": null
+              },
+              "coverage": {
+                "complete": true,
+                "unknown": []
+              },
+              "expressions": [
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "keep-first",
+                  "kind": "item",
+                  "meaning": "첫 그래프는 그대로",
+                  "relation": "retain_prior",
+                  "unresolved": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [],
+                  "explicit_target_ids": [],
+                  "expression_id": "change-second",
+                  "kind": "item",
+                  "meaning": "두 번째는 가운데 말고 오른쪽 그래프",
+                  "relation": "relative_position",
+                  "unresolved": []
+                }
+              ],
+              "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+              "revision": 2
+            }
+          }
+        ],
+        "screen_parser_variant": "Qwen vision screen producer; no external OmniParser dependency deployed",
+        "tactic": "none"
+      },
+      "elapsed_ns": 13051333,
+      "event_id": "event-105",
+      "goal_ids": [],
+      "kind": "EPISODE_RESULT",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921723889346666
+    }
+  ],
+  "calls": [
+    {
+      "call_uuid": "OFFLINE-f27c721300295581",
+      "stage": "dp04.screen_producer",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "candidates": [
+          {
+            "target_id": "C1",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "bbox_2d": [
+              40,
+              169,
+              335,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox_2d": [
+              360,
+              169,
+              655,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox_2d": [
+              680,
+              169,
+              975,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ]
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-25785e52f4febb36",
+      "stage": "dp04.speech_producer",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "expressions": [
+          {
+            "expression_id": "keep-first",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "왼쪽 그래프"
+          },
+          {
+            "expression_id": "change-second",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "가운데 그래프"
+          }
+        ],
+        "coverage": {
+          "complete": true,
+          "unknown": []
+        }
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-04a93cc7d3323840",
+      "stage": "dp04.candidate_binding",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C2"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-389780b08a5298d1",
+      "stage": "dp04.screen_source_expansion",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "candidates": [
+          {
+            "target_id": "C1",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "bbox_2d": [
+              40,
+              169,
+              335,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox_2d": [
+              360,
+              169,
+              655,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox_2d": [
+              680,
+              169,
+              975,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ]
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-d2dac9851fd6a054",
+      "stage": "dp04.candidate_binding",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C2"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-b9e200b851e97cd8",
+      "stage": "dp04.screen_producer",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "candidates": [
+          {
+            "target_id": "C1",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "bbox_2d": [
+              40,
+              169,
+              335,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox_2d": [
+              360,
+              169,
+              655,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox_2d": [
+              680,
+              169,
+              975,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ]
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-6d766624a115329c",
+      "stage": "dp04.speech_producer",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "expressions": [
+          {
+            "expression_id": "keep-first",
+            "kind": "item",
+            "count": 1,
+            "relation": "retain_prior",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "첫 그래프는 그대로"
+          },
+          {
+            "expression_id": "change-second",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "두 번째는 가운데 말고 오른쪽 그래프"
+          }
+        ],
+        "coverage": {
+          "complete": true,
+          "unknown": []
+        }
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-cd5aacad72b93a3c",
+      "stage": "dp04.candidate_binding",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "retain_prior",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C3"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-b5edb12070a948e4",
+      "stage": "dp04.screen_source_expansion",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "candidates": [
+          {
+            "target_id": "C1",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "bbox_2d": [
+              40,
+              169,
+              335,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox_2d": [
+              360,
+              169,
+              655,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ]
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox_2d": [
+              680,
+              169,
+              975,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000",
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ]
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-497be51f1c274af9",
+      "stage": "dp04.candidate_binding",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "retain_prior",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C3"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    }
+  ],
+  "memory": [
+    {
+      "at_ns": 1921723869867708,
+      "sample_end_ns": 1921723874683458,
+      "stage": "RUST_WAITING_FOR_INPUT",
+      "processes": [
+        {
+          "pid": 58091,
+          "ppid": 50460,
+          "role": "python_runner_bridge",
+          "rss_bytes": 31997952
+        },
+        {
+          "pid": 58106,
+          "ppid": 58091,
+          "role": "rust_candidate",
+          "rss_bytes": 1654784
+        }
+      ],
+      "registered_processes": [
+        {
+          "pid": 58091,
+          "role": "python_runner_bridge"
+        },
+        {
+          "pid": 58106,
+          "role": "rust_candidate"
+        }
+      ],
+      "rss_bytes_by_pid": {
+        "58091": 31997952,
+        "58106": 1654784
+      },
+      "rss_bytes_by_role": {
+        "python_runner_bridge": 31997952,
+        "rust_candidate": 1654784
+      },
+      "concurrent_sum_bytes": 33652736,
+      "all_registered_observed": true,
+      "logical_buffers": {
+        "input_json": {
+          "bytes": 2276,
+          "category": "input",
+          "owner": "python_runner_bridge"
+        }
+      },
+      "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+      "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+    }
+  ],
+  "memory_baseline": {
+    "at_ns": 1921723865777458,
+    "sample_end_ns": 1921723867778250,
+    "stage": "BEFORE_RUST_START",
+    "processes": [
+      {
+        "pid": 58091,
+        "ppid": 50460,
+        "role": "python_runner_bridge",
+        "rss_bytes": 31965184
+      }
+    ],
+    "registered_processes": [
+      {
+        "pid": 58091,
+        "role": "python_runner_bridge"
+      }
+    ],
+    "rss_bytes_by_pid": {
+      "58091": 31965184
+    },
+    "rss_bytes_by_role": {
+      "python_runner_bridge": 31965184
+    },
+    "concurrent_sum_bytes": 31965184,
+    "all_registered_observed": true,
+    "logical_buffers": {
+      "input_json": {
+        "bytes": 2276,
+        "category": "input",
+        "owner": "python_runner_bridge"
+      }
+    },
+    "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+    "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+  },
+  "logical_buffer_events": [
+    {
+      "at_ns": 1921723865776583,
+      "name": "input_json",
+      "bytes": 2276,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "input",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723874885875,
+      "name": "retained_events",
+      "bytes": 224,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723874910083,
+      "name": "retained_events",
+      "bytes": 627,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723874920916,
+      "name": "retained_events",
+      "bytes": 1024,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723874954791,
+      "name": "retained_events",
+      "bytes": 1324,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875005000,
+      "name": "retained_events",
+      "bytes": 1848,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875021083,
+      "name": "retained_events",
+      "bytes": 2163,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875022416,
+      "name": "rust:dp04_source_png",
+      "bytes": 27303,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875039791,
+      "name": "retained_events",
+      "bytes": 2473,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875041083,
+      "name": "rust:dp04_source_png",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 27303,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875057333,
+      "name": "retained_events",
+      "bytes": 2753,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875076083,
+      "name": "retained_events",
+      "bytes": 3027,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875098625,
+      "name": "retained_events",
+      "bytes": 3374,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875099083,
+      "name": "rust:dp04_observations",
+      "bytes": 816,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875121583,
+      "name": "retained_events",
+      "bytes": 3650,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875157500,
+      "name": "retained_events",
+      "bytes": 4058,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875271125,
+      "name": "retained_events",
+      "bytes": 4405,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875271666,
+      "name": "rust:model_request_12",
+      "bytes": 3985,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875568708,
+      "name": "retained_call_records",
+      "bytes": 920,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875680541,
+      "name": "retained_events",
+      "bytes": 4748,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875681500,
+      "name": "rust:model_request_12",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 3985,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875721083,
+      "name": "retained_events",
+      "bytes": 5216,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875759708,
+      "name": "retained_events",
+      "bytes": 5522,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875809708,
+      "name": "retained_events",
+      "bytes": 5872,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875810333,
+      "name": "rust:dp04_screen_candidates_r1",
+      "bytes": 1059,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875890958,
+      "name": "retained_events",
+      "bytes": 7295,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723875964333,
+      "name": "retained_events",
+      "bytes": 7670,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876012375,
+      "name": "retained_events",
+      "bytes": 8001,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876012958,
+      "name": "rust:model_request_20",
+      "bytes": 2688,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876094333,
+      "name": "retained_call_records",
+      "bytes": 1626,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876207041,
+      "name": "retained_events",
+      "bytes": 8328,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876207875,
+      "name": "rust:model_request_20",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 2688,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876259875,
+      "name": "retained_events",
+      "bytes": 8763,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876310333,
+      "name": "retained_events",
+      "bytes": 9113,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876310916,
+      "name": "rust:dp04_speech_candidates_r1",
+      "bytes": 570,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876372958,
+      "name": "retained_events",
+      "bytes": 9984,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876428708,
+      "name": "retained_events",
+      "bytes": 10361,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876508875,
+      "name": "retained_events",
+      "bytes": 10692,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876509333,
+      "name": "rust:model_request_27",
+      "bytes": 4218,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876680166,
+      "name": "retained_call_records",
+      "bytes": 2820,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876825333,
+      "name": "retained_events",
+      "bytes": 11019,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876825958,
+      "name": "rust:model_request_27",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 4218,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723876890541,
+      "name": "retained_events",
+      "bytes": 11456,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877051791,
+      "name": "retained_events",
+      "bytes": 14000,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877127833,
+      "name": "retained_events",
+      "bytes": 14383,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877305166,
+      "name": "retained_events",
+      "bytes": 14714,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877305750,
+      "name": "rust:model_request_33",
+      "bytes": 6135,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877645291,
+      "name": "retained_call_records",
+      "bytes": 3748,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877788708,
+      "name": "retained_events",
+      "bytes": 15041,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877789375,
+      "name": "rust:model_request_33",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 6135,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877869500,
+      "name": "retained_events",
+      "bytes": 15484,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723877956500,
+      "name": "retained_events",
+      "bytes": 15791,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878040166,
+      "name": "retained_events",
+      "bytes": 16142,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878040833,
+      "name": "rust:dp04_screen_candidates_r1",
+      "bytes": 1059,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878132291,
+      "name": "retained_events",
+      "bytes": 17566,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878226958,
+      "name": "retained_events",
+      "bytes": 17943,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878318625,
+      "name": "retained_events",
+      "bytes": 18274,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878319208,
+      "name": "rust:model_request_41",
+      "bytes": 4218,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878415500,
+      "name": "retained_call_records",
+      "bytes": 4942,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878587083,
+      "name": "retained_events",
+      "bytes": 18601,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878588041,
+      "name": "rust:model_request_41",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 4218,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878688625,
+      "name": "retained_events",
+      "bytes": 19038,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878799125,
+      "name": "retained_events",
+      "bytes": 20454,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723878902833,
+      "name": "retained_events",
+      "bytes": 20904,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879005583,
+      "name": "retained_events",
+      "bytes": 21357,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879138708,
+      "name": "retained_events",
+      "bytes": 24611,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879258041,
+      "name": "retained_events",
+      "bytes": 24939,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879258541,
+      "name": "rust:dp04_observations",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 816,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879378416,
+      "name": "retained_events",
+      "bytes": 25269,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879378958,
+      "name": "rust:dp04_prior_binding",
+      "bytes": 560,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879501208,
+      "name": "retained_events",
+      "bytes": 25623,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879501708,
+      "name": "rust:dp04_retained_proposal_trace",
+      "bytes": 2673,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879627875,
+      "name": "retained_events",
+      "bytes": 26074,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879753666,
+      "name": "retained_events",
+      "bytes": 26519,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723879880250,
+      "name": "retained_events",
+      "bytes": 26849,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880041500,
+      "name": "retained_events",
+      "bytes": 27389,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880182416,
+      "name": "retained_events",
+      "bytes": 27720,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880183250,
+      "name": "rust:dp04_source_png",
+      "bytes": 27303,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880321291,
+      "name": "retained_events",
+      "bytes": 28046,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880321875,
+      "name": "rust:dp04_source_png",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 27303,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880459666,
+      "name": "retained_events",
+      "bytes": 28342,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880597666,
+      "name": "retained_events",
+      "bytes": 28618,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880739000,
+      "name": "retained_events",
+      "bytes": 28966,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880739500,
+      "name": "rust:dp04_observations",
+      "bytes": 903,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723880968208,
+      "name": "retained_events",
+      "bytes": 29242,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881162000,
+      "name": "retained_events",
+      "bytes": 32577,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881354916,
+      "name": "retained_events",
+      "bytes": 32986,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881522000,
+      "name": "retained_events",
+      "bytes": 33334,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881522500,
+      "name": "rust:model_request_64",
+      "bytes": 3985,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881685041,
+      "name": "retained_call_records",
+      "bytes": 5862,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881919875,
+      "name": "retained_events",
+      "bytes": 33678,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723881920500,
+      "name": "rust:model_request_64",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 3985,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882081333,
+      "name": "retained_events",
+      "bytes": 34147,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882239791,
+      "name": "retained_events",
+      "bytes": 34454,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882390625,
+      "name": "retained_events",
+      "bytes": 34805,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882391083,
+      "name": "rust:dp04_screen_candidates_r2",
+      "bytes": 1059,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882560625,
+      "name": "retained_events",
+      "bytes": 36229,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882728958,
+      "name": "retained_events",
+      "bytes": 36604,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882886083,
+      "name": "retained_events",
+      "bytes": 36935,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882886458,
+      "name": "rust:model_request_72",
+      "bytes": 3331,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723882982000,
+      "name": "retained_call_records",
+      "bytes": 6604,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883216708,
+      "name": "retained_events",
+      "bytes": 37262,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883217250,
+      "name": "rust:model_request_72",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 3331,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883397166,
+      "name": "retained_events",
+      "bytes": 37697,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883575708,
+      "name": "retained_events",
+      "bytes": 38047,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883576166,
+      "name": "rust:dp04_speech_candidates_r2",
+      "bytes": 606,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883750541,
+      "name": "retained_events",
+      "bytes": 38954,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723883939375,
+      "name": "retained_events",
+      "bytes": 39331,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884116958,
+      "name": "retained_events",
+      "bytes": 39662,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884117500,
+      "name": "rust:model_request_79",
+      "bytes": 4810,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884243875,
+      "name": "retained_call_records",
+      "bytes": 7792,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884527166,
+      "name": "retained_events",
+      "bytes": 39989,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884527791,
+      "name": "rust:model_request_79",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 4810,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884715416,
+      "name": "retained_events",
+      "bytes": 40426,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723884919333,
+      "name": "retained_events",
+      "bytes": 43006,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885112000,
+      "name": "retained_events",
+      "bytes": 43389,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885305291,
+      "name": "retained_events",
+      "bytes": 43720,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885305750,
+      "name": "rust:model_request_85",
+      "bytes": 6171,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885530875,
+      "name": "retained_call_records",
+      "bytes": 8720,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885797625,
+      "name": "retained_events",
+      "bytes": 44048,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885798250,
+      "name": "rust:model_request_85",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 6171,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723885993500,
+      "name": "retained_events",
+      "bytes": 44492,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886185833,
+      "name": "retained_events",
+      "bytes": 44800,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886373458,
+      "name": "retained_events",
+      "bytes": 45152,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886374000,
+      "name": "rust:dp04_screen_candidates_r2",
+      "bytes": 1059,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886577250,
+      "name": "retained_events",
+      "bytes": 46577,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886782291,
+      "name": "retained_events",
+      "bytes": 46955,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886978708,
+      "name": "retained_events",
+      "bytes": 47287,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723886979125,
+      "name": "rust:model_request_93",
+      "bytes": 4810,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723887105333,
+      "name": "retained_call_records",
+      "bytes": 9908,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723887418166,
+      "name": "retained_events",
+      "bytes": 47615,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723887418958,
+      "name": "rust:model_request_93",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 4810,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723887636583,
+      "name": "retained_events",
+      "bytes": 48053,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723887890208,
+      "name": "retained_events",
+      "bytes": 49464,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723888116041,
+      "name": "retained_events",
+      "bytes": 49910,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723888347000,
+      "name": "retained_events",
+      "bytes": 50365,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723888592958,
+      "name": "retained_events",
+      "bytes": 53652,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723888820791,
+      "name": "retained_events",
+      "bytes": 53982,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723888821291,
+      "name": "rust:dp04_observations",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 903,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723889049416,
+      "name": "retained_events",
+      "bytes": 54314,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723889049958,
+      "name": "rust:dp04_prior_binding",
+      "bytes": 598,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723889297666,
+      "name": "retained_events",
+      "bytes": 54670,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723889298166,
+      "name": "rust:dp04_retained_proposal_trace",
+      "bytes": 5376,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921723889612916,
+      "name": "retained_events",
+      "bytes": 61756,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    }
+  ],
+  "process_registry": [
+    {
+      "pid": 58091,
+      "role": "python_runner_bridge"
+    },
+    {
+      "pid": 58106,
+      "role": "rust_candidate"
+    }
+  ],
+  "memory_nominal_poll_ms": 50,
+  "stderr": "",
+  "returncode": 0,
+  "input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/normalized-offline-reject_duplicate/raw/runs/offline_normalized-dp04-partial-correction-B-r1-5bb6b1/input.json",
+  "offline_responder": true
+}

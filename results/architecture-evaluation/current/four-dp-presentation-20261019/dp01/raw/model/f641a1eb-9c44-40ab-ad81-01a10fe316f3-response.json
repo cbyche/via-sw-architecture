@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-1d3a9dc0-fcc8-98ed-8db7-5b4405fc7065",
+  "object": "chat.completion",
+  "created": 1792345080,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"Summarize the actually explained criteria and the received quote, excluding installation details.\"\n  },\n  \"mode\": \"COMPLETE\",\n  \"answer\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"text\": \"The actually explained criteria involve comparing VAT-included prices and maintenance periods together, prioritizing longer maintenance if prices are equal. The purchase decision is pending verification of the latest quote. The received quote for Aster A (v1) lists a price of 1,250,000 KRW per unit (VAT included) with 36 months of maintenance. The quantity is 12 units, and no contract has been signed yet.\",\n    \"facts\": [\n      {\n        \"statement\": \"The comparison criteria include VAT-included price and maintenance period, with priority given to longer maintenance if prices are equal.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 2,\n        \"quote\": \"비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\\n두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\"\n      },\n      {\n        \"statement\": \"The purchase decision is not yet made and requires checking the latest version of the quote.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\"\n      },\n      {\n        \"statement\": \"The Aster A quote v1 specifies a price of 1,250,000 KRW per unit including VAT and 36 months of maintenance.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.\"\n      },\n      {\n        \"statement\": \"The quantity is 12 units and the contract or purchase has not been concluded.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"수량은 12대이며 계약이나 구매는 아직 체결하지 않았다.\"\n      }\n    ],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1\n      }\n    ],\n    \"conditions\": [\n      \"Installation details are excluded as per user instruction.\"\n    ],\n    \"uncertainties\": []\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requested a summary of the 'actually explained criteria' and the 'received quote'. The catalog indicates that lines 1-3 of 'explained-criteria' were delivered, while 'vendor-quote' was not delivered but is available as evidence. The user explicitly asked to exclude installation explanations. Therefore, I extracted the criteria from 'explained-criteria' and the pricing/maintenance/contract status from 'vendor-quote', omitting the installation fee mentioned in line 2 of 'vendor-quote'.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2744,
+    "total_tokens": 3631,
+    "completion_tokens": 887,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 2744
+    }
+  }
+}

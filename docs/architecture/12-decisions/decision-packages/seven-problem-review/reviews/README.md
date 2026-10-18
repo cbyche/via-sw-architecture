@@ -2,7 +2,9 @@
 
 2026-10-19 / 설계 문서·그림 및 보완 PoC 증거 검토
 
-> **현재 보완 PoC:** [15 결과 보고서](../15-corrected-poc-results.md)와 [실행 전 검토](poc-review-v2-pre-run.md)를 따른다. 기본 기능·측정 경계·실패 분모·QA04·메모리를 보완하고 원시 증거와 본문 의미를 교차 검토했다. [전체229 증거 감사](../../../../../../results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/final-review/final229-review.md)는153 PASS/1 LIMITED/0 FAIL이다. LIMITED는 calibration-v1 당시 파생 계산기 provenance UNKNOWN의 명시적 보존이다. 실제 후보 실패는 결과표에 남으며, 감사 통과가 후보의 업무 성공을 뜻하지 않는다. 실제 브라우저의 재생 필터·이미지·실패·호출 탭은 표본 확인했다. 번호 진단 본문 한 건의 작성자/독립 해석 차이도 보존했다.
+> **최신 발표용 검토:** [17 결과](../17-presentation-results.md)와 [발표용 검토 기록](presentation-review-20261019.md)을 따른다. 추가 모델 실행, 재생/native 검사, 독립 코드 검토와 PPTX의 시각 검토를 구별해 남긴다. 아래 검토는 각 이전 캠페인의 이력이다.
+
+> **이전 보완 PoC:** [15 결과 보고서](../15-corrected-poc-results.md)와 [실행 전 검토](poc-review-v2-pre-run.md)를 따른다. 기본 기능·측정 경계·실패 분모·QA04·메모리를 보완하고 원시 증거와 본문 의미를 교차 검토했다. [전체229 증거 감사](../../../../../../results/architecture-evaluation/current/four-dp-qwen37-review-v2-20261018/analysis/final-review/final229-review.md)는153 PASS/1 LIMITED/0 FAIL이다. LIMITED는 calibration-v1 당시 파생 계산기 provenance UNKNOWN의 명시적 보존이다. 실제 후보 실패는 결과표에 남으며, 감사 통과가 후보의 업무 성공을 뜻하지 않는다. 실제 브라우저의 재생 필터·이미지·실패·호출 탭은 표본 확인했다. 번호 진단 본문 한 건의 작성자/독립 해석 차이도 보존했다.
 
 > **이전 135회 PoC 검토 이력:** [초기 실행과 결과 검토](poc-final-review-20261018.md)의 당시 증거 일관성 결과는 32 PASS / RSS 한계 1 / FAIL 0이었다. 이후 사용자 리뷰에서 측정 의미와 기본 기능 누락이 확인됐으므로 현재 수치의 최종 유효성 판정으로 사용하지 않는다. 원시 실패와 이 검토 기록은 보존한다.
 

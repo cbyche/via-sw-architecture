@@ -1,0 +1,75 @@
+{
+  "version": "review-v2-future-features-before-patch",
+  "status": "PARENT_APPROVED_FEATURE_SCOPE_AWAIT_FORMAL_BASELINE_HASH",
+  "execution": "Independent scratch patch per feature and variant; deterministic protocol responder/replay only; no provider latency or semantic-quality claim",
+  "common_rules": [
+    "Use the runtime's formal frozen baseline, not a mutable calibration tree.",
+    "Apply each feature independently to A/B/C with identical externally visible requirements.",
+    "Count actual changed operational Rust modules, including newly added operational modules when used; retain exact diffs, implementation time, repair revisions and acceptance logs.",
+    "Do not split or merge modules to force a score difference. Ties are valid.",
+    "Retain existing whole-source revision/revocation and source-backed completion guards.",
+    "Original read model prompts and actual model outputs are not replaced by oracle content in measured candidates. Offline semantic responses are explicitly test doubles.",
+    "Keep failed patches/acceptance attempts and exclude all QA04 replay timing from actual model QA01/QA03."
+  ],
+  "tasks": [
+    {
+      "dp": "01",
+      "feature": "C05",
+      "name": "Query provenance of an actually delivered answer",
+      "input_contract": "Explicit UI action identifying a previously delivered response/goal ID. It does not require a new natural-language semantic classifier.",
+      "expected": [
+        "A successful actual complete callback registers queryable original source identity, source revision and inclusive extent from its delivered fact provenance.",
+        "Return source metadata and current usability separately from historical delivered provenance; do not claim an obsolete revision is current.",
+        "Unpresented initial proposals, rejected answers and exhausted repairs are never registered as delivered answers.",
+        "Unknown response ID returns NO_MATCH. Repeated lookup is read-only and leaves the answer and task unchanged.",
+        "Use the existing outputs/delivery lifecycle if sufficient; a one-module tie across ABC is acceptable."
+      ],
+      "acceptance_cases": ["delivered_current_answer", "unknown_response", "rejected_unpresented_proposal", "failed_completion", "source_revised_after_delivery", "read_only_repeat_lookup"]
+    },
+    {
+      "dp": "01",
+      "feature": "C06",
+      "name": "Withdraw a proper subrange of an evidence source",
+      "input_contract": "Trusted user authority event: source_id, current source revision, inclusive one-based start/end line, new access epoch. This is a permission event, never a referent/semantic oracle hint.",
+      "expected": [
+        "Block newly requested original reads and actual model/adoption use that overlap the withdrawn range, including old spans from before the authority change.",
+        "Keep nonoverlapping source ranges available. A retained raw view can preserve or split unaffected raw passages; a derived assertion spanning a withdrawn range must be blocked rather than host-reinterpreted.",
+        "Filter source-dependent recent delivered facts before later model transmission without resurrecting withdrawn text through a whole-answer string.",
+        "C producer reads only remaining authorized segments; current valid records survive and affected records cannot be consumed or republished from old state.",
+        "B request-local evidence and any active returned bundle must obey the same common span authority.",
+        "Do not represent past external disclosure as recalled; this feature blocks new use after the event."
+      ],
+      "acceptance_cases": ["proper_middle_range_withdrawal", "old_crossing_span_denied", "left_and_right_ranges_available", "raw_view_safe_fragment_preservation", "affected_recent_fact_removed", "affected_derived_record_blocked", "unaffected_record_preserved", "future_production_excludes_withdrawn_text", "whole_source_revoke_regression"]
+    },
+    {
+      "dp": "05",
+      "feature": "C04",
+      "name": "Apply a section-specific incremental Agent artifact update",
+      "input_contract": "A real received typed artifact update with task_id, artifact_id, section_id, base_revision, new_revision, replacement text and source provenance; no external action is replayed.",
+      "expected": [
+        "Bind an accepted section update to its existing Task/artifact and display the changed section with actual delivery history.",
+        "Leave other artifact sections, unrelated tasks/delegations and their delivery state unchanged.",
+        "Reject stale base_revision, duplicate new_revision, unknown artifact/section and task mismatch; retain rejected evidence.",
+        "Queued text/audio references to the changed section resolve to the new accepted section revision. Voice remains OFF; do not claim TTS performance.",
+        "Expose the updated public artifact as source-backed evidence for later handoff: current source vector/manifest and any B work-record dependencies must no longer admit the obsolete section.",
+        "Do not rebuild or silently alter unrelated sections or send real external actions."
+      ],
+      "acceptance_cases": ["accept_one_existing_section_update", "other_section_and_task_preserved", "actual_section_display_history", "queued_reference_revision_updated", "stale_duplicate_and_wrong_task_rejected", "later_handoff_uses_new_section_revision", "stale_derived_work_record_blocked"]
+    },
+    {
+      "dp": "05",
+      "feature": "C06",
+      "name": "Withdraw part of a handoff source",
+      "input_contract": "Trusted source-range authority event with revision and access epoch, as for DP01. Same source remains partially usable.",
+      "expected": [
+        "Manifest reports remaining usable segments and receiver range reads deny overlap with the withdrawn part while serving allowed ranges.",
+        "Capsule references/passages and B work-record spans from the old access epoch cannot be newly admitted if they overlap the withdrawn part.",
+        "Retain valid unaffected blocks/references and avoid whole-source denial merely because one range was withdrawn.",
+        "B future producer excludes withdrawn segments and does not reintroduce old text through previous_record.",
+        "All A/B/C receivers share the same access checks and do not gain broader ranges through a valid old manifest.",
+        "Record actual denied range receipts; whole-source revision/revocation still rejects stale and revoked spans."
+      ],
+      "acceptance_cases": ["manifest_allowed_segments", "receiver_old_lease_overlap_denied", "receiver_unaffected_range_served", "old_capsule_overlap_rejected", "old_record_overlap_blocked", "unaffected_blocks_refs_retained", "future_record_excludes_withdrawn_text", "revision_and_whole_revoke_regressions"]
+    }
+  ]
+}

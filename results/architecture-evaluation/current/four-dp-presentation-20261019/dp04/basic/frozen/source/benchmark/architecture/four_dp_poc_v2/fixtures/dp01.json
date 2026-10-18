@@ -1,0 +1,443 @@
+[
+  {
+    "id": "dp01-e1",
+    "description": "같은 자료의 가격, 일정, 조건 후속 질문",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "desk-compare",
+          "revision": 1,
+          "title": "업무용 PC 교체 비교표",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "line_count": 5,
+          "outline": [
+            {
+              "section": "가격과 유지보수",
+              "lines": [
+                1,
+                4
+              ]
+            },
+            {
+              "section": "일정과 미확인",
+              "lines": [
+                2,
+                5
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "c1",
+          "kind": "public_result"
+        }
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e1-q1",
+        "goal_id": "e1-q1",
+        "expression_id": "e1-q1-ref",
+        "revision": 1,
+        "conversation": "c1",
+        "utterance": "이 비교표에서 두 제품 가격을 알려줘.",
+        "expression": "이 비교표"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e1-q2",
+        "goal_id": "e1-q2",
+        "expression_id": "e1-q2-ref",
+        "revision": 1,
+        "conversation": "c1",
+        "utterance": "그 표의 납기와 유지보수 기간도 알려줘.",
+        "expression": "그 표"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e1-q3",
+        "goal_id": "e1-q3",
+        "expression_id": "e1-q3-ref",
+        "revision": 1,
+        "conversation": "c1",
+        "utterance": "같은 자료에서 가격이 같을 때 기준을 다시 설명해줘.",
+        "expression": "같은 자료"
+      }
+    ],
+    "dp": "01",
+    "fixture_version": "review-v2",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC"
+  },
+  {
+    "id": "dp01-e2",
+    "description": "PC 비교에서 메일, 일정, 출장 규정으로 전환",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "desk-compare",
+          "revision": 1,
+          "title": "업무용 PC 교체 비교표",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/desk-compare-v1.txt",
+          "line_count": 5,
+          "outline": [
+            {
+              "section": "가격과 유지보수",
+              "lines": [
+                1,
+                4
+              ]
+            },
+            {
+              "section": "일정과 미확인",
+              "lines": [
+                2,
+                5
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "c1",
+          "kind": "public_result"
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "customer-mail",
+          "revision": 1,
+          "title": "북부 고객 검토 회의 메일",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/customer-mail-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "회의 제안",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "c2",
+          "kind": "mail"
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "team-calendar",
+          "revision": 1,
+          "title": "개발팀 10월 일정 조회",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/team-calendar-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "사용 가능 시간",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "c2",
+          "kind": "calendar"
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "travel-rule",
+          "revision": 1,
+          "title": "국내 출장 경비 규정",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/travel-rule-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "숙박과 예외",
+              "lines": [
+                1,
+                2
+              ]
+            },
+            {
+              "section": "적용 범위",
+              "lines": [
+                3,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "c2",
+          "kind": "policy"
+        }
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e2-q1",
+        "goal_id": "e2-q1",
+        "expression_id": "e2-q1-ref",
+        "revision": 1,
+        "conversation": "c2",
+        "utterance": "PC 비교표의 가장 싼 제품은 뭐야?",
+        "expression": "PC 비교표"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e2-q2",
+        "goal_id": "e2-q2",
+        "expression_id": "e2-q2-ref",
+        "revision": 1,
+        "conversation": "c2",
+        "utterance": "주제 바꿔서 북부 고객이 보낸 회의 메일의 시간을 알려줘.",
+        "expression": "북부 고객이 보낸 회의 메일"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e2-q3",
+        "goal_id": "e2-q3",
+        "expression_id": "e2-q3-ref",
+        "revision": 1,
+        "conversation": "c2",
+        "utterance": "이제 개발팀 일정에서 그 시간 충돌을 확인해줘.",
+        "expression": "개발팀 일정"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e2-q4",
+        "goal_id": "e2-q4",
+        "expression_id": "e2-q4-ref",
+        "revision": 1,
+        "conversation": "c2",
+        "utterance": "출장 숙박 규정의 서울 예외를 알려줘.",
+        "expression": "출장 숙박 규정"
+      }
+    ],
+    "dp": "01",
+    "fixture_version": "review-v2",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC"
+  },
+  {
+    "id": "dp01-e3",
+    "description": "준비 응답 일부만 실제 표시, 원본 가격과 납기 정정",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "explained-criteria",
+          "revision": 1,
+          "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/explained-criteria-v1.txt",
+          "line_count": 5,
+          "outline": [
+            {
+              "section": "실제 설명한 기준",
+              "lines": [
+                1,
+                3
+              ]
+            },
+            {
+              "section": "표시하지 않은 준비 부분",
+              "lines": [
+                4,
+                5
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "old-c",
+          "kind": "response_delivery",
+          "delivered_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "vendor-quote",
+          "revision": 1,
+          "title": "Aster A 공급업체 견적",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "가격",
+              "lines": [
+                1,
+                1
+              ]
+            },
+            {
+              "section": "납기와 설치비",
+              "lines": [
+                2,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "old-c",
+          "kind": "public_result"
+        }
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e3-q1",
+        "goal_id": "e3-q1",
+        "expression_id": "e3-q1-ref",
+        "revision": 1,
+        "conversation": "partial-c",
+        "utterance": "지난번 네가 실제로 설명한 기준과 받아둔 견적을 같이 요약해줘. 설치를 설명했다고 가정하지 마.",
+        "expression": "실제로 설명한 기준과 받아둔 견적"
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "vendor-quote",
+          "revision": 2,
+          "title": "Aster A 공급업체 정정 견적",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/vendor-quote-v2.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "정정 가격과 일정",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "old-c",
+          "kind": "public_result"
+        }
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e3-q2",
+        "goal_id": "e3-q2",
+        "expression_id": "e3-q2-ref",
+        "revision": 2,
+        "conversation": "partial-c",
+        "utterance": "그 설명 기준과 이제 최신으로 정정된 견적만 다시 정리해줘.",
+        "expression": "그 설명 기준과 최신으로 정정된 견적"
+      }
+    ],
+    "dp": "01",
+    "fixture_version": "review-v2",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC"
+  },
+  {
+    "id": "dp01-e4",
+    "description": "새 대화에서 오래된 두 자료의 관계 재조회",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "old-research",
+          "revision": 1,
+          "title": "9월 전력 실측 공개 결과",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/old-research-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "유휴 전력과 한계",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "sep-research",
+          "kind": "public_result"
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "old-price",
+          "revision": 1,
+          "title": "9월 구매 예산 견적 공개 결과",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/old-price-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "과거 견적과 조건",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "sep-budget",
+          "kind": "public_result"
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "old-explanation",
+          "revision": 1,
+          "title": "9월 두 공개 결과를 설명한 실제 응답",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/sources/dp01/old-explanation-v1.txt",
+          "line_count": 3,
+          "outline": [
+            {
+              "section": "두 결과의 관계와 한계",
+              "lines": [
+                1,
+                3
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "sep-summary",
+          "kind": "response_delivery",
+          "delivered_lines": [
+            1,
+            3
+          ]
+        }
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e4-q1",
+        "goal_id": "e4-q1",
+        "expression_id": "e4-q1-ref",
+        "revision": 1,
+        "conversation": "history-c",
+        "utterance": "9월에 연구한 전력 결과와 받아둔 구매 견적을 같이 설명해줘.",
+        "expression": "연구한 전력 결과와 받아둔 구매 견적"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e4-q2",
+        "goal_id": "e4-q2",
+        "expression_id": "e4-q2-ref",
+        "revision": 1,
+        "conversation": "fresh-c",
+        "utterance": "새 대화야. 지난 9월 연구한 전력 결과와 받아둔 견적의 조건 차이를 다시 알려줘.",
+        "expression": "9월 전력 결과와 받아둔 견적"
+      },
+      {
+        "kind": "request",
+        "stimulus_id": "e4-q3",
+        "goal_id": "e4-q3",
+        "expression_id": "e4-q3-ref",
+        "revision": 1,
+        "conversation": "fresh-c",
+        "utterance": "이 새 대화에서 같은 두 원본의 미확인 사항만 다시 알려줘.",
+        "expression": "같은 두 원본"
+      }
+    ],
+    "dp": "01",
+    "fixture_version": "review-v2",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC"
+  }
+]

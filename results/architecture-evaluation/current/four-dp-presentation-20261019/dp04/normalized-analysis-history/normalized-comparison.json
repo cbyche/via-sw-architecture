@@ -1,0 +1,2027 @@
+{
+  "scope": "Separate common representation sensitivity; old48/raw/QA02 unchanged; no A2/A5/B4, no oracle conversion/clamping.",
+  "analysis_source_sha256": "c67cf6d8f12980ae5e086de83c28649b42fe8cd842ba2a8a9f4bf2f515d4c96b",
+  "phase_freeze_sha256": "152fb974b18d24b6cd9a09cd6ce352bcd262238e5433b2fd0361beb10d8c8744",
+  "actual_trials": 24,
+  "actual_requests": 57,
+  "known_usage_requests": 57,
+  "known_cost_usd": 0.0904784,
+  "unknown_usage": [],
+  "known_plus_unknown_reserved_upper_bound_usd": 0.0904784,
+  "options": [
+    {
+      "phase": "BASIC_NORMALIZED",
+      "dp": "04",
+      "variant": "A",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 7716.260644533334,
+      "qa01_n": 15,
+      "qa01_expected": 15,
+      "comparison_status": "COMPLETE",
+      "qa01_noresponse": 0,
+      "qa02_percent": 100.0,
+      "qa02_correct": 24,
+      "qa02_total": 24,
+      "qa03_ms": 9645.7323715,
+      "qa03_full_elapsed_ms": 9645.7323715,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 12,
+      "qa03_expected": 12,
+      "qa03_incomplete": 0,
+      "qa04_modules_mean": null,
+      "qa05_via_usd": 0.0254572,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 40.1408,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 0,
+      "content_total": 0,
+      "nh_percent": null,
+      "wrong_referent_judgments": 0,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 0,
+      "unknown_usage_calls": 0,
+      "model_calls": 15,
+      "functional_qualification": "FINITE_CHECKS_PASSED",
+      "common_endpoint_eligible": true,
+      "stages": {
+        "dp04.joint_grounding": {
+          "calls": 15,
+          "usage_known_calls": 15,
+          "usage_unknown_calls": 0,
+          "input_tokens": 38803,
+          "output_tokens": 6210,
+          "known_usd": 0.0254572,
+          "service_ms": 115593.33804199999,
+          "usage_scope": "reported tokens/cost only; unknown is not zero"
+        }
+      }
+    },
+    {
+      "phase": "BASIC_NORMALIZED",
+      "dp": "04",
+      "variant": "B",
+      "tactic": null,
+      "episodes": 12,
+      "qa01_ms": 18774.385822916665,
+      "qa01_n": 12,
+      "qa01_expected": 15,
+      "comparison_status": "INCOMPLETE",
+      "qa01_noresponse": 3,
+      "qa02_percent": 75.0,
+      "qa02_correct": 18,
+      "qa02_total": 24,
+      "qa03_ms": 25033.006129555557,
+      "qa03_full_elapsed_ms": 25033.006129555557,
+      "receiver_shim_excluded_ms": 0.0,
+      "qa03_n": 9,
+      "qa03_expected": 12,
+      "qa03_incomplete": 3,
+      "qa04_modules_mean": null,
+      "qa05_via_usd": 0.0650212,
+      "qa05_receiver_usd": 0,
+      "qa06_incomplete_memory_runs": 0,
+      "qa06_peak_rss_mb": 41.893888,
+      "nr_correct": 0,
+      "nr_total": 0,
+      "nr_percent": null,
+      "nh_correct": 0,
+      "nh_total": 0,
+      "nh_purpose_contract_correct": 0,
+      "nh_combined_contract_correct": 0,
+      "content_correct": 0,
+      "content_total": 0,
+      "nh_percent": null,
+      "wrong_referent_judgments": 6,
+      "wrong_association_judgments": 0,
+      "wrong_handoff_contracts": 0,
+      "errors": 3,
+      "unknown_usage_calls": 0,
+      "model_calls": 42,
+      "functional_qualification": "FAILED_FINITE_CHECKS",
+      "common_endpoint_eligible": false,
+      "stages": {
+        "dp04.screen_producer": {
+          "calls": 15,
+          "usage_known_calls": 15,
+          "usage_unknown_calls": 0,
+          "input_tokens": 33264,
+          "output_tokens": 13306,
+          "known_usd": 0.0345952,
+          "service_ms": 230005.86212299997,
+          "usage_scope": "reported tokens/cost only; unknown is not zero"
+        },
+        "dp04.speech_producer": {
+          "calls": 15,
+          "usage_known_calls": 15,
+          "usage_unknown_calls": 0,
+          "input_tokens": 10992,
+          "output_tokens": 2973,
+          "known_usd": 0.0091536,
+          "service_ms": 68219.698042,
+          "usage_scope": "reported tokens/cost only; unknown is not zero"
+        },
+        "dp04.screen_source_expansion": {
+          "calls": 3,
+          "usage_known_calls": 3,
+          "usage_unknown_calls": 0,
+          "input_tokens": 13445,
+          "output_tokens": 4419,
+          "known_usd": 0.012448400000000002,
+          "service_ms": 74208.346334,
+          "usage_scope": "reported tokens/cost only; unknown is not zero"
+        },
+        "dp04.candidate_binding": {
+          "calls": 9,
+          "usage_known_calls": 9,
+          "usage_unknown_calls": 0,
+          "input_tokens": 16484,
+          "output_tokens": 1394,
+          "known_usd": 0.008824000000000002,
+          "service_ms": 34930.823498,
+          "usage_scope": "reported tokens/cost only; unknown is not zero"
+        }
+      }
+    }
+  ],
+  "eligible_basic_options": [
+    "A"
+  ],
+  "selection_status": "ONE_COMMON_ENDPOINT_ELIGIBLE_BASIC_OPTION",
+  "normalization_events": 33,
+  "normalized_boxes": 172,
+  "checks": [
+    {
+      "check": "all24_unique_planned_keys",
+      "pass": true
+    },
+    {
+      "check": "freeze_binary_plan_schedule",
+      "pass": true
+    },
+    {
+      "check": "all_phase_local_global_call_links",
+      "pass": true
+    },
+    {
+      "check": "phase_cap20c_and_dp04_cap55c",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-dense-A-r1-23bb4b_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-dense-B-r1-27bc1b_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-free-region-A-r1-c112b5_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-free-region-B-r1-89c99a_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-page-change-A-r1-0fdc1c_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-page-change-B-r1-1c98df_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-partial-correction-A-r1-29c4db_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-partial-correction-B-r1-e11ecb_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-dense-B-r2-15a81a_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-dense-A-r2-a2a6a9_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-free-region-B-r2-74aa69_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-free-region-A-r2-500a00_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-page-change-B-r2-a74f57_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-page-change-A-r2-2fbe6d_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-partial-correction-B-r2-c49288_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-partial-correction-A-r2-c761ab_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-dense-A-r3-75c81b_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-dense-B-r3-40ba0c_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-free-region-A-r3-f9c2d7_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-free-region-B-r3-76cf1d_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-page-change-A-r3-774537_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-page-change-B-r3-c1f15c_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-partial-correction-A-r3-4fbd27_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "basic_normalized-dp04-partial-correction-B-r3-04afbf_no_free_tactics",
+      "pass": true
+    },
+    {
+      "check": "5cee6928-9aac-4e9e-bf74-81b1e43f2caf_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "6fd9c2f2-d028-493a-b904-81a34eaabdce_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "05b97dca-1ad3-4e02-859f-6c58e30ad86a_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "4046c25d-62c3-4214-9228-7bb0eb055ec4_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "0a82f9e7-d3a2-49d9-b8e2-2a8850c94952_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "7b3617ab-3f6f-40e4-a7a2-23d70eff7540_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "ed9bbf02-53d7-45b9-9070-e0bfcf3f29a8_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "9d65e22f-4f1e-4b50-93b6-f7ea04cfc85b_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "1d13b67e-4f81-47d5-88f4-c321ee1df263_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "2f972ac8-a795-4925-9ff6-125a4a84d740_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "c135bdc6-604b-4b90-854e-6903ce3ae752_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "5aad12ac-1d65-40a7-ae00-15770fcead00_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "dfd4d93b-df01-49e3-9ada-fca33bf50740_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "06e633c8-51f6-4f2e-b298-7d4951bfdac1_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "3a606061-3398-4f2b-a436-092b36fc2216_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "e31b3522-58bb-47f0-bfb2-e471964178ef_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "7e571d60-2a6e-4872-b5c2-1c41cc4e5db2_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "8c773a50-4d43-407e-983f-4fd469906a64_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "725af51e-f955-49ef-826c-caea0d2750f0_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "399edb30-5853-4338-95b1-63e32fca178c_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "c3c547d0-d8e1-4b77-ac30-67b10de4f1ac_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "2eb631e7-649b-44fc-b58a-e6653b80ce3b_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "5302cdad-5445-419b-8e4d-87707c8908f0_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "c0698d2c-a561-45c9-98a3-4c76fc7bb8cc_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "9edaa022-2d12-4870-85d0-42605b8d804e_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "1744eb4d-f4db-44dd-a118-a2aaf9531a89_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "dc46d2e6-65b6-412f-9844-ee65e3476d34_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "009c41f0-4aa0-4e3d-9d8f-b298763989b9_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "62a73c5a-27ff-4787-a0a4-d3dee8b70a01_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "b60492b8-4868-48b9-b611-66e834e02ac4_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "9cdd615f-6f61-461d-802c-3461a210702c_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "d2b80545-b9c6-446d-b9f4-467f7e122a3e_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "c943f802-a81f-4392-94ba-f06457074f60_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "74a58286-c321-4763-98a1-2521c784b566_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "6832f63e-4a33-44f4-bfbf-c73de565b988_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "00d75b05-5801-43b5-916b-7663bc197e46_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "dabdeea7-42b0-45ce-b2e2-5969c40b21e9_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "332458e5-7400-49ab-9eef-18be99b82561_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "c66cd255-b38c-41b2-8b8f-f65b22e68fa3_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "285909e7-67d3-470e-8f39-f4aef9a76767_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "083fda9c-e2d9-4161-86dd-8cfabc504ad7_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "eac30e41-211b-4762-84f3-608447024028_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "bbf976c9-f51e-41e4-b1fb-d8de2b3fd5e3_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "51759416-afb5-48c3-829e-40405de1518e_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "eff5525b-b69c-40e5-82ca-05d02ea2003e_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "323ed00c-4966-4e09-9a76-4b68eb772c6a_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "1bb86eeb-a198-4985-8579-50be9d41add9_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "be93bd8d-71c4-4eb7-86de-a0fc378e3020_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "16741e15-16bf-469a-9e97-ab7a74437a6a_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "fd3bebc2-273d-4619-8030-cfc4058c6635_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "7e6c91ee-d7ea-4a78-bd50-43d3944d736d_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "be50cfa6-092a-4895-8f99-6dee53e50d1b_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "ea41e0f1-c4c1-4f41-9ccb-f84d477789d2_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "9bfdaa4a-87b2-4e0a-8d4a-781e52e061ef_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "4acdfe66-52e6-4b38-94e9-ceff423b24e8_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "2c68af38-d18b-40f5-aa25-f8309836efd4_fixed_model_usage",
+      "pass": true
+    },
+    {
+      "check": "60b49a3d-24c3-4ef0-a0c8-bc8bd7f59132_fixed_model_usage",
+      "pass": true
+    }
+  ],
+  "all_checks_pass": true,
+  "failures": [
+    {
+      "run_id": "basic_normalized-dp04-dense-A-r1-23bb4b",
+      "variant": "A",
+      "episode": "dp04-dense",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-dense-B-r1-27bc1b",
+      "variant": "B",
+      "episode": "dp04-dense",
+      "rep": 1,
+      "events": [
+        {
+          "data": {
+            "issues": [
+              "EXPANSION_BUDGET_EXHAUSTED"
+            ],
+            "owner": "candidate_binding",
+            "proposal": {
+              "_provider_usage": {
+                "input_tokens": 2462,
+                "output_tokens": 178
+              },
+              "adoptions": [
+                {
+                  "evidence": "Cue pointer-1 relation point_inside uniquely maps to D06.",
+                  "expression_id": "dense-first",
+                  "status": "ready",
+                  "targets": [
+                    "D06 / Orion"
+                  ]
+                },
+                {
+                  "evidence": "Cue pointer-2 has no target_ids; screen coverage unknown for this cue.",
+                  "expression_id": "dense-second",
+                  "status": "need_evidence",
+                  "targets": []
+                }
+              ],
+              "need_expansion": {
+                "expression_ids": [
+                  "dense-second"
+                ],
+                "producer": "screen",
+                "scope": "pointer-2"
+              }
+            }
+          },
+          "elapsed_ns": 60926279041,
+          "event_id": "event-45",
+          "goal_ids": [
+            "dp04-dense:grounding"
+          ],
+          "kind": "GROUNDING_CONSISTENCY_REJECTED",
+          "parent_ids": [
+            "operation-40"
+          ],
+          "type": "event",
+          "observed_ns": 1921865775562500
+        },
+        {
+          "data": {
+            "goal_id": "dp04-dense:grounding",
+            "proposal": {
+              "adoptions": [
+                {
+                  "count": 1,
+                  "cue_ids": [
+                    "pointer-1"
+                  ],
+                  "evidence": "Consistency validation failed after bounded source rejudgment",
+                  "expression_id": "dense-first",
+                  "extents": [],
+                  "relation": "designated_by_cue",
+                  "status": "need_evidence",
+                  "targets": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [
+                    "pointer-2"
+                  ],
+                  "evidence": "Consistency validation failed after bounded source rejudgment",
+                  "expression_id": "dense-second",
+                  "extents": [],
+                  "relation": "designated_by_cue",
+                  "status": "need_evidence",
+                  "targets": []
+                }
+              ],
+              "candidate_read_set": {
+                "screen_generation": 2,
+                "screen_source_snapshot": [
+                  {
+                    "frame_id": "dense",
+                    "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                    "source_id": "document",
+                    "source_revision": 1
+                  }
+                ],
+                "speech_revision": 1
+              },
+              "contract_failures": [
+                "EXPANSION_BUDGET_EXHAUSTED"
+              ],
+              "intent": "Compare branch performance of two designated items",
+              "revision": 1,
+              "screen_state": {
+                "_provider_usage": {
+                  "input_tokens": 4483,
+                  "output_tokens": 1473
+                },
+                "candidates": [
+                  {
+                    "bbox": [
+                      30.0,
+                      84.0,
+                      240.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      130,
+                      240,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D01 / Orion North / Q1 Revenue 85 / active Forecast review",
+                    "target_id": "D01 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      260.0,
+                      84.0,
+                      470.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      260,
+                      130,
+                      470,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D02 / Orion North / Q2 Revenue 92 / active Forecast review",
+                    "target_id": "D02 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      490.0,
+                      84.0,
+                      700.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      490,
+                      130,
+                      700,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D03 / Orion North / Q3 Revenue 99 / active Forecast review",
+                    "target_id": "D03 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      720.0,
+                      84.0,
+                      930.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      720,
+                      130,
+                      930,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D04 / Orion North / Q4 Revenue 106 / active Forecast review",
+                    "target_id": "D04 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      30.0,
+                      214.0,
+                      240.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      330,
+                      240,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D05 / Orion South / Q1 Revenue 113 / active Forecast review",
+                    "target_id": "D05 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      260.0,
+                      214.0,
+                      470.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      260,
+                      330,
+                      470,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      490.0,
+                      214.0,
+                      700.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      490,
+                      330,
+                      700,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D07 / Orion South / Q3 Revenue 98 / active Forecast review",
+                    "target_id": "D07 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      720.0,
+                      214.0,
+                      930.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      720,
+                      330,
+                      930,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D08 / Orion South / Q4 Revenue 105 / active Forecast review",
+                    "target_id": "D08 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      30.0,
+                      344.0,
+                      240.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      530,
+                      240,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D09 / Orion East / Q1 Revenue 112 / active Forecast review",
+                    "target_id": "D09 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      260.0,
+                      344.0,
+                      470.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      260,
+                      530,
+                      470,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D10 / Orion East / Q2 Revenue 90 / active Forecast review",
+                    "target_id": "D10 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      490.0,
+                      344.0,
+                      700.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      490,
+                      530,
+                      700,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      720.0,
+                      344.0,
+                      930.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      720,
+                      530,
+                      930,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D12 / Orion East / Q4 Revenue 104 / active Forecast review",
+                    "target_id": "D12 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "coordinate_wire_valid": true,
+                "coverage": {
+                  "competing": [],
+                  "complete": false,
+                  "unknown": [
+                    "pointer-2"
+                  ]
+                },
+                "cue_relations": [
+                  {
+                    "complete": true,
+                    "cue_id": "pointer-1",
+                    "navigation_alternative": false,
+                    "relation": "point_inside",
+                    "target_ids": [
+                      "D06 / Orion"
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "complete": false,
+                    "cue_id": "pointer-2",
+                    "navigation_alternative": false,
+                    "relation": "point_inside",
+                    "target_ids": [],
+                    "unique": false
+                  }
+                ],
+                "geometry_issues": [],
+                "producer_generation": 2,
+                "revision": 1,
+                "source_refs": [
+                  "dense"
+                ],
+                "source_snapshot": [
+                  {
+                    "frame_id": "dense",
+                    "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                    "source_id": "document",
+                    "source_revision": 1
+                  }
+                ]
+              },
+              "source_snapshot": [
+                {
+                  "frame_id": "dense",
+                  "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_state": {
+                "_provider_usage": {
+                  "input_tokens": 696,
+                  "output_tokens": 227
+                },
+                "coverage": {
+                  "complete": true,
+                  "unknown": []
+                },
+                "expressions": [
+                  {
+                    "count": 1,
+                    "cue_ids": [
+                      "pointer-1"
+                    ],
+                    "explicit_target_ids": [],
+                    "expression_id": "dense-first",
+                    "kind": "item",
+                    "meaning": "First item indicated by pointer move",
+                    "relation": "designated_by_cue",
+                    "unresolved": []
+                  },
+                  {
+                    "count": 1,
+                    "cue_ids": [
+                      "pointer-2"
+                    ],
+                    "explicit_target_ids": [],
+                    "expression_id": "dense-second",
+                    "kind": "item",
+                    "meaning": "Second item indicated by pointer move",
+                    "relation": "designated_by_cue",
+                    "unresolved": []
+                  }
+                ],
+                "intent": "Compare branch performance of two designated items",
+                "revision": 1
+              }
+            },
+            "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+            "revision": 1,
+            "stimulus_id": "dp04-dense:r1"
+          },
+          "elapsed_ns": 60926677875,
+          "event_id": "event-48",
+          "goal_ids": [
+            "dp04-dense:grounding"
+          ],
+          "kind": "GOAL_FAILED",
+          "parent_ids": [
+            "operation-40"
+          ],
+          "type": "event",
+          "observed_ns": 1921865776460958
+        }
+      ]
+    },
+    {
+      "run_id": "basic_normalized-dp04-free-region-A-r1-c112b5",
+      "variant": "A",
+      "episode": "dp04-free-region",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-free-region-B-r1-89c99a",
+      "variant": "B",
+      "episode": "dp04-free-region",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-page-change-A-r1-0fdc1c",
+      "variant": "A",
+      "episode": "dp04-page-change",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-page-change-B-r1-1c98df",
+      "variant": "B",
+      "episode": "dp04-page-change",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-partial-correction-A-r1-29c4db",
+      "variant": "A",
+      "episode": "dp04-partial-correction",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-partial-correction-B-r1-e11ecb",
+      "variant": "B",
+      "episode": "dp04-partial-correction",
+      "rep": 1,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-dense-B-r2-15a81a",
+      "variant": "B",
+      "episode": "dp04-dense",
+      "rep": 2,
+      "events": [
+        {
+          "data": {
+            "issues": [
+              "EXPANSION_BUDGET_EXHAUSTED"
+            ],
+            "owner": "candidate_binding",
+            "proposal": {
+              "_provider_usage": {
+                "input_tokens": 2462,
+                "output_tokens": 177
+              },
+              "adoptions": [
+                {
+                  "evidence": "Cue pointer-1 point_inside D06 / Orion bbox.",
+                  "expression_id": "dense-first",
+                  "status": "ready",
+                  "targets": [
+                    "D06 / Orion"
+                  ]
+                },
+                {
+                  "evidence": "Cue pointer-2 point_inside has no target_ids; screen coverage unknown.",
+                  "expression_id": "dense-second",
+                  "status": "need_evidence",
+                  "targets": []
+                }
+              ],
+              "need_expansion": {
+                "expression_ids": [
+                  "dense-second"
+                ],
+                "producer": "screen",
+                "scope": "pointer-2 resolution"
+              }
+            }
+          },
+          "elapsed_ns": 60839955417,
+          "event_id": "event-45",
+          "goal_ids": [
+            "dp04-dense:grounding"
+          ],
+          "kind": "GROUNDING_CONSISTENCY_REJECTED",
+          "parent_ids": [
+            "operation-40"
+          ],
+          "type": "event",
+          "observed_ns": 1922032541079791
+        },
+        {
+          "data": {
+            "goal_id": "dp04-dense:grounding",
+            "proposal": {
+              "adoptions": [
+                {
+                  "count": 1,
+                  "cue_ids": [
+                    "pointer-1"
+                  ],
+                  "evidence": "Consistency validation failed after bounded source rejudgment",
+                  "expression_id": "dense-first",
+                  "extents": [],
+                  "relation": "designated_by_cue",
+                  "status": "need_evidence",
+                  "targets": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [
+                    "pointer-2"
+                  ],
+                  "evidence": "Consistency validation failed after bounded source rejudgment",
+                  "expression_id": "dense-second",
+                  "extents": [],
+                  "relation": "designated_by_cue",
+                  "status": "need_evidence",
+                  "targets": []
+                }
+              ],
+              "candidate_read_set": {
+                "screen_generation": 2,
+                "screen_source_snapshot": [
+                  {
+                    "frame_id": "dense",
+                    "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                    "source_id": "document",
+                    "source_revision": 1
+                  }
+                ],
+                "speech_revision": 1
+              },
+              "contract_failures": [
+                "EXPANSION_BUDGET_EXHAUSTED"
+              ],
+              "intent": "Compare branch performance of two designated items",
+              "revision": 1,
+              "screen_state": {
+                "_provider_usage": {
+                  "input_tokens": 4483,
+                  "output_tokens": 1473
+                },
+                "candidates": [
+                  {
+                    "bbox": [
+                      30.0,
+                      84.0,
+                      240.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      130,
+                      240,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D01 / Orion North / Q1 Revenue 85 / active Forecast review",
+                    "target_id": "D01 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      270.0,
+                      84.0,
+                      480.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      270,
+                      130,
+                      480,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D02 / Orion North / Q2 Revenue 92 / active Forecast review",
+                    "target_id": "D02 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      510.0,
+                      84.0,
+                      720.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      510,
+                      130,
+                      720,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D03 / Orion North / Q3 Revenue 99 / active Forecast review",
+                    "target_id": "D03 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      750.0,
+                      84.0,
+                      960.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      750,
+                      130,
+                      960,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D04 / Orion North / Q4 Revenue 106 / active Forecast review",
+                    "target_id": "D04 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      30.0,
+                      214.0,
+                      240.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      330,
+                      240,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D05 / Orion South / Q1 Revenue 113 / active Forecast review",
+                    "target_id": "D05 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      270.0,
+                      214.0,
+                      480.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      270,
+                      330,
+                      480,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      510.0,
+                      214.0,
+                      720.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      510,
+                      330,
+                      720,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D07 / Orion South / Q3 Revenue 98 / active Forecast review",
+                    "target_id": "D07 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      750.0,
+                      214.0,
+                      960.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      750,
+                      330,
+                      960,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D08 / Orion South / Q4 Revenue 105 / active Forecast review",
+                    "target_id": "D08 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      30.0,
+                      344.0,
+                      240.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      530,
+                      240,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D09 / Orion East / Q1 Revenue 112 / active Forecast review",
+                    "target_id": "D09 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      270.0,
+                      344.0,
+                      480.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      270,
+                      530,
+                      480,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D10 / Orion East / Q2 Revenue 90 / active Forecast review",
+                    "target_id": "D10 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      510.0,
+                      344.0,
+                      720.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      510,
+                      530,
+                      720,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      750.0,
+                      344.0,
+                      960.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      750,
+                      530,
+                      960,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D12 / Orion East / Q4 Revenue 104 / active Forecast review",
+                    "target_id": "D12 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "coordinate_wire_valid": true,
+                "coverage": {
+                  "competing": [],
+                  "complete": false,
+                  "unknown": [
+                    "pointer-2"
+                  ]
+                },
+                "cue_relations": [
+                  {
+                    "complete": true,
+                    "cue_id": "pointer-1",
+                    "navigation_alternative": false,
+                    "relation": "point_inside",
+                    "target_ids": [
+                      "D06 / Orion"
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "complete": false,
+                    "cue_id": "pointer-2",
+                    "navigation_alternative": false,
+                    "relation": "point_inside",
+                    "target_ids": [],
+                    "unique": false
+                  }
+                ],
+                "geometry_issues": [],
+                "producer_generation": 2,
+                "revision": 1,
+                "source_refs": [
+                  "dense"
+                ],
+                "source_snapshot": [
+                  {
+                    "frame_id": "dense",
+                    "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                    "source_id": "document",
+                    "source_revision": 1
+                  }
+                ]
+              },
+              "source_snapshot": [
+                {
+                  "frame_id": "dense",
+                  "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_state": {
+                "_provider_usage": {
+                  "input_tokens": 696,
+                  "output_tokens": 227
+                },
+                "coverage": {
+                  "complete": true,
+                  "unknown": []
+                },
+                "expressions": [
+                  {
+                    "count": 1,
+                    "cue_ids": [
+                      "pointer-1"
+                    ],
+                    "explicit_target_ids": [],
+                    "expression_id": "dense-first",
+                    "kind": "item",
+                    "meaning": "First item indicated by pointer move",
+                    "relation": "designated_by_cue",
+                    "unresolved": []
+                  },
+                  {
+                    "count": 1,
+                    "cue_ids": [
+                      "pointer-2"
+                    ],
+                    "explicit_target_ids": [],
+                    "expression_id": "dense-second",
+                    "kind": "item",
+                    "meaning": "Second item indicated by pointer move",
+                    "relation": "designated_by_cue",
+                    "unresolved": []
+                  }
+                ],
+                "intent": "Compare branch performance of two designated items",
+                "revision": 1
+              }
+            },
+            "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+            "revision": 1,
+            "stimulus_id": "dp04-dense:r1"
+          },
+          "elapsed_ns": 60840170709,
+          "event_id": "event-48",
+          "goal_ids": [
+            "dp04-dense:grounding"
+          ],
+          "kind": "GOAL_FAILED",
+          "parent_ids": [
+            "operation-40"
+          ],
+          "type": "event",
+          "observed_ns": 1922032541588875
+        }
+      ]
+    },
+    {
+      "run_id": "basic_normalized-dp04-dense-A-r2-a2a6a9",
+      "variant": "A",
+      "episode": "dp04-dense",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-free-region-B-r2-74aa69",
+      "variant": "B",
+      "episode": "dp04-free-region",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-free-region-A-r2-500a00",
+      "variant": "A",
+      "episode": "dp04-free-region",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-page-change-B-r2-a74f57",
+      "variant": "B",
+      "episode": "dp04-page-change",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-page-change-A-r2-2fbe6d",
+      "variant": "A",
+      "episode": "dp04-page-change",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-partial-correction-B-r2-c49288",
+      "variant": "B",
+      "episode": "dp04-partial-correction",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-partial-correction-A-r2-c761ab",
+      "variant": "A",
+      "episode": "dp04-partial-correction",
+      "rep": 2,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-dense-A-r3-75c81b",
+      "variant": "A",
+      "episode": "dp04-dense",
+      "rep": 3,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-dense-B-r3-40ba0c",
+      "variant": "B",
+      "episode": "dp04-dense",
+      "rep": 3,
+      "events": [
+        {
+          "data": {
+            "issues": [
+              "EXPANSION_BUDGET_EXHAUSTED"
+            ],
+            "owner": "candidate_binding",
+            "proposal": {
+              "_provider_usage": {
+                "input_tokens": 2458,
+                "output_tokens": 175
+              },
+              "adoptions": [
+                {
+                  "evidence": "Cue pointer-1 resolves to D06 via point_inside relation.",
+                  "expression_id": "dense-first",
+                  "status": "ready",
+                  "targets": [
+                    "D06 / Orion"
+                  ]
+                },
+                {
+                  "evidence": "Cue pointer-2 has no target candidates; screen coverage unknown.",
+                  "expression_id": "dense-second",
+                  "status": "need_evidence",
+                  "targets": []
+                }
+              ],
+              "need_expansion": {
+                "expression_ids": [
+                  "dense-second"
+                ],
+                "producer": "screen",
+                "scope": "pointer-2"
+              }
+            }
+          },
+          "elapsed_ns": 60728782333,
+          "event_id": "event-45",
+          "goal_ids": [
+            "dp04-dense:grounding"
+          ],
+          "kind": "GROUNDING_CONSISTENCY_REJECTED",
+          "parent_ids": [
+            "operation-40"
+          ],
+          "type": "event",
+          "observed_ns": 1922214068450708
+        },
+        {
+          "data": {
+            "goal_id": "dp04-dense:grounding",
+            "proposal": {
+              "adoptions": [
+                {
+                  "count": 1,
+                  "cue_ids": [
+                    "pointer-1"
+                  ],
+                  "evidence": "Consistency validation failed after bounded source rejudgment",
+                  "expression_id": "dense-first",
+                  "extents": [],
+                  "relation": "designated_by_cue",
+                  "status": "need_evidence",
+                  "targets": []
+                },
+                {
+                  "count": 1,
+                  "cue_ids": [
+                    "pointer-2"
+                  ],
+                  "evidence": "Consistency validation failed after bounded source rejudgment",
+                  "expression_id": "dense-second",
+                  "extents": [],
+                  "relation": "designated_by_cue",
+                  "status": "need_evidence",
+                  "targets": []
+                }
+              ],
+              "candidate_read_set": {
+                "screen_generation": 2,
+                "screen_source_snapshot": [
+                  {
+                    "frame_id": "dense",
+                    "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                    "source_id": "document",
+                    "source_revision": 1
+                  }
+                ],
+                "speech_revision": 1
+              },
+              "contract_failures": [
+                "EXPANSION_BUDGET_EXHAUSTED"
+              ],
+              "intent": "Compare branch performance of two designated items",
+              "revision": 1,
+              "screen_state": {
+                "_provider_usage": {
+                  "input_tokens": 4479,
+                  "output_tokens": 1473
+                },
+                "candidates": [
+                  {
+                    "bbox": [
+                      30.0,
+                      84.0,
+                      240.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      130,
+                      240,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D01 / Orion North / Q1 Revenue 85 / active Forecast review",
+                    "target_id": "D01 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      270.0,
+                      84.0,
+                      480.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      270,
+                      130,
+                      480,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D02 / Orion North / Q2 Revenue 92 / active Forecast review",
+                    "target_id": "D02 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      510.0,
+                      84.0,
+                      720.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      510,
+                      130,
+                      720,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D03 / Orion North / Q3 Revenue 99 / active Forecast review",
+                    "target_id": "D03 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      750.0,
+                      84.0,
+                      960.0,
+                      188.0
+                    ],
+                    "bbox_2d": [
+                      750,
+                      130,
+                      960,
+                      290
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D04 / Orion North / Q4 Revenue 106 / active Forecast review",
+                    "target_id": "D04 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      30.0,
+                      214.0,
+                      240.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      330,
+                      240,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D05 / Orion South / Q1 Revenue 113 / active Forecast review",
+                    "target_id": "D05 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      270.0,
+                      214.0,
+                      480.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      270,
+                      330,
+                      480,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D06 / Orion South / Q2 Revenue 91 / active Forecast review",
+                    "target_id": "D06 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      510.0,
+                      214.0,
+                      720.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      510,
+                      330,
+                      720,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D07 / Orion South / Q3 Revenue 98 / active Forecast review",
+                    "target_id": "D07 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      750.0,
+                      214.0,
+                      960.0,
+                      318.0
+                    ],
+                    "bbox_2d": [
+                      750,
+                      330,
+                      960,
+                      490
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D08 / Orion South / Q4 Revenue 105 / active Forecast review",
+                    "target_id": "D08 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      30.0,
+                      344.0,
+                      240.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      30,
+                      530,
+                      240,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D09 / Orion East / Q1 Revenue 112 / active Forecast review",
+                    "target_id": "D09 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      270.0,
+                      344.0,
+                      480.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      270,
+                      530,
+                      480,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D10 / Orion East / Q2 Revenue 90 / active Forecast review",
+                    "target_id": "D10 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      510.0,
+                      344.0,
+                      720.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      510,
+                      530,
+                      720,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D11 / Orion East / Q3 Revenue 97 / active Forecast review",
+                    "target_id": "D11 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  },
+                  {
+                    "bbox": [
+                      750.0,
+                      344.0,
+                      960.0,
+                      448.0
+                    ],
+                    "bbox_2d": [
+                      750,
+                      530,
+                      960,
+                      690
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "dense",
+                    "kind": "card",
+                    "label": "D12 / Orion East / Q4 Revenue 104 / active Forecast review",
+                    "target_id": "D12 / Orion",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "coordinate_wire_valid": true,
+                "coverage": {
+                  "competing": [],
+                  "complete": false,
+                  "unknown": [
+                    "pointer-2"
+                  ]
+                },
+                "cue_relations": [
+                  {
+                    "complete": true,
+                    "cue_id": "pointer-1",
+                    "navigation_alternative": false,
+                    "relation": "point_inside",
+                    "target_ids": [
+                      "D06 / Orion"
+                    ],
+                    "unique": true
+                  },
+                  {
+                    "complete": false,
+                    "cue_id": "pointer-2",
+                    "navigation_alternative": false,
+                    "relation": "point_inside",
+                    "target_ids": [],
+                    "unique": false
+                  }
+                ],
+                "geometry_issues": [],
+                "producer_generation": 2,
+                "revision": 1,
+                "source_refs": [
+                  "dense"
+                ],
+                "source_snapshot": [
+                  {
+                    "frame_id": "dense",
+                    "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                    "source_id": "document",
+                    "source_revision": 1
+                  }
+                ]
+              },
+              "source_snapshot": [
+                {
+                  "frame_id": "dense",
+                  "sha256": "cde7cfc8dadcc70b08cf51537d80a16a524f81295abdef38ec98ad91f27bc077",
+                  "source_id": "document",
+                  "source_revision": 1
+                }
+              ],
+              "speech_state": {
+                "_provider_usage": {
+                  "input_tokens": 696,
+                  "output_tokens": 223
+                },
+                "coverage": {
+                  "complete": true,
+                  "unknown": []
+                },
+                "expressions": [
+                  {
+                    "count": 1,
+                    "cue_ids": [
+                      "pointer-1"
+                    ],
+                    "explicit_target_ids": [],
+                    "expression_id": "dense-first",
+                    "kind": "item",
+                    "meaning": "First item for comparison",
+                    "relation": "designated_by_cue",
+                    "unresolved": []
+                  },
+                  {
+                    "count": 1,
+                    "cue_ids": [
+                      "pointer-2"
+                    ],
+                    "explicit_target_ids": [],
+                    "expression_id": "dense-second",
+                    "kind": "item",
+                    "meaning": "Second item for comparison",
+                    "relation": "designated_by_cue",
+                    "unresolved": []
+                  }
+                ],
+                "intent": "Compare branch performance of two designated items",
+                "revision": 1
+              }
+            },
+            "reason": "UNRESOLVED_GROUNDING_OR_INTENT",
+            "revision": 1,
+            "stimulus_id": "dp04-dense:r1"
+          },
+          "elapsed_ns": 60729239500,
+          "event_id": "event-48",
+          "goal_ids": [
+            "dp04-dense:grounding"
+          ],
+          "kind": "GOAL_FAILED",
+          "parent_ids": [
+            "operation-40"
+          ],
+          "type": "event",
+          "observed_ns": 1922214069346291
+        }
+      ]
+    },
+    {
+      "run_id": "basic_normalized-dp04-free-region-A-r3-f9c2d7",
+      "variant": "A",
+      "episode": "dp04-free-region",
+      "rep": 3,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-free-region-B-r3-76cf1d",
+      "variant": "B",
+      "episode": "dp04-free-region",
+      "rep": 3,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-page-change-A-r3-774537",
+      "variant": "A",
+      "episode": "dp04-page-change",
+      "rep": 3,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-page-change-B-r3-c1f15c",
+      "variant": "B",
+      "episode": "dp04-page-change",
+      "rep": 3,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-partial-correction-A-r3-4fbd27",
+      "variant": "A",
+      "episode": "dp04-partial-correction",
+      "rep": 3,
+      "events": []
+    },
+    {
+      "run_id": "basic_normalized-dp04-partial-correction-B-r3-04afbf",
+      "variant": "B",
+      "episode": "dp04-partial-correction",
+      "rep": 3,
+      "events": []
+    }
+  ],
+  "limits": [
+    "Official tool convention is not a snapshot-model API guarantee",
+    "No pure causal ownership claim from normalized coordinate presentation",
+    "Same finite four cases and three repetitions; no population or statistical significance claim",
+    "New QA04 change exercise not run; sampled local Python/Rust RSS excludes cloud weights/UI"
+  ]
+}

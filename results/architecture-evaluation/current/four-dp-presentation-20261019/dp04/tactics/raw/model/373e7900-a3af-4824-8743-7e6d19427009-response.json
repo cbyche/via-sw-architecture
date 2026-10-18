@@ -1,0 +1,31 @@
+{
+  "id": "chatcmpl-925f1dbc-beba-9419-90da-61f2ab76ab9e",
+  "object": "chat.completion",
+  "created": 1792343988,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "{\n  \"intent\": \"Retain first chart and replace second target with rightmost chart per user correction.\",\n  \"adoptions\": [\n    {\n      \"expression_id\": \"keep-first\",\n      \"targets\": [\n        \"C1 / Baseline\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"retain_prior\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C1 / Baseline\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C1 / Baseline\",\n          \"bbox\": [\n            30,\n            100,\n            320,\n            530\n          ]\n        }\n      ],\n      \"evidence\": \"Prior binding retained; leftmost chart labeled 'C1 / Baseline' visible.\"\n    },\n    {\n      \"expression_id\": \"change-second\",\n      \"targets\": [\n        \"C3 / Recovery\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"relative_position\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C3 / Recovery\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C3 / Recovery\",\n          \"bbox\": [\n            670,\n            100,\n            960,\n            530\n          ]\n        }\n      ],\n      \"evidence\": \"User specified 'right graph not middle'; rightmost chart is 'C3 / Recovery'.\"\n    }\n  ],\n  \"need_evidence\": false\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1906,
+    "total_tokens": 2300,
+    "completion_tokens": 394,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "image_tokens": 622,
+      "text_tokens": 1284
+    },
+    "completion_tokens_details": {
+      "text_tokens": 394
+    }
+  }
+}

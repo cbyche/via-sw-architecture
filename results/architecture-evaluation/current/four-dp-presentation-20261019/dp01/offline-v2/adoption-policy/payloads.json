@@ -1,0 +1,507 @@
+[
+  {
+    "stage": "dp01_adopt_only",
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e3-q1"
+        ],
+        "node_id": "operation-15",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp01_adopt_only"
+      },
+      "input": {
+        "available_evidence": [],
+        "catalog": [
+          {
+            "conversation": "old-c",
+            "delivered_lines": [
+              1,
+              3
+            ],
+            "id": "explained-criteria",
+            "kind": "response_delivery",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 설명한 기준"
+              },
+              {
+                "lines": [
+                  4,
+                  5
+                ],
+                "section": "표시하지 않은 준비 부분"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+          },
+          {
+            "conversation": "old-c",
+            "delivered_lines": null,
+            "id": "vendor-quote",
+            "kind": "public_result",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "가격"
+              },
+              {
+                "lines": [
+                  2,
+                  3
+                ],
+                "section": "납기와 설치비"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "Aster A 공급업체 견적"
+          }
+        ],
+        "expression": "실제로 설명한 기준과 받아둔 견적",
+        "published_relations": null,
+        "recent_conversation": [],
+        "utterance": "지난번 네가 실제로 설명한 기준과 받아둔 견적을 같이 요약해줘. 설치를 설명했다고 가정하지 마."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve exact ORIGINAL source referent IDs and requested handling. Return ONLY JSON {adoption:{targets:[source ID strings],intent:string}}. Intent is concrete requested future handling for UI progress, not completed factual summary. Do not generate final answer or source facts. Separate supporting explanation from referred source targets. Use actual supplied history/current evidence, never invented IDs.",
+      "max_tokens": 450
+    }
+  },
+  {
+    "stage": "dp01_select_adopt_or_complete",
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e3-q1"
+        ],
+        "node_id": "operation-24",
+        "parent_ids": [
+          "operation-15"
+        ],
+        "role": "VIA",
+        "stage": "dp01_select_adopt_or_complete"
+      },
+      "input": {
+        "available_evidence": [],
+        "catalog": [
+          {
+            "conversation": "old-c",
+            "delivered_lines": [
+              1,
+              3
+            ],
+            "id": "explained-criteria",
+            "kind": "response_delivery",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 설명한 기준"
+              },
+              {
+                "lines": [
+                  4,
+                  5
+                ],
+                "section": "표시하지 않은 준비 부분"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+          },
+          {
+            "conversation": "old-c",
+            "delivered_lines": null,
+            "id": "vendor-quote",
+            "kind": "public_result",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "가격"
+              },
+              {
+                "lines": [
+                  2,
+                  3
+                ],
+                "section": "납기와 설치비"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "Aster A 공급업체 견적"
+          }
+        ],
+        "expression": "실제로 설명한 기준과 받아둔 견적",
+        "published_relations": null,
+        "recent_conversation": [],
+        "utterance": "지난번 네가 실제로 설명한 기준과 받아둔 견적을 같이 요약해줘. 설치를 설명했다고 가정하지 마."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+      "max_tokens": 2200
+    }
+  },
+  {
+    "stage": "dp01_source_backed_answer",
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e3-q1"
+        ],
+        "node_id": "operation-42",
+        "parent_ids": [
+          "source-37"
+        ],
+        "role": "VIA",
+        "stage": "dp01_source_backed_answer"
+      },
+      "input": {
+        "actual_evidence": [
+          {
+            "actual_delivery_only": true,
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "explained-criteria",
+            "start_line": 1,
+            "text": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\n두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\n구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          {
+            "actual_delivery_only": false,
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "vendor-quote",
+            "start_line": 1,
+            "text": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.\n납기 10월 29일. 설치비는 80,000원 별도다.\n수량은 12대이며 계약이나 구매는 아직 체결하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          }
+        ],
+        "catalog": [
+          {
+            "conversation": "old-c",
+            "delivered_lines": [
+              1,
+              3
+            ],
+            "id": "explained-criteria",
+            "kind": "response_delivery",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 설명한 기준"
+              },
+              {
+                "lines": [
+                  4,
+                  5
+                ],
+                "section": "표시하지 않은 준비 부분"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+          },
+          {
+            "conversation": "old-c",
+            "delivered_lines": null,
+            "id": "vendor-quote",
+            "kind": "public_result",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  1
+                ],
+                "section": "가격"
+              },
+              {
+                "lines": [
+                  2,
+                  3
+                ],
+                "section": "납기와 설치비"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "Aster A 공급업체 견적"
+          }
+        ],
+        "denied": [],
+        "expression": "실제로 설명한 기준과 받아둔 견적",
+        "recent_conversation": [],
+        "utterance": "지난번 네가 실제로 설명한 기준과 받아둔 견적을 같이 요약해줘. 설치를 설명했다고 가정하지 마."
+      },
+      "instruction": "Complete the user's actual requested bounded summary or explanation using ONLY actual supplied current evidence. Return JSON {targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]} (the answer object). Do not echo the user's request or only name source targets. Give actual prices, dates, conditions or unknowns when requested and supported. Each fact claim needs an EXACT copied quote in supplied evidence.text and current source_id/revision/start_line/end_line. Displayed text may paraphrase fact claims. For ACTUALLY_DELIVERED_ANSWER quote only the actual displayed text; preserve original_source_provenance and do not claim the quote is verbatim original text. At least one fact per referred original target. Supporting explanation is not automatically a referred target. Preserve actual delivery limits, scope, caveats and corrections. Do not guess unseen facts. If unable, return text:null and uncertainties.",
+      "max_tokens": 2200
+    }
+  },
+  {
+    "stage": "dp01_adopt_only",
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e3-q2"
+        ],
+        "node_id": "operation-62",
+        "parent_ids": [],
+        "role": "VIA",
+        "stage": "dp01_adopt_only"
+      },
+      "input": {
+        "available_evidence": [],
+        "catalog": [
+          {
+            "conversation": "old-c",
+            "delivered_lines": [
+              1,
+              3
+            ],
+            "id": "explained-criteria",
+            "kind": "response_delivery",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 설명한 기준"
+              },
+              {
+                "lines": [
+                  4,
+                  5
+                ],
+                "section": "표시하지 않은 준비 부분"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+          },
+          {
+            "conversation": "old-c",
+            "delivered_lines": null,
+            "id": "vendor-quote",
+            "kind": "public_result",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "정정 가격과 일정"
+              }
+            ],
+            "revision": 2,
+            "revoked": false,
+            "title": "Aster A 공급업체 정정 견적"
+          }
+        ],
+        "expression": "그 설명 기준과 최신으로 정정된 견적",
+        "published_relations": null,
+        "recent_conversation": [],
+        "utterance": "그 설명 기준과 이제 최신으로 정정된 견적만 다시 정리해줘."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve exact ORIGINAL source referent IDs and requested handling. Return ONLY JSON {adoption:{targets:[source ID strings],intent:string}}. Intent is concrete requested future handling for UI progress, not completed factual summary. Do not generate final answer or source facts. Separate supporting explanation from referred source targets. Use actual supplied history/current evidence, never invented IDs.",
+      "max_tokens": 450
+    }
+  },
+  {
+    "stage": "dp01_select_adopt_or_complete",
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e3-q2"
+        ],
+        "node_id": "operation-71",
+        "parent_ids": [
+          "operation-62"
+        ],
+        "role": "VIA",
+        "stage": "dp01_select_adopt_or_complete"
+      },
+      "input": {
+        "available_evidence": [],
+        "catalog": [
+          {
+            "conversation": "old-c",
+            "delivered_lines": [
+              1,
+              3
+            ],
+            "id": "explained-criteria",
+            "kind": "response_delivery",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 설명한 기준"
+              },
+              {
+                "lines": [
+                  4,
+                  5
+                ],
+                "section": "표시하지 않은 준비 부분"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+          },
+          {
+            "conversation": "old-c",
+            "delivered_lines": null,
+            "id": "vendor-quote",
+            "kind": "public_result",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "정정 가격과 일정"
+              }
+            ],
+            "revision": 2,
+            "revoked": false,
+            "title": "Aster A 공급업체 정정 견적"
+          }
+        ],
+        "expression": "그 설명 기준과 최신으로 정정된 견적",
+        "published_relations": null,
+        "recent_conversation": [],
+        "utterance": "그 설명 기준과 이제 최신으로 정정된 견적만 다시 정리해줘."
+      },
+      "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+      "max_tokens": 2200
+    }
+  },
+  {
+    "stage": "dp01_source_backed_answer",
+    "payload": {
+      "_trace": {
+        "goal_ids": [
+          "e3-q2"
+        ],
+        "node_id": "operation-89",
+        "parent_ids": [
+          "source-84"
+        ],
+        "role": "VIA",
+        "stage": "dp01_source_backed_answer"
+      },
+      "input": {
+        "actual_evidence": [
+          {
+            "actual_delivery_only": true,
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "explained-criteria",
+            "start_line": 1,
+            "text": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\n두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\n구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.",
+            "unit": "one_based_line_inclusive"
+          },
+          {
+            "actual_delivery_only": false,
+            "end_line": 3,
+            "revision": 2,
+            "source_id": "vendor-quote",
+            "start_line": 1,
+            "text": "Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.\n유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.\n설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다.",
+            "unit": "one_based_line_inclusive"
+          }
+        ],
+        "catalog": [
+          {
+            "conversation": "old-c",
+            "delivered_lines": [
+              1,
+              3
+            ],
+            "id": "explained-criteria",
+            "kind": "response_delivery",
+            "line_count": 5,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "실제 설명한 기준"
+              },
+              {
+                "lines": [
+                  4,
+                  5
+                ],
+                "section": "표시하지 않은 준비 부분"
+              }
+            ],
+            "revision": 1,
+            "revoked": false,
+            "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+          },
+          {
+            "conversation": "old-c",
+            "delivered_lines": null,
+            "id": "vendor-quote",
+            "kind": "public_result",
+            "line_count": 3,
+            "outline": [
+              {
+                "lines": [
+                  1,
+                  3
+                ],
+                "section": "정정 가격과 일정"
+              }
+            ],
+            "revision": 2,
+            "revoked": false,
+            "title": "Aster A 공급업체 정정 견적"
+          }
+        ],
+        "denied": [],
+        "expression": "그 설명 기준과 최신으로 정정된 견적",
+        "recent_conversation": [],
+        "utterance": "그 설명 기준과 이제 최신으로 정정된 견적만 다시 정리해줘."
+      },
+      "instruction": "Complete the user's actual requested bounded summary or explanation using ONLY actual supplied current evidence. Return JSON {targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]} (the answer object). Do not echo the user's request or only name source targets. Give actual prices, dates, conditions or unknowns when requested and supported. Each fact claim needs an EXACT copied quote in supplied evidence.text and current source_id/revision/start_line/end_line. Displayed text may paraphrase fact claims. For ACTUALLY_DELIVERED_ANSWER quote only the actual displayed text; preserve original_source_provenance and do not claim the quote is verbatim original text. At least one fact per referred original target. Supporting explanation is not automatically a referred target. Preserve actual delivery limits, scope, caveats and corrections. Do not guess unseen facts. If unable, return text:null and uncertainties.",
+      "max_tokens": 2200
+    }
+  }
+]

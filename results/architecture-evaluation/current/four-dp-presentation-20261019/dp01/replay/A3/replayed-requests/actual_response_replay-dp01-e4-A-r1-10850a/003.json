@@ -1,0 +1,118 @@
+{
+  "source_call_uuid": "fff22922-021c-4bc5-9091-036f9a694222",
+  "payload": {
+    "input": {
+      "available_evidence": [],
+      "catalog": [
+        {
+          "conversation": "sep-summary",
+          "delivered_lines": [
+            1,
+            3
+          ],
+          "id": "old-explanation",
+          "kind": "response_delivery",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "두 결과의 관계와 한계"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "9월 두 공개 결과를 설명한 실제 응답"
+        },
+        {
+          "conversation": "sep-budget",
+          "delivered_lines": null,
+          "id": "old-price",
+          "kind": "public_result",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "과거 견적과 조건"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "9월 구매 예산 견적 공개 결과"
+        },
+        {
+          "conversation": "sep-research",
+          "delivered_lines": null,
+          "id": "old-research",
+          "kind": "public_result",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "유휴 전력과 한계"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "9월 전력 실측 공개 결과"
+        }
+      ],
+      "expression": "9월 전력 결과와 받아둔 견적",
+      "published_relations": null,
+      "recent_conversation": [],
+      "utterance": "새 대화야. 지난 9월 연구한 전력 결과와 받아둔 견적의 조건 차이를 다시 알려줘."
+    },
+    "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "adoption": {
+      "targets": [
+        "old-research",
+        "old-price"
+      ],
+      "intent": "compare_conditions"
+    },
+    "mode": "READ",
+    "answer": {
+      "targets": [],
+      "text": "",
+      "facts": [],
+      "source_revisions": [
+        {
+          "source_id": "old-research",
+          "revision": 1
+        },
+        {
+          "source_id": "old-price",
+          "revision": 1
+        }
+      ],
+      "conditions": [],
+      "uncertainties": [
+        "Evidence content for 'old-research' and 'old-price' is not available in the current context."
+      ]
+    },
+    "reads": [
+      {
+        "source_id": "old-research",
+        "start_line": 1,
+        "end_line": 3
+      },
+      {
+        "source_id": "old-price",
+        "start_line": 1,
+        "end_line": 3
+      }
+    ],
+    "reason": "The user requests a comparison of conditions between the September power research results ('old-research') and the received price quote ('old-price'). Although these sources are identified in the catalog, their actual text content is not provided in 'available_evidence'. Therefore, I must READ the specified line ranges from both sources to extract the necessary factual details regarding their conditions and differences."
+  }
+}

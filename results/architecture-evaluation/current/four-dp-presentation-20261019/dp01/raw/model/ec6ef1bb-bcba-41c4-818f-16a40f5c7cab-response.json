@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-b57d3609-990d-9896-b287-3ae9aaf5e7e8",
+  "object": "chat.completion",
+  "created": 1792345429,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"summarize_delivered_content_and_latest_revision\"\n  },\n  \"mode\": \"READ\",\n  \"answer\": {\n    \"targets\": [],\n    \"text\": \"\",\n    \"facts\": [],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2\n      }\n    ],\n    \"conditions\": [],\n    \"uncertainties\": [\n      \"Content of 'explained-criteria' and 'vendor-quote' is not available in evidence; reading required.\"\n    ]\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requests a summary of 'the explained criteria' (referring to 'explained-criteria', specifically the delivered lines 1-3 as per catalog) and 'the latest corrected quote' (referring to 'vendor-quote', revision 2). Since available_evidence is empty, I must read the specified lines from both sources to provide the factual summary.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 594,
+    "total_tokens": 934,
+    "completion_tokens": 340,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 594
+    }
+  }
+}

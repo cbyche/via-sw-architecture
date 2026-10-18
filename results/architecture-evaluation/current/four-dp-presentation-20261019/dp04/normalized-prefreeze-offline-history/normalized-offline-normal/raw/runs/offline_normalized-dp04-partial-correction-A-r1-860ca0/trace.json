@@ -1,0 +1,4153 @@
+{
+  "schema_version": 2,
+  "run_id": "offline_normalized-dp04-partial-correction-A-r1-860ca0",
+  "dp": "04",
+  "episode": "dp04-partial-correction",
+  "variant": "A",
+  "repetition": 1,
+  "phase": "OFFLINE_NORMALIZED",
+  "tactic": null,
+  "candidate_binary_sha256": "d165ee786eeed523a5ecc38b54ebcc973823fcaa2f4ec1167b955333a8223704",
+  "postrun_binary_sha256": "d165ee786eeed523a5ecc38b54ebcc973823fcaa2f4ec1167b955333a8223704",
+  "candidate_binary_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/normalized-offline-normal/frozen/bin/four_dp_poc",
+  "freeze_sha256": "24188d7c3bb5c94c702f689743bee409749ede5be1c325b966c472b1e9cec14c",
+  "start_ns": 1921693490138000,
+  "end_ns": 1921693505013875,
+  "events": [
+    {
+      "data": {
+        "dp": "04",
+        "id": "dp04-partial-correction",
+        "variant": "A"
+      },
+      "elapsed_ns": 32000,
+      "event_id": "event-1",
+      "goal_ids": [],
+      "kind": "EPISODE_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693495624708
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 54250,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 63583,
+      "event_id": "event-2",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693495653333
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 54250,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 81500,
+      "event_id": "event-3",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693495667666
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "parent_ids": [],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 110916,
+      "event_id": "event-4",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693495692000
+    },
+    {
+      "data": {
+        "bytes": 27303,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+      },
+      "elapsed_ns": 458416,
+      "event_id": "event-5",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693496049708
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27303,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 481708,
+      "event_id": "event-6",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693496064041
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 493500,
+      "event_id": "event-7",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693496080250
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 504291,
+      "event_id": "event-8",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693496095458
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r1-\"correction\""
+        ]
+      },
+      "elapsed_ns": 513791,
+      "event_id": "event-9",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496111166
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 816,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 548833,
+      "event_id": "event-10",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496128583
+    },
+    {
+      "data": {
+        "held_previous": false,
+        "revision": 1
+      },
+      "elapsed_ns": 578791,
+      "event_id": "event-11",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496153750
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.joint_grounding"
+      },
+      "elapsed_ns": 612333,
+      "event_id": "event-13",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496199041
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 5190,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 750500,
+      "event_id": "event-14",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496330416
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1346041,
+      "event_id": "event-15",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496935083
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "response_logical_bytes": 918,
+        "role": "VIA",
+        "stage": "dp04.joint_grounding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 1400708,
+      "event_id": "event-16",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693496986000
+    },
+    {
+      "data": {
+        "error": "NORMALIZED_INTEGER_OUT_OF_RANGE",
+        "owner": "joint"
+      },
+      "elapsed_ns": 1460000,
+      "event_id": "event-17",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497040083
+    },
+    {
+      "data": {
+        "attempt": 0,
+        "issues": [
+          "INVALID_FRAME_OR_BBOX:\"C1\"",
+          "INVALID_FRAME_OR_BBOX:\"C2\"",
+          "NORMALIZED_WIRE:NORMALIZED_INTEGER_OUT_OF_RANGE"
+        ],
+        "owner": "joint",
+        "proposal": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "keep-first",
+              "extents": [
+                {
+                  "bbox_2d": [
+                    -1,
+                    -2,
+                    2000,
+                    3077
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C1"
+              ]
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox_2d": [
+                    360,
+                    169,
+                    655,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "need_evidence": false,
+          "need_expansion": false
+        }
+      },
+      "elapsed_ns": 1481916,
+      "event_id": "event-18",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GROUNDING_CONSISTENCY_REJECTED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497098500
+    },
+    {
+      "data": {
+        "issues": [
+          "INVALID_FRAME_OR_BBOX:\"C1\"",
+          "INVALID_FRAME_OR_BBOX:\"C2\"",
+          "NORMALIZED_WIRE:NORMALIZED_INTEGER_OUT_OF_RANGE"
+        ],
+        "owner": "joint",
+        "revision": 1
+      },
+      "elapsed_ns": 1533125,
+      "event_id": "event-19",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "BOUNDED_SOURCE_REREAD",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497139250
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-20",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "role": "VIA",
+        "stage": "dp04.joint_source_reread"
+      },
+      "elapsed_ns": 1575125,
+      "event_id": "event-21",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497175833
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 6665,
+        "name": "model_request_20",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1758875,
+      "event_id": "event-22",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497337708
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_20",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2158916,
+      "event_id": "event-23",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497747666
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-20",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "response_logical_bytes": 917,
+        "role": "VIA",
+        "stage": "dp04.joint_source_reread",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 2210791,
+      "event_id": "event-24",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497799250
+    },
+    {
+      "data": {
+        "mappings": [
+          {
+            "canonical_pixel_bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "height": 650.0,
+            "inference_or_clamping": false,
+            "normalized_bbox": [
+              40.0,
+              169.0,
+              335.0,
+              815.0
+            ],
+            "rounding": "nearest_ties_even",
+            "source_id": "document",
+            "source_revision": 1,
+            "target_id": "C1",
+            "width": 1000.0
+          },
+          {
+            "canonical_pixel_bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "height": 650.0,
+            "inference_or_clamping": false,
+            "normalized_bbox": [
+              360.0,
+              169.0,
+              655.0,
+              815.0
+            ],
+            "rounding": "nearest_ties_even",
+            "source_id": "document",
+            "source_revision": 1,
+            "target_id": "C2",
+            "width": 1000.0
+          }
+        ],
+        "owner": "joint"
+      },
+      "elapsed_ns": 2281125,
+      "event_id": "event-25",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "COORDINATES_NORMALIZED",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497894458
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "keep-first",
+        "extents": [
+          {
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ],
+            "bbox_2d": [
+              40,
+              169,
+              335,
+              815
+            ],
+            "coordinate_space": "frame_pixels",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "target_id": "C1",
+            "wire_coordinate_space": "qwen_normalized_0_1000"
+          }
+        ],
+        "relation": "relative_position",
+        "revision": 1,
+        "status": "ready",
+        "targets": [
+          "C1"
+        ]
+      },
+      "elapsed_ns": 2362208,
+      "event_id": "event-26",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693497954541
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "change-second",
+        "extents": [
+          {
+            "bbox": [
+              360.0,
+              110.0,
+              655.0,
+              530.0
+            ],
+            "bbox_2d": [
+              360,
+              169,
+              655,
+              815
+            ],
+            "coordinate_space": "frame_pixels",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "target_id": "C2",
+            "wire_coordinate_space": "qwen_normalized_0_1000"
+          }
+        ],
+        "relation": "relative_position",
+        "revision": 1,
+        "status": "ready",
+        "targets": [
+          "C2"
+        ]
+      },
+      "elapsed_ns": 2389000,
+      "event_id": "event-27",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498012875
+    },
+    {
+      "data": {
+        "adopted_at_stimulus": "dp04-partial-correction:r1",
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 54250,
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "origin": "user_grounding_goal",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 2435333,
+      "event_id": "event-28",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_START",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498072000
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r1",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "resolved": true,
+        "revision": 1,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 2499916,
+      "event_id": "event-29",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION_COMMITTED",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498140375
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r1",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "resolved": true,
+        "revision": 1,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 2562500,
+      "event_id": "event-30",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498219333
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 2648041,
+      "event_id": "event-31",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498302166
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 1,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r1",
+        "targets": [
+          "C1",
+          "C2"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 2712166,
+      "event_id": "event-32",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_COMPLETE",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498397125
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2785583,
+      "event_id": "event-33",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498488416
+    },
+    {
+      "data": {
+        "action": "RETAIN",
+        "bytes": 1005,
+        "name": "dp04_prior_binding",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2829833,
+      "event_id": "event-34",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498579291
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 1334,
+        "name": "dp04_retained_proposal_trace",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2881458,
+      "event_id": "event-35",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498668416
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 2897625,
+        "kind": "user_grounding_input",
+        "raw_text": "첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 2899625,
+      "event_id": "event-36",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693498756666
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 2897625,
+        "kind": "user_grounding_input",
+        "raw_text": "첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 2912875,
+      "event_id": "event-37",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693498846625
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r2-\"correction\"",
+        "parent_ids": [
+          "operation-20"
+        ],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 2935791,
+      "event_id": "event-38",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693498939083
+    },
+    {
+      "data": {
+        "bytes": 27303,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+      },
+      "elapsed_ns": 2976916,
+      "event_id": "event-39",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693499040500
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27303,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 2996916,
+      "event_id": "event-40",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693499138041
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 3008916,
+      "event_id": "event-41",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693499240708
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r2-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 3020083,
+      "event_id": "event-42",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693499338416
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r2-\"correction\""
+        ]
+      },
+      "elapsed_ns": 3029916,
+      "event_id": "event-43",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693499436375
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 903,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 3065750,
+      "event_id": "event-44",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693499534875
+    },
+    {
+      "data": {
+        "held_previous": true,
+        "revision": 2
+      },
+      "elapsed_ns": 3092541,
+      "event_id": "event-45",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693499635125
+    },
+    {
+      "data": {
+        "accepted": false,
+        "kind": "LATE_MODEL_RESULT_PUBLICATION_ATTEMPT",
+        "proposal": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "keep-first",
+              "extents": [
+                {
+                  "bbox": [
+                    40.0,
+                    110.0,
+                    335.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    40,
+                    169,
+                    335,
+                    815
+                  ],
+                  "coordinate_space": "frame_pixels",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1",
+                  "wire_coordinate_space": "qwen_normalized_0_1000"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C1"
+              ]
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox": [
+                    360.0,
+                    110.0,
+                    655.0,
+                    530.0
+                  ],
+                  "bbox_2d": [
+                    360,
+                    169,
+                    655,
+                    815
+                  ],
+                  "coordinate_space": "frame_pixels",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C2 / Expansion",
+                  "target_id": "C2",
+                  "wire_coordinate_space": "qwen_normalized_0_1000"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C2"
+              ]
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "need_evidence": false,
+          "need_expansion": false,
+          "revision": 1,
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ],
+          "validated_by": "actual_frame_bounds_count_and_claimed_event_geometry"
+        },
+        "reason": "STALE_INPUT_REVISION",
+        "source": "actual earlier revision model proposal held and replayed; no model/network delay injected"
+      },
+      "elapsed_ns": 3115375,
+      "event_id": "event-46",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REPLAYED_CONTROL_EVENT",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693499743208
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-47",
+        "parent_ids": [
+          "dp04-source-r2-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.joint_grounding"
+      },
+      "elapsed_ns": 3221583,
+      "event_id": "event-48",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693499855583
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 6278,
+        "name": "model_request_47",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 3389000,
+      "event_id": "event-49",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693499969250
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_47",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 4729250,
+      "event_id": "event-50",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693500316625
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-47",
+        "parent_ids": [
+          "dp04-source-r2-\"correction\""
+        ],
+        "response_logical_bytes": 912,
+        "role": "VIA",
+        "stage": "dp04.joint_grounding",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 4774333,
+      "event_id": "event-51",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r2-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693500464333
+    },
+    {
+      "data": {
+        "error": "NORMALIZED_INTEGER_OUT_OF_RANGE",
+        "owner": "joint"
+      },
+      "elapsed_ns": 4830291,
+      "event_id": "event-52",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693500585458
+    },
+    {
+      "data": {
+        "attempt": 0,
+        "issues": [
+          "INVALID_FRAME_OR_BBOX:\"C1\"",
+          "INVALID_FRAME_OR_BBOX:\"C3\"",
+          "NORMALIZED_WIRE:NORMALIZED_INTEGER_OUT_OF_RANGE"
+        ],
+        "owner": "joint",
+        "proposal": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "adoptions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "keep-first",
+              "extents": [
+                {
+                  "bbox_2d": [
+                    -1,
+                    -2,
+                    2000,
+                    3077
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C1 / Baseline",
+                  "target_id": "C1"
+                }
+              ],
+              "relation": "retain_prior",
+              "status": "ready",
+              "targets": [
+                "C1"
+              ]
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "evidence": "Offline structural source geometry; not a model inference result",
+              "expression_id": "change-second",
+              "extents": [
+                {
+                  "bbox_2d": [
+                    680,
+                    169,
+                    975,
+                    815
+                  ],
+                  "coordinate_space": "qwen_normalized_0_1000",
+                  "frame_id": "correction",
+                  "kind": "card",
+                  "label": "C3 / Recovery",
+                  "target_id": "C3"
+                }
+              ],
+              "relation": "relative_position",
+              "status": "ready",
+              "targets": [
+                "C3"
+              ]
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "need_evidence": false,
+          "need_expansion": false
+        }
+      },
+      "elapsed_ns": 4850500,
+      "event_id": "event-53",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GROUNDING_CONSISTENCY_REJECTED",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693500709875
+    },
+    {
+      "data": {
+        "issues": [
+          "INVALID_FRAME_OR_BBOX:\"C1\"",
+          "INVALID_FRAME_OR_BBOX:\"C3\"",
+          "NORMALIZED_WIRE:NORMALIZED_INTEGER_OUT_OF_RANGE"
+        ],
+        "owner": "joint",
+        "revision": 2
+      },
+      "elapsed_ns": 4899458,
+      "event_id": "event-54",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "BOUNDED_SOURCE_REREAD",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693500845125
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-55",
+        "parent_ids": [
+          "operation-47"
+        ],
+        "role": "VIA",
+        "stage": "dp04.joint_source_reread"
+      },
+      "elapsed_ns": 4949958,
+      "event_id": "event-56",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693500973000
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 7747,
+        "name": "model_request_55",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 5158541,
+      "event_id": "event-57",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693501098875
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_55",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 5911416,
+      "event_id": "event-58",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693501496750
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-55",
+        "parent_ids": [
+          "operation-47"
+        ],
+        "response_logical_bytes": 911,
+        "role": "VIA",
+        "stage": "dp04.joint_source_reread",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 5955291,
+      "event_id": "event-59",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-47"
+      ],
+      "type": "event",
+      "observed_ns": 1921693501638708
+    },
+    {
+      "data": {
+        "mappings": [
+          {
+            "canonical_pixel_bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "height": 650.0,
+            "inference_or_clamping": false,
+            "normalized_bbox": [
+              40.0,
+              169.0,
+              335.0,
+              815.0
+            ],
+            "rounding": "nearest_ties_even",
+            "source_id": "document",
+            "source_revision": 1,
+            "target_id": "C1",
+            "width": 1000.0
+          },
+          {
+            "canonical_pixel_bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ],
+            "frame_id": "correction",
+            "height": 650.0,
+            "inference_or_clamping": false,
+            "normalized_bbox": [
+              680.0,
+              169.0,
+              975.0,
+              815.0
+            ],
+            "rounding": "nearest_ties_even",
+            "source_id": "document",
+            "source_revision": 1,
+            "target_id": "C3",
+            "width": 1000.0
+          }
+        ],
+        "owner": "joint"
+      },
+      "elapsed_ns": 6021833,
+      "event_id": "event-60",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "COORDINATES_NORMALIZED",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693501776333
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "keep-first",
+        "extents": [
+          {
+            "bbox": [
+              40.0,
+              110.0,
+              335.0,
+              530.0
+            ],
+            "bbox_2d": [
+              40,
+              169,
+              335,
+              815
+            ],
+            "coordinate_space": "frame_pixels",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "target_id": "C1",
+            "wire_coordinate_space": "qwen_normalized_0_1000"
+          }
+        ],
+        "relation": "retain_prior",
+        "revision": 2,
+        "status": "ready",
+        "targets": [
+          "C1"
+        ]
+      },
+      "elapsed_ns": 6096083,
+      "event_id": "event-61",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693501917708
+    },
+    {
+      "data": {
+        "count": 1,
+        "cue_ids": [],
+        "evidence": "Offline structural source geometry; not a model inference result",
+        "expression_id": "change-second",
+        "extents": [
+          {
+            "bbox": [
+              680.0,
+              110.0,
+              975.0,
+              530.0
+            ],
+            "bbox_2d": [
+              680,
+              169,
+              975,
+              815
+            ],
+            "coordinate_space": "frame_pixels",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "target_id": "C3",
+            "wire_coordinate_space": "qwen_normalized_0_1000"
+          }
+        ],
+        "relation": "relative_position",
+        "revision": 2,
+        "status": "ready",
+        "targets": [
+          "C3"
+        ]
+      },
+      "elapsed_ns": 6120208,
+      "event_id": "event-62",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693502058125
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "relation": "CORRECTION_SAME_GROUNDING_GOAL",
+        "revision": 2,
+        "stimulus_id": "dp04-partial-correction:r2"
+      },
+      "elapsed_ns": 6161833,
+      "event_id": "event-63",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_LINK",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693502199458
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r2",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.",
+        "resolved": true,
+        "revision": 2,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "retain_prior",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C3"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C1",
+          "C3"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C3 / Recovery을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 6216916,
+      "event_id": "event-64",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "ADOPTION_COMMITTED",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693502349625
+    },
+    {
+      "data": {
+        "adoption_id": "dp04-partial-correction:grounding:r2",
+        "content_type": "ADOPTED_HANDLING",
+        "goal_id": "dp04-partial-correction:grounding",
+        "handling": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "raw_utterance": "첫 그래프는 그대로 두고, 두 번째는 가운데 말고 오른쪽 그래프로 바꿔줘.",
+        "resolved": true,
+        "revision": 2,
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "retain_prior",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C3"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C1",
+          "C3"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C3 / Recovery을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 6276000,
+      "event_id": "event-65",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693502504708
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 2,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "retain_prior",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C3"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C1",
+          "C3"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C3 / Recovery을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 6356500,
+      "event_id": "event-66",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "DISPLAY_PROXY",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693502686166
+    },
+    {
+      "data": {
+        "checks": [
+          "current_revision",
+          "frame_snapshot",
+          "nonempty_target_extents",
+          "explicit_count",
+          "claimed_event_geometry"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "dp04-partial-correction:grounding",
+        "observation_class": "DISPLAY_PROXY",
+        "revision": 2,
+        "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+        "scope": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "retain_prior",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C3"
+            ]
+          }
+        ],
+        "source_revisions": {
+          "document@correction": 1
+        },
+        "stimulus_id": "dp04-partial-correction:r2",
+        "targets": [
+          "C1",
+          "C3"
+        ],
+        "text": "지칭 대상 C1 / Baseline, C3 / Recovery을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+      },
+      "elapsed_ns": 6419208,
+      "event_id": "event-67",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "GOAL_COMPLETE",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693502862958
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 6487833,
+      "event_id": "event-68",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693503034916
+    },
+    {
+      "data": {
+        "action": "RETAIN",
+        "bytes": 1042,
+        "name": "dp04_prior_binding",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 6531333,
+      "event_id": "event-69",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693503204000
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 2661,
+        "name": "dp04_retained_proposal_trace",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 6614250,
+      "event_id": "event-70",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-55"
+      ],
+      "type": "event",
+      "observed_ns": 1921693503376708
+    },
+    {
+      "data": {
+        "adoptions": [
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  360.0,
+                  110.0,
+                  655.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "target_id": "C2",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 1,
+            "status": "ready",
+            "targets": [
+              "C2"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "keep-first",
+            "extents": [
+              {
+                "bbox": [
+                  40.0,
+                  110.0,
+                  335.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "target_id": "C1",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "retain_prior",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C1"
+            ]
+          },
+          {
+            "count": 1,
+            "cue_ids": [],
+            "evidence": "Offline structural source geometry; not a model inference result",
+            "expression_id": "change-second",
+            "extents": [
+              {
+                "bbox": [
+                  680.0,
+                  110.0,
+                  975.0,
+                  530.0
+                ],
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "frame_pixels",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "target_id": "C3",
+                "wire_coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "relation": "relative_position",
+            "revision": 2,
+            "status": "ready",
+            "targets": [
+              "C3"
+            ]
+          }
+        ],
+        "outputs": [
+          {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "goal_id": "dp04-partial-correction:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 1,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "keep-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      40.0,
+                      110.0,
+                      335.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      40,
+                      169,
+                      335,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C1 / Baseline",
+                    "target_id": "C1",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "relative_position",
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "C1"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      360,
+                      169,
+                      655,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "relative_position",
+                "revision": 1,
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@correction": 1
+            },
+            "stimulus_id": "dp04-partial-correction:r1",
+            "targets": [
+              "C1",
+              "C2"
+            ],
+            "text": "지칭 대상 C1 / Baseline, C2 / Expansion을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+          },
+          {
+            "checks": [
+              "current_revision",
+              "frame_snapshot",
+              "nonempty_target_extents",
+              "explicit_count",
+              "claimed_event_geometry"
+            ],
+            "content_contract_checked": true,
+            "goal_id": "dp04-partial-correction:grounding",
+            "observation_class": "DISPLAY_PROXY",
+            "revision": 2,
+            "same_endpoint_reason": "Grounding/adoption/display is the complete VIA scope; no artificial business work added",
+            "scope": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "keep-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      40.0,
+                      110.0,
+                      335.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      40,
+                      169,
+                      335,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C1 / Baseline",
+                    "target_id": "C1",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "retain_prior",
+                "revision": 2,
+                "status": "ready",
+                "targets": [
+                  "C1"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      680.0,
+                      110.0,
+                      975.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      680,
+                      169,
+                      975,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C3 / Recovery",
+                    "target_id": "C3",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "relative_position",
+                "revision": 2,
+                "status": "ready",
+                "targets": [
+                  "C3"
+                ]
+              }
+            ],
+            "source_revisions": {
+              "document@correction": 1
+            },
+            "stimulus_id": "dp04-partial-correction:r2",
+            "targets": [
+              "C1",
+              "C3"
+            ],
+            "text": "지칭 대상 C1 / Baseline, C3 / Recovery을(를) 채택했습니다. 수행 의도: 지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결"
+          }
+        ],
+        "proposals": [
+          {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "keep-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      40.0,
+                      110.0,
+                      335.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      40,
+                      169,
+                      335,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C1 / Baseline",
+                    "target_id": "C1",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "relative_position",
+                "status": "ready",
+                "targets": [
+                  "C1"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      360.0,
+                      110.0,
+                      655.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      360,
+                      169,
+                      655,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C2 / Expansion",
+                    "target_id": "C2",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "relative_position",
+                "status": "ready",
+                "targets": [
+                  "C2"
+                ]
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "need_evidence": false,
+            "need_expansion": false,
+            "revision": 1,
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "validated_by": "actual_frame_bounds_count_and_claimed_event_geometry"
+          },
+          {
+            "_provider_usage": {
+              "input_tokens": null,
+              "output_tokens": null
+            },
+            "adoptions": [
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "keep-first",
+                "extents": [
+                  {
+                    "bbox": [
+                      40.0,
+                      110.0,
+                      335.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      40,
+                      169,
+                      335,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C1 / Baseline",
+                    "target_id": "C1",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "retain_prior",
+                "status": "ready",
+                "targets": [
+                  "C1"
+                ]
+              },
+              {
+                "count": 1,
+                "cue_ids": [],
+                "evidence": "Offline structural source geometry; not a model inference result",
+                "expression_id": "change-second",
+                "extents": [
+                  {
+                    "bbox": [
+                      680.0,
+                      110.0,
+                      975.0,
+                      530.0
+                    ],
+                    "bbox_2d": [
+                      680,
+                      169,
+                      975,
+                      815
+                    ],
+                    "coordinate_space": "frame_pixels",
+                    "frame_id": "correction",
+                    "kind": "card",
+                    "label": "C3 / Recovery",
+                    "target_id": "C3",
+                    "wire_coordinate_space": "qwen_normalized_0_1000"
+                  }
+                ],
+                "relation": "relative_position",
+                "status": "ready",
+                "targets": [
+                  "C3"
+                ]
+              }
+            ],
+            "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+            "need_evidence": false,
+            "need_expansion": false,
+            "revision": 2,
+            "source_snapshot": [
+              {
+                "frame_id": "correction",
+                "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+                "source_id": "document",
+                "source_revision": 1
+              }
+            ],
+            "validated_by": "actual_frame_bounds_count_and_claimed_event_geometry"
+          }
+        ],
+        "screen_parser_variant": "Qwen vision screen producer; no external OmniParser dependency deployed",
+        "tactic": "none"
+      },
+      "elapsed_ns": 6726625,
+      "event_id": "event-71",
+      "goal_ids": [],
+      "kind": "EPISODE_RESULT",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693503585750
+    }
+  ],
+  "calls": [
+    {
+      "call_uuid": "OFFLINE-76940d862873f110",
+      "stage": "dp04.joint_grounding",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C1",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "bbox_2d": [
+                  -1,
+                  -2,
+                  2000,
+                  3077
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C2"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C2",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-41a88b978f78d93a",
+      "stage": "dp04.joint_source_reread",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C1",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C2"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C2",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C2 / Expansion",
+                "bbox_2d": [
+                  360,
+                  169,
+                  655,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-1127215b613009fb",
+      "stage": "dp04.joint_grounding",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "retain_prior",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C1",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "bbox_2d": [
+                  -1,
+                  -2,
+                  2000,
+                  3077
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C3"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C3",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-9c70f3b91679c03f",
+      "stage": "dp04.joint_source_reread",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "adoptions": [
+          {
+            "expression_id": "keep-first",
+            "targets": [
+              "C1"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "retain_prior",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C1",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C1 / Baseline",
+                "bbox_2d": [
+                  40,
+                  169,
+                  335,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          },
+          {
+            "expression_id": "change-second",
+            "targets": [
+              "C3"
+            ],
+            "status": "ready",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "extents": [
+              {
+                "target_id": "C3",
+                "frame_id": "correction",
+                "kind": "card",
+                "label": "C3 / Recovery",
+                "bbox_2d": [
+                  680,
+                  169,
+                  975,
+                  815
+                ],
+                "coordinate_space": "qwen_normalized_0_1000"
+              }
+            ],
+            "evidence": "Offline structural source geometry; not a model inference result"
+          }
+        ],
+        "need_expansion": false,
+        "need_evidence": false
+      }
+    }
+  ],
+  "memory": [
+    {
+      "at_ns": 1921693490857166,
+      "sample_end_ns": 1921693495401666,
+      "stage": "RUST_WAITING_FOR_INPUT",
+      "processes": [
+        {
+          "pid": 57932,
+          "ppid": 50460,
+          "role": "python_runner_bridge",
+          "rss_bytes": 33456128
+        },
+        {
+          "pid": 57960,
+          "ppid": 57932,
+          "role": "rust_candidate",
+          "rss_bytes": 1654784
+        }
+      ],
+      "registered_processes": [
+        {
+          "pid": 57932,
+          "role": "python_runner_bridge"
+        },
+        {
+          "pid": 57960,
+          "role": "rust_candidate"
+        }
+      ],
+      "rss_bytes_by_pid": {
+        "57932": 33456128,
+        "57960": 1654784
+      },
+      "rss_bytes_by_role": {
+        "python_runner_bridge": 33456128,
+        "rust_candidate": 1654784
+      },
+      "concurrent_sum_bytes": 35110912,
+      "all_registered_observed": true,
+      "logical_buffers": {
+        "input_json": {
+          "bytes": 2276,
+          "category": "input",
+          "owner": "python_runner_bridge"
+        }
+      },
+      "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+      "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+    }
+  ],
+  "memory_baseline": {
+    "at_ns": 1921693486913833,
+    "sample_end_ns": 1921693488921833,
+    "stage": "BEFORE_RUST_START",
+    "processes": [
+      {
+        "pid": 57932,
+        "ppid": 50460,
+        "role": "python_runner_bridge",
+        "rss_bytes": 33423360
+      }
+    ],
+    "registered_processes": [
+      {
+        "pid": 57932,
+        "role": "python_runner_bridge"
+      }
+    ],
+    "rss_bytes_by_pid": {
+      "57932": 33423360
+    },
+    "rss_bytes_by_role": {
+      "python_runner_bridge": 33423360
+    },
+    "concurrent_sum_bytes": 33423360,
+    "all_registered_observed": true,
+    "logical_buffers": {
+      "input_json": {
+        "bytes": 2276,
+        "category": "input",
+        "owner": "python_runner_bridge"
+      }
+    },
+    "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+    "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+  },
+  "logical_buffer_events": [
+    {
+      "at_ns": 1921693486912958,
+      "name": "input_json",
+      "bytes": 2276,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "input",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693495634916,
+      "name": "retained_events",
+      "bytes": 224,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693495662500,
+      "name": "retained_events",
+      "bytes": 627,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693495674708,
+      "name": "retained_events",
+      "bytes": 1024,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693495701875,
+      "name": "retained_events",
+      "bytes": 1324,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496061083,
+      "name": "retained_events",
+      "bytes": 1848,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496075500,
+      "name": "retained_events",
+      "bytes": 2163,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496076833,
+      "name": "rust:dp04_source_png",
+      "bytes": 27303,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496092500,
+      "name": "retained_events",
+      "bytes": 2473,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496093666,
+      "name": "rust:dp04_source_png",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 27303,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496108791,
+      "name": "retained_events",
+      "bytes": 2753,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496126208,
+      "name": "retained_events",
+      "bytes": 3027,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496146791,
+      "name": "retained_events",
+      "bytes": 3374,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496147250,
+      "name": "rust:dp04_observations",
+      "bytes": 816,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496171791,
+      "name": "retained_events",
+      "bytes": 3650,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496221875,
+      "name": "retained_events",
+      "bytes": 4058,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496353750,
+      "name": "retained_events",
+      "bytes": 4405,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496354208,
+      "name": "rust:model_request_12",
+      "bytes": 5190,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496858333,
+      "name": "retained_call_records",
+      "bytes": 1118,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496964208,
+      "name": "retained_events",
+      "bytes": 4749,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693496964875,
+      "name": "rust:model_request_12",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 5190,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497013541,
+      "name": "retained_events",
+      "bytes": 5218,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497068916,
+      "name": "retained_events",
+      "bytes": 5506,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497136208,
+      "name": "retained_events",
+      "bytes": 6924,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497173458,
+      "name": "retained_events",
+      "bytes": 7307,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497211083,
+      "name": "retained_events",
+      "bytes": 7686,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497399666,
+      "name": "retained_events",
+      "bytes": 8017,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497400416,
+      "name": "rust:model_request_20",
+      "bytes": 6665,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497678250,
+      "name": "retained_call_records",
+      "bytes": 2239,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497793583,
+      "name": "retained_events",
+      "bytes": 8344,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497794166,
+      "name": "rust:model_request_20",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 6665,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497843125,
+      "name": "retained_events",
+      "bytes": 8783,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693497947250,
+      "name": "retained_events",
+      "bytes": 9629,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498008125,
+      "name": "retained_events",
+      "bytes": 10321,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498067250,
+      "name": "retained_events",
+      "bytes": 11019,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498129166,
+      "name": "retained_events",
+      "bytes": 11619,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498210083,
+      "name": "retained_events",
+      "bytes": 13468,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498290500,
+      "name": "retained_events",
+      "bytes": 15312,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498384416,
+      "name": "retained_events",
+      "bytes": 17216,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498486291,
+      "name": "retained_events",
+      "bytes": 19120,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498574833,
+      "name": "retained_events",
+      "bytes": 19448,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498575666,
+      "name": "rust:dp04_observations",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 816,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498666125,
+      "name": "retained_events",
+      "bytes": 19779,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498666625,
+      "name": "rust:dp04_prior_binding",
+      "bytes": 1005,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498753750,
+      "name": "retained_events",
+      "bytes": 20133,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498754208,
+      "name": "rust:dp04_retained_proposal_trace",
+      "bytes": 1334,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498844375,
+      "name": "retained_events",
+      "bytes": 20584,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693498935750,
+      "name": "retained_events",
+      "bytes": 21029,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499037583,
+      "name": "retained_events",
+      "bytes": 21359,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499136208,
+      "name": "retained_events",
+      "bytes": 21899,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499231916,
+      "name": "retained_events",
+      "bytes": 22230,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499232333,
+      "name": "rust:dp04_source_png",
+      "bytes": 27303,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499336000,
+      "name": "retained_events",
+      "bytes": 22556,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499336458,
+      "name": "rust:dp04_source_png",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 27303,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499434625,
+      "name": "retained_events",
+      "bytes": 22852,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499533083,
+      "name": "retained_events",
+      "bytes": 23128,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499633166,
+      "name": "retained_events",
+      "bytes": 23476,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499633583,
+      "name": "rust:dp04_observations",
+      "bytes": 903,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499734791,
+      "name": "retained_events",
+      "bytes": 23752,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499851750,
+      "name": "retained_events",
+      "bytes": 25642,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693499967458,
+      "name": "retained_events",
+      "bytes": 26051,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500089083,
+      "name": "retained_events",
+      "bytes": 26399,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500089625,
+      "name": "rust:model_request_47",
+      "bytes": 6278,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500253125,
+      "name": "retained_call_records",
+      "bytes": 3351,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500456291,
+      "name": "retained_events",
+      "bytes": 26743,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500457250,
+      "name": "rust:model_request_47",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 6278,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500583541,
+      "name": "retained_events",
+      "bytes": 27212,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500701791,
+      "name": "retained_events",
+      "bytes": 27500,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500838708,
+      "name": "retained_events",
+      "bytes": 28912,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693500971166,
+      "name": "retained_events",
+      "bytes": 29295,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501097000,
+      "name": "retained_events",
+      "bytes": 29674,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501223291,
+      "name": "retained_events",
+      "bytes": 30005,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501223833,
+      "name": "rust:model_request_55",
+      "bytes": 7747,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501438333,
+      "name": "retained_call_records",
+      "bytes": 4466,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501634625,
+      "name": "retained_events",
+      "bytes": 30332,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501635250,
+      "name": "rust:model_request_55",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 7747,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501770416,
+      "name": "retained_events",
+      "bytes": 30771,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693501910833,
+      "name": "retained_events",
+      "bytes": 31617,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693502055083,
+      "name": "retained_events",
+      "bytes": 32304,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693502196666,
+      "name": "retained_events",
+      "bytes": 33001,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693502341375,
+      "name": "retained_events",
+      "bytes": 33461,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693502497625,
+      "name": "retained_events",
+      "bytes": 35346,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693502671583,
+      "name": "retained_events",
+      "bytes": 37226,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693502853958,
+      "name": "retained_events",
+      "bytes": 39123,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503033083,
+      "name": "retained_events",
+      "bytes": 41020,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503201875,
+      "name": "retained_events",
+      "bytes": 41348,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503202333,
+      "name": "rust:dp04_observations",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 903,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503374291,
+      "name": "retained_events",
+      "bytes": 41679,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503374916,
+      "name": "rust:dp04_prior_binding",
+      "bytes": 1042,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503546041,
+      "name": "retained_events",
+      "bytes": 42033,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503546625,
+      "name": "rust:dp04_retained_proposal_trace",
+      "bytes": 2661,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693503792416,
+      "name": "retained_events",
+      "bytes": 50466,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    }
+  ],
+  "process_registry": [
+    {
+      "pid": 57932,
+      "role": "python_runner_bridge"
+    },
+    {
+      "pid": 57960,
+      "role": "rust_candidate"
+    }
+  ],
+  "memory_nominal_poll_ms": 50,
+  "stderr": "",
+  "returncode": 0,
+  "input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/normalized-offline-normal/raw/runs/offline_normalized-dp04-partial-correction-A-r1-860ca0/input.json",
+  "offline_responder": true
+}

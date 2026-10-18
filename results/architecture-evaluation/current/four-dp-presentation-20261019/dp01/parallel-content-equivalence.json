@@ -1,0 +1,869 @@
+{
+  "evaluator_version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+  "code_sha256": "7cf1a5cceb355d625e4581412d82c108463d84faca82dfbf0b4594c86cb60d82",
+  "rules_unchanged_from_preformal_20261018": true,
+  "candidate_input": false,
+  "model_calls": 0,
+  "groups": {
+    "A/ORIGINAL": {
+      "literal_correct": 3,
+      "equivalent_correct": 3,
+      "total": 6
+    },
+    "A/ADOPTION_ONLY": {
+      "literal_correct": 3,
+      "equivalent_correct": 3,
+      "total": 6
+    },
+    "B/ORIGINAL": {
+      "literal_correct": 3,
+      "equivalent_correct": 3,
+      "total": 6
+    },
+    "B/ADOPTION_ONLY": {
+      "literal_correct": 3,
+      "equivalent_correct": 3,
+      "total": 6
+    },
+    "C/ORIGINAL": {
+      "literal_correct": 3,
+      "equivalent_correct": 6,
+      "total": 6
+    },
+    "C/ADOPTION_ONLY": {
+      "literal_correct": 2,
+      "equivalent_correct": 6,
+      "total": 6
+    }
+  },
+  "rows": [
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-A-r1-d17c90",
+      "variant": "A",
+      "tactic": "ORIGINAL",
+      "repetition": 1,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-A-r1-d05bee",
+      "variant": "A",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 1,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 밝혔습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비 80,000원은 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고밝혔습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비80000원은별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-B-r1-d7ca19",
+      "variant": "B",
+      "tactic": "ORIGINAL",
+      "repetition": 1,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-B-r1-6e7818",
+      "variant": "B",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 1,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-C-r1-c49c3e",
+      "variant": "C",
+      "tactic": "ORIGINAL",
+      "repetition": 1,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 0,
+      "equivalent_correct": 2,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "The actually delivered evaluation criteria focus on comparing the price including VAT and the maintenance period, with a tie-breaker rule preferring the longer maintenance period if prices are equal. It also notes that the purchase decision is pending and requires checking the latest quote version. The received vendor quote for Aster A specifies a unit price of 1,250,000 KRW (including VAT) for 12 units, with a 36-month maintenance period. The delivery date is October 29, and the installation fee is 80,000 KRW separate from the unit price. The contract has not yet been concluded.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theactuallydeliveredevaluationcriteriafocusoncomparingthepriceincludingvatandthemaintenanceperiodwithatiebreakerrulepreferringthelongermaintenanceperiodifpricesareequal.italsonotesthatthepurchasedecisionispendingandrequirescheckingthelatestquoteversion.thereceivedvendorquoteforasteraspecifiesaunitpriceof1250000krw(includingvat)for12unitswitha36개월maintenanceperiod.thedeliverydateis10월29일andtheinstallationfeeis80000krwseparatefromtheunitprice.thecontracthasnotyetbeenconcluded.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "The evaluation criteria prioritize VAT-inclusive prices and maintenance periods, using longer maintenance as a tiebreaker if prices are equal, while noting that no purchase decision has been made. The latest corrected quote (v2) for Aster A sets the unit price at 1,180,000 KRW (VAT included), maintains a quantity of 12 units and a 36-month maintenance period, corrects the delivery date to November 1st, and keeps the installation fee separate at 80,000 KRW. No contract has been signed yet.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theevaluationcriteriaprioritizevatinclusivepricesandmaintenanceperiodsusinglongermaintenanceasatiebreakerifpricesareequalwhilenotingthatnopurchasedecisionhasbeenmade.thelatestcorrectedquote(v2)forasterasetstheunitpriceat1180000krw(vatincluded)maintainsaquantityof12unitsanda36개월maintenanceperiodcorrectsthedeliverydateto11월1일andkeepstheinstallationfeeseparateat80000krw.nocontracthasbeensignedyet.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-C-r1-de6ad1",
+      "variant": "C",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 1,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 2,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다. 받아둔 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.받아둔astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "The evaluation criteria prioritize comparing prices including VAT alongside maintenance periods, using longer maintenance as a tiebreaker if prices are equal, while noting that the purchase decision is pending and requires checking the latest quote. The latest corrected quote (v2) for Aster A specifies a unit price of 1,180,000 KRW (including VAT), maintains the quantity of 12 units and 36-month maintenance period, keeps the separate installation fee of 80,000 KRW, and corrects the delivery date to November 1st, with no contract yet signed.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theevaluationcriteriaprioritizecomparingpricesincludingvatalongsidemaintenanceperiodsusinglongermaintenanceasatiebreakerifpricesareequalwhilenotingthatthepurchasedecisionispendingandrequirescheckingthelatestquote.thelatestcorrectedquote(v2)forasteraspecifiesaunitpriceof1180000krw(includingvat)maintainsthequantityof12unitsand36개월maintenanceperiodkeepstheseparateinstallationfeeof80000krwandcorrectsthedeliverydateto11월1일withnocontractyetsigned.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-C-r2-df190d",
+      "variant": "C",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 2,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 0,
+      "equivalent_correct": 2,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "The previously explained criteria prioritize comparing VAT-inclusive prices alongside maintenance periods, with a tie-breaker favoring longer maintenance if prices are equal. The purchase decision remains pending verification of the latest quote version. The received Aster A quote (v1) lists a unit price of 1,250,000 KRW (VAT included) for 12 units, with a 36-month maintenance period and a delivery date of October 29. The contract has not yet been signed.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "thepreviouslyexplainedcriteriaprioritizecomparingvatinclusivepricesalongsidemaintenanceperiodswithatiebreakerfavoringlongermaintenanceifpricesareequal.thepurchasedecisionremainspendingverificationofthelatestquoteversion.thereceivedasteraquote(v1)listsaunitpriceof1250000krw(vatincluded)for12unitswitha36개월maintenanceperiodandadeliverydateof10월29일.thecontracthasnotyetbeensigned.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "The evaluation criteria prioritize VAT-inclusive prices and maintenance periods, using longer maintenance as a tiebreaker if prices are equal. The latest Aster A quote (v2) corrects the unit price to 1,180,000 KRW (VAT included) and the delivery date to November 1st, while maintaining the quantity of 12 units, 36-month maintenance, and a separate installation fee of 80,000 KRW. No contract has been signed yet.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theevaluationcriteriaprioritizevatinclusivepricesandmaintenanceperiodsusinglongermaintenanceasatiebreakerifpricesareequal.thelatestasteraquote(v2)correctstheunitpriceto1180000krw(vatincluded)andthedeliverydateto11월1일whilemaintainingthequantityof12units36개월maintenanceandaseparateinstallationfeeof80000krw.nocontracthasbeensignedyet.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-C-r2-f6d5ac",
+      "variant": "C",
+      "tactic": "ORIGINAL",
+      "repetition": 2,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 2,
+      "equivalent_correct": 2,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "The actually explained criteria involve comparing VAT-included prices and maintenance periods together, prioritizing longer maintenance if prices are equal. The purchase decision is pending verification of the latest quote. The received quote for Aster A (v1) lists a price of 1,250,000 KRW per unit (VAT included) with 36 months of maintenance. The quantity is 12 units, and no contract has been signed yet.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theactuallyexplainedcriteriainvolvecomparingvatincludedpricesandmaintenanceperiodstogetherprioritizinglongermaintenanceifpricesareequal.thepurchasedecisionispendingverificationofthelatestquote.thereceivedquoteforastera(v1)listsapriceof1250000krwperunit(vatincluded)with36개월ofmaintenance.thequantityis12unitsandnocontracthasbeensignedyet.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "The evaluation criteria prioritize VAT-inclusive price and maintenance period, preferring longer maintenance if prices are equal, while noting the purchase decision is pending. The latest Aster A quote (v2) sets the unit price at 1,180,000 KRW (VAT included), maintains 12 units and 36 months of maintenance, corrects the delivery date to November 1st, and keeps the installation fee separate at 80,000 KRW, with no contract signed yet.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theevaluationcriteriaprioritizevatinclusivepriceandmaintenanceperiodpreferringlongermaintenanceifpricesareequalwhilenotingthepurchasedecisionispending.thelatestasteraquote(v2)setstheunitpriceat1180000krw(vatincluded)maintains12unitsand36개월ofmaintenancecorrectsthedeliverydateto11월1일andkeepstheinstallationfeeseparateat80000krwwithnocontractsignedyet.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-B-r2-2863cc",
+      "variant": "B",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 2,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-B-r2-a600d6",
+      "variant": "B",
+      "tactic": "ORIGINAL",
+      "repetition": 2,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-A-r2-1872a2",
+      "variant": "A",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 2,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-A-r2-25f4ba",
+      "variant": "A",
+      "tactic": "ORIGINAL",
+      "repetition": 2,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-A-r3-e7191a",
+      "variant": "A",
+      "tactic": "ORIGINAL",
+      "repetition": 3,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-A-r3-632b98",
+      "variant": "A",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 3,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 밝혔습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비 80,000원은 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고밝혔습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비80000원은별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-B-r3-2ca369",
+      "variant": "B",
+      "tactic": "ORIGINAL",
+      "repetition": 3,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선합니다. 최신 정정 견적(Aster A v2)은 1대당 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 정해지지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선합니다.최신정정견적(asterav2)은1대당부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직정해지지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-B-r3-8aa99b",
+      "variant": "B",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 3,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 1,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명한평가기준은부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시하는것입니다.또한구매여부는아직정하지않았으며견적의최신판본확인이필요하다고명시했습니다.제공된astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도입니다.수량은12대이며계약이나구매는아직체결되지않았습니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "평가기준에따르면부가세포함가격과유지보수기간을함께비교하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.최신정정견적(asterav2)에따르면단가는부가세포함1180000원이며유지보수기간은36개월입니다.설치비80000원은별도이며구매여부는아직결정되지않았습니다.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ],
+          "equivalent_correct": false,
+          "equivalent_missing_groups": [
+            [
+              "11월1일",
+              "11/1",
+              "november1"
+            ]
+          ]
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-C-r3-d4abab",
+      "variant": "C",
+      "tactic": "ORIGINAL",
+      "repetition": 3,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 2,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "실제로 설명된 비교 기준은 부가세 포함 가격과 유지보수 기간을 함께 고려하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 또한 구매 여부는 미정이며 견적 최신 판본 확인이 필요하다고 명시되었습니다. 받아둔 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도이며, 수량은 12대입니다.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "실제로설명된비교기준은부가세포함가격과유지보수기간을함께고려하며가격이동일할경우유지보수기간이더긴제품을우선시합니다.또한구매여부는미정이며견적최신판본확인이필요하다고명시되었습니다.받아둔astera견적(v1)에따르면단가는부가세포함1250000원이며유지보수기간은36개월입니다.납기는10월29일이고설치비는80000원이별도이며수량은12대입니다.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "The delivered evaluation criteria prioritize VAT-inclusive prices and maintenance periods, using longer maintenance as a tiebreaker if prices are equal, while noting that no purchase decision has been made yet. The latest revised quote (v2) for Aster A sets the unit price at 1,180,000 KRW (VAT included) with a delivery date of November 1, while maintaining the 36-month maintenance period, quantity of 12 units, and a separate installation fee of 80,000 KRW. No contract has been signed.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "thedeliveredevaluationcriteriaprioritizevatinclusivepricesandmaintenanceperiodsusinglongermaintenanceasatiebreakerifpricesareequalwhilenotingthatnopurchasedecisionhasbeenmadeyet.thelatestrevisedquote(v2)forasterasetstheunitpriceat1180000krw(vatincluded)withadeliverydateof11월1일whilemaintainingthe36개월maintenanceperiodquantityof12unitsandaseparateinstallationfeeof80000krw.nocontracthasbeensigned.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    },
+    {
+      "run_id": "output_policy_sensitivity-dp01-e3-C-r3-3d0c01",
+      "variant": "C",
+      "tactic": "ADOPTION_ONLY",
+      "repetition": 3,
+      "version": "BOUNDED_CONTENT_EQUIVALENCE_V2_20261018",
+      "total": 2,
+      "literal_correct": 1,
+      "equivalent_correct": 2,
+      "details": [
+        {
+          "goal_id": "e3-q1",
+          "actual_detailed_text": "The previously explained evaluation criteria prioritize price including VAT and maintenance period, with a tie-breaker rule favoring longer maintenance if prices are equal. The current purchase decision is undecided pending verification of the latest quote version. The received Aster A quote lists a unit price of 1,250,000 KRW (including VAT) for 12 units, with a 36-month maintenance period and a delivery date of October 29. The contract has not yet been concluded.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "thepreviouslyexplainedevaluationcriteriaprioritizepriceincludingvatandmaintenanceperiodwithatiebreakerrulefavoringlongermaintenanceifpricesareequal.thecurrentpurchasedecisionisundecidedpendingverificationofthelatestquoteversion.thereceivedasteraquotelistsaunitpriceof1250000krw(includingvat)for12unitswitha36개월maintenanceperiodandadeliverydateof10월29일.thecontracthasnotyetbeenconcluded.",
+          "literal_correct": false,
+          "literal_missing_groups": [
+            [
+              "36개월",
+              "36months"
+            ]
+          ],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        },
+        {
+          "goal_id": "e3-q2",
+          "actual_detailed_text": "The evaluation criteria prioritize VAT-included price and maintenance period, with longer maintenance preferred if prices are equal, noting that the purchase decision is pending verification of the latest quote. The latest Aster A quote (v2) sets the unit price at 1,180,000 KRW (VAT included), maintains 12 units and 36 months of maintenance, corrects the delivery date to November 1st, and keeps the installation fee separate at 80,000 KRW, with no contract yet signed.",
+          "detailed_content_displayed": true,
+          "source_revisions_match": true,
+          "equivalent_normalized_text": "theevaluationcriteriaprioritizevatincludedpriceandmaintenanceperiodwithlongermaintenancepreferredifpricesareequalnotingthatthepurchasedecisionispendingverificationofthelatestquote.thelatestasteraquote(v2)setstheunitpriceat1180000krw(vatincluded)maintains12unitsand36개월ofmaintenancecorrectsthedeliverydateto11월1일andkeepstheinstallationfeeseparateat80000krwwithnocontractyetsigned.",
+          "literal_correct": true,
+          "literal_missing_groups": [],
+          "equivalent_correct": true,
+          "equivalent_missing_groups": []
+        }
+      ],
+      "model_calls": 0,
+      "scope": "Uniform month/months duration and English month/ordinal date equivalence only; literal values retained. Actual meaning/conditional claims require separately recorded manual review."
+    }
+  ],
+  "separate_from_manual_meaning": true
+}

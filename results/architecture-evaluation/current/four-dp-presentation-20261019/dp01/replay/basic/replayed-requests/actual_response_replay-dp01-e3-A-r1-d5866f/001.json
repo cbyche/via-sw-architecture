@@ -1,0 +1,113 @@
+{
+  "source_call_uuid": "bf3cefdb-3e68-4e21-8dcd-e16e0ab0c889",
+  "payload": {
+    "input": {
+      "available_evidence": [],
+      "catalog": [
+        {
+          "conversation": "old-c",
+          "delivered_lines": [
+            1,
+            3
+          ],
+          "id": "explained-criteria",
+          "kind": "response_delivery",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "실제 설명한 기준"
+            },
+            {
+              "lines": [
+                4,
+                5
+              ],
+              "section": "표시하지 않은 준비 부분"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+        },
+        {
+          "conversation": "old-c",
+          "delivered_lines": null,
+          "id": "vendor-quote",
+          "kind": "public_result",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                1
+              ],
+              "section": "가격"
+            },
+            {
+              "lines": [
+                2,
+                3
+              ],
+              "section": "납기와 설치비"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "Aster A 공급업체 견적"
+        }
+      ],
+      "expression": "실제로 설명한 기준과 받아둔 견적",
+      "published_relations": null,
+      "recent_conversation": [],
+      "utterance": "지난번 네가 실제로 설명한 기준과 받아둔 견적을 같이 요약해줘. 설치를 설명했다고 가정하지 마."
+    },
+    "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "adoption": {
+      "targets": [
+        "explained-criteria",
+        "vendor-quote"
+      ],
+      "intent": "summarize_explained_criteria_and_vendor_quote"
+    },
+    "mode": "READ",
+    "answer": {
+      "targets": [],
+      "text": "",
+      "facts": [],
+      "source_revisions": [
+        {
+          "source_id": "explained-criteria",
+          "revision": 1
+        },
+        {
+          "source_id": "vendor-quote",
+          "revision": 1
+        }
+      ],
+      "conditions": [
+        "Do not assume installation was explained in the criteria."
+      ],
+      "uncertainties": []
+    },
+    "reads": [
+      {
+        "source_id": "explained-criteria",
+        "start_line": 1,
+        "end_line": 3
+      },
+      {
+        "source_id": "vendor-quote",
+        "start_line": 1,
+        "end_line": 3
+      }
+    ],
+    "reason": "The user requests a summary of two specific sources: 'explained-criteria' (specifically the actually explained parts) and 'vendor-quote'. The content of these sources is not provided in 'available_evidence', so I must read the relevant lines to extract the facts for the summary. For 'explained-criteria', only lines 1-3 are marked as delivered/explained, matching the user's constraint. For 'vendor-quote', all lines 1-3 are needed for the full quote summary."
+  }
+}

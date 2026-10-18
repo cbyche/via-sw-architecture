@@ -1,0 +1,50 @@
+{
+  "status": "PRE_FREEZE_ACCEPTANCE_PLAN_NOT_EXECUTED",
+  "dp": "04",
+  "alternatives": ["A", "B"],
+  "baseline_modules": {
+    "dp04.rs": "input revision orchestration, adopted state, callbacks and retained proposals",
+    "dp04/observations.rs": "authorized original and raw-event overlay pixel reads and frame normalization",
+    "dp04/joint.rs": "A direct target extent and binding writer with bounded source reread",
+    "dp04/producers.rs": "B screen and speech candidate producer outputs and source provenance",
+    "dp04/binding.rs": "B typed/model resolver, screen-owner expansion and candidate read set",
+    "dp04/geometry.rs": "common source-frame, raw narrow count and claimed geometric consistency checks",
+    "dp04/gate.rs": "current input/source revision admission and first-adoption normalization"
+  },
+  "count_rule": "Actual changed added/deleted operating Rust modules only. Tests and harness excluded; real runtime helper/prompt/schema owners included. Do not repartition modules to force differences. All counts remain unknown until independent scratch patches execute.",
+  "tasks": [
+    {
+      "id": "C05",
+      "feature": "Query actual delivered referent explanation provenance",
+      "before": "Bindings/proposals are returned and displayed; there is no user-facing delivered explanation query API.",
+      "after": "A query by expression_id, input_revision and adoption_id returns the actually delivered target frame/source revision/extent and observed cue provenance. Unresolved, rejected or never displayed proposals are excluded.",
+      "acceptance": [
+        "Successful first and correction revisions each return their own exact delivered record.",
+        "Returned source/frame revision and model-produced extent match the actual admitted source snapshot, not an evaluator expected extent.",
+        "An unresolved failed proposal and fake adoption_id return NOT_FOUND.",
+        "A retained old revision is distinguishable from the current query; query cannot silently substitute current content.",
+        "Both A joint and B producer/read-set provenance participate through the real production path with an offline model double."
+      ],
+      "likely_change_owners_not_predicted_count": ["adopted-delivery state/query admission", "provenance query operation"],
+      "mock_scope": "Source/flow correctness only, not model quality"
+    },
+    {
+      "id": "C06",
+      "feature": "Withdraw one source region while retaining a disjoint permitted region",
+      "before": "Baseline checks whole frame/source snapshot and input revision. No live per-region withdrawal operation.",
+      "after": "A real external authorization event updates region policy generation. Intersecting candidate/binding uses are invalidated, disjoint uses remain, held old publication is rejected, and subsequent model input uses an actual permitted/redacted source view.",
+      "acceptance": [
+        "Same two-region source and same external withdrawn rectangle for A/B; rectangle is an authorization event, not a target oracle.",
+        "An adopted intersecting extent is no longer admissible; a disjoint extent remains available.",
+        "Actual pixel view sent on reread is redacted for the withdrawn rectangle, and no old unredacted path is admitted as fallback.",
+        "A held old proposal under the prior policy generation is rejected even if input/source revisions otherwise match.",
+        "Repeated withdrawal is idempotent and whole-source rights/revision guards continue to pass their regressions.",
+        "B producer candidates and final binding read-set are invalidated through their actual owners; no binder raw-to-final bypass is introduced."
+      ],
+      "likely_change_owners_not_predicted_count": ["source view authorization/redaction", "region policy admission", "adopted binding and B candidate eligibility"],
+      "mock_scope": "Actual local pixel redaction/admission and stale-policy behavior, not provider performance"
+    }
+  ],
+  "independence": "Each task starts from the same frozen baseline in a fresh scratch copy. Original C01/C03 controls are preserved separately. Neither new feature is added to BASIC performance.",
+  "model_calls_authorized_for_this_plan": 0
+}

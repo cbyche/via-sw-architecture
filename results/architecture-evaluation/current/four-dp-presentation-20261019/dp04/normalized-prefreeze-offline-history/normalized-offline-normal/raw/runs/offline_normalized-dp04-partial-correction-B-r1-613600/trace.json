@@ -1,0 +1,1308 @@
+{
+  "schema_version": 2,
+  "run_id": "offline_normalized-dp04-partial-correction-B-r1-613600",
+  "dp": "04",
+  "episode": "dp04-partial-correction",
+  "variant": "B",
+  "repetition": 1,
+  "phase": "OFFLINE_NORMALIZED",
+  "tactic": null,
+  "candidate_binary_sha256": "d165ee786eeed523a5ecc38b54ebcc973823fcaa2f4ec1167b955333a8223704",
+  "postrun_binary_sha256": "d165ee786eeed523a5ecc38b54ebcc973823fcaa2f4ec1167b955333a8223704",
+  "candidate_binary_path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/normalized-offline-normal/frozen/bin/four_dp_poc",
+  "freeze_sha256": "24188d7c3bb5c94c702f689743bee409749ede5be1c325b966c472b1e9cec14c",
+  "start_ns": 1921693510271458,
+  "end_ns": 1921693518822916,
+  "events": [
+    {
+      "data": {
+        "dp": "04",
+        "id": "dp04-partial-correction",
+        "variant": "B"
+      },
+      "elapsed_ns": 28917,
+      "event_id": "event-1",
+      "goal_ids": [],
+      "kind": "EPISODE_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515772750
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 50875,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 58583,
+      "event_id": "event-2",
+      "goal_ids": [],
+      "kind": "INPUT_CAPTURED",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515796750
+    },
+    {
+      "data": {
+        "goal_id": "dp04-partial-correction:grounding",
+        "input_elapsed_ns": 50875,
+        "kind": "user_grounding_input",
+        "raw_text": "왼쪽 그래프와 가운데 그래프를 비교해줘.",
+        "revision": 1,
+        "stimulus_id": "dp04-partial-correction:r1"
+      },
+      "elapsed_ns": 73625,
+      "event_id": "event-3",
+      "goal_ids": [],
+      "kind": "STIMULUS",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515808041
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "parent_ids": [],
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 101500,
+      "event_id": "event-4",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515834083
+    },
+    {
+      "data": {
+        "bytes": 27303,
+        "identity": {
+          "frame_id": "correction",
+          "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+          "source_id": "document",
+          "source_revision": 1
+        },
+        "kind": "PNG_PIXELS",
+        "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/correction.png"
+      },
+      "elapsed_ns": 146667,
+      "event_id": "event-5",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SOURCE_READ",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515885791
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 27303,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 165042,
+      "event_id": "event-6",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515899416
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "dp04_source_png",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 176458,
+      "event_id": "event-7",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515914958
+    },
+    {
+      "data": {
+        "node_id": "dp04-source-r1-\"correction\"",
+        "stage": "dp04_source_pixels"
+      },
+      "elapsed_ns": 186792,
+      "event_id": "event-8",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOCAL_OPERATION_END",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693515931208
+    },
+    {
+      "data": {
+        "parents": [
+          "dp04-source-r1-\"correction\""
+        ]
+      },
+      "elapsed_ns": 195750,
+      "event_id": "event-9",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "CAUSAL_JOIN",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693515947250
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 816,
+        "name": "dp04_observations",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 228583,
+      "event_id": "event-10",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693515964291
+    },
+    {
+      "data": {
+        "held_previous": false,
+        "revision": 1
+      },
+      "elapsed_ns": 260583,
+      "event_id": "event-11",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "REVISION_REGISTERED",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693515989458
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "role": "VIA",
+        "stage": "dp04.screen_producer"
+      },
+      "elapsed_ns": 290042,
+      "event_id": "event-13",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693516024583
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 3985,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 394375,
+      "event_id": "event-14",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693516130750
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_12",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 741125,
+      "event_id": "event-15",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693516480375
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-12",
+        "parent_ids": [
+          "dp04-source-r1-\"correction\""
+        ],
+        "response_logical_bytes": 618,
+        "role": "VIA",
+        "stage": "dp04.screen_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 783833,
+      "event_id": "event-16",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "dp04-source-r1-\"correction\""
+      ],
+      "type": "event",
+      "observed_ns": 1921693516517666
+    },
+    {
+      "data": {
+        "error": "NORMALIZED_INTEGER_OUT_OF_RANGE",
+        "owner": "screen"
+      },
+      "elapsed_ns": 815583,
+      "event_id": "event-17",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "NORMALIZED_WIRE_REJECTED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516545333
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 1037,
+        "name": "dp04_screen_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 864375,
+      "event_id": "event-18",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516597000
+    },
+    {
+      "data": {
+        "generation": 1,
+        "revision": 1,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "candidates": [
+            {
+              "bbox_2d": [
+                -1,
+                -2,
+                2000,
+                3077
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C1 / Baseline",
+              "target_id": "C1"
+            },
+            {
+              "bbox_2d": [
+                360,
+                169,
+                655,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C2 / Expansion",
+              "target_id": "C2"
+            },
+            {
+              "bbox_2d": [
+                680,
+                169,
+                975,
+                815
+              ],
+              "coordinate_space": "qwen_normalized_0_1000",
+              "frame_id": "correction",
+              "kind": "card",
+              "label": "C3 / Recovery",
+              "target_id": "C3"
+            }
+          ],
+          "coordinate_wire_valid": false,
+          "coverage": {
+            "competing": [],
+            "complete": true,
+            "unknown": []
+          },
+          "cue_relations": [],
+          "geometry_issues": [
+            "INVALID_FRAME_OR_BBOX:\"C1\"",
+            "INVALID_FRAME_OR_BBOX:\"C2\"",
+            "INVALID_FRAME_OR_BBOX:\"C3\"",
+            "NORMALIZED_WIRE:NORMALIZED_INTEGER_OUT_OF_RANGE"
+          ],
+          "producer_generation": 1,
+          "revision": 1,
+          "source_refs": [
+            "correction"
+          ],
+          "source_snapshot": [
+            {
+              "frame_id": "correction",
+              "sha256": "a893b81f1f8a61d5e6bae9be6c2f5776536d2b109d2d1108079dfab2e6932ded",
+              "source_id": "document",
+              "source_revision": 1
+            }
+          ]
+        }
+      },
+      "elapsed_ns": 887792,
+      "event_id": "event-19",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SCREEN_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516653875
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-20",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "role": "VIA",
+        "stage": "dp04.speech_producer"
+      },
+      "elapsed_ns": 952333,
+      "event_id": "event-21",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516698166
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 2688,
+        "name": "model_request_20",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1024208,
+      "event_id": "event-22",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516756208
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_20",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1198542,
+      "event_id": "event-23",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516937375
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-20",
+        "parent_ids": [
+          "operation-12"
+        ],
+        "response_logical_bytes": 533,
+        "role": "VIA",
+        "stage": "dp04.speech_producer",
+        "status": "RESPONSE_RECEIVED"
+      },
+      "elapsed_ns": 1237583,
+      "event_id": "event-24",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-12"
+      ],
+      "type": "event",
+      "observed_ns": 1921693516992916
+    },
+    {
+      "data": {
+        "action": "ALLOCATE_OR_REPLACE",
+        "bytes": 570,
+        "name": "dp04_speech_candidates_r1",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1282458,
+      "event_id": "event-25",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693517039208
+    },
+    {
+      "data": {
+        "revision": 1,
+        "state": {
+          "_provider_usage": {
+            "input_tokens": null,
+            "output_tokens": null
+          },
+          "coverage": {
+            "complete": true,
+            "unknown": []
+          },
+          "expressions": [
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "keep-first",
+              "kind": "item",
+              "meaning": "왼쪽 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            },
+            {
+              "count": 1,
+              "cue_ids": [],
+              "explicit_target_ids": [],
+              "expression_id": "change-second",
+              "kind": "item",
+              "meaning": "가운데 그래프",
+              "relation": "relative_position",
+              "unresolved": []
+            }
+          ],
+          "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+          "revision": 1
+        }
+      },
+      "elapsed_ns": 1301292,
+      "event_id": "event-26",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "SPEECH_CANDIDATES_PUBLISHED",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693517093000
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-27",
+        "parent_ids": [
+          "operation-20"
+        ],
+        "role": "VIA",
+        "stage": "dp04.candidate_binding"
+      },
+      "elapsed_ns": 1357208,
+      "event_id": "event-28",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_START",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693517144416
+    },
+    {
+      "data": {
+        "action": "ALLOCATE",
+        "bytes": 4196,
+        "name": "model_request_27",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1476500,
+      "event_id": "event-29",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693517214541
+    },
+    {
+      "data": {
+        "action": "RELEASE",
+        "bytes": 0,
+        "name": "model_request_27",
+        "not_rss": true,
+        "unit": "serialized_UTF8_bytes"
+      },
+      "elapsed_ns": 1680750,
+      "event_id": "event-30",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "LOGICAL_BUFFER",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693517420250
+    },
+    {
+      "data": {
+        "goal_ids": [
+          "dp04-partial-correction:grounding"
+        ],
+        "node_id": "operation-27",
+        "parent_ids": [
+          "operation-20"
+        ],
+        "response_logical_bytes": 31,
+        "role": "VIA",
+        "stage": "dp04.candidate_binding",
+        "status": "FAILED"
+      },
+      "elapsed_ns": 1700167,
+      "event_id": "event-31",
+      "goal_ids": [
+        "dp04-partial-correction:grounding"
+      ],
+      "kind": "OPERATION_END",
+      "parent_ids": [
+        "operation-20"
+      ],
+      "type": "event",
+      "observed_ns": 1921693517482666
+    },
+    {
+      "data": {
+        "error": "\"'bbox'\""
+      },
+      "elapsed_ns": 1736750,
+      "event_id": "event-32",
+      "goal_ids": [],
+      "kind": "EPISODE_ERROR",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1921693517542583
+    }
+  ],
+  "calls": [
+    {
+      "call_uuid": "OFFLINE-436f8fba0f727d15",
+      "stage": "dp04.screen_producer",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "candidates": [
+          {
+            "target_id": "C1",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C1 / Baseline",
+            "bbox_2d": [
+              -1,
+              -2,
+              2000,
+              3077
+            ],
+            "coordinate_space": "qwen_normalized_0_1000"
+          },
+          {
+            "target_id": "C2",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C2 / Expansion",
+            "bbox_2d": [
+              360,
+              169,
+              655,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000"
+          },
+          {
+            "target_id": "C3",
+            "frame_id": "correction",
+            "kind": "card",
+            "label": "C3 / Recovery",
+            "bbox_2d": [
+              680,
+              169,
+              975,
+              815
+            ],
+            "coordinate_space": "qwen_normalized_0_1000"
+          }
+        ],
+        "cue_relations": [],
+        "coverage": {
+          "complete": true,
+          "unknown": [],
+          "competing": []
+        },
+        "source_refs": [
+          "correction"
+        ]
+      }
+    },
+    {
+      "call_uuid": "OFFLINE-872d3afba32c75f4",
+      "stage": "dp04.speech_producer",
+      "status": "OFFLINE",
+      "cost_usd": 0,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "response_value": {
+        "intent": "지칭한 대상의 비교 또는 자료 사용 요청을 현재 판본에 연결",
+        "expressions": [
+          {
+            "expression_id": "keep-first",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "왼쪽 그래프"
+          },
+          {
+            "expression_id": "change-second",
+            "kind": "item",
+            "count": 1,
+            "relation": "relative_position",
+            "cue_ids": [],
+            "explicit_target_ids": [],
+            "unresolved": [],
+            "meaning": "가운데 그래프"
+          }
+        ],
+        "coverage": {
+          "complete": true,
+          "unknown": []
+        }
+      }
+    },
+    {
+      "run_id": "offline_normalized-dp04-partial-correction-B-r1-613600",
+      "phase": "OFFLINE_NORMALIZED",
+      "dp": "04",
+      "variant": "B",
+      "episode": "dp04-partial-correction",
+      "repetition": 1,
+      "stage": "dp04.candidate_binding",
+      "rust_call_id": 27,
+      "status": "BRIDGE_ERROR",
+      "error": "'bbox'",
+      "terminal_ns": 1921693517363500
+    }
+  ],
+  "memory": [
+    {
+      "at_ns": 1921693510944125,
+      "sample_end_ns": 1921693515551666,
+      "stage": "RUST_WAITING_FOR_INPUT",
+      "processes": [
+        {
+          "pid": 57932,
+          "ppid": 50460,
+          "role": "python_runner_bridge",
+          "rss_bytes": 33570816
+        },
+        {
+          "pid": 57963,
+          "ppid": 57932,
+          "role": "rust_candidate",
+          "rss_bytes": 1654784
+        }
+      ],
+      "registered_processes": [
+        {
+          "pid": 57932,
+          "role": "python_runner_bridge"
+        },
+        {
+          "pid": 57963,
+          "role": "rust_candidate"
+        }
+      ],
+      "rss_bytes_by_pid": {
+        "57932": 33570816,
+        "57963": 1654784
+      },
+      "rss_bytes_by_role": {
+        "python_runner_bridge": 33570816,
+        "rust_candidate": 1654784
+      },
+      "concurrent_sum_bytes": 35225600,
+      "all_registered_observed": true,
+      "logical_buffers": {
+        "input_json": {
+          "bytes": 2276,
+          "category": "input",
+          "owner": "python_runner_bridge"
+        }
+      },
+      "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+      "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+    }
+  ],
+  "memory_baseline": {
+    "at_ns": 1921693507196791,
+    "sample_end_ns": 1921693509101541,
+    "stage": "BEFORE_RUST_START",
+    "processes": [
+      {
+        "pid": 57932,
+        "ppid": 50460,
+        "role": "python_runner_bridge",
+        "rss_bytes": 33538048
+      }
+    ],
+    "registered_processes": [
+      {
+        "pid": 57932,
+        "role": "python_runner_bridge"
+      }
+    ],
+    "rss_bytes_by_pid": {
+      "57932": 33538048
+    },
+    "rss_bytes_by_role": {
+      "python_runner_bridge": 33538048
+    },
+    "concurrent_sum_bytes": 33538048,
+    "all_registered_observed": true,
+    "logical_buffers": {
+      "input_json": {
+        "bytes": 2276,
+        "category": "input",
+        "owner": "python_runner_bridge"
+      }
+    },
+    "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+    "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+  },
+  "logical_buffer_events": [
+    {
+      "at_ns": 1921693507195833,
+      "name": "input_json",
+      "bytes": 2276,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "input",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515779875,
+      "name": "retained_events",
+      "bytes": 224,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515804583,
+      "name": "retained_events",
+      "bytes": 627,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515814291,
+      "name": "retained_events",
+      "bytes": 1024,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515844041,
+      "name": "retained_events",
+      "bytes": 1324,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515896666,
+      "name": "retained_events",
+      "bytes": 1848,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515910583,
+      "name": "retained_events",
+      "bytes": 2163,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515911666,
+      "name": "rust:dp04_source_png",
+      "bytes": 27303,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515927833,
+      "name": "retained_events",
+      "bytes": 2473,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515929083,
+      "name": "rust:dp04_source_png",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 27303,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515944958,
+      "name": "retained_events",
+      "bytes": 2753,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515961916,
+      "name": "retained_events",
+      "bytes": 3027,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515986083,
+      "name": "retained_events",
+      "bytes": 3374,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693515986500,
+      "name": "rust:dp04_observations",
+      "bytes": 816,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516011375,
+      "name": "retained_events",
+      "bytes": 3650,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516047208,
+      "name": "retained_events",
+      "bytes": 4058,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516156000,
+      "name": "retained_events",
+      "bytes": 4405,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516156416,
+      "name": "rust:model_request_12",
+      "bytes": 3985,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516416583,
+      "name": "retained_call_records",
+      "bytes": 808,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516508250,
+      "name": "retained_events",
+      "bytes": 4748,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516508916,
+      "name": "rust:model_request_12",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 3985,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516542708,
+      "name": "retained_events",
+      "bytes": 5216,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516571250,
+      "name": "retained_events",
+      "bytes": 5504,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516626958,
+      "name": "retained_events",
+      "bytes": 5854,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516627458,
+      "name": "rust:dp04_screen_candidates_r1",
+      "bytes": 1037,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516695333,
+      "name": "retained_events",
+      "bytes": 7243,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516733833,
+      "name": "retained_events",
+      "bytes": 7617,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516795458,
+      "name": "retained_events",
+      "bytes": 7948,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516795958,
+      "name": "rust:model_request_20",
+      "bytes": 2688,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516875208,
+      "name": "retained_call_records",
+      "bytes": 1514,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516987375,
+      "name": "retained_events",
+      "bytes": 8275,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693516988208,
+      "name": "rust:model_request_20",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 2688,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517035666,
+      "name": "retained_events",
+      "bytes": 8710,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517081833,
+      "name": "retained_events",
+      "bytes": 9060,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517082416,
+      "name": "rust:dp04_speech_candidates_r1",
+      "bytes": 570,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517141583,
+      "name": "retained_events",
+      "bytes": 9931,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517191958,
+      "name": "retained_events",
+      "bytes": 10308,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517267791,
+      "name": "retained_events",
+      "bytes": 10639,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517268250,
+      "name": "rust:model_request_27",
+      "bytes": 4196,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "rust_serialized",
+      "owner": "rust_candidate",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517377375,
+      "name": "retained_call_records",
+      "bytes": 1831,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517477708,
+      "name": "retained_events",
+      "bytes": 10966,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517478541,
+      "name": "rust:model_request_27",
+      "action": "RELEASE",
+      "prior": {
+        "bytes": 4196,
+        "category": "rust_serialized",
+        "owner": "rust_candidate"
+      },
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517540916,
+      "name": "retained_events",
+      "bytes": 11391,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1921693517597083,
+      "name": "retained_events",
+      "bytes": 11580,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    }
+  ],
+  "process_registry": [
+    {
+      "pid": 57932,
+      "role": "python_runner_bridge"
+    },
+    {
+      "pid": 57963,
+      "role": "rust_candidate"
+    }
+  ],
+  "memory_nominal_poll_ms": 50,
+  "stderr": "",
+  "returncode": 0,
+  "input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/normalized-offline-normal/raw/runs/offline_normalized-dp04-partial-correction-B-r1-613600/input.json",
+  "offline_responder": true
+}

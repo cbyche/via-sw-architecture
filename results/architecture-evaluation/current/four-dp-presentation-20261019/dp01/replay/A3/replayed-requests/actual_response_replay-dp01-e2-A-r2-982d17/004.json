@@ -1,0 +1,205 @@
+{
+  "source_call_uuid": "c607a065-3f20-4886-a404-fbc82e5d8edb",
+  "payload": {
+    "input": {
+      "actual_evidence": [
+        {
+          "actual_delivery_only": false,
+          "end_line": 5,
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 1,
+          "text": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.\nAster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.\nBoreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.\n배송비와 설치 지원은 별도 견적 확인이 필요하다. 비교표는 두 제품만 다룬다.",
+          "unit": "one_based_line_inclusive"
+        },
+        {
+          "end_line": 3,
+          "kind": "ACTUALLY_DELIVERED_ANSWER",
+          "original_source_provenance": {
+            "end_line": 3,
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 3
+          },
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 3,
+          "text": "PC 비교표에서 가장 싼 제품은 Boreal B로, 가격은 1,190,000원입니다."
+        },
+        {
+          "end_line": 2,
+          "kind": "ACTUALLY_DELIVERED_ANSWER",
+          "original_source_provenance": {
+            "end_line": 2,
+            "revision": 1,
+            "source_id": "desk-compare",
+            "start_line": 2
+          },
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 2,
+          "text": "PC 비교표에서 가장 싼 제품은 Boreal B로, 가격은 1,190,000원입니다."
+        },
+        {
+          "actual_delivery_only": false,
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "customer-mail",
+          "start_line": 1,
+          "text": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다.\n참가자는 영업팀 김유나와 기술팀 박민수이며 회의는 온라인이다.\n메일은 회의 제안이며 수락이나 일정 등록 완료를 의미하지 않는다.",
+          "unit": "one_based_line_inclusive"
+        }
+      ],
+      "catalog": [
+        {
+          "conversation": "c2",
+          "delivered_lines": null,
+          "id": "customer-mail",
+          "kind": "mail",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "회의 제안"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "북부 고객 검토 회의 메일"
+        },
+        {
+          "conversation": "c1",
+          "delivered_lines": null,
+          "id": "desk-compare",
+          "kind": "public_result",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                4
+              ],
+              "section": "가격과 유지보수"
+            },
+            {
+              "lines": [
+                2,
+                5
+              ],
+              "section": "일정과 미확인"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "업무용 PC 교체 비교표"
+        },
+        {
+          "conversation": "c2",
+          "delivered_lines": null,
+          "id": "team-calendar",
+          "kind": "calendar",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "사용 가능 시간"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "개발팀 10월 일정 조회"
+        },
+        {
+          "conversation": "c2",
+          "delivered_lines": null,
+          "id": "travel-rule",
+          "kind": "policy",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                2
+              ],
+              "section": "숙박과 예외"
+            },
+            {
+              "lines": [
+                3,
+                3
+              ],
+              "section": "적용 범위"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "국내 출장 경비 규정"
+        }
+      ],
+      "denied": [],
+      "expression": "북부 고객이 보낸 회의 메일",
+      "recent_conversation": [
+        {
+          "adopted_targets": [
+            "desk-compare"
+          ],
+          "facts": [
+            {
+              "end_line": 3,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 3
+            },
+            {
+              "end_line": 2,
+              "revision": 1,
+              "source_id": "desk-compare",
+              "start_line": 2
+            }
+          ],
+          "source_revisions": [
+            {
+              "revision": 1,
+              "source_id": "desk-compare"
+            }
+          ],
+          "text": "PC 비교표에서 가장 싼 제품은 Boreal B로, 가격은 1,190,000원입니다.",
+          "utterance": "PC 비교표의 가장 싼 제품은 뭐야?"
+        }
+      ],
+      "utterance": "주제 바꿔서 북부 고객이 보낸 회의 메일의 시간을 알려줘."
+    },
+    "instruction": "Complete the user's actual requested bounded summary or explanation using ONLY actual supplied current evidence. Return JSON {targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]} (the answer object). Do not echo the user's request or only name source targets. Give actual prices, dates, conditions or unknowns when requested and supported. Each fact claim needs an EXACT copied quote in supplied evidence.text and current source_id/revision/start_line/end_line. Displayed text may paraphrase fact claims. For ACTUALLY_DELIVERED_ANSWER quote only the actual displayed text; preserve original_source_provenance and do not claim the quote is verbatim original text. At least one fact per referred original target. Supporting explanation is not automatically a referred target. Preserve actual delivery limits, scope, caveats and corrections. Do not guess unseen facts. If unable, return text:null and uncertainties.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "targets": [
+      "customer-mail"
+    ],
+    "text": "북부 고객이 보낸 회의 메일에서 제안된 시간은 10월 30일 오후 2시입니다.",
+    "facts": [
+      {
+        "statement": "북부 고객이 제품 검토 회의를 요청한 시간은 10월 30일 오후 2시다.",
+        "source_id": "customer-mail",
+        "revision": 1,
+        "start_line": 1,
+        "end_line": 1,
+        "quote": "북부 고객이 10월 30일 오후 2시에 제품 검토 회의를 요청했다."
+      }
+    ],
+    "source_revisions": [
+      {
+        "source_id": "customer-mail",
+        "revision": 1
+      }
+    ],
+    "conditions": [],
+    "uncertainties": []
+  }
+}

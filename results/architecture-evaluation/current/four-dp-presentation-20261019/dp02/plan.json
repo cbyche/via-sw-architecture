@@ -1,0 +1,208 @@
+{
+  "version": "DP02_B1_IMMUTABLE_CONTEXT_REPLAY_V1",
+  "status": "PRE_EXECUTION",
+  "model_calls_created": 0,
+  "scope": "Full DP02 semantic/control pipeline with exact actual frozen B responses; memory diagnostic, not newly measured QA01/QA03/model accuracy or cost.",
+  "baseline": "Original BASIC B semantic/source/revision/recovery/lifecycle rules; deep-copy worker input and owned wire encoding.",
+  "tactic": "B1 immutable Arc root input/source views plus borrowed payload/wire encoding; per-request mutable state/history snapshot and all semantic/currentness/recovery rules unchanged.",
+  "N": [
+    1,
+    2,
+    4
+  ],
+  "episodes": [
+    "02-E1",
+    "02-E2",
+    "02-E3",
+    "02-E4"
+  ],
+  "replay_seeds": [
+    1,
+    2,
+    3
+  ],
+  "trials": 72,
+  "fixed_denominator": "Every 2 modes ×4 episodes ×3 N ×3 original-response seeds; failed or mismatched trial remains included, no silent retry. N is concurrent independent request-context replicas using the same actual source input, no padding/concatenated filler.",
+  "expected": "Only ~7.5KB source JSON per copy; owned allocator bytes may fall while whole Python+Rust RSS ties or fluctuates. Do not force a large QA06 gain or claim the original0.8192MB gap is explained.",
+  "falsification": "Any baseline/B1 output/current-revision/failure/call-replay mismatch invalidates functional equivalence; no whole-RSS improvement means B1 has no confirmed QA06 headline benefit.",
+  "primary_memory": "Maximum same-sample fresh Python replay+Rust RSS; Rust role separately. Nominal10ms sampling plus declared sampler observation gate at first pending-call wave; no latency result derived from replay wall.",
+  "secondary_memory": "Global allocator requested-live/peak bytes, unique immutable source/input ownership and serialized logical bytes; these do not partition RSS.",
+  "schedule": "Replay original Rust OPERATION_END order and prior actual input/adoption/revision/completion barriers, not just provider-return timestamps; no simulated wall delays. Independent HashMap request order and cross-input association interleaving canonicalized; each input intent_index/goal revision preserved.",
+  "input_capsules": [
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E1-r1.json",
+      "sha256": "0ff8c1b3d52cb164e4d42bd35babdfb536162501e0f2ebe4d8474f7c422027e6",
+      "episode": "02-E1",
+      "rep": 1,
+      "input_sha256": "37bd586d964b6445ec26c06dc9e4fbd79ed7ea2f7442f761d309989d61fb705e",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E1-r2.json",
+      "sha256": "42113238b85b45519a495aff1729f4605ed3dc264797541c44e1b6b51e77ab4d",
+      "episode": "02-E1",
+      "rep": 2,
+      "input_sha256": "37bd586d964b6445ec26c06dc9e4fbd79ed7ea2f7442f761d309989d61fb705e",
+      "calls": 5
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E1-r3.json",
+      "sha256": "ac8f2a61c3d058f1ace98ff967aa831870add782159d83eab2d1de78af2bb67f",
+      "episode": "02-E1",
+      "rep": 3,
+      "input_sha256": "37bd586d964b6445ec26c06dc9e4fbd79ed7ea2f7442f761d309989d61fb705e",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E2-r1.json",
+      "sha256": "4bdc0030b8b4a63927b2a8da8b155ce76dc0bc18e7757b1c855c68f31caac3a5",
+      "episode": "02-E2",
+      "rep": 1,
+      "input_sha256": "9bc18489a247fea0f901153d4af93600df6ed4c2f608d8968967ae7860549bcc",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E2-r2.json",
+      "sha256": "8ee6b3c4328926da92685bee86dff63e703b728f287c1dea5081655f030af24a",
+      "episode": "02-E2",
+      "rep": 2,
+      "input_sha256": "9bc18489a247fea0f901153d4af93600df6ed4c2f608d8968967ae7860549bcc",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E2-r3.json",
+      "sha256": "2b981a4beed49a117ee1ac04a055a91b7fd3dafc306c99eecc825c96fcab8b78",
+      "episode": "02-E2",
+      "rep": 3,
+      "input_sha256": "9bc18489a247fea0f901153d4af93600df6ed4c2f608d8968967ae7860549bcc",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E3-r1.json",
+      "sha256": "6638f25191dde4180baa53c55b7f18f3a52b40148ba0f03fb32b3836cd48adad",
+      "episode": "02-E3",
+      "rep": 1,
+      "input_sha256": "edf9afb8067847d391e7323f0f205f07f5a6793701c6debcbbde7c355c88ece3",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E3-r2.json",
+      "sha256": "9a5e2d2bfa772afce588db416eb70fd07853230e216ef12a7f4c88f88e9a4481",
+      "episode": "02-E3",
+      "rep": 2,
+      "input_sha256": "edf9afb8067847d391e7323f0f205f07f5a6793701c6debcbbde7c355c88ece3",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E3-r3.json",
+      "sha256": "c56b5750a915394bcb4a6f791c52dccc66b44a1d44fb8232404f3810f9fa392b",
+      "episode": "02-E3",
+      "rep": 3,
+      "input_sha256": "edf9afb8067847d391e7323f0f205f07f5a6793701c6debcbbde7c355c88ece3",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E4-r1.json",
+      "sha256": "918a4b3cbe71ca4925da0eea716691a79fbeada60924cd150a65dbac3195dfb5",
+      "episode": "02-E4",
+      "rep": 1,
+      "input_sha256": "ee45fff5be56bcc2af4e78c64b8da45f019182b3a84f6226e18619a628e0ad8f",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E4-r2.json",
+      "sha256": "55f631850044d48fe4e01bf637a8a59353700109e9f6d92db945e5176d7ade79",
+      "episode": "02-E4",
+      "rep": 2,
+      "input_sha256": "ee45fff5be56bcc2af4e78c64b8da45f019182b3a84f6226e18619a628e0ad8f",
+      "calls": 4
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/inputs/02-E4-r3.json",
+      "sha256": "2ae408df62c40d730ab343ed9a0d24af503332786967b77900f1cdde34a3d6f5",
+      "episode": "02-E4",
+      "rep": 3,
+      "input_sha256": "ee45fff5be56bcc2af4e78c64b8da45f019182b3a84f6226e18619a628e0ad8f",
+      "calls": 4
+    }
+  ],
+  "old_freeze_sha256": "50e4116e1fa86807c19abecac6586110e88968087542eececcfc4e379a7cecf2",
+  "sources": {
+    "prototypes/candidates/four_dp_poc_v2/src/dp01_request.rs": "62467daa6e0efc3eccda15b9ff28ee8a715b2acf016f53134b88495350bb803f",
+    "prototypes/candidates/four_dp_poc_v2/src/dp01_producer.rs": "45d8cfcec174ddb3b3b58cfd7664504602e73654f58f66e84422b457468f101b",
+    "prototypes/candidates/four_dp_poc_v2/src/source_contract.rs": "623039d85f9553cb92d850c89bdad4835b18930980ef9963fa897d2baf381b52",
+    "prototypes/candidates/four_dp_poc_v2/src/dp02.rs": "b2287c993245a5716365c1ba4da291534972f36f6889383e2784cf2cd4b33edd",
+    "prototypes/candidates/four_dp_poc_v2/src/dp05_sources.rs": "cfb48d95d1a4efaf38804072f326f079e58e880dda61482b299636e80afa3505",
+    "prototypes/candidates/four_dp_poc_v2/src/dp05_receiver.rs": "f55b23318cd4dbd193f0bc6c437e4f46754456375f674f4d07e9caf1a4b892f3",
+    "prototypes/candidates/four_dp_poc_v2/src/dp01_evidence.rs": "feb656a574b4bb06966537ba7fb4f5193e748dea501a7799de7463c7e5ba3e0b",
+    "prototypes/candidates/four_dp_poc_v2/src/model_wire.rs": "35ff2899ac53ced6123b72ceb18469800ef6c10f0b6631b5d05eadd0299ccf89",
+    "prototypes/candidates/four_dp_poc_v2/src/dp05_record.rs": "653118f49474d5d24346e861944281a7b09cc317ce8d0d1161906408709b97a2",
+    "prototypes/candidates/four_dp_poc_v2/src/main.rs": "cc06465e83e181611de6ab883987c7267600f6d95c7b486566113ad87bd93b7e",
+    "prototypes/candidates/four_dp_poc_v2/src/dp05_handoff.rs": "86bd51c11b3f272f95f1bd30fea1a4d6d6fcac0dc71b3119fb26648b1f61c84e",
+    "prototypes/candidates/four_dp_poc_v2/src/dp01.rs": "1a13cc9bd66994b1fea06eaa3ad46121cfa76a2f883fff76deb4917469e0bd75",
+    "prototypes/candidates/four_dp_poc_v2/src/dp05.rs": "384e133d08ca460782b7b8cd36787c3c1d2c44fd92d2721e6eafe12d4305668f",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04.rs": "66c01003aca623108659cb70a099bf96097c4e34b2e7eacd74d0b652c5311907",
+    "prototypes/candidates/four_dp_poc_v2/src/context.rs": "8d42a018e99d0371f289e7487c974091c3707707e76bdb6ed74b88051a07ce70",
+    "prototypes/candidates/four_dp_poc_v2/src/dp02/response.rs": "36bb7fb95502d422ff76ee0d97e1842b46b9e639592af270b86adc406b6dbbe3",
+    "prototypes/candidates/four_dp_poc_v2/src/dp02/execution.rs": "e024fa04b37f39ebdae252754ab169e116946566039dc0ba003b492a304edf81",
+    "prototypes/candidates/four_dp_poc_v2/src/dp02/state.rs": "a390a2127fb7e395cd6b1a454e9d9e4a2e575dc3b1099ba9e8364383486fb28e",
+    "prototypes/candidates/four_dp_poc_v2/src/dp02/interpretation.rs": "a11de7e488fb37b3800b1552e07af46e68c3a81dbcba251e693510ec490b2d78",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04/observations.rs": "afb0720f7c355b75d832032494ec61e63baebc0d388f96ca08d6595eaeaa29c7",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04/producers.rs": "38c5fb8411bd66e01b32e92a7c576bb6ad333d7b5743ecd52fff6fe2f0fc1f6e",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04/binding.rs": "07c40aa54c2a4da273d95b0171ba3eba771b3f9a8cf73d2bddbd2d129dcbe48c",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04/geometry.rs": "0e1112661777ba650e5c3fac6e86941a6bf37126f03d01413307024d152ad397",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04/gate.rs": "072f9ed8685411e1e17f0fb270d1c3a5099a7038e6d5eb1959f6115cc5c39d2c",
+    "prototypes/candidates/four_dp_poc_v2/src/dp04/joint.rs": "26e976efea43963f7ba4314c9ca8fb74bb366e011ec83eba32a6c47b2970c719"
+  },
+  "no_changes": "No original candidate, fixture, oracle, raw evidence, AGENTS or unrelated work changed.",
+  "schedules": [
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E1-r1.json",
+      "sha256": "1a91f117c0a79b1841a2a9c695dddc0097e21466967d560ef785ce07a247badc"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E1-r2.json",
+      "sha256": "a32796cb4dbb3e9256028e722fb106311f57c18c9b6abbb96a7a10c29081fcac"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E1-r3.json",
+      "sha256": "a833b4d5dee05ee5cc1e2c3a7457c0e5d531851b3d6f19ea1a36d641f2344130"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E2-r1.json",
+      "sha256": "44b6343ca1ecf11d71ffe0c696760708cc1fef7935dc7bbae3cf7724c8fb406e"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E2-r2.json",
+      "sha256": "19c1f6ba754b4c7359fbb630c66010e6101e1d30db8b7ee32c085b6c18bbad64"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E2-r3.json",
+      "sha256": "f9c3494894bdd9e4204af99e8344e4f8e3bf618a47dcb9fb05a5fb6845000cfb"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E3-r1.json",
+      "sha256": "c11d1b49193ddc98888e195adcc667d4d79f689955810372d856c5c4df3c67e6"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E3-r2.json",
+      "sha256": "b74674fc4ee5a55525076db1321e69f4ef0398d097b9869e5837f5b679dd738f"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E3-r3.json",
+      "sha256": "e3bfb856a99e6545c94805f6599e3772aa12a5e83c4140ab5bc4a19793df470d"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E4-r1.json",
+      "sha256": "08f7231b73702230326b37d541279aff258bad59a83b4958c60e3291a7f0741c"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E4-r2.json",
+      "sha256": "a6f928bba8b26a23d564de25452e332d61573c25eff6fa98ad1c7db065bdc67e"
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp02/schedules/02-E4-r3.json",
+      "sha256": "300a10cfd87c3afe135b7a8aa87c95f92afbbe1d6b968c29aafe8cb9a5f988e9"
+    }
+  ]
+}

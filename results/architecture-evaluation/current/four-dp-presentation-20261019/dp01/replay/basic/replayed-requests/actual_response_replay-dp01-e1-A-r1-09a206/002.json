@@ -1,0 +1,92 @@
+{
+  "source_call_uuid": "67a18877-8245-4537-8985-ae8ae3c6ba65",
+  "payload": {
+    "input": {
+      "actual_evidence": [
+        {
+          "actual_delivery_only": false,
+          "end_line": 4,
+          "revision": 1,
+          "source_id": "desk-compare",
+          "start_line": 1,
+          "text": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다.\nAster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일.\nBoreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다. 아직 최종 구매는 승인하지 않았다.",
+          "unit": "one_based_line_inclusive"
+        }
+      ],
+      "catalog": [
+        {
+          "conversation": "c1",
+          "delivered_lines": null,
+          "id": "desk-compare",
+          "kind": "public_result",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                4
+              ],
+              "section": "가격과 유지보수"
+            },
+            {
+              "lines": [
+                2,
+                5
+              ],
+              "section": "일정과 미확인"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "업무용 PC 교체 비교표"
+        }
+      ],
+      "denied": [],
+      "expression": "이 비교표",
+      "recent_conversation": [],
+      "utterance": "이 비교표에서 두 제품 가격을 알려줘."
+    },
+    "instruction": "Complete the user's actual requested bounded summary or explanation using ONLY actual supplied current evidence. Return JSON {targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]} (the answer object). Do not echo the user's request or only name source targets. Give actual prices, dates, conditions or unknowns when requested and supported. Each fact claim needs an EXACT copied quote in supplied evidence.text and current source_id/revision/start_line/end_line. Displayed text may paraphrase fact claims. For ACTUALLY_DELIVERED_ANSWER quote only the actual displayed text; preserve original_source_provenance and do not claim the quote is verbatim original text. At least one fact per referred original target. Supporting explanation is not automatically a referred target. Preserve actual delivery limits, scope, caveats and corrections. Do not guess unseen facts. If unable, return text:null and uncertainties.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "targets": [
+      "desk-compare"
+    ],
+    "text": "Aster A의 가격은 1,250,000원이며, Boreal B의 가격은 1,190,000원입니다. 두 가격 모두 부가세 포함 원화 기준입니다.",
+    "facts": [
+      {
+        "statement": "Aster A의 1대 가격은 1,250,000원이다.",
+        "source_id": "desk-compare",
+        "revision": 1,
+        "start_line": 2,
+        "end_line": 2,
+        "quote": "Aster A: 1대 가격 1,250,000원, 유지보수 36개월, 납기 10월 29일."
+      },
+      {
+        "statement": "Boreal B의 1대 가격은 1,190,000원이다.",
+        "source_id": "desk-compare",
+        "revision": 1,
+        "start_line": 3,
+        "end_line": 3,
+        "quote": "Boreal B: 1대 가격 1,190,000원, 유지보수 24개월, 납기 11월 3일."
+      },
+      {
+        "statement": "가격 기준은 부가세 포함 원화다.",
+        "source_id": "desk-compare",
+        "revision": 1,
+        "start_line": 1,
+        "end_line": 1,
+        "quote": "업무용 PC 교체 검토: Aster A와 Boreal B의 공개 비교 결과. 가격 기준은 부가세 포함 원화다."
+      }
+    ],
+    "source_revisions": [
+      {
+        "source_id": "desk-compare",
+        "revision": 1
+      }
+    ],
+    "conditions": [],
+    "uncertainties": []
+  }
+}

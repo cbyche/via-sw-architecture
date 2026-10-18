@@ -1,0 +1,276 @@
+{
+  "original_trace_sha256": "564c3796e162aa28adda82b4cc7233a0dc774adf0c040a03e544b3c3ecb9a22f",
+  "calls": [
+    {
+      "original_call_uuid": "056b7d97-eec2-4b7c-8067-8ec98e1df185",
+      "terminal_order": 18,
+      "required_barriers": [
+        "INPUT_CAPTURED:Q-MAIL-1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "INPUT_CAPTURED:U3"
+      ]
+    },
+    {
+      "original_call_uuid": "3f6f74d2-271f-480e-9db0-1f83b6cdea3a",
+      "terminal_order": 31,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:U2-0",
+        "GOAL_REVISION:R1:2",
+        "INPUT_CAPTURED:Q-MAIL-1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "INPUT_CAPTURED:U3"
+      ]
+    },
+    {
+      "original_call_uuid": "050b251d-00d1-4914-97bc-986142280ee2",
+      "terminal_order": 44,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "ADOPTION_COMMITTED:U2-0",
+        "GOAL_REVISION:R1:2",
+        "INPUT_CAPTURED:Q-MAIL-1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "INPUT_CAPTURED:U3"
+      ]
+    },
+    {
+      "original_call_uuid": "04858b40-4227-405b-8ffa-0ce284865d1c",
+      "terminal_order": 60,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "ADOPTION_COMMITTED:U2-0",
+        "ADOPTION_COMMITTED:U3-0",
+        "DOWNSTREAM_SHIM_RECEIPT:T-MAIL:U3",
+        "GOAL_COMPLETE:T-MAIL:U3:1",
+        "GOAL_REVISION:R1:2",
+        "INPUT_CAPTURED:Q-MAIL-1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2",
+        "INPUT_CAPTURED:U3"
+      ]
+    }
+  ],
+  "original_callbacks": [
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "U2-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": null,
+          "handling_text": "Revise the comparison of Plan A and Plan B to focus exclusively on cost metrics, removing recovery and capacity from the analysis scope while keeping the request active.",
+          "question_id": null,
+          "relation": "CORRECTION",
+          "scope": "criteria",
+          "source_claims": [],
+          "source_revisions": {},
+          "target_request_id": "R1",
+          "targets": [
+            "cost"
+          ],
+          "task_id": null
+        },
+        "goal_id": "R1",
+        "handling": "CORRECTION",
+        "raw_utterance": "Change the earlier comparison to cost only. Keep the comparison request active.",
+        "resolved": true,
+        "revision": 2,
+        "scope": "criteria",
+        "source_revisions": {},
+        "stimulus_id": "U2",
+        "targets": [
+          "cost"
+        ],
+        "text": "Revise the comparison of Plan A and Plan B to focus exclusively on cost metrics, removing recovery and capacity from the analysis scope while keeping the request active."
+      }
+    },
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "R1-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": null,
+          "handling_text": "Compare Plan A and Plan B regarding cost, recovery frequency, and capacity limits, explaining the evidence from the stress test ledger and the resulting tradeoffs.",
+          "question_id": null,
+          "relation": "NEW",
+          "scope": "comparison",
+          "source_claims": [
+            {
+              "quote": "Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Trial 17: 25 active requests; ... Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ],
+          "source_revisions": {
+            "D1": 1,
+            "D2": 1
+          },
+          "target_request_id": null,
+          "targets": [
+            "Plan A",
+            "Plan B"
+          ],
+          "task_id": null
+        },
+        "goal_id": "R1",
+        "handling": "CORRECTION",
+        "raw_utterance": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+        "resolved": true,
+        "revision": 2,
+        "scope": "criteria",
+        "source_revisions": {},
+        "stimulus_id": "R1",
+        "targets": [
+          "cost"
+        ],
+        "text": "Revise the comparison of Plan A and Plan B to focus exclusively on cost metrics, removing recovery and capacity from the analysis scope while keeping the request active."
+      }
+    },
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "U3-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": "The status email should be sent to Kim, the deputy manager.",
+          "handling_text": "Identify Kim, the deputy manager, as the recipient for the status email in response to question Q-MAIL-1.",
+          "question_id": "Q-MAIL-1",
+          "relation": "ANSWER",
+          "scope": "recipient",
+          "source_claims": [],
+          "source_revisions": {},
+          "target_request_id": null,
+          "targets": [
+            "Kim"
+          ],
+          "task_id": "T-MAIL"
+        },
+        "goal_id": "T-MAIL:U3",
+        "handling": "ANSWER",
+        "raw_utterance": "Send it to Kim, the deputy manager.",
+        "resolved": true,
+        "revision": 1,
+        "scope": "recipient",
+        "source_revisions": {},
+        "stimulus_id": "U3",
+        "targets": [
+          "Kim"
+        ],
+        "text": "Identify Kim, the deputy manager, as the recipient for the status email in response to question Q-MAIL-1."
+      }
+    },
+    {
+      "kind": "DOWNSTREAM_SHIM_RECEIPT",
+      "data": {
+        "accepted": true,
+        "external_wait_ns": 0,
+        "goal_id": "T-MAIL:U3",
+        "implementation": "fixed answer-delivery acceptance shim; not email-domain execution",
+        "question_id": "Q-MAIL-1",
+        "task_id": "T-MAIL"
+      }
+    },
+    {
+      "kind": "GOAL_COMPLETE",
+      "data": {
+        "checks": [
+          "nonempty detailed sections",
+          "current goal revision",
+          "actual supplied quote checks"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "delivery_receipt": {
+          "accepted": true,
+          "external_wait_ns": 0,
+          "goal_id": "T-MAIL:U3",
+          "implementation": "fixed answer-delivery acceptance shim; not email-domain execution",
+          "question_id": "Q-MAIL-1",
+          "task_id": "T-MAIL"
+        },
+        "goal_id": "T-MAIL:U3",
+        "goal_scope": "ANSWER_DELIVERY_TO_EXISTING_TASK",
+        "result": {
+          "answer": "The status email should be sent to Kim, the deputy manager.",
+          "applied_revision": 1,
+          "path": "VALID_COMPLETE_ANSWER_FROM_ADOPTION",
+          "sections": [
+            {
+              "id": "main",
+              "text": "The status email should be sent to Kim, the deputy manager."
+            }
+          ],
+          "source_claims": []
+        },
+        "revision": 1,
+        "stimulus_id": "U3",
+        "text": "The status email should be sent to Kim, the deputy manager."
+      }
+    },
+    {
+      "kind": "GOAL_COMPLETE",
+      "data": {
+        "checks": [
+          "nonempty detailed sections",
+          "current goal revision",
+          "actual supplied quote checks"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "R1",
+        "goal_scope": "USER_REQUEST",
+        "result": {
+          "_provider_usage": {
+            "input_tokens": 3492,
+            "output_tokens": 404
+          },
+          "answer": "Based on the revised scope focusing exclusively on cost metrics, Plan B is the superior choice with a monthly cost of 75 dollars compared to Plan A's 120 dollars per month. This represents a direct cost saving of 45 dollars per month for Plan B. The evidence from the source data confirms these fixed monthly costs: 'Plan A: cost 120 dollars per month' and 'Plan B: cost 75 dollars per month'. While other factors like recovery time and capacity differ significantly between the two plans, the current instruction explicitly removes recovery and capacity from the analysis scope. Therefore, strictly adhering to the cost-only comparison, Plan B is the more economical option.",
+          "applied_revision": 2,
+          "sections": [
+            {
+              "id": "cost-comparison",
+              "text": "Plan A costs 120 dollars per month, while Plan B costs 75 dollars per month. Plan B is cheaper by 45 dollars per month."
+            },
+            {
+              "id": "evidence",
+              "text": "The source text states: 'VIA Plan A: cost 120 dollars per month... Plan B: cost 75 dollars per month'."
+            },
+            {
+              "id": "scope-adherence",
+              "text": "Per the correction 'Change the earlier comparison to cost only', recovery and capacity metrics are excluded from this evaluation."
+            }
+          ],
+          "source_claims": [
+            {
+              "quote": "VIA Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM. Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            }
+          ]
+        },
+        "revision": 2,
+        "stimulus_id": "R1",
+        "text": "Based on the revised scope focusing exclusively on cost metrics, Plan B is the superior choice with a monthly cost of 75 dollars compared to Plan A's 120 dollars per month. This represents a direct cost saving of 45 dollars per month for Plan B. The evidence from the source data confirms these fixed monthly costs: 'Plan A: cost 120 dollars per month' and 'Plan B: cost 75 dollars per month'. While other factors like recovery time and capacity differ significantly between the two plans, the current instruction explicitly removes recovery and capacity from the analysis scope. Therefore, strictly adhering to the cost-only comparison, Plan B is the more economical option."
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-9a59ffed-3514-9054-95b5-4ccdf649ddf4",
+  "object": "chat.completion",
+  "created": 1792344835,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"Summarize the delivered explanation criteria and the latest corrected vendor quote details.\"\n  },\n  \"mode\": \"COMPLETE\",\n  \"answer\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"text\": \"The evaluation criteria prioritize VAT-inclusive prices and maintenance periods, using longer maintenance as a tiebreaker if prices are equal, while noting that no purchase decision has been made. The latest corrected quote (v2) for Aster A sets the unit price at 1,180,000 KRW (VAT included), maintains a quantity of 12 units and a 36-month maintenance period, corrects the delivery date to November 1st, and keeps the installation fee separate at 80,000 KRW. No contract has been signed yet.\",\n    \"facts\": [\n      {\n        \"statement\": \"Comparison considers VAT-inclusive price and maintenance period together.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\"\n      },\n      {\n        \"statement\": \"If prices are equal, the product with the longer maintenance period is prioritized.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\"\n      },\n      {\n        \"statement\": \"Purchase decision is not yet made and the latest quote version must be checked.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\"\n      },\n      {\n        \"statement\": \"Aster A Quote v2 corrects only price and delivery from v1, setting unit price at 1,180,000 KRW including VAT.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.\"\n      },\n      {\n        \"statement\": \"Maintenance period of 36 months and quantity of 12 units are maintained, while delivery date is corrected to November 1st.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.\"\n      },\n      {\n        \"statement\": \"Installation fee of 80,000 KRW is maintained as separate, and no contract or purchase has been concluded.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다.\"\n      }\n    ],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2\n      }\n    ],\n    \"conditions\": [],\n    \"uncertainties\": []\n  },\n  \"reads\": [],\n  \"reason\": \"The user requested a summary of the 'explanation criteria' and the 'latest corrected quote'. Both sources ('explained-criteria' rev 1 and 'vendor-quote' rev 2) are fully available in the evidence. I extracted all relevant facts from the delivered lines of 'explained-criteria' and all lines of 'vendor-quote' to provide a complete summary without needing further reads.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2861,
+    "total_tokens": 3859,
+    "completion_tokens": 998,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 2861
+    }
+  }
+}

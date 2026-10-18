@@ -1,0 +1,279 @@
+{
+  "original_trace_sha256": "2b335b911b3779192522d4c57360022f70952c298d24cf6ed1db55284f9c9fd5",
+  "calls": [
+    {
+      "original_call_uuid": "f6c9699b-53b4-41ca-b43d-b4ad954a1edb",
+      "terminal_order": 6,
+      "required_barriers": [
+        "INPUT_CAPTURED:R1"
+      ]
+    },
+    {
+      "original_call_uuid": "28e981d9-b1d4-4145-8f73-82ddbcc37c6a",
+      "terminal_order": 17,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "INPUT_CAPTURED:R1"
+      ]
+    },
+    {
+      "original_call_uuid": "d3f8d7d4-264a-470f-8af3-0875e523d5f7",
+      "terminal_order": 22,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "INPUT_CAPTURED:R1"
+      ]
+    },
+    {
+      "original_call_uuid": "1b070f61-6af2-4829-bec6-fb659ccb1f34",
+      "terminal_order": 32,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "GOAL_COMPLETE:R1:1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2"
+      ]
+    },
+    {
+      "original_call_uuid": "b41ab8c1-9e40-4c27-9034-a0f199d3a0f2",
+      "terminal_order": 43,
+      "required_barriers": [
+        "ADOPTION_COMMITTED:R1-0",
+        "ADOPTION_COMMITTED:U2-0",
+        "GOAL_COMPLETE:R1:1",
+        "INPUT_CAPTURED:R1",
+        "INPUT_CAPTURED:U2"
+      ]
+    }
+  ],
+  "original_callbacks": [
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "R1-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": null,
+          "handling_text": "Compare Plan A and Plan B regarding cost, recovery frequency, and capacity limits, explaining the evidence from the stress test ledger and the resulting tradeoffs.",
+          "question_id": null,
+          "relation": "NEW",
+          "scope": "comparison",
+          "source_claims": [
+            {
+              "quote": "Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Trial 17: 25 active requests; ... Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ],
+          "source_revisions": {
+            "D1": 1,
+            "D2": 1
+          },
+          "target_request_id": null,
+          "targets": [
+            "Plan A",
+            "Plan B"
+          ],
+          "task_id": null
+        },
+        "goal_id": "R1",
+        "handling": "NEW",
+        "raw_utterance": "Compare Plan A and Plan B on cost, recovery and capacity. Explain the evidence and tradeoffs in a detailed answer.",
+        "resolved": true,
+        "revision": 1,
+        "scope": "comparison",
+        "source_revisions": {
+          "D1": 1,
+          "D2": 1
+        },
+        "stimulus_id": "R1",
+        "targets": [
+          "Plan A",
+          "Plan B"
+        ],
+        "text": "Compare Plan A and Plan B regarding cost, recovery frequency, and capacity limits, explaining the evidence from the stress test ledger and the resulting tradeoffs."
+      }
+    },
+    {
+      "kind": "GOAL_COMPLETE",
+      "data": {
+        "checks": [
+          "nonempty detailed sections",
+          "current goal revision",
+          "actual supplied quote checks"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "R1",
+        "goal_scope": "USER_REQUEST",
+        "result": {
+          "_provider_usage": {
+            "input_tokens": 4471,
+            "output_tokens": 1041
+          },
+          "answer": "Plan A and Plan B present distinct tradeoffs between cost, data safety, and throughput capacity. Plan A is the robust choice for high-concurrency workloads requiring strict latency guarantees and minimal data loss, while Plan B offers significant cost savings but fails to scale beyond its declared capacity limits.\n\n**Cost Analysis:**\nPlan B is significantly cheaper at $75 per month compared to Plan A's $120 per month, representing a 37.5% reduction in monthly operational costs. However, as noted in the product trial conclusion, 'lower monthly cost alone does not establish superior user response latency.' This indicates that the cost savings come with performance compromises that may impact user experience under load.\n\n**Recovery Frequency and Data Safety:**\nPlan A provides recovery checkpoints every 10 seconds, whereas Plan B checkpoints only every 30 seconds. In the event of a system failure, Plan A limits potential data loss to a maximum of 10 seconds of transactions, making it three times more resilient than Plan B, which risks up to 30 seconds of data loss. This makes Plan A preferable for applications where data consistency and integrity are critical.\n\n**Capacity Limits and Stress Test Evidence:**\nThe stress test ledger reveals a critical divergence in how each plan handles increasing load:\n1.  **Declared Capacity:** Plan A is rated for 40 concurrent requests, while Plan B is rated for 24.\n2.  **Saturation Point:** Trial 17 marks the failure point for Plan B. At 25 active requests, which exceeds its declared capacity of 24, 'Plan B saturated above declared capacity.' From Trial 17 through Trial 36, Plan B consistently completed only 960 requests regardless of the increasing load (ranging from 25 to 44 active requests), indicating it hit a hard throughput ceiling. In contrast, Plan A continued to scale linearly, successfully completing all requested transactions even at peak load (e.g., 1760 requests at 44 active requests in Trial 36).\n3.  **Latency Tradeoff:** While Plan B uses less RAM (500 MB vs 800 MB), its latency degrades significantly as it approaches and exceeds saturation. For instance, in Trial 16 (within capacity), Plan B had a p95 latency of 486 ms compared to Plan A's 392 ms. As load increased beyond capacity (Trial 36), Plan B's p95 latency spiked to 686 ms, while Plan A remained relatively stable at 532 ms despite handling nearly double the throughput.\n\n**Conclusion:**\nChoose Plan A if your workload exceeds 24 concurrent requests or requires sub-500ms latency guarantees and minimal data loss risk. Choose Plan B only if your workload is strictly bounded below 24 concurrent requests and budget constraints are the primary driver, accepting the tradeoff of less frequent recovery points and higher latency relative to throughput.",
+          "applied_revision": 1,
+          "sections": [
+            {
+              "id": "cost_analysis",
+              "text": "Plan B costs $75/month vs Plan A at $120/month. Plan B is cheaper but does not guarantee better performance."
+            },
+            {
+              "id": "recovery_analysis",
+              "text": "Plan A checkpoints every 10s; Plan B every 30s. Plan A offers better data protection."
+            },
+            {
+              "id": "capacity_evidence",
+              "text": "Plan B saturated at 25 requests (Trial 17). Plan A scaled successfully up to 44 requests (Trial 36)."
+            }
+          ],
+          "source_claims": [
+            {
+              "quote": "Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Trial 17: 25 active requests; Plan A p95 408 ms, peak RSS 761 MB, completed 1000 requests; Plan B p95 507 ms, peak RSS 474 MB, completed 960 requests. Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ]
+        },
+        "revision": 1,
+        "stimulus_id": "R1",
+        "text": "Plan A and Plan B present distinct tradeoffs between cost, data safety, and throughput capacity. Plan A is the robust choice for high-concurrency workloads requiring strict latency guarantees and minimal data loss, while Plan B offers significant cost savings but fails to scale beyond its declared capacity limits.\n\n**Cost Analysis:**\nPlan B is significantly cheaper at $75 per month compared to Plan A's $120 per month, representing a 37.5% reduction in monthly operational costs. However, as noted in the product trial conclusion, 'lower monthly cost alone does not establish superior user response latency.' This indicates that the cost savings come with performance compromises that may impact user experience under load.\n\n**Recovery Frequency and Data Safety:**\nPlan A provides recovery checkpoints every 10 seconds, whereas Plan B checkpoints only every 30 seconds. In the event of a system failure, Plan A limits potential data loss to a maximum of 10 seconds of transactions, making it three times more resilient than Plan B, which risks up to 30 seconds of data loss. This makes Plan A preferable for applications where data consistency and integrity are critical.\n\n**Capacity Limits and Stress Test Evidence:**\nThe stress test ledger reveals a critical divergence in how each plan handles increasing load:\n1.  **Declared Capacity:** Plan A is rated for 40 concurrent requests, while Plan B is rated for 24.\n2.  **Saturation Point:** Trial 17 marks the failure point for Plan B. At 25 active requests, which exceeds its declared capacity of 24, 'Plan B saturated above declared capacity.' From Trial 17 through Trial 36, Plan B consistently completed only 960 requests regardless of the increasing load (ranging from 25 to 44 active requests), indicating it hit a hard throughput ceiling. In contrast, Plan A continued to scale linearly, successfully completing all requested transactions even at peak load (e.g., 1760 requests at 44 active requests in Trial 36).\n3.  **Latency Tradeoff:** While Plan B uses less RAM (500 MB vs 800 MB), its latency degrades significantly as it approaches and exceeds saturation. For instance, in Trial 16 (within capacity), Plan B had a p95 latency of 486 ms compared to Plan A's 392 ms. As load increased beyond capacity (Trial 36), Plan B's p95 latency spiked to 686 ms, while Plan A remained relatively stable at 532 ms despite handling nearly double the throughput.\n\n**Conclusion:**\nChoose Plan A if your workload exceeds 24 concurrent requests or requires sub-500ms latency guarantees and minimal data loss risk. Choose Plan B only if your workload is strictly bounded below 24 concurrent requests and budget constraints are the primary driver, accepting the tradeoff of less frequent recovery points and higher latency relative to throughput."
+      }
+    },
+    {
+      "kind": "ADOPTION_COMMITTED",
+      "data": {
+        "adoption_id": "U2-0",
+        "content_type": "ADOPTED_HANDLING",
+        "decision": {
+          "complete_answer": "Plan A is the superior choice for high-concurrency workloads requiring strict latency and data safety, while Plan B offers cost savings but fails to scale beyond its declared capacity limits.",
+          "handling_text": "Summarize the conclusion of the comparison between Plan A and Plan B regarding cost, recovery, and capacity in one sentence.",
+          "question_id": null,
+          "relation": "FOLLOWUP",
+          "scope": "summary",
+          "source_claims": [
+            {
+              "quote": "Plan A: cost 120 dollars per month; recovery checkpoint every 10 seconds; handles 40 concurrent requests; uses 800 MB host RAM.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Plan B: cost 75 dollars per month; checkpoint every 30 seconds; handles 24 concurrent requests; uses 500 MB.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "Trial 17: 25 active requests; ... Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ],
+          "source_revisions": {
+            "D1": 1,
+            "D2": 1
+          },
+          "target_request_id": "R1",
+          "targets": [
+            "Plan A",
+            "Plan B"
+          ],
+          "task_id": null
+        },
+        "goal_id": "U2",
+        "handling": "FOLLOWUP",
+        "raw_utterance": "Summarize the conclusion of that comparison in one sentence.",
+        "resolved": true,
+        "revision": 1,
+        "scope": "summary",
+        "source_revisions": {
+          "D1": 1,
+          "D2": 1
+        },
+        "stimulus_id": "U2",
+        "targets": [
+          "Plan A",
+          "Plan B"
+        ],
+        "text": "Summarize the conclusion of the comparison between Plan A and Plan B regarding cost, recovery, and capacity in one sentence."
+      }
+    },
+    {
+      "kind": "GOAL_COMPLETE",
+      "data": {
+        "checks": [
+          "nonempty detailed sections",
+          "current goal revision",
+          "actual supplied quote checks"
+        ],
+        "content_contract_checked": true,
+        "content_type": "DETAILED_RESULT",
+        "goal_id": "U2",
+        "goal_scope": "USER_REQUEST",
+        "result": {
+          "_provider_usage": {
+            "input_tokens": 5427,
+            "output_tokens": 208
+          },
+          "answer": "Plan A is the superior choice for high-concurrency workloads requiring strict latency and data safety, while Plan B offers cost savings but fails to scale beyond its declared capacity limits.",
+          "applied_revision": 1,
+          "sections": [
+            {
+              "id": "summary",
+              "text": "Plan A is the superior choice for high-concurrency workloads requiring strict latency and data safety, while Plan B offers cost savings but fails to scale beyond its declared capacity limits."
+            }
+          ],
+          "source_claims": [
+            {
+              "quote": "Plan B saturated above declared capacity.",
+              "revision": 1,
+              "source_id": "D1"
+            },
+            {
+              "quote": "lower monthly cost alone does not establish superior user response latency.",
+              "revision": 1,
+              "source_id": "D2"
+            }
+          ]
+        },
+        "revision": 1,
+        "stimulus_id": "U2",
+        "text": "Plan A is the superior choice for high-concurrency workloads requiring strict latency and data safety, while Plan B offers cost savings but fails to scale beyond its declared capacity limits."
+      }
+    }
+  ]
+}

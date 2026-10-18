@@ -1,0 +1,31 @@
+{
+  "id": "chatcmpl-03488544-9da6-9d24-98a3-3ff5d01922e3",
+  "object": "chat.completion",
+  "created": 1792344247,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "{\n  \"intent\": \"Keep first chart, replace second with rightmost chart\",\n  \"adoptions\": [\n    {\n      \"expression_id\": \"keep-first\",\n      \"targets\": [\n        \"C1 / Baseline\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"retain_prior\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C1 / Baseline\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C1 / Baseline\",\n          \"bbox\": [\n            30,\n            100,\n            320,\n            530\n          ]\n        }\n      ],\n      \"evidence\": \"Retained prior binding for 'first graph' as requested.\"\n    },\n    {\n      \"expression_id\": \"change-second\",\n      \"targets\": [\n        \"C3 / Recovery\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"other\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C3 / Recovery\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C3 / Recovery\",\n          \"bbox\": [\n            670,\n            100,\n            960,\n            530\n          ]\n        }\n      ],\n      \"evidence\": \"Speech specifies 'right graph' instead of middle; C3 is rightmost.\"\n    }\n  ],\n  \"need_evidence\": false\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1908,
+    "total_tokens": 2288,
+    "completion_tokens": 380,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "image_tokens": 622,
+      "text_tokens": 1286
+    },
+    "completion_tokens_details": {
+      "text_tokens": 380
+    }
+  }
+}

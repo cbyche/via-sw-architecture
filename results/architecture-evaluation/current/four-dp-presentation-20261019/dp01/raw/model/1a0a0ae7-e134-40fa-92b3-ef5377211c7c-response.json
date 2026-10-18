@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-58b6a0b9-8159-9623-a1d8-3863d1d2e343",
+  "object": "chat.completion",
+  "created": 1792345588,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"records\": [\n    {\n      \"record_id\": \"rec-001\",\n      \"subject\": \"Evaluation Criteria\",\n      \"predicate\": \"includes\",\n      \"object\": \"Price including VAT and maintenance period\",\n      \"explanation\": \"The delivered explanation explicitly states that comparison involves looking at the price including value-added tax and the maintenance period together.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 1\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec-002\",\n      \"subject\": \"Tie-breaking Rule\",\n      \"predicate\": \"prioritizes\",\n      \"object\": \"Product with longer maintenance period when prices are equal\",\n      \"explanation\": \"If the two prices are identical, the criterion dictates prioritizing the product that offers a longer maintenance period.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 2,\n          \"end_line\": 2\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec-003\",\n      \"subject\": \"Purchase Decision Status\",\n      \"predicate\": \"is\",\n      \"object\": \"Undecided\",\n      \"explanation\": \"The text explicitly states that the decision to purchase has not yet been made.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 3,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec-004\",\n      \"subject\": \"Next Action Requirement\",\n      \"predicate\": \"requires\",\n      \"object\": \"Verification of the latest version of the quotation\",\n      \"explanation\": \"Before proceeding, it is necessary to check the most recent version of the quotation.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 3,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec-005\",\n      \"subject\": \"Delivered Content Scope\",\n      \"predicate\": \"excludes\",\n      \"object\": \"Prepared but undelivered content (lines 4-5)\",\n      \"explanation\": \"The source activity confirms that only lines 1-3 were delivered, while lines 4-5 containing prepared but undelivered content were excluded from the actual output.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 3\n        }\n      ]\n    }\n  ],\n  \"coverage\": {\n    \"source_ids\": [\n      \"explained-criteria\"\n    ],\n    \"gaps\": [\n      \"Content in lines 4-5 is marked as prepared but undelivered and thus excluded from evidence records.\"\n    ]\n  }\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 538,
+    "total_tokens": 1281,
+    "completion_tokens": 743,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 538
+    }
+  }
+}

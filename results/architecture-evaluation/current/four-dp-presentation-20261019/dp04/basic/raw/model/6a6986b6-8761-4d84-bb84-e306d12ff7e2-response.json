@@ -1,0 +1,31 @@
+{
+  "id": "chatcmpl-da2c0dfc-8b7a-95fb-8e3e-62ee1b9bda1d",
+  "object": "chat.completion",
+  "created": 1792343409,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "{\n  \"intent\": \"Retain first chart and replace second target with rightmost chart per user correction.\",\n  \"adoptions\": [\n    {\n      \"expression_id\": \"keep-first\",\n      \"targets\": [\n        \"C1 / Baseline\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"retain_prior\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C1 / Baseline\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C1 / Baseline\",\n          \"bbox\": [\n            30,\n            150,\n            320,\n            600\n          ]\n        }\n      ],\n      \"evidence\": \"Prior binding for 'first graph' retained as requested.\"\n    },\n    {\n      \"expression_id\": \"change-second\",\n      \"targets\": [\n        \"C3 / Recovery\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"other\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C3 / Recovery\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C3 / Recovery\",\n          \"bbox\": [\n            670,\n            150,\n            960,\n            600\n          ]\n        }\n      ],\n      \"evidence\": \"User specified 'right graph' instead of middle; C3 is rightmost.\"\n    }\n  ],\n  \"need_evidence\": false\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1908,
+    "total_tokens": 2292,
+    "completion_tokens": 384,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "image_tokens": 622,
+      "text_tokens": 1286
+    },
+    "completion_tokens_details": {
+      "text_tokens": 384
+    }
+  }
+}

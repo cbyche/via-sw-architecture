@@ -1,0 +1,138 @@
+{
+  "source_call_uuid": "c82d947f-cb77-4897-9f80-ce7de9b36817",
+  "payload": {
+    "input": {
+      "available_evidence": [],
+      "catalog": [
+        {
+          "conversation": "c2",
+          "delivered_lines": null,
+          "id": "customer-mail",
+          "kind": "mail",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "회의 제안"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "북부 고객 검토 회의 메일"
+        },
+        {
+          "conversation": "c1",
+          "delivered_lines": null,
+          "id": "desk-compare",
+          "kind": "public_result",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                4
+              ],
+              "section": "가격과 유지보수"
+            },
+            {
+              "lines": [
+                2,
+                5
+              ],
+              "section": "일정과 미확인"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "업무용 PC 교체 비교표"
+        },
+        {
+          "conversation": "c2",
+          "delivered_lines": null,
+          "id": "team-calendar",
+          "kind": "calendar",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "사용 가능 시간"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "개발팀 10월 일정 조회"
+        },
+        {
+          "conversation": "c2",
+          "delivered_lines": null,
+          "id": "travel-rule",
+          "kind": "policy",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                2
+              ],
+              "section": "숙박과 예외"
+            },
+            {
+              "lines": [
+                3,
+                3
+              ],
+              "section": "적용 범위"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "국내 출장 경비 규정"
+        }
+      ],
+      "expression": "PC 비교표",
+      "published_relations": null,
+      "recent_conversation": [],
+      "utterance": "PC 비교표의 가장 싼 제품은 뭐야?"
+    },
+    "instruction": "Interpret the CURRENT utterance and resolve the exact ORIGINAL source referent IDs, separating supporting explanation from referred targets. Return JSON {adoption:{targets:[string],intent:string},mode:'COMPLETE'|'READ',answer:{targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]},reads:[{source_id:string,start_line:number,end_line:number}],reason:string}. The intent is the concrete requested handling, not a generic acknowledgement. You may adopt identifiable targets before factual details are read. COMPLETE is legal only from actual supplied evidence or actually delivered facts. Metadata alone is NEVER source facts. Supply a bounded substantive answer satisfying the user's actual request, never merely repeat its referent phrase. Each fact claim cites an exact quote from actually supplied evidence, its current revision and inclusive one-based source provenance. The displayed text may paraphrase fact claims. ACTUALLY_DELIVERED_ANSWER is derived previous displayed text, not a verbatim original: quote only its actual text and preserve its separate original source provenance. The quote must be copied exactly (including punctuation) from a supplied evidence.text. Include at least one fact per target and only currently delivered explanation lines. If missing detail, READ necessary bounded ranges. A later fact may need an original read even if recent answers concern that source. Do not invent IDs or values. Preserve unknowns and correction scope.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "adoption": {
+      "targets": [
+        "desk-compare"
+      ],
+      "intent": "identify_cheapest_product"
+    },
+    "mode": "READ",
+    "answer": {
+      "targets": [],
+      "text": "",
+      "facts": [],
+      "source_revisions": [
+        {
+          "source_id": "desk-compare",
+          "revision": 1
+        }
+      ],
+      "conditions": [],
+      "uncertainties": [
+        "Evidence content for 'desk-compare' is not available; need to read lines to identify prices and products."
+      ]
+    },
+    "reads": [
+      {
+        "source_id": "desk-compare",
+        "start_line": 1,
+        "end_line": 5
+      }
+    ],
+    "reason": "The user asks for the cheapest product in the 'PC comparison table'. The catalog identifies 'desk-compare' (title: '업무용 PC 교체 비교표') as the relevant source. Since no evidence text is provided, I must read the full content of this source to extract product names and prices."
+  }
+}

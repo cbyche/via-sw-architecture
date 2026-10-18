@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-90d08d1b-d2b4-9eb1-9744-6da93e0fab4c",
+  "object": "chat.completion",
+  "created": 1792343438,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"intent\": \"Retain first graph, replace second with right graph\",\n  \"expressions\": [\n    {\n      \"expression_id\": \"keep-first\",\n      \"kind\": \"chart_container\",\n      \"count\": 1,\n      \"relation\": \"retain_prior\",\n      \"cue_ids\": [],\n      \"explicit_target_ids\": [],\n      \"unresolved\": [],\n      \"meaning\": \"Keep the first graph as is\"\n    },\n    {\n      \"expression_id\": \"change-second\",\n      \"kind\": \"chart_container\",\n      \"count\": 1,\n      \"relation\": \"other\",\n      \"cue_ids\": [],\n      \"explicit_target_ids\": [],\n      \"unresolved\": [\n        \"오른쪽 그래프\"\n      ],\n      \"meaning\": \"Change second to right graph, not middle\"\n    }\n  ],\n  \"coverage\": {\n    \"complete\": false,\n    \"unknown\": [\n      \"chart_c3_right\"\n    ]\n  }\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 895,
+    "total_tokens": 1125,
+    "completion_tokens": 230,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 895
+    }
+  }
+}

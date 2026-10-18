@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-2c37851a-6259-97fc-8af3-75c27c3876e9",
+  "object": "chat.completion",
+  "created": 1792345207,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"summarize_delivered_content_and_latest_revision\"\n  },\n  \"mode\": \"READ\",\n  \"answer\": {\n    \"targets\": [],\n    \"text\": \"\",\n    \"facts\": [],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2\n      }\n    ],\n    \"conditions\": [],\n    \"uncertainties\": []\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requests a summary of 'that explanation criteria' (referring to 'explained-criteria') and the 'latest corrected quote' (referring to 'vendor-quote'). Although 'explained-criteria' has delivered lines, the actual text content is not provided in available_evidence. 'vendor-quote' has no delivered lines. Therefore, I must READ the specific line ranges for both sources to extract the factual content for the summary.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 594,
+    "total_tokens": 921,
+    "completion_tokens": 327,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 594
+    }
+  }
+}

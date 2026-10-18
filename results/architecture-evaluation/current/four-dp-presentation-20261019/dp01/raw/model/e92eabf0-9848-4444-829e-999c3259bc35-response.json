@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-15ae0811-cf18-9f25-b9eb-20e66f83e179",
+  "object": "chat.completion",
+  "created": 1792345674,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"Summarize the delivered evaluation criteria and the latest corrected vendor quote details.\"\n  },\n  \"mode\": \"COMPLETE\",\n  \"answer\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"text\": \"The evaluation criteria prioritize VAT-included price and maintenance period, with longer maintenance preferred if prices are equal, noting that the purchase decision is pending verification of the latest quote. The latest Aster A quote (v2) sets the unit price at 1,180,000 KRW (VAT included), maintains 12 units and 36 months of maintenance, corrects the delivery date to November 1st, and keeps the installation fee separate at 80,000 KRW, with no contract yet signed.\",\n    \"facts\": [\n      {\n        \"statement\": \"Comparison considers VAT-included price and maintenance period together.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\"\n      },\n      {\n        \"statement\": \"If prices are equal, the product with the longer maintenance period is prioritized.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\"\n      },\n      {\n        \"statement\": \"Purchase decision is undecided and requires checking the latest quote version.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\"\n      },\n      {\n        \"statement\": \"Aster A Quote v2 corrects price and delivery, setting unit price at 1,180,000 KRW including VAT.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.\"\n      },\n      {\n        \"statement\": \"Maintenance period of 36 months and quantity of 12 units are maintained, with delivery corrected to November 1st.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"유지보수 36개월과 수량 12대는 유지한다. 납기는 11월 1일로 정정한다.\"\n      },\n      {\n        \"statement\": \"Installation fee of 80,000 KRW is maintained as separate, and no contract or purchase has been concluded.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"설치비 80,000원 별도는 유지한다. 계약이나 구매는 아직 체결하지 않았다.\"\n      }\n    ],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2\n      }\n    ],\n    \"conditions\": [],\n    \"uncertainties\": []\n  },\n  \"reads\": [],\n  \"reason\": \"The user requested a summary of the 'explained criteria' and the 'latest corrected quote'. Both sources are fully available in the evidence. I extracted the key points from the delivered lines of 'explained-criteria' (lines 1-3) and all lines of 'vendor-quote' (lines 1-3, revision 2) to provide a complete summary without needing further reads.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 3072,
+    "total_tokens": 4054,
+    "completion_tokens": 982,
+    "prompt_tokens_details": {
+      "cached_tokens": 512,
+      "text_tokens": 3072
+    }
+  }
+}

@@ -1,0 +1,11 @@
+//! C producer sees only observed source activities, never future queries.
+use super::evidence::{array,bounds,catalog,contained,read,valid_span,Sources};
+use crate::context::Context;use serde_json::{json,Value};
+pub fn produce(ctx:&mut Context,sources:&Sources,trigger:&Value,revision:u64)->Result<Value,String>{
+ let mut evidence=Vec::new();for s in sources.values().filter(|s|s["revoked"].as_bool()!=Some(true)){let(a,b)=bounds(s);evidence.push(read(ctx,s,a,b)?);}
+ let candidate=ctx.call("dp01_publish_relations",&json!({"instruction":"Independently publish reusable evidence relations from ONLY observed source activity. No future query or purpose is available. Return JSON {records:[{record_id:string,subject:string,predicate:string,object:string,explanation:string,source_spans:[{source_id:string,revision:number,start_line:number,end_line:number}]}],coverage:{source_ids:[string],gaps:[string]}}. At most 10 compact records. Distinguish actual delivered explanation from prepared undelivered content. Preserve exceptions, conditions and unknowns. Every assertion requires precise original spans. This is derived interpretation, not original authority.","input":{"source_activity":trigger,"catalog":catalog(sources),"observed_evidence":evidence},"max_tokens":2200}))?;
+ let mut records=Vec::new();for mut r in array(&candidate["records"]){let spans=array(&r["source_spans"]);if spans.is_empty()||!spans.iter().all(|s|valid_span(s,sources)&&evidence.iter().any(|p|contained(s,p))){ctx.event("PROVENANCE_REJECTED",&json!({"stage":"relation_publication","record":r}));continue;}
+  let mut support=Vec::new();for span in spans{if let Some(p)=evidence.iter().find(|p|contained(&span,p)){let lo=span["start_line"].as_u64().unwrap();let hi=span["end_line"].as_u64().unwrap();let base=p["start_line"].as_u64().unwrap();let text=p["text"].as_str().unwrap().lines().skip((lo-base)as usize).take((hi-lo+1)as usize).collect::<Vec<_>>().join("\n");let mut q=span.clone();q["text"]=json!(text);support.push(q);}}r["supporting_passages"]=json!(support);records.push(r);
+ }
+ let publication=json!({"producer_node":ctx.last_node(),"publication_revision":revision,"state":"PUBLISHED","records":records,"coverage":candidate["coverage"],"source_vector":catalog(sources)});ctx.event("RELATION_PUBLICATION",&publication);Ok(publication)
+}

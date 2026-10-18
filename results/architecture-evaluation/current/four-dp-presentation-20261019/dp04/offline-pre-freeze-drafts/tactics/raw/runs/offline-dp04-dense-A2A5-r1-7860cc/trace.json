@@ -1,0 +1,175 @@
+{
+  "schema_version": 2,
+  "run_id": "offline-dp04-dense-A2A5-r1-7860cc",
+  "dp": "04",
+  "episode": "dp04-dense",
+  "variant": "A2A5",
+  "repetition": 1,
+  "phase": "OFFLINE",
+  "tactic": "A2+A5",
+  "candidate_binary_sha256": "3debb193f15512465619d8eb398b999f5d4425a4ed356bbdb08d6ca0b7ac6bae",
+  "postrun_binary_sha256": "3debb193f15512465619d8eb398b999f5d4425a4ed356bbdb08d6ca0b7ac6bae",
+  "candidate_binary_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_presentation/dp04/candidate/target/debug/four_dp_poc",
+  "freeze_sha256": "53f6826b5c4f82db360b980da212b3936edcced7dd9314b0ea9f15f7a1b142c2",
+  "start_ns": 1918265102342041,
+  "end_ns": 1918265110170041,
+  "events": [
+    {
+      "data": {
+        "dp": "04",
+        "id": "dp04-dense",
+        "variant": "A2A5"
+      },
+      "elapsed_ns": 29792,
+      "event_id": "event-1",
+      "goal_ids": [],
+      "kind": "EPISODE_START",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1918265108642666
+    },
+    {
+      "data": {
+        "error": "Unsupported DP04 variant"
+      },
+      "elapsed_ns": 53625,
+      "event_id": "event-2",
+      "goal_ids": [],
+      "kind": "EPISODE_ERROR",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 1918265108661041
+    }
+  ],
+  "calls": [],
+  "memory": [
+    {
+      "at_ns": 1918265103306583,
+      "sample_end_ns": 1918265108401833,
+      "stage": "RUST_WAITING_FOR_INPUT",
+      "processes": [
+        {
+          "pid": 9809,
+          "ppid": 9808,
+          "role": "python_runner_bridge",
+          "rss_bytes": 28950528
+        },
+        {
+          "pid": 9811,
+          "ppid": 9809,
+          "role": "rust_candidate",
+          "rss_bytes": 1687552
+        }
+      ],
+      "registered_processes": [
+        {
+          "pid": 9809,
+          "role": "python_runner_bridge"
+        },
+        {
+          "pid": 9811,
+          "role": "rust_candidate"
+        }
+      ],
+      "rss_bytes_by_pid": {
+        "9809": 28950528,
+        "9811": 1687552
+      },
+      "rss_bytes_by_role": {
+        "python_runner_bridge": 28950528,
+        "rust_candidate": 1687552
+      },
+      "concurrent_sum_bytes": 30638080,
+      "all_registered_observed": true,
+      "logical_buffers": {
+        "input_json": {
+          "bytes": 1900,
+          "category": "input",
+          "owner": "python_runner_bridge"
+        }
+      },
+      "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+      "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+    }
+  ],
+  "memory_baseline": {
+    "at_ns": 1918265097464500,
+    "sample_end_ns": 1918265100821958,
+    "stage": "BEFORE_RUST_START",
+    "processes": [
+      {
+        "pid": 9809,
+        "ppid": 9808,
+        "role": "python_runner_bridge",
+        "rss_bytes": 25837568
+      }
+    ],
+    "registered_processes": [
+      {
+        "pid": 9809,
+        "role": "python_runner_bridge"
+      }
+    ],
+    "rss_bytes_by_pid": {
+      "9809": 25837568
+    },
+    "rss_bytes_by_role": {
+      "python_runner_bridge": 25837568
+    },
+    "concurrent_sum_bytes": 25837568,
+    "all_registered_observed": true,
+    "logical_buffers": {
+      "input_json": {
+        "bytes": 1900,
+        "category": "input",
+        "owner": "python_runner_bridge"
+      }
+    },
+    "method": "macOS ps RSS; decimal MB; one ps invocation; sample start/end bracket recorded; shared-page deduplication unverified",
+    "scope": "Fresh Python runner/bridge + Rust candidate. Browser/replay controller, cloud weights, outer orchestrator excluded. Logical bytes are not RSS."
+  },
+  "logical_buffer_events": [
+    {
+      "at_ns": 1918265097462041,
+      "name": "input_json",
+      "bytes": 1900,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "input",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1918265108653000,
+      "name": "retained_events",
+      "bytes": 214,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    },
+    {
+      "at_ns": 1918265108668708,
+      "name": "retained_events",
+      "bytes": 414,
+      "action": "ALLOCATE_OR_REPLACE",
+      "category": "retained_evidence",
+      "owner": "python_runner_bridge",
+      "not_rss": true
+    }
+  ],
+  "process_registry": [
+    {
+      "pid": 9809,
+      "role": "python_runner_bridge"
+    },
+    {
+      "pid": 9811,
+      "role": "rust_candidate"
+    }
+  ],
+  "memory_nominal_poll_ms": 50,
+  "stderr": "",
+  "returncode": 0,
+  "input": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/four-dp-presentation-20261019/dp04/offline/tactics/raw/runs/offline-dp04-dense-A2A5-r1-7860cc/input.json",
+  "offline_responder": true
+}

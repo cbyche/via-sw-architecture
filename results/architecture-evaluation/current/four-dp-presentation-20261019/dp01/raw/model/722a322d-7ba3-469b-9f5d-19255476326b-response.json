@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-c0360390-b582-94c6-afed-e62dd40292e5",
+  "object": "chat.completion",
+  "created": 1792345482,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"targets\": [\n    \"explained-criteria\",\n    \"vendor-quote\"\n  ],\n  \"text\": \"평가 기준에 따르면 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시합니다. 최신 정정 견적(Aster A v2)에 따르면 단가는 부가세 포함 1,180,000원이며, 유지보수 기간은 36개월입니다. 설치비 80,000원은 별도이며, 구매 여부는 아직 결정되지 않았습니다.\",\n  \"facts\": [\n    {\n      \"statement\": \"비교 시 부가세 포함 가격과 유지보수 기간을 함께 고려한다.\",\n      \"source_id\": \"explained-criteria\",\n      \"revision\": 1,\n      \"start_line\": 1,\n      \"end_line\": 1,\n      \"quote\": \"비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\"\n    },\n    {\n      \"statement\": \"가격이 같으면 유지보수 기간이 더 긴 제품을 우선한다.\",\n      \"source_id\": \"explained-criteria\",\n      \"revision\": 1,\n      \"start_line\": 2,\n      \"end_line\": 2,\n      \"quote\": \"두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\"\n    },\n    {\n      \"statement\": \"Aster A 견적 v2의 부가세 포함 단가는 1,180,000원이다.\",\n      \"source_id\": \"vendor-quote\",\n      \"revision\": 2,\n      \"start_line\": 1,\n      \"end_line\": 1,\n      \"quote\": \"Aster A 견적 v2는 v1의 가격과 납기만 정정한다. 1대 1,180,000원, 부가세 포함.\"\n    },\n    {\n      \"statement\": \"유지보수 기간은 36개월이다.\",\n      \"source_id\": \"vendor-quote\",\n      \"revision\": 2,\n      \"start_line\": 2,\n      \"end_line\": 2,\n      \"quote\": \"유지보수 36개월과 수량 12대는 유지한다.\"\n    },\n    {\n      \"statement\": \"설치비 80,000원은 별도이다.\",\n      \"source_id\": \"vendor-quote\",\n      \"revision\": 2,\n      \"start_line\": 3,\n      \"end_line\": 3,\n      \"quote\": \"설치비 80,000원 별도는 유지한다.\"\n    },\n    {\n      \"statement\": \"구매 여부는 아직 결정되지 않았다.\",\n      \"source_id\": \"explained-criteria\",\n      \"revision\": 1,\n      \"start_line\": 3,\n      \"end_line\": 3,\n      \"quote\": \"구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\"\n    }\n  ],\n  \"source_revisions\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"revision\": 1\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"revision\": 2\n    }\n  ],\n  \"conditions\": [\n    \"부가세 포함 가격 기준\",\n    \"유지보수 기간 우선 순위 적용 (동일 가격 시)\",\n    \"설치비 별도\"\n  ],\n  \"uncertainties\": []\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 750,
+    "total_tokens": 1546,
+    "completion_tokens": 796,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 750
+    }
+  }
+}

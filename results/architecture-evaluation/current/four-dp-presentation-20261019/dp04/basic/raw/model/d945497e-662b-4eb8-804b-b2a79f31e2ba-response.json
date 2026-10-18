@@ -1,0 +1,31 @@
+{
+  "id": "chatcmpl-0a8b371b-a2c5-9271-9c27-30834f3d90a9",
+  "object": "chat.completion",
+  "created": 1792343810,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "{\n  \"intent\": \"Keep first chart, replace second with rightmost chart for comparison\",\n  \"adoptions\": [\n    {\n      \"expression_id\": \"keep-first\",\n      \"targets\": [\n        \"C1 / Baseline\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"retain_prior\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C1 / Baseline\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C1 / Baseline\",\n          \"bbox\": [\n            30,\n            150,\n            320,\n            600\n          ]\n        }\n      ],\n      \"evidence\": \"Retained prior binding for leftmost chart 'C1 / Baseline'.\"\n    },\n    {\n      \"expression_id\": \"change-second\",\n      \"targets\": [\n        \"C3 / Recovery\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"relative_position\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C3 / Recovery\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C3 / Recovery\",\n          \"bbox\": [\n            670,\n            150,\n            960,\n            600\n          ]\n        }\n      ],\n      \"evidence\": \"User requested 'right graph' instead of middle; selected rightmost chart.\"\n    }\n  ],\n  \"need_evidence\": false\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1910,
+    "total_tokens": 2296,
+    "completion_tokens": 386,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "image_tokens": 622,
+      "text_tokens": 1288
+    },
+    "completion_tokens_details": {
+      "text_tokens": 386
+    }
+  }
+}

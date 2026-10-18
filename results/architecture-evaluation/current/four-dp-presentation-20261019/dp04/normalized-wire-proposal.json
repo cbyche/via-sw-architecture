@@ -1,0 +1,55 @@
+{
+  "status": "PROPOSED_NOT_APPROVED_NO_API",
+  "version": "DP04_COMMON_NORMALIZED_WIRE_PROPOSAL_20261019",
+  "classification": "COMMON_AB_REPRESENTATION_SENSITIVITY_NEW_BASELINE_NOT_A_TACTIC_OR_RETROSPECTIVE_RESCORING",
+  "prior_raw_unchanged": true,
+  "model": "qwen3.7-plus-2026-05-26",
+  "thinking": false,
+  "temperature": 0,
+  "variants": [
+    "A",
+    "B"
+  ],
+  "episodes": [
+    "dp04-dense",
+    "dp04-free-region",
+    "dp04-page-change",
+    "dp04-partial-correction"
+  ],
+  "repetitions": 3,
+  "planned_trials": 24,
+  "fixed_denominators_per_variant": {
+    "qa01": 15,
+    "qa03": 12,
+    "qa02": 24
+  },
+  "change": "Both A joint/reread and B screen/expansion explicitly emit source/frame-bound bbox_2d in0..1000 normalized original-frame axes. Shared strict adapter converts to original pixel bbox before the unchanged common geometry gate and candidate publication. B binder consumes canonical pixels. Speech/count/intents and binder ownership remain unchanged.",
+  "adapter_formula": "round(x_norm/1000*original_width), round(y_norm/1000*original_height); use source frame dimensions, not screen/window guesses.",
+  "no_heuristics": [
+    "No overflow-based scale guessing",
+    "No clamp/reorder/target replacement",
+    "Do not convert old responses or rescore earlier results",
+    "Unknown coordinate units, wrong frame/source/revision, malformed/out-of-range boxes fail explicitly",
+    "No free A2 patch/A5 coordinate views/B4 parallel dispatch"
+  ],
+  "before_calls": [
+    "Review exact official code and pin source citation/retrieval facts without claiming snapshot-model API guarantee",
+    "Offline asymmetric dimensions, corners, rounding, wrong axes/units/source/frame/revision/current permission negative checks",
+    "Snapshot only new source; same original4 fixtures and fixed evaluator/oracle hashes",
+    "Balanced A/B order by repetition, all24 schedule frozen before provider calls",
+    "Dedicated cap$.20 within original DP04$.55 and parent shared$.1.50",
+    "Wait for runtime/evidence measurement window release and parent explicit approval"
+  ],
+  "budget": {
+    "expected_usd": [
+      0.08,
+      0.1
+    ],
+    "additional_cap_proposed_usd": 0.2,
+    "already_known_plus_retained_unknown_reservation_usd": 0.2387928,
+    "conservative_dp04_total_if_added_cap_spent_usd": 0.4387928,
+    "approved": false
+  },
+  "interpretation": "A/B old pixel schema was explicit. Normalized wire is a fair common integration sensitivity, not a confirmed bug fix or a guaranteed accuracy improvement. Full endpoint eligibility precedes unchanged QA01..06 priorities; neither incomplete mean nor selected success can establish a winner.",
+  "calls": 0
+}

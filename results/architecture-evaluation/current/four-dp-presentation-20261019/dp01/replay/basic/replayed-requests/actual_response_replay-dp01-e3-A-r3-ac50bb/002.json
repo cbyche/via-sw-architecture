@@ -1,0 +1,161 @@
+{
+  "source_call_uuid": "f2df13a1-8216-44ec-8e4c-905adab6d945",
+  "payload": {
+    "input": {
+      "actual_evidence": [
+        {
+          "actual_delivery_only": true,
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "explained-criteria",
+          "start_line": 1,
+          "text": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\n두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\n구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.",
+          "unit": "one_based_line_inclusive"
+        },
+        {
+          "actual_delivery_only": false,
+          "end_line": 3,
+          "revision": 1,
+          "source_id": "vendor-quote",
+          "start_line": 1,
+          "text": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.\n납기 10월 29일. 설치비는 80,000원 별도다.\n수량은 12대이며 계약이나 구매는 아직 체결하지 않았다.",
+          "unit": "one_based_line_inclusive"
+        }
+      ],
+      "catalog": [
+        {
+          "conversation": "old-c",
+          "delivered_lines": [
+            1,
+            3
+          ],
+          "id": "explained-criteria",
+          "kind": "response_delivery",
+          "line_count": 5,
+          "outline": [
+            {
+              "lines": [
+                1,
+                3
+              ],
+              "section": "실제 설명한 기준"
+            },
+            {
+              "lines": [
+                4,
+                5
+              ],
+              "section": "표시하지 않은 준비 부분"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "이전에 준비한 평가 기준 응답과 실제 표시 기록"
+        },
+        {
+          "conversation": "old-c",
+          "delivered_lines": null,
+          "id": "vendor-quote",
+          "kind": "public_result",
+          "line_count": 3,
+          "outline": [
+            {
+              "lines": [
+                1,
+                1
+              ],
+              "section": "가격"
+            },
+            {
+              "lines": [
+                2,
+                3
+              ],
+              "section": "납기와 설치비"
+            }
+          ],
+          "revision": 1,
+          "revoked": false,
+          "title": "Aster A 공급업체 견적"
+        }
+      ],
+      "denied": [],
+      "expression": "실제로 설명한 기준과 받아둔 견적",
+      "recent_conversation": [],
+      "utterance": "지난번 네가 실제로 설명한 기준과 받아둔 견적을 같이 요약해줘. 설치를 설명했다고 가정하지 마."
+    },
+    "instruction": "Complete the user's actual requested bounded summary or explanation using ONLY actual supplied current evidence. Return JSON {targets:[source ID strings],text:string,facts:[{statement:string,source_id:string,revision:number,start_line:number,end_line:number,quote:string}],source_revisions:[{source_id:string,revision:number}],conditions:[string],uncertainties:[string]} (the answer object). Do not echo the user's request or only name source targets. Give actual prices, dates, conditions or unknowns when requested and supported. Each fact claim needs an EXACT copied quote in supplied evidence.text and current source_id/revision/start_line/end_line. Displayed text may paraphrase fact claims. For ACTUALLY_DELIVERED_ANSWER quote only the actual displayed text; preserve original_source_provenance and do not claim the quote is verbatim original text. At least one fact per referred original target. Supporting explanation is not automatically a referred target. Preserve actual delivery limits, scope, caveats and corrections. Do not guess unseen facts. If unable, return text:null and uncertainties.",
+    "max_tokens": 2200
+  },
+  "source_response": {
+    "targets": [
+      "explained-criteria",
+      "vendor-quote"
+    ],
+    "text": "실제로 설명한 평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 비교하며, 가격이 동일할 경우 유지보수 기간이 더 긴 제품을 우선시하는 것입니다. 또한 구매 여부는 아직 정하지 않았으며 견적의 최신 판본 확인이 필요하다고 명시했습니다.\n\n제공된 Aster A 견적(v1)에 따르면 단가는 부가세 포함 1,250,000원이며 유지보수 기간은 36개월입니다. 납기는 10월 29일이고 설치비는 80,000원이 별도입니다. 수량은 12대이며 계약이나 구매는 아직 체결되지 않았습니다.",
+    "facts": [
+      {
+        "statement": "평가 기준은 부가세 포함 가격과 유지보수 기간을 함께 보는 것이다.",
+        "source_id": "explained-criteria",
+        "revision": 1,
+        "start_line": 1,
+        "end_line": 1,
+        "quote": "비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다."
+      },
+      {
+        "statement": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선한다.",
+        "source_id": "explained-criteria",
+        "revision": 1,
+        "start_line": 2,
+        "end_line": 2,
+        "quote": "두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다."
+      },
+      {
+        "statement": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 한다.",
+        "source_id": "explained-criteria",
+        "revision": 1,
+        "start_line": 3,
+        "end_line": 3,
+        "quote": "구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다."
+      },
+      {
+        "statement": "Aster A 견적 v1의 단가는 부가세 포함 1,250,000원이고 유지보수는 36개월이다.",
+        "source_id": "vendor-quote",
+        "revision": 1,
+        "start_line": 1,
+        "end_line": 1,
+        "quote": "Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월."
+      },
+      {
+        "statement": "납기는 10월 29일이며 설치비는 80,000원 별도이다.",
+        "source_id": "vendor-quote",
+        "revision": 1,
+        "start_line": 2,
+        "end_line": 2,
+        "quote": "납기 10월 29일. 설치비는 80,000원 별도다."
+      },
+      {
+        "statement": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다.",
+        "source_id": "vendor-quote",
+        "revision": 1,
+        "start_line": 3,
+        "end_line": 3,
+        "quote": "수량은 12대이며 계약이나 구매는 아직 체결하지 않았다."
+      }
+    ],
+    "source_revisions": [
+      {
+        "source_id": "explained-criteria",
+        "revision": 1
+      },
+      {
+        "source_id": "vendor-quote",
+        "revision": 1
+      }
+    ],
+    "conditions": [
+      "설치비를 설명했다고 가정하지 않음"
+    ],
+    "uncertainties": []
+  }
+}

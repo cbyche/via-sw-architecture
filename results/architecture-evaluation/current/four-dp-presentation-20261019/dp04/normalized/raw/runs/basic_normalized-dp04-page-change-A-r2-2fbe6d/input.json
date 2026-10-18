@@ -1,0 +1,94 @@
+{
+  "id": "dp04-page-change",
+  "dp": "04",
+  "description": "Pointing precedes a page navigation before transcript finalization",
+  "provenance": "AUTHORED_SYNTHETIC_SVG_RENDERED_TO_PNG; timestamped authored transcript/pointer ledger, not a recorded user study",
+  "revisions": [
+    {
+      "revision": 1,
+      "transcript": "방금 가리킨 이 항목을 다음 작업의 자료로 써줘.",
+      "expressions": [
+        {
+          "expression_id": "page-target",
+          "text": "방금 가리킨 이 항목",
+          "start_ms": 100,
+          "end_ms": 600,
+          "time_uncertainty_ms": 20
+        }
+      ],
+      "events": [
+        {
+          "event_id": "point-old",
+          "type": "pointer_move",
+          "t_ms": 300,
+          "frame_id": "page_a",
+          "x": 470,
+          "y": 320,
+          "button": "none"
+        },
+        {
+          "event_id": "drag",
+          "type": "pointer_drag",
+          "start_ms": 680,
+          "end_ms": 850,
+          "frame_id": "page_a",
+          "points": [
+            [
+              958,
+              150
+            ],
+            [
+              958,
+              445
+            ]
+          ],
+          "button": "left"
+        },
+        {
+          "event_id": "page-change",
+          "type": "source_change",
+          "t_ms": 800,
+          "from_frame": "page_a",
+          "to_frame": "page_b",
+          "source_revision": 2
+        }
+      ],
+      "frames": [
+        {
+          "frame_id": "page_a",
+          "source_id": "document",
+          "source_revision": 1,
+          "observed_at_ms": 0,
+          "width": 1000,
+          "height": 650,
+          "coordinate_space": "frame_pixels",
+          "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/page_a.png",
+          "sha256": "e97f51702247f7123a40bff34b9ecb2c60a389fd0e6f93cc972a220b0e18a90a",
+          "overlay_image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/dp04-page-change-r1-page_a-events.png",
+          "overlay_sha256": "60f6edde72cf58059b99f296769c538da44ba3d53832e9ac6a53b6eecbc10285",
+          "overlay_encoding": "RAW_EVENT_OVERLAY_V1; crosses/path and labels are original events, no semantic region/target annotations"
+        },
+        {
+          "frame_id": "page_b",
+          "source_id": "document",
+          "source_revision": 2,
+          "observed_at_ms": 800,
+          "width": 1000,
+          "height": 650,
+          "coordinate_space": "frame_pixels",
+          "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/assets/screen/page_b.png",
+          "sha256": "0bafd89320b1c28b07f73948cab62cd9390f7ff159a94515c3be9897c39e3574"
+        }
+      ],
+      "native_selection": {
+        "status": "unsupported"
+      },
+      "capture_gaps": [],
+      "permission": "allowed",
+      "transcript_ready_ms": 700
+    }
+  ],
+  "late_result_replay": false,
+  "observation_encoding": "original PNG plus RAW_EVENT_OVERLAY_V1 from observed event coordinates, identical for A/B",
+  "variant": "A"
+}

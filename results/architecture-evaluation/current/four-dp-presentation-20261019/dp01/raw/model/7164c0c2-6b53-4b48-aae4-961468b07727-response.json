@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-3f31449b-3ada-93f8-adaf-089d7337243b",
+  "object": "chat.completion",
+  "created": 1792345510,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"records\": [\n    {\n      \"record_id\": \"rec_001\",\n      \"subject\": \"explained-criteria\",\n      \"predicate\": \"delivered_content_span\",\n      \"object\": \"lines 1-3\",\n      \"explanation\": \"The source activity confirms that only lines 1 through 3 of the 'explained-criteria' document were delivered, corresponding to the section '실제 설명한 기준'. Lines 4-5 were prepared but not delivered.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_002\",\n      \"subject\": \"vendor-quote\",\n      \"predicate\": \"delivery_status\",\n      \"object\": \"not_delivered\",\n      \"explanation\": \"The 'vendor-quote' source has 'delivered_lines': null in the catalog, indicating no content from this source was actively delivered in the observed interaction, despite being present in the source activity context.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"vendor-quote\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_003\",\n      \"subject\": \"evaluation_criteria\",\n      \"predicate\": \"includes_factor\",\n      \"object\": \"VAT-inclusive price and maintenance period\",\n      \"explanation\": \"The delivered text explicitly states that comparison criteria include VAT-inclusive price and maintenance period.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 1,\n          \"end_line\": 1\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_004\",\n      \"subject\": \"evaluation_criteria\",\n      \"predicate\": \"tie_breaker_rule\",\n      \"object\": \"prefer longer maintenance period if prices are equal\",\n      \"explanation\": \"The delivered text specifies a condition: if two prices are identical, the product with the longer maintenance period is prioritized.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 2,\n          \"end_line\": 2\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_005\",\n      \"subject\": \"purchase_decision\",\n      \"predicate\": \"status\",\n      \"object\": \"undecided\",\n      \"explanation\": \"The delivered text explicitly states that the purchase decision has not yet been made.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 3,\n          \"end_line\": 3\n        }\n      ]\n    },\n    {\n      \"record_id\": \"rec_006\",\n      \"subject\": \"purchase_decision\",\n      \"predicate\": \"requires_action\",\n      \"object\": \"verify latest quote version\",\n      \"explanation\": \"The delivered text notes a condition that the latest version of the quote must be checked before proceeding.\",\n      \"source_spans\": [\n        {\n          \"source_id\": \"explained-criteria\",\n          \"revision\": 1,\n          \"start_line\": 3,\n          \"end_line\": 3\n        }\n      ]\n    }\n  ],\n  \"coverage\": {\n    \"source_ids\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"gaps\": [\n      \"Content in 'vendor-quote' (lines 1-3) was observed in source activity but marked as not delivered (delivered_lines: null), so no evidence relations regarding its specific content (price, delivery date) are derived as 'delivered' facts.\",\n      \"Lines 4-5 of 'explained-criteria' are identified as prepared but undelivered content.\"\n    ]\n  }\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 736,
+    "total_tokens": 1687,
+    "completion_tokens": 951,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 736
+    }
+  }
+}

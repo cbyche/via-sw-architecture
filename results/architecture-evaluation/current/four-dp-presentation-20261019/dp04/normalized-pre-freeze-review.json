@@ -1,0 +1,26 @@
+{
+  "status": "CLOSED_NATIVE_AND_ACTUAL_OFFLINE_PASS",
+  "reviewer": "poc_runtime_sol",
+  "finding": "B normalized wire rejection could be bypassed by a model binder choosing existing valid-looking raw pixel bboxes.",
+  "correction": "Host overwrites coordinate_wire_valid from adapter result; common final_issues requires true before and after existing one owner expansion. No model can override this host field.",
+  "independent_reread": "Reviewer confirmed bypass closed in code; no reviewer edits/compile/API.",
+  "regressions_prepared": [
+    "native valid pixel bbox cannot bypass wire failure",
+    "actual wire B pixel-only response followed by forced-ready binder still expands and ends unresolved",
+    "actual wire B duplicate bbox+bbox_2d followed by forced-ready binder still expands and ends unresolved"
+  ],
+  "native_checks": {
+    "passed": 55,
+    "failed": 0,
+    "log": "normalized-native-tests.log"
+  },
+  "model_calls": 0,
+  "old48_unchanged": true,
+  "actual_offline": {
+    "normal": 8,
+    "pixel_only_rejection": 4,
+    "duplicate_bbox_rejection": 4,
+    "all_pass": true
+  },
+  "prefreeze_mock_issue": "First positive run failed in old test-only binder because it assumed bbox on malformed normalized producer result; preserved normalized-prefreeze-offline-history. Only private mock copy adapted; candidate guard unchanged."
+}

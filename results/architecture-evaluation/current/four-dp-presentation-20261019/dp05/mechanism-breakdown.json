@@ -1,0 +1,867 @@
+{
+  "groups": {
+    "None": {
+      "pre_input_source_read_local_ns": [],
+      "pre_input_source_read_local_ns_total": 0,
+      "pre_input_actual_full_file_read_bytes": 0,
+      "episodes": 3,
+      "stage_calls": {
+        "dp05_interpret_user_request": {
+          "role": "VIA",
+          "calls": 9,
+          "input_tokens": 6333,
+          "output_tokens": 1612,
+          "cost_usd": 0.0051124,
+          "HTTP_ms": 38198.107791
+        },
+        "dp05_receiver_select_or_complete": {
+          "role": "RECEIVER",
+          "calls": 9,
+          "input_tokens": 10243,
+          "output_tokens": 1381,
+          "cost_usd": 0.0063068,
+          "HTTP_ms": 33218.206
+        },
+        "dp05_receiver_result": {
+          "role": "RECEIVER",
+          "calls": 9,
+          "input_tokens": 12510,
+          "output_tokens": 12564,
+          "cost_usd": 0.0251064,
+          "HTTP_ms": 212088.29941699997
+        },
+        "dp05_receiver_repair_result": {
+          "role": "RECEIVER",
+          "calls": 1,
+          "input_tokens": 2986,
+          "output_tokens": 1864,
+          "cost_usd": 0.0041768000000000005,
+          "HTTP_ms": 31491.176958
+        }
+      },
+      "read_counts": [
+        {
+          "consumer": "RECEIVER",
+          "source_id": "delivered-guidance",
+          "count": 2
+        },
+        {
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "count": 9
+        },
+        {
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "count": 9
+        }
+      ],
+      "receiver_branches": {
+        "READ_ORIGINAL_SOURCES": 9
+      },
+      "prefetch_commits": [],
+      "served_original_spans": [
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-b2dfed",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-3cd791",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-3cd791",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-3cd791",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-3cd791",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-3cd791",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-3cd791",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        }
+      ],
+      "prefetch_serialized_peak_bytes": 0
+    },
+    "C1": {
+      "pre_input_source_read_local_ns": [
+        64458,
+        69500,
+        66792
+      ],
+      "pre_input_source_read_local_ns_total": 200750,
+      "pre_input_actual_full_file_read_bytes": 1848,
+      "episodes": 3,
+      "stage_calls": {
+        "dp05_interpret_user_request": {
+          "role": "VIA",
+          "calls": 9,
+          "input_tokens": 6333,
+          "output_tokens": 1622,
+          "cost_usd": 0.0051284,
+          "HTTP_ms": 38334.29633600001
+        },
+        "dp05_receiver_select_or_complete": {
+          "role": "RECEIVER",
+          "calls": 9,
+          "input_tokens": 11501,
+          "output_tokens": 1289,
+          "cost_usd": 0.0066628,
+          "HTTP_ms": 32326.572830999998
+        },
+        "dp05_receiver_result": {
+          "role": "RECEIVER",
+          "calls": 9,
+          "input_tokens": 14345,
+          "output_tokens": 12546,
+          "cost_usd": 0.025811600000000004,
+          "HTTP_ms": 213483.57033400002
+        }
+      },
+      "read_counts": [
+        {
+          "consumer": "C1_PREFETCH",
+          "source_id": "delivered-guidance",
+          "count": 3
+        },
+        {
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "count": 9
+        },
+        {
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "count": 9
+        }
+      ],
+      "receiver_branches": {
+        "READ_ORIGINAL_SOURCES": 9
+      },
+      "prefetch_commits": [
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "elapsed_ns": 480625,
+          "spans": {
+            "denials": [],
+            "passages": [
+              {
+                "consumer": "C1_PREFETCH",
+                "end_line": 2,
+                "revision": 1,
+                "source_id": "delivered-guidance",
+                "start_line": 1,
+                "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+                "unit": "one_based_line_inclusive"
+              }
+            ]
+          }
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "elapsed_ns": 481500,
+          "spans": {
+            "denials": [],
+            "passages": [
+              {
+                "consumer": "C1_PREFETCH",
+                "end_line": 2,
+                "revision": 1,
+                "source_id": "delivered-guidance",
+                "start_line": 1,
+                "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+                "unit": "one_based_line_inclusive"
+              }
+            ]
+          }
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "elapsed_ns": 509042,
+          "spans": {
+            "denials": [],
+            "passages": [
+              {
+                "consumer": "C1_PREFETCH",
+                "end_line": 2,
+                "revision": 1,
+                "source_id": "delivered-guidance",
+                "start_line": 1,
+                "text": "사용자에게 표시한 기준은 부가세 포함 가격과 유지보수 기간이다.\n가격이 같으면 유지보수 기간이 긴 제품을 우선한다고 설명했다.",
+                "unit": "one_based_line_inclusive"
+              }
+            ]
+          }
+        }
+      ],
+      "served_original_spans": [
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [],
+          "consumer": "C1_PREFETCH",
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "end_line": 2,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r1-6312a0",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [],
+          "consumer": "C1_PREFETCH",
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "end_line": 2,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r2-14f98a",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [],
+          "consumer": "C1_PREFETCH",
+          "source_id": "delivered-guidance",
+          "start_line": 1,
+          "end_line": 2,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [
+            "h3-deck"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [
+            "h3-mail"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-comparison",
+          "start_line": 1,
+          "end_line": 4,
+          "revision": 1
+        },
+        {
+          "run_id": "prefetch_tactic-dp05-e3-C-r3-751ddb",
+          "goal_ids": [
+            "h3-meeting"
+          ],
+          "consumer": "RECEIVER",
+          "source_id": "public-quote",
+          "start_line": 1,
+          "end_line": 3,
+          "revision": 1
+        }
+      ],
+      "prefetch_serialized_peak_bytes": 323
+    }
+  },
+  "paired_goals": [
+    {
+      "repetition": 1,
+      "goal_id": "h3-deck",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 3979.41225,
+        "elapsed_ms": 30501.576875
+      },
+      "C1": {
+        "qa03_ms": 3849.366042,
+        "elapsed_ms": 30539.4975
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "f72ccbe8d87ec23cb262ba03454b0f78a68c0b674d2c8122eddd30d4d112ca3a",
+          "call_uuid": "1b7ebe44-059d-4139-85a8-13b690d88c69"
+        },
+        "C1": {
+          "sha256": "f72ccbe8d87ec23cb262ba03454b0f78a68c0b674d2c8122eddd30d4d112ca3a",
+          "call_uuid": "17a19a44-accc-4c5c-bdea-7e90a57c5a2a"
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "goal_id": "h3-mail",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 4030.225748,
+        "elapsed_ms": 27038.605791
+      },
+      "C1": {
+        "qa03_ms": 4845.552584,
+        "elapsed_ms": 31041.948
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "a344e918896337475bde9cd4ecc02dd819f74687023b9644db24ad868fe97999",
+          "call_uuid": "cea27013-1ecb-49e4-9859-b4f0a95137fe"
+        },
+        "C1": {
+          "sha256": "a344e918896337475bde9cd4ecc02dd819f74687023b9644db24ad868fe97999",
+          "call_uuid": "d3abc81d-48fc-4773-8b88-5acc9dd1dd5f"
+        }
+      }
+    },
+    {
+      "repetition": 1,
+      "goal_id": "h3-meeting",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 3822.596458,
+        "elapsed_ms": 29085.588083
+      },
+      "C1": {
+        "qa03_ms": 4020.090791,
+        "elapsed_ms": 31325.404625
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "06e97b1e1376a54ff7864e5e60677d8fad452275dccfcc2d5b21a9d96b743098",
+          "call_uuid": "7074a33f-d9cf-4d97-a9f6-42534079aa52"
+        },
+        "C1": {
+          "sha256": "06e97b1e1376a54ff7864e5e60677d8fad452275dccfcc2d5b21a9d96b743098",
+          "call_uuid": "f979ab05-dbbc-4171-b9c0-5d445c1027c7"
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "goal_id": "h3-deck",
+      "both_completed": false,
+      "C": {
+        "qa03_ms": null,
+        "elapsed_ms": null
+      },
+      "C1": {
+        "qa03_ms": 4436.872584,
+        "elapsed_ms": 32370.86575
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "f72ccbe8d87ec23cb262ba03454b0f78a68c0b674d2c8122eddd30d4d112ca3a",
+          "call_uuid": "0d166de9-57f0-4c55-8208-6c71f85cf0e4"
+        },
+        "C1": {
+          "sha256": "f72ccbe8d87ec23cb262ba03454b0f78a68c0b674d2c8122eddd30d4d112ca3a",
+          "call_uuid": "d0f166c4-7ef3-4976-aee8-9a53a815ff8c"
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "goal_id": "h3-mail",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 5335.006459,
+        "elapsed_ms": 34903.266167
+      },
+      "C1": {
+        "qa03_ms": 4802.666917,
+        "elapsed_ms": 33548.80225
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "a344e918896337475bde9cd4ecc02dd819f74687023b9644db24ad868fe97999",
+          "call_uuid": "d4f1e52e-0c3a-402b-8d8c-03cb2517e162"
+        },
+        "C1": {
+          "sha256": "a344e918896337475bde9cd4ecc02dd819f74687023b9644db24ad868fe97999",
+          "call_uuid": "c45e0849-6982-428b-84cb-cc6b3741c5c1"
+        }
+      }
+    },
+    {
+      "repetition": 2,
+      "goal_id": "h3-meeting",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 4135.777542,
+        "elapsed_ms": 28260.4565
+      },
+      "C1": {
+        "qa03_ms": 4163.930291,
+        "elapsed_ms": 32133.236875
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "06e97b1e1376a54ff7864e5e60677d8fad452275dccfcc2d5b21a9d96b743098",
+          "call_uuid": "728c9b00-28c1-4914-8ef1-4edb6ba0d119"
+        },
+        "C1": {
+          "sha256": "06e97b1e1376a54ff7864e5e60677d8fad452275dccfcc2d5b21a9d96b743098",
+          "call_uuid": "a4410876-126b-415d-95ec-1d33880c787c"
+        }
+      }
+    },
+    {
+      "repetition": 3,
+      "goal_id": "h3-deck",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 4350.555334,
+        "elapsed_ms": 30542.500709
+      },
+      "C1": {
+        "qa03_ms": 4412.510084,
+        "elapsed_ms": 31006.739375
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "f72ccbe8d87ec23cb262ba03454b0f78a68c0b674d2c8122eddd30d4d112ca3a",
+          "call_uuid": "9529385e-cee8-4b2c-8ffa-2f66fa3f20ea"
+        },
+        "C1": {
+          "sha256": "f72ccbe8d87ec23cb262ba03454b0f78a68c0b674d2c8122eddd30d4d112ca3a",
+          "call_uuid": "143f9c2d-2fff-4016-905a-523fc3c22bdb"
+        }
+      }
+    },
+    {
+      "repetition": 3,
+      "goal_id": "h3-mail",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 4668.127124,
+        "elapsed_ms": 31341.174958
+      },
+      "C1": {
+        "qa03_ms": 4068.224126,
+        "elapsed_ms": 31046.067042
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "a344e918896337475bde9cd4ecc02dd819f74687023b9644db24ad868fe97999",
+          "call_uuid": "01ddcb1a-19b5-4de2-803d-b83b9428a241"
+        },
+        "C1": {
+          "sha256": "a344e918896337475bde9cd4ecc02dd819f74687023b9644db24ad868fe97999",
+          "call_uuid": "b29e59b2-78d9-40b8-a00d-fc6e88836b34"
+        }
+      }
+    },
+    {
+      "repetition": 3,
+      "goal_id": "h3-meeting",
+      "both_completed": true,
+      "C": {
+        "qa03_ms": 4090.370876,
+        "elapsed_ms": 32580.715042
+      },
+      "C1": {
+        "qa03_ms": 4112.451833,
+        "elapsed_ms": 31509.247
+      },
+      "prefix_request_values_equal": true,
+      "requests": {
+        "C": {
+          "sha256": "06e97b1e1376a54ff7864e5e60677d8fad452275dccfcc2d5b21a9d96b743098",
+          "call_uuid": "d7b3aa25-e148-4918-9f62-5c9449efccf9"
+        },
+        "C1": {
+          "sha256": "06e97b1e1376a54ff7864e5e60677d8fad452275dccfcc2d5b21a9d96b743098",
+          "call_uuid": "b3a4b5bd-ef3b-4ff0-8900-6ceacfd4e964"
+        }
+      }
+    }
+  ],
+  "all_9_prefix_actual_request_values_equal": true,
+  "common_completed_population": {
+    "goals": 8,
+    "C": {
+      "qa03_ms": 4301.508973875,
+      "elapsed_ms": 30531.735515625
+    },
+    "C1": {
+      "qa03_ms": 4284.3490835,
+      "elapsed_ms": 31518.867833375
+    }
+  },
+  "failure_classification": {
+    "run_id": "prefetch_tactic-dp05-e3-C-r2-35dfbe",
+    "goal_id": "h3-deck",
+    "host_error": "missing_structured_facts_or_provenance",
+    "actual_reason": "15 nonempty sourced facts exceeds host facts.len()>14 guard, initial and repair; not missing all facts",
+    "numeric_cap_explicit_in_frozen_receiver_prompt": false,
+    "displayed": false
+  },
+  "aggregation_compatibility_note": "Old analyzer sorted null and C1 directly, which Python rejects. New report wrapper uses null-safe group ordering only; original raw/group metrics unchanged."
+}

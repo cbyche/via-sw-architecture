@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-73efd1c8-5806-9666-83f2-299c3801850b",
+  "object": "chat.completion",
+  "created": 1792345161,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"summarize_delivered_content_and_latest_revision\"\n  },\n  \"mode\": \"READ\",\n  \"answer\": {\n    \"targets\": [],\n    \"text\": \"\",\n    \"facts\": [],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 2\n      }\n    ],\n    \"conditions\": [],\n    \"uncertainties\": [\n      \"Content of 'explained-criteria' lines 1-3 is not available in evidence.\",\n      \"Content of 'vendor-quote' lines 1-3 is not available in evidence.\"\n    ]\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requests a summary of 'the explained criteria' (referring to 'explained-criteria') and 'the latest corrected quote' (referring to 'vendor-quote'). The catalog indicates 'explained-criteria' has delivered lines 1-3 and 'vendor-quote' is at revision 2. However, 'available_evidence' is empty, so the actual text content required to generate the summary and cite facts is missing. I must READ the specified lines from both sources to retrieve the content.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 594,
+    "total_tokens": 979,
+    "completion_tokens": 385,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 594
+    }
+  }
+}

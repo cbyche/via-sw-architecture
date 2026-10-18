@@ -1,0 +1,19 @@
+{
+  "model": "qwen3.7-plus-2026-05-26",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Interpret the CURRENT utterance and resolve exact ORIGINAL source referent IDs and requested handling. Return ONLY JSON {adoption:{targets:[source ID strings],intent:string}}. Intent is concrete requested future handling for UI progress, not completed factual summary. Do not generate final answer or source facts. Separate supporting explanation from referred source targets. Use actual supplied history/current evidence, never invented IDs. Return valid JSON only."
+    },
+    {
+      "role": "user",
+      "content": "{\"available_evidence\": [], \"catalog\": [{\"conversation\": \"old-c\", \"delivered_lines\": [1, 3], \"id\": \"explained-criteria\", \"kind\": \"response_delivery\", \"line_count\": 5, \"outline\": [{\"lines\": [1, 3], \"section\": \"실제 설명한 기준\"}, {\"lines\": [4, 5], \"section\": \"표시하지 않은 준비 부분\"}], \"revision\": 1, \"revoked\": false, \"title\": \"이전에 준비한 평가 기준 응답과 실제 표시 기록\"}, {\"conversation\": \"old-c\", \"delivered_lines\": null, \"id\": \"vendor-quote\", \"kind\": \"public_result\", \"line_count\": 3, \"outline\": [{\"lines\": [1, 3], \"section\": \"정정 가격과 일정\"}], \"revision\": 2, \"revoked\": false, \"title\": \"Aster A 공급업체 정정 견적\"}], \"expression\": \"그 설명 기준과 최신으로 정정된 견적\", \"published_relations\": null, \"recent_conversation\": [], \"utterance\": \"그 설명 기준과 이제 최신으로 정정된 견적만 다시 정리해줘.\"}"
+    }
+  ],
+  "enable_thinking": false,
+  "temperature": 0,
+  "max_tokens": 450,
+  "response_format": {
+    "type": "json_object"
+  }
+}

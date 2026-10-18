@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-373e8ab3-4aea-9937-aa0f-1e74becbffe3",
+  "object": "chat.completion",
+  "created": 1792344990,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"Summarize the previously explained evaluation criteria and the received vendor quote details, explicitly excluding installation explanations as per instruction.\"\n  },\n  \"mode\": \"COMPLETE\",\n  \"answer\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"text\": \"The previously explained criteria prioritize comparing VAT-inclusive prices alongside maintenance periods, with a tie-breaker favoring longer maintenance if prices are equal. The purchase decision remains pending verification of the latest quote version. The received Aster A quote (v1) lists a unit price of 1,250,000 KRW (VAT included) for 12 units, with a 36-month maintenance period and a delivery date of October 29. The contract has not yet been signed.\",\n    \"facts\": [\n      {\n        \"statement\": \"Comparison considers VAT-inclusive price and maintenance period together.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"비교할 때는 부가세 포함 가격과 유지보수 기간을 함께 보겠습니다.\"\n      },\n      {\n        \"statement\": \"If prices are equal, the product with the longer maintenance period is prioritized.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"두 가격이 같으면 유지보수 기간이 더 긴 제품을 우선하겠습니다.\"\n      },\n      {\n        \"statement\": \"Purchase decision is undecided and requires checking the latest quote version.\",\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"구매 여부는 아직 정하지 않았으며 견적의 최신 판본을 확인해야 합니다.\"\n      },\n      {\n        \"statement\": \"Aster A quote v1 unit price is 1,250,000 KRW including VAT, with 36 months maintenance.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 1,\n        \"end_line\": 1,\n        \"quote\": \"Aster A 견적 v1: 1대 1,250,000원, 부가세 포함, 유지보수 36개월.\"\n      },\n      {\n        \"statement\": \"Delivery date is October 29.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 2,\n        \"end_line\": 2,\n        \"quote\": \"납기 10월 29일. 설치비는 80,000원 별도다.\"\n      },\n      {\n        \"statement\": \"Quantity is 12 units and the contract/purchase is not yet concluded.\",\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1,\n        \"start_line\": 3,\n        \"end_line\": 3,\n        \"quote\": \"수량은 12대이며 계약이나 구매는 아직 체결하지 않았다.\"\n      }\n    ],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1\n      }\n    ],\n    \"conditions\": [\n      \"Do not explain or include installation details in the summary.\"\n    ],\n    \"uncertainties\": []\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requested a summary of two specific sources: 'explained-criteria' and 'vendor-quote'. I extracted the relevant facts from both sources, ensuring that while the installation fee fact exists in the source, it was excluded from the final text summary as per the explicit constraint '설치를 설명했다고 가정하지 마' (Do not assume/explain installation). All other key details (price, maintenance, delivery, quantity, status) were included with exact quotes.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2892,
+    "total_tokens": 3926,
+    "completion_tokens": 1034,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 2892
+    }
+  }
+}

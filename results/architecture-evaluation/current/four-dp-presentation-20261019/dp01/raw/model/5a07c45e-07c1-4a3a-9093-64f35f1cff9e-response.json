@@ -1,0 +1,26 @@
+{
+  "id": "chatcmpl-cca13577-6870-9825-81e0-583d9357bb68",
+  "object": "chat.completion",
+  "created": 1792344712,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"adoption\": {\n    \"targets\": [\n      \"explained-criteria\",\n      \"vendor-quote\"\n    ],\n    \"intent\": \"summarize_explained_criteria_and_quote\"\n  },\n  \"mode\": \"READ\",\n  \"answer\": {\n    \"targets\": [],\n    \"text\": \"\",\n    \"facts\": [],\n    \"source_revisions\": [\n      {\n        \"source_id\": \"explained-criteria\",\n        \"revision\": 1\n      },\n      {\n        \"source_id\": \"vendor-quote\",\n        \"revision\": 1\n      }\n    ],\n    \"conditions\": [\n      \"Do not assume installation was explained in the criteria.\"\n    ],\n    \"uncertainties\": []\n  },\n  \"reads\": [\n    {\n      \"source_id\": \"explained-criteria\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    },\n    {\n      \"source_id\": \"vendor-quote\",\n      \"start_line\": 1,\n      \"end_line\": 3\n    }\n  ],\n  \"reason\": \"The user requests a summary of two specific sources: 'explained-criteria' (specifically the actually explained parts) and 'vendor-quote'. The evidence content is currently empty, so I must read the relevant lines from both sources to provide the summary. For 'explained-criteria', only lines 1-3 are marked as delivered/explained, matching the user's constraint to use 'actually explained' criteria. For 'vendor-quote', all lines 1-3 are needed for the full quote summary.\"\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 613,
+    "total_tokens": 971,
+    "completion_tokens": 358,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "text_tokens": 613
+    }
+  }
+}

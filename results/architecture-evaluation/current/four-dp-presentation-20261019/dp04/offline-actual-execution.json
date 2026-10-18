@@ -1,0 +1,65 @@
+[
+  {
+    "phase": "basic",
+    "index": 0,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-dense-A-r1-fec011\", \"calls\": 2, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 1,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-dense-B-r1-3348b4\", \"calls\": 4, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 2,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-free-region-A-r1-7fc718\", \"calls\": 2, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 3,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-free-region-B-r1-ea61fb\", \"calls\": 4, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 4,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-page-change-A-r1-9acc93\", \"calls\": 2, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 5,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-page-change-B-r1-91b571\", \"calls\": 4, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 6,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-partial-correction-A-r1-86dc8a\", \"calls\": 4, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "basic",
+    "index": 7,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"offline-dp04-partial-correction-B-r1-01763d\", \"calls\": 10, \"failed_events\": 0}\n",
+    "stderr": ""
+  },
+  {
+    "phase": "tactics",
+    "index": 0,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_presentation/dp04/control.py\", line 119, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_presentation/dp04/control.py\", line 113, in main\n    elif a.action=='worker':worker(RESULT/a.phase,a.job,a.offline)\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_presentation/dp04/control.py\", line 89, in worker\n    record=harness.execute(client,fixture,spec['variant'],spec['repetition'],'OFFLINE' if offline else auth['phase'],tactic='A2+A5' if spec['variant']=='A2A5' else 'B4' if spec['variant']=='B4' else None)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_poc_v2/run.py\", line 54, in execute\n    if (client.root/'freeze.json').exists() and prestart_binary_sha256!=read(client.root/'freeze.json')['binary']['sha256']:raise RuntimeError('Frozen binary digest mismatch')\n                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Frozen binary digest mismatch\n"
+  }
+]

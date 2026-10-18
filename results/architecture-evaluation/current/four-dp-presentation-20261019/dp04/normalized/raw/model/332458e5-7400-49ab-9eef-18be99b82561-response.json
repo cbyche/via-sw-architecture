@@ -1,0 +1,31 @@
+{
+  "id": "chatcmpl-9b1dc75f-c96d-9866-bbe1-dd056d6c9be6",
+  "object": "chat.completion",
+  "created": 1792346792,
+  "model": "qwen3.7-plus-2026-05-26",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "reasoning_content": "",
+        "content": "{\n  \"intent\": \"Retain first chart and replace second with rightmost chart per user request.\",\n  \"adoptions\": [\n    {\n      \"expression_id\": \"keep-first\",\n      \"targets\": [\n        \"C1 / Baseline\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"retain_prior\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C1 / Baseline\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C1 / Baseline\",\n          \"coordinate_space\": \"qwen_normalized_0_1000\",\n          \"bbox_2d\": [\n            30,\n            150,\n            320,\n            820\n          ]\n        }\n      ],\n      \"evidence\": \"Leftmost chart panel labeled C1 / Baseline.\"\n    },\n    {\n      \"expression_id\": \"change-second\",\n      \"targets\": [\n        \"C3 / Recovery\"\n      ],\n      \"status\": \"ready\",\n      \"count\": null,\n      \"relation\": \"relative_position\",\n      \"cue_ids\": [],\n      \"extents\": [\n        {\n          \"target_id\": \"C3 / Recovery\",\n          \"frame_id\": \"correction\",\n          \"label\": \"C3 / Recovery\",\n          \"coordinate_space\": \"qwen_normalized_0_1000\",\n          \"bbox_2d\": [\n            670,\n            150,\n            960,\n            820\n          ]\n        }\n      ],\n      \"evidence\": \"Rightmost chart panel labeled C3 / Recovery.\"\n    }\n  ],\n  \"need_evidence\": false\n}"
+      },
+      "finish_reason": "stop",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2233,
+    "total_tokens": 2653,
+    "completion_tokens": 420,
+    "prompt_tokens_details": {
+      "cached_tokens": 1152,
+      "image_tokens": 622,
+      "text_tokens": 1611
+    },
+    "completion_tokens_details": {
+      "text_tokens": 420
+    }
+  }
+}
