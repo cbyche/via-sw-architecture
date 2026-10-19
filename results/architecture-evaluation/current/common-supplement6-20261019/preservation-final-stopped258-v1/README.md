@@ -21,3 +21,9 @@ python3 -E -S -B scripts/architecture/package_common9_evidence.py restore --bund
 ```
 
 The restore command rejects an existing nonempty destination. Do not overwrite originals. `RESTORE.md` contains reconstruction/build instructions and environment limitations. **Relocated API-free analysis is UNVERIFIED and was not run**; byte reconstruction is the validated scope. This README and verification sidecars are outside the archived selection in the excluded package directory.
+
+## Publication CI limits
+
+The initial publication had 426 link errors: 14 exact errors also present in baseline commit 41f65b5, plus 412 introduced locator errors. `CI-FAILURE-DIAGNOSIS.json` preserves their exact strings and run/log bindings. A narrowly pinned archive-locator correction retains ordinary checks and rejects corrupt, missing, unbound or symlink-alias paths. Independent review closed its P2 finding; 11 synthetic checks passed. `CI-TARGETED-CHECK-RESULT-v4.json` checks 884 published/restored Markdown files and retains exactly the 14 baseline errors with no additional error. Those frozen copied-document navigation links remain unchanged. This is not a claim of a passing full CI or downstream tests. CI metadata and this README remain outside the immutable archived selection.
+
+The intermediate v3 check retained one fictitious missing-link example in the independent review. Its original review bytes remain in `CI-LINK-INDEPENDENT-REVIEW-original.txt`; only that example was converted to plain text. The final v4 check includes the review and records no new errors.

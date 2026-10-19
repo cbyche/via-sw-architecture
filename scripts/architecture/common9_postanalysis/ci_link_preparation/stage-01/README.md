@@ -1,0 +1,9 @@
+# Published evidence link verification preparation
+
+The correction is limited to the exact stopped258 preservation package. The checker pins its manifest and validates inventory, all archive parts and their concatenated hash, provenance roles and original-root containment. It grants packaged-only availability only to exact regular FILE members. Preserved Markdown must retain its recorded hash for absolute original-root rebasing. Missing/corrupt/unbound metadata, symlinks at member paths or ancestors, ordinary missing links and outside-root links fail closed. This is archive locator validation, not byte restoration or portable reanalysis.
+
+The first saved attempt passed 10 synthetic checks. Independent Sol review found an inside-root broken-symlink alias that could broaden membership. The source before correction remains in `checker-before-symlink-fix.py`. The corrected attempt passed 11 checks, including that negative case, in 0.01723383297212422 seconds. Both outputs are preserved. These are reporting-tool checks, not campaign trials; no measurement, model, analyzer or runtime calls occurred.
+
+The independent review and actual published-file check are stored outside the archived selection in the preservation package directory as `CI-LINK-INDEPENDENT-REVIEW.md` and `CI-TARGETED-CHECK-RESULT-v4.json`. The latter checks 884 tracked/restored Markdown files with unchanged active predicates and retains the exact 14 baseline errors. It is a clean-publication projection, not a full scan of untracked captured/development copies. The 412 additional first-publication errors were absent. Automatic follow-up CI is separate evidence.
+
+The v3 projection retained one error from a fictitious missing-link example inside the independent review. The exact original review remains as an inert .txt copy; only that example was converted to plain prose. v4 then retained only the 14 baseline errors. No checker predicate changed for this formatting correction.

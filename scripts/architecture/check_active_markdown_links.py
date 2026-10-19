@@ -35,6 +35,124 @@ FOUR_DP_CAMPAIGNS = (
     CURRENT_EVIDENCE / "four-dp-qwen37-20261018",
     CURRENT_EVIDENCE / "four-dp-qwen37-review-v2-20261018",
 )
+COMMON15_PACKAGE = CURRENT_EVIDENCE / "common-supplement6-20261019/preservation-final-stopped258-v1"
+COMMON15_MANIFEST_SHA = "dc0ad05f5bb4ccab61d367e95771ed65c7f0cf6b19d818464a0d9ebbd2a0aba3"
+COMMON15_CAMPAIGNS = (
+    CURRENT_EVIDENCE / "common9-poc-20261019",
+    CURRENT_EVIDENCE / "common-supplement6-20261019",
+    CURRENT_EVIDENCE / "four-dp-prediction-validation-20261019",
+)
+
+
+def published_common15_contexts() -> tuple[dict[Path, dict], set[Path], list[str]]:
+    """Resolve published evidence locators without rewriting preserved bytes.
+
+    Parts and inventory must match the published hashes. A packaged-only target
+    is an available inventory member, not a claim of filesystem restoration or
+    portable analysis. Ordinary unregistered missing links still fail.
+    """
+    manifest_path = COMMON15_PACKAGE / "chunk-manifest.json"
+    if not COMMON15_PACKAGE.exists():
+        return {}, set(), []
+    try:
+        if any(node.is_symlink() for node in (COMMON15_PACKAGE, *COMMON15_PACKAGE.parents)):
+            raise ValueError("linked package ancestor")
+        if (not manifest_path.is_file() or manifest_path.is_symlink()
+                or manifest_path.stat().st_size > 2 * 1024 * 1024):
+            raise ValueError("missing/linked published manifest")
+        manifest_bytes = manifest_path.read_bytes()
+        if hashlib.sha256(manifest_bytes).hexdigest() != COMMON15_MANIFEST_SHA:
+            raise ValueError("unbound published manifest")
+        manifest = json.loads(manifest_bytes)
+        inventory_path = COMMON15_PACKAGE / "PRESERVATION-INVENTORY.json"
+        if inventory_path.is_symlink() or inventory_path.stat().st_size > 16 * 1024 * 1024:
+            raise ValueError("linked published inventory")
+        inventory_bytes = inventory_path.read_bytes()
+        if hashlib.sha256(inventory_bytes).hexdigest() != manifest["inventory_sha256"]:
+            raise ValueError("inventory hash mismatch")
+        inventory = json.loads(inventory_bytes)
+        archive_digest = hashlib.sha256()
+        archive_bytes = 0
+        seen_parts = set()
+        for part in manifest["parts"]:
+            name = part["name"]
+            if Path(name).name != name or name in seen_parts:
+                raise ValueError("unsafe/duplicate archive part")
+            seen_parts.add(name)
+            part_path = COMMON15_PACKAGE / name
+            if (part_path.is_symlink() or not 0 < part["bytes"] <= 20 * 1024 * 1024
+                    or part_path.stat().st_size != part["bytes"]):
+                raise ValueError("invalid archive part")
+            digest, count = hashlib.sha256(), 0
+            with part_path.open("rb") as stream:
+                while chunk := stream.read(1024 * 1024):
+                    digest.update(chunk)
+                    archive_digest.update(chunk)
+                    count += len(chunk)
+            if count != part["bytes"] or digest.hexdigest() != part["sha256"]:
+                raise ValueError("archive part hash/size mismatch")
+            archive_bytes += count
+        if archive_bytes != manifest["archive_bytes"] or archive_digest.hexdigest() != manifest["archive_sha256"]:
+            raise ValueError("archive hash/size mismatch")
+        files, seen_members = {}, set()
+        for item in inventory["included_files"]:
+            relative = Path(item["path"])
+            if relative.is_absolute() or ".." in relative.parts or str(relative) != item["path"]:
+                raise ValueError("unsafe inventory path")
+            if item["path"] in seen_members:
+                raise ValueError("duplicate inventory member")
+            seen_members.add(item["path"])
+            if item["kind"] == "FILE":
+                if not re.fullmatch(r"[0-9a-f]{64}", item["sha256"]):
+                    raise ValueError("invalid member hash")
+                files[item["path"]] = item
+        records = inventory["provenance"]["records"]
+        roles = {row["role"]: row for row in records}
+        if len(roles) != len(records):
+            raise ValueError("duplicate provenance role")
+        for role in ("generation_mapping", "joint441_final_freeze"):
+            bound = roles[role]
+            if (bound["path"] not in files or any(bound[key] != files[bound["path"]][field]
+                    for key, field in (("sha256", "sha256"), ("bytes", "size")))):
+                raise ValueError("unbound provenance role")
+        mapping_ref = roles["generation_mapping"]
+        mapping_path = ROOT / mapping_ref["path"]
+        if (any(node.is_symlink() for node in (mapping_path, *mapping_path.parents))
+                or not mapping_path.resolve().is_relative_to(ROOT.resolve())
+                or mapping_path.stat().st_size > 2 * 1024 * 1024):
+            raise ValueError("linked generation mapping")
+        mapping_bytes = mapping_path.read_bytes()
+        if (hashlib.sha256(mapping_bytes).hexdigest() != mapping_ref["sha256"]
+                or len(mapping_bytes) != mapping_ref["bytes"]):
+            raise ValueError("generation mapping mismatch")
+        freeze_ref = json.loads(mapping_bytes)["artifacts"]["formal_freeze"]
+        if any(freeze_ref[key] != roles["joint441_final_freeze"][key] for key in ("sha256", "bytes")):
+            raise ValueError("recorded freeze association mismatch")
+        recorded_freeze = Path(freeze_ref["path"])
+        relative_freeze = Path(roles["joint441_final_freeze"]["path"])
+        original = recorded_freeze.parents[len(relative_freeze.parts) - 1]
+        if not original.is_absolute() or len(original.parts) < 3 or original / relative_freeze != recorded_freeze:
+            raise ValueError("invalid recorded repository root")
+        targets, checked_nodes = set(), set()
+        for relative in files:
+            target = ROOT / relative
+            for node in (target, *target.parents):
+                if node not in checked_nodes:
+                    checked_nodes.add(node)
+                    if node.is_symlink():
+                        raise ValueError("linked inventory file/ancestor")
+            if not target.resolve().is_relative_to(ROOT.resolve()):
+                raise ValueError("inventory target escapes repository")
+            # Keep exact lexical membership; no alias can admit another name.
+            targets.add(target)
+        contexts = {}
+        for relative, item in files.items():
+            source = (ROOT / relative).resolve()
+            if source.suffix == ".md" and any(source.is_relative_to(campaign) for campaign in COMMON15_CAMPAIGNS):
+                contexts[source] = {"sha256": item["sha256"], "original_root": original, "context": None}
+        return contexts, targets, []
+    except (KeyError, IndexError, TypeError, ValueError, OSError) as exc:
+        return {}, set(), [f"{manifest_path.relative_to(ROOT)}: invalid published evidence metadata: {type(exc).__name__}"]
 
 
 def restored_markdown_contexts() -> tuple[dict[Path, dict], list[str]]:
@@ -127,6 +245,9 @@ def local_target(raw: str) -> str | None:
 
 def main() -> int:
     contexts, violations = restored_markdown_contexts()
+    common15_contexts, packaged_targets, package_violations = published_common15_contexts()
+    contexts.update(common15_contexts)
+    violations.extend(package_violations)
     for source in markdown_files():
         preserved = contexts.get(source.resolve())
         if preserved is not None:
@@ -155,7 +276,7 @@ def main() -> int:
                         f"{source.relative_to(ROOT)}:{line_number}: outside repository: {target}"
                     )
                     continue
-                if not resolved.exists():
+                if not resolved.exists() and resolved not in packaged_targets:
                     violations.append(
                         f"{source.relative_to(ROOT)}:{line_number}: missing: {target}"
                     )
