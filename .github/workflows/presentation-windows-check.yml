@@ -1,6 +1,10 @@
 name: presentation-windows-check
 
 on:
+  push:
+    paths:
+      - '.github/workflows/presentation-windows-check.yml'
+      - 'docs/presentations_files/**/*-windows.pptx'
   workflow_dispatch:
     inputs:
       pptx_path:
@@ -16,7 +20,7 @@ jobs:
     runs-on: windows-2022
     timeout-minutes: 15
     env:
-      PPTX_PATH: ${{ inputs.pptx_path }}
+      PPTX_PATH: ${{ inputs.pptx_path || 'docs/presentations_files/dp1-dp4-reference-style-20261019/VIA-DP1-DP4-reference-style-16slides-v2-windows.pptx' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,7 +28,7 @@ jobs:
             scripts/presentations/windows-validator
             scripts/presentations/presentation_windows_policy.py
             scripts/presentations/full_presentation_package.py
-            ${{ inputs.pptx_path }}
+            ${{ env.PPTX_PATH }}
           sparse-checkout-cone-mode: false
       - uses: actions/setup-dotnet@v4
         with:
