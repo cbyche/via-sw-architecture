@@ -1,0 +1,134 @@
+{
+  "version": "ADAPTER_PREPARATION_STAGE03_v1",
+  "status": "IMPLEMENTED_SYNTHETIC_PASS_PENDING_INDEPENDENT_STATIC_REVIEW_NO_ACTUAL_QUANTITATIVE_EXECUTION",
+  "spec_sha256": "b4bb8735e67ec84dbef1cb193ac3a36f6ea70411094515a7f5d616b0ee82a09e",
+  "sources": [
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/report_adapter.py",
+      "sha256": "c0e369bab675d96cd2cbeb15c79523d89841cdc0a3e91bc2b12a477b94fe77a0",
+      "bytes": 84200
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/test_report_adapter.py",
+      "sha256": "1c01510f3d0e1a29f1b82dc7619ff46146371c31846ad8393435792b8758d3d4",
+      "bytes": 39659
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/report_adapter.schema.json",
+      "sha256": "27dbad35efada5bfa7f5a4c93649d1d34b91ccb470e6495ab5664e0b5ac32628",
+      "bytes": 10277
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/report_adapter.input.schema.json",
+      "sha256": "91f2353d321c58f2d5b2a3b0821ce6e842e9c5bc89a599c6af2a3ecbf4476546",
+      "bytes": 2480
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/ADAPTER-README.md",
+      "sha256": "608c347d378dbe00e5e5d7874736f234676247d644fe28942597f4abfa854e92",
+      "bytes": 11634
+    }
+  ],
+  "synthetic_records": [
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage03-final-core-v1.json",
+      "sha256": "967914e46222482eebfd1831335afd72c11153f5a6fd8659280a4b99c8837a0b",
+      "bytes": 1395
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage03-final-review-fixes-v1.json",
+      "sha256": "ce987559c83af3b00cd891ef388bccc299166ab752c9b41e2196d521bb7e4a4e",
+      "bytes": 924
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage03-final-projection-v1.json",
+      "sha256": "d0777e6d589923b8f9ab0560b0eea4d0edfcb9c8f54d59a2ad614dd57762a3f7",
+      "bytes": 1431
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage03-final-output-v1.json",
+      "sha256": "65e552b38b6020aff6cfa111d9b5da128992d1978eed5991ff8287d6f9840e91",
+      "bytes": 811
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage03-final-loader-v1.json",
+      "sha256": "aec1f649a6eb9dcf21369f40b38dd44c04bbeb386f723ddd302a0e2312498639",
+      "bytes": 690
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage03-final-specific-v1.json",
+      "sha256": "6f9897028981eaa54d9feb6445d17ac70f50443b3fa8074b49cbfdef3f2b76db",
+      "bytes": 1384
+    }
+  ],
+  "synthetic_checks": 24,
+  "synthetic_max_batch_seconds": 0.22293116594664752,
+  "stage02_checkpoint": {
+    "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-02/CHECKPOINT.json",
+    "sha256": "d610b1a2143d69f29f681448f75cdbbb3328923dbbde2c887aa16a18070fc7e9",
+    "bytes": 5881
+  },
+  "stage02_review": {
+    "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-02/static-astra-review-stage02.md",
+    "sha256": "f9971c0869038b51d3e3b0699e40c66f1269c53b05a12f698ee36af32a849702",
+    "bytes": 11970
+  },
+  "diff": {
+    "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/stage-03/stage02-to-stage03.diff",
+    "sha256": "73e15a9bb5084c94a9246ef557cd076b55e1718f2fca37cd5550ed13c0eecce8",
+    "bytes": 25177
+  },
+  "finding_repairs": {
+    "S2-01": {
+      "repair": "Exact supported ordered unique STARTED\u2192DISPATCHED\u2192TERMINATED required for certification; complete-progress contradictions invalidate affected episode/obligations/pairs, ordered partial incomplete progress is recoverable/unverified; raw costs retained",
+      "tests": [
+        "stage02-fixes:test_exact_lifecycle_complete_conflicts_and_recoverable_incomplete",
+        "review-fixes:test_bad_identity_declaration_and_progress_cannot_enter_pairs"
+      ]
+    },
+    "S2-02": {
+      "repair": "Independent artifact reads retain unavailable trace/result/association refs separately from stale hash/path/identity contradictions. Terminal placeholders including absent run ID reach TERMINATED_TRACE_MISSING; missing association only is unverified. Available raw result/cost/calls remain. Trace root/run path is checked even before availability.",
+      "tests": [
+        "loader:test_synthetic_explicit_full_loader_and_QA04_final_roles (temporary missing trace/result/association/placeholder/stalehash variants)",
+        "stage02-fixes:test_unavailable_vs_contradictory_artifacts_and_missing_association"
+      ]
+    },
+    "S2-03": {
+      "repair": "Saved peak, exact same-sample concurrent sum and process arithmetic consistency required for complete/comparable RSS; no sample reclassification or substitute selection. Inconsistent OBSERVED data recorded as ABI contradiction; all raw invalid values/reasons retained.",
+      "tests": [
+        "stage02-fixes:test_saved_RSS_arithmetic_cannot_certify_missing_or_mismatched_sample",
+        "projection:test_same_sample_RSS_ties_not_role_or_episode_sum"
+      ]
+    },
+    "S2-04": {
+      "repair": "Every fixed repetition bundle adds QA01/QA02/QA03 fixed partitions; timing summed ns/count/micro means. Counts43/15/23 COMMON9,12/6/8 supplement; output invariants include all56 bundles.",
+      "tests": [
+        "stage02-fixes:test_repetition_bundle_metrics_fixed_counts_and_micro_means"
+      ]
+    },
+    "S2-05": {
+      "repair": "Exact discarded_after_candidate_end flag retained. Every UUID source occurrence retains disposition fields with absence versus false distinction. Disposition-only differences do not create financial conflict or duplicate spend; actual financial differences still conflict.",
+      "tests": [
+        "stage02-fixes:test_later_disposition_only_annotation_dedups_financial_call",
+        "projection:test_call_uuid_dedup_rates_unknown_late_settlement_all_cost"
+      ]
+    }
+  },
+  "preserved_synthetic_failure": {
+    "record": {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/scripts/architecture/common9_postanalysis/adapter_preparation/development/stage03-review-fixes-v1.json",
+      "sha256": "6163317c2923fdf094b4da04df551280e9480bd91ca3d77508b6d5954363579c",
+      "bytes": 1773
+    },
+    "reason": "Old test used explicitly incomplete progress but expected unstarted terminal evidence to be a complete-progress contradiction. Assertion context updated to progress_complete=true; failed evidence preserved, implementation not relaxed."
+  },
+  "actual_quantitative_execution_count": 0,
+  "accepted_extractors_and_lead_v3_unchanged": true,
+  "frozen_runtime_contracts_QA04_unchanged": true,
+  "scope": "Only owned new report_adapter/schema/tests/README and adapter_preparation evidence modified.",
+  "limitations": [
+    "Independent static closure pending; implementation repair is not a reviewer PASS",
+    "No actual campaign analysis or semantic/architecture judgment",
+    "Final input provenance requires independently recorded exact associations and quiescent immutable snapshots; restore mapping unsupported"
+  ]
+}

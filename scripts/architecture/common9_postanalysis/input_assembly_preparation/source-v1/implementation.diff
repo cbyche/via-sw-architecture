@@ -1,0 +1,675 @@
+--- /dev/null
++++ record_joint_report_inputs.py
+@@ -0,0 +1,368 @@
++"""Record one explicitly authorized frozen analysis and assemble report inputs.
++
++No episode/controller/model/parser/compiler launch. Never imports frozen code.
++The sole subprocess target is the pinned frozen analyze_joint.py, after supplied
++quiescence evidence. Actual execution requires a separate root GO; preparation
++and synthetic checks do not authorize using this CLI against the campaign.
++"""
++import argparse
++from datetime import datetime, timezone
++import hashlib
++import json
++from pathlib import Path
++import subprocess
++import sys
++import time
++
++import report_adapter as adapter
++
++VERSION = 'JOINT441_REPORT_INPUT_ASSEMBLY_v1'
++PLAN_VERSION = 'JOINT441_REPORT_INPUT_ASSEMBLY_PLAN_v1'
++ADAPTER_SHA = 'c0e369bab675d96cd2cbeb15c79523d89841cdc0a3e91bc2b12a477b94fe77a0'
++FREEZE_SHA = adapter.FREEZE_SHA
++APPROVAL_SHA = adapter.APPROVAL_SHA
++ANALYZER_RELATIVE = 'benchmark/architecture/common_supplement6_20261019/analyze_joint.py'
++ANALYZER_SHA = '469a5c8a57ee1a3e6812b8c85182cc0e4b2fbd59b69fbca8eeb8591a0fcecb49'
++MAX_ANALYSIS_BYTES = 128 * 1024 * 1024
++HARD_ANALYSIS_BYTES = 512 * 1024 * 1024
++MAX_RUNS_BYTES = 4 * 1024 * 1024 * 1024
++HARD_RUNS_BYTES = 8 * 1024 * 1024 * 1024
++GROUPS = (('COMMON9', 'primary_common9', 315), ('COMMON_SUPPLEMENT6', 'supplement6', 126))
++require, InputError = adapter.require, adapter.InputError
++
++
++def utc():
++    return datetime.now(timezone.utc).isoformat()
++
++
++def safe_path(path, root):
++    path = Path(path)
++    require(path.is_absolute() and '..' not in path.parts and path.resolve().is_relative_to(root), 'Path outside exact root or traversal')
++    require(not any(p.is_symlink() for p in (path, *path.parents)), 'Symlink path/ancestor unsupported')
++    return path
++
++
++def hash_file(path, root, limit):
++    """Bounded streaming hash; never parses trace/model/media contents."""
++    path = safe_path(path, root)
++    before = path.stat()
++    require(path.is_file() and before.st_size <= limit, 'Not a bounded regular file: ' + str(path))
++    digest = hashlib.sha256()
++    count = 0
++    with path.open('rb') as handle:
++        while chunk := handle.read(1024 * 1024):
++            count += len(chunk)
++            require(count <= limit, 'Input grew beyond read limit')
++            digest.update(chunk)
++    after = path.stat()
++    require(before.st_size == after.st_size == count and before.st_mtime_ns == after.st_mtime_ns, 'Input changed while hashing: ' + str(path))
++    return {'path': str(path), 'sha256': digest.hexdigest(), 'bytes': count}
++
++
++def check_ref(reference, root, limit):
++    require(isinstance(reference, dict) and type(reference.get('bytes')) is int, 'Explicit integer-size file ref required')
++    actual = hash_file(reference['path'], root, limit)
++    require(all(actual[k] == reference[k] for k in ('path', 'sha256', 'bytes')), 'Source hash/path/bytes mismatch: ' + reference['path'])
++    return actual
++
++
++class ExclusiveOutput:
++    def __init__(self, path, root):
++        self.root = root
++        self.path = safe_path(path, root)
++        require(self.path.is_relative_to(root / 'postanalysis'), 'Assembly output must be inside exact formal postanalysis root')
++        require(not self.path.exists(), 'Immutable output already exists')
++        self.path.mkdir(parents=True, exist_ok=False)
++        self.outputs = {}
++        self.tool_ref = hash_file(Path(__file__).resolve(), Path(__file__).resolve().parent, 1024*1024)
++
++    def write(self, name, value, *, raw=False):
++        require(not Path(name).is_absolute() and '..' not in Path(name).parts, 'Unsafe output member')
++        path = self.path / name
++        safe_path(path, self.root)
++        path.parent.mkdir(parents=True, exist_ok=True)
++        data = value if raw else adapter.json_bytes(value)
++        with path.open('xb') as handle:
++            handle.write(data)
++        reference = {'path': str(path), 'sha256': adapter.sha(data), 'bytes': len(data)}
++        self.outputs[name] = reference
++        return reference
++
++    def adopt(self, name, limit):
++        reference = hash_file(self.path / name, self.root, limit)
++        self.outputs[name] = reference
++        return reference
++
++    def finish(self, status, **metadata):
++        manifest = {'version': VERSION, 'status': status, 'outputs': dict(self.outputs),
++                    'manifest_written_last': True, 'tool': self.tool_ref,
++                    'accepted_adapter_sha256': ADAPTER_SHA, 'spec_sha256': adapter.SPEC_SHA, **metadata}
++        self.write('manifest.json', manifest)
++        return manifest
++
++
++def read_plan(plan_path, expected_sha):
++    path = Path(plan_path)
++    require(path.is_absolute() and '..' not in path.parts and not any(p.is_symlink() for p in (path,*path.parents))
++            and path.is_file() and path.stat().st_size <= 2 * 1024 * 1024, 'Explicit bounded nonsymlink plan file required')
++    data = path.read_bytes()
++    require(adapter.sha(data) == expected_sha, 'Assembly plan hash mismatch')
++    plan = json.loads(data)
++    require(isinstance(plan, dict) and plan.get('version') == PLAN_VERSION, 'Unsupported assembly plan ABI')
++    root = Path(plan['formal_root'])
++    require(root.is_absolute() and '..' not in root.parts and not any(p.is_symlink() for p in (root, *root.parents)), 'Unsafe formal root')
++    root = root.resolve()
++    safe_path(path, root)
++    return plan, root, {'path': str(path), 'sha256': expected_sha, 'bytes': len(data)}
++
++
++def preflight(plan, root):
++    require(adapter.sha(Path(adapter.__file__).read_bytes()) == ADAPTER_SHA, 'Accepted adapter source changed')
++    reader = adapter.ArtifactReader(root, **plan.get('adapter_read_limits', {}))
++    refs = plan['artifacts']
++    require(refs['freeze']['path'] == str(root / 'freeze.json') and refs['freeze']['sha256'] == FREEZE_SHA, 'Wrong formal freeze')
++    require(refs['approval']['path'] == str(root / 'approval/APPROVAL-BINDING.json') and refs['approval']['sha256'] == APPROVAL_SHA, 'Wrong approval binding')
++    freeze, approval = reader.read(refs['freeze']), reader.read(refs['approval'])
++    require(freeze.get('version') == 'COMMON9_PLUS_SUPPLEMENT6_JOINT441_v1' and approval.get('formal_freeze_sha256') == FREEZE_SHA, 'Mixed freeze/approval generation')
++    require(len(freeze['sources']) == 112 and len({s['relativePath'] for s in freeze['sources']}) == 112, 'Expected exact112 frozen sources')
++    q = reader.read(refs['quiescence'])
++    require(q.get('version') == 'JOINT441_QUIESCENT_SNAPSHOT_v1' and q.get('controller_state') in ('STOPPED','COMPLETED')
++            and q.get('no_active_episode_processes') is True and type(q.get('progress_complete')) is bool and q.get('evidence_refs'), 'Independent quiescence evidence required')
++    for reference in q['evidence_refs']:
++        reader.read(reference, raw=True)
++    for name, original in [('progress', root / 'campaign-progress.jsonl'), ('status', root / 'status.json'), ('ledger', Path(freeze['ledger_path']))]:
++        require(refs[name].get('snapshot_of') == str(original) and refs[name]['path'] != str(original)
++                and q.get(name + '_snapshot_sha256') == refs[name]['sha256'], 'Immutable quiescence snapshot association differs: ' + name)
++    reader.read(refs['progress'], jsonl=True)
++    require(reader.read(refs['status']).get('planned') == 441, 'Wrong status plan')
++    ledger = reader.read(refs['ledger'])
++    require(adapter.decimal(ledger.get('limit_usd')) == adapter.Decimal('40'), 'Wrong budget cap')
++    source_map, source_refs = {}, []
++    for entry in freeze['sources']:
++        relative = entry['relativePath']
++        path = root / 'frozen/source' / relative
++        require(entry['frozen_path'] == str(path) and '..' not in Path(relative).parts and not Path(relative).is_absolute(), 'Mixed frozen source association')
++        reference = {'path': str(path), 'sha256': entry['sha256'], 'bytes': path.stat().st_size}
++        reader.read(reference, raw=True)
++        source_map[relative] = entry
++        source_refs.append(reference)
++    require(source_map[ANALYZER_RELATIVE]['sha256'] == ANALYZER_SHA, 'Wrong frozen analyzer source')
++    oracles = {}
++    for population, relative in [('COMMON9','benchmark/architecture/common9_poc_20261019/oracles.json'), ('COMMON_SUPPLEMENT6','benchmark/architecture/common_supplement6_20261019/oracles.json')]:
++        reference, entry = plan['oracles'][population], source_map[relative]
++        require(reference['path'] == entry['frozen_path'] and reference['sha256'] == entry['sha256'], 'Wrong population oracle')
++        oracles[population] = reader.read(reference)
++    adapter.validate_plan(freeze['jobs'], oracles)
++    adapter.approved_qa04(reader, plan['qa04'], approval)
++    require(refs['runs']['path'] == str(root / 'runs.jsonl'), 'Analyzer input must be the exact formal runs.jsonl')
++    runs_limit = plan.get('runs_max_bytes', MAX_RUNS_BYTES)
++    require(type(runs_limit) is int and 0 < runs_limit <= HARD_RUNS_BYTES, 'Unsupported streaming runs read limit')
++    run_ref = check_ref(refs['runs'], root, runs_limit)
++    for name in ('global_call_snapshot','semantic_review_index','registrations'):
++        if refs.get(name):
++            if name == 'global_call_snapshot':
++                require(refs[name].get('snapshot_of') == str(root / 'model-calls.jsonl') and refs[name]['path'] != str(root / 'model-calls.jsonl'), 'Only immutable global call snapshot allowed')
++            reader.read(refs[name], jsonl=name != 'registrations')
++    limit = plan.get('analysis_max_bytes', MAX_ANALYSIS_BYTES)
++    require(type(limit) is int and 0 < limit <= HARD_ANALYSIS_BYTES, 'Unsupported joint-analysis read limit')
++    return {'freeze': freeze, 'oracles': oracles, 'reader_inputs': list(reader.inputs.values()), 'source_refs': source_refs,
++            'runs_ref': run_ref, 'runs_limit': runs_limit, 'fragment_limit': reader.file_limit, 'oracle_refs': plan['oracles'], 'analysis_limit': limit, 'analyzer_path': source_map[ANALYZER_RELATIVE]['frozen_path']}
++
++
++def default_runner(argv, stdout, stderr, cwd):
++    # This fixed analysis CLI is the only possible subprocess; no shell, extra
++    # options, episode runner, report adapter or frozen-module import here.
++    return subprocess.run(argv, stdout=stdout, stderr=stderr, cwd=cwd, check=False).returncode
++
++
++def record_invocation(out, context, root, *, runner=None):
++    synthetic = runner is not None
++    argv = [str(Path(sys.executable).resolve()), context['analyzer_path'], '--root', str(root), '--output', str(out.path / 'joint-analysis.json')]
++    started_ns, started_at = time.monotonic_ns(), utc()
++    error, returncode = None, None
++    with (out.path / 'analysis.stdout.log').open('xb') as stdout, (out.path / 'analysis.stderr.log').open('xb') as stderr:
++        try:
++            returncode = (runner or default_runner)(argv, stdout, stderr, str(Path(context['analyzer_path']).parent))
++            require(type(returncode) is int, 'Analysis runner returned unsupported exit result')
++        except Exception as caught:
++            error = {'type': type(caught).__name__, 'message': str(caught)}
++    ended_ns, ended_at = time.monotonic_ns(), utc()
++    log_refs, log_errors = {}, []
++    for name in ('analysis.stdout.log','analysis.stderr.log'):
++        try:
++            log_refs[name] = out.adopt(name, 64 * 1024 * 1024)
++        except (OSError, InputError) as caught:
++            log_refs[name] = None
++            log_errors.append({'path':str(out.path/name),'type':type(caught).__name__,'message':str(caught)})
++    stdout_ref, stderr_ref = log_refs['analysis.stdout.log'], log_refs['analysis.stderr.log']
++    output_path = out.path / 'joint-analysis.json'
++    output_ref, output_bytes, output_error = None, None, None
++    if output_path.exists():
++        try:
++            safe_path(output_path, root)
++            before = output_path.stat()
++            require(output_path.is_file() and before.st_size <= context['analysis_limit'], 'Oversized or nonregular joint analysis output')
++            output_bytes = output_path.read_bytes()  # sole full read of joint output
++            require(output_path.stat().st_mtime_ns == before.st_mtime_ns and len(output_bytes) == before.st_size, 'Analysis output changed while reading')
++            output_ref = {'path': str(output_path), 'sha256': adapter.sha(output_bytes), 'bytes': len(output_bytes)}
++            out.outputs['joint-analysis.json'] = output_ref
++        except (OSError, InputError) as caught:
++            output_error = {'type': type(caught).__name__, 'message': str(caught), 'path': str(output_path)}
++    receipt = {'version': 'JOINT441_RECORDED_ANALYSIS_EXECUTION_v1', 'invocation_kind': 'SYNTHETIC_FAKE_NO_PROCESS' if synthetic else 'ACTUAL_FROZEN_ANALYZER',
++               'actual_invocation_attempted': not synthetic, 'actual_process_invoked': False if synthetic else True if type(returncode) is int else None, 'argv': argv, 'cwd': str(Path(context['analyzer_path']).parent),
++               'python_version': sys.version, 'started_monotonic_ns': started_ns, 'ended_monotonic_ns': ended_ns,
++               'started_at_utc': started_at, 'ended_at_utc': ended_at, 'elapsed_seconds': (ended_ns-started_ns)/1e9,
++               'returncode': returncode, 'exception': error, 'log_errors': log_errors, 'stdout_ref': stdout_ref, 'stderr_ref': stderr_ref,
++               'output_ref': output_ref, 'output_error': output_error, 'mode': 'FORMAL_STRICT_FROZEN_JOINT_CLI_NO_OFFLINE',
++               'freeze_sha256': FREEZE_SHA, 'binary_sha256': context['freeze']['binary']['sha256'],
++               'source_sha256': {s['relativePath']:s['sha256'] for s in context['freeze']['sources']},
++               'runs_ref': context['runs_ref'], 'population_oracle_refs': context['oracle_refs'], 'scope': 'No episode/model/parser/build invocation; analysis only after independent quiescence/root GO'}
++    receipt_ref = out.write('analysis-execution.json', receipt)
++    require(error is None and returncode == 0 and output_ref is not None and output_error is None and not log_errors, 'Recorded frozen analysis failed or output unavailable; receipt/logs preserved')
++    return receipt, receipt_ref, output_ref, output_bytes
++
++
++def validate_joint(joint, freeze, root):
++    require(isinstance(joint, dict) and joint.get('version') == 'JOINT441_SEPARATE_POPULATION_ANALYSIS_v1' and joint.get('freeze_sha256') == FREEZE_SHA, 'Unsupported/mixed joint analysis ABI')
++    jobs = {adapter.identity(j): j for j in freeze['jobs']}
++    traces = {}
++    for row in joint['trace_provenance']:
++        run = row['run_id']
++        require(isinstance(run,str) and run and run not in ('.','..') and '/' not in run and run not in traces, 'Duplicate/unsafe trace run ID')
++        require(row['trace_path'] == str(root / 'raw/runs' / run / 'trace.json'), 'Mixed trace path/root')
++        traces[run] = row
++    identities, runs, observed = set(), set(), []
++    for population, group, count in GROUPS:
++        value = joint[group]
++        require(value.get('planned_episodes') == count and value.get('observed_episodes') == len(value['results']), 'Wrong population counts')
++        for index, result in enumerate(value['results']):
++            key = (population,result.get('configuration'),result.get('episode'),result.get('rep'))
++            run = result.get('run_id')
++            require(type(result.get('rep')) is int and key in jobs and key not in identities and run in traces and run not in runs, 'Duplicate/unplanned/mismatched result identity')
++            require(result.get('phase') == 'FORMAL' and result.get('version') == 'COMMON9-EVALUATOR-v3' and result.get('evaluation_mode') == 'strict'
++                    and ('population' not in result or result['population'] == population), 'Wrong result phase/population/strict evaluator')
++            identities.add(key)
++            runs.add(run)
++            observed.append((key,group,index,result,traces[run]))
++        require(isinstance(value['summary'],dict) and all(k in {'FORMAL:'+c for c in adapter.CONFIGS} for k in value['summary']), 'Unsupported summary phase/configuration')
++    require(runs == set(traces), 'Unmatched trace provenance/result')
++    absent = {k[1:] for k in jobs if k not in identities}
++    missing = joint['unexecuted_planned_identities']
++    require(all(type(r.get('rep')) is int for r in missing), 'Wrong unexecuted identity repetition type')
++    actual = [(r.get('configuration'),r.get('episode'),r.get('rep')) for r in missing]
++    require(len(actual) == len(set(actual)) and set(actual) == absent, 'Original analyzer missing-identity list differs; no execution inference is allowed')
++    activations = joint['supplement6']['mechanism_activation']
++    activation_runs = []
++    by_run = {result['run_id']:key for key,_,_,result,_ in observed}
++    for value in activations:
++        run = value.get('run_id')
++        require(value.get('version') == 'CONTRACT20_OBSERVED_ACTIVATION_v1' and run in by_run, 'Unknown mechanism result')
++        key = by_run[run]
++        require(key[0] == 'COMMON_SUPPLEMENT6' and type(value.get('rep')) is int and (value.get('configuration'),value.get('episode'),value.get('rep')) == key[1:], 'Mechanism identity mismatch')
++        activation_runs.append(run)
++    require(len(activation_runs) == len(set(activation_runs)) and set(activation_runs) == {run for run,key in by_run.items() if key[0]=='COMMON_SUPPLEMENT6'}, 'Mechanism provenance incomplete/duplicate')
++    return observed, identities, by_run
++
++
++def assemble_fragments(out, plan, context, receipt, receipt_ref, original, joint, root):
++    observed, identities, by_run = validate_joint(joint, context['freeze'], root)
++    result_index, summary_index, mechanism_index, mappings = [], [], [], []
++    def fragment(name, value):
++        data = adapter.json_bytes(value)
++        require(len(data) <= context['fragment_limit'], 'Fragment exceeds existing explicit adapter read limit: ' + name)
++        return out.write(name, data, raw=True)
++    for number, (key,group,index,result,trace) in enumerate(observed):
++        trace_ref = hash_file(trace['trace_path'], root, 64 * 1024 * 1024)
++        require(trace_ref['sha256'] == trace['sha256'], 'Preserved trace differs from actual analysis provenance')
++        pointer = '/' + group + '/results/' + str(index)
++        result_ref = fragment('results/result-' + str(number).zfill(3) + '.json', result)
++        association = {'version':'JOINT441_RESULT_ASSOCIATION_v1','phase':'FORMAL','mode':'strict','evaluator_version':'COMMON9-EVALUATOR-v3',
++            'formal_root':str(root),'formal_freeze_sha256':FREEZE_SHA,'binary_sha256':context['freeze']['binary']['sha256'],
++            'identity':adapter.key_object(key),'run_id':result['run_id'],'result_ref':result_ref,'trace_ref':trace_ref,'oracle_ref':plan['oracles'][key[0]],
++            'source_sha256':receipt['source_sha256'],'recorded_analysis_argv':receipt['argv'],'recorded_by':str(Path(__file__).resolve()),
++            'recorded_at':receipt['ended_at_utc'],'analysis_execution_ref':receipt_ref,'original_analysis_ref':original,'original_result_json_pointer':pointer,
++            'invocation_kind':receipt['invocation_kind']}
++        association_ref=fragment('associations/result-'+str(number).zfill(3)+'.json',association)
++        result_index.append({'identity':adapter.key_object(key),'run_id':result['run_id'],'result_ref':result_ref,'trace_ref':trace_ref,'association_ref':association_ref})
++        mappings.append({'fragment_ref':result_ref,'original_analysis_ref':original,'original_json_pointer':pointer,'unchanged_data_object':True})
++    for population,group,_ in GROUPS:
++        for config_key,value in joint[group]['summary'].items():
++            cfg=config_key.split(':',1)[1]
++            reference=fragment('summaries/'+population+'-'+cfg+'.json',value)
++            summary_index.append({'population':population,'configuration':cfg,'ref':reference})
++            mappings.append({'fragment_ref':reference,'original_analysis_ref':original,'original_json_pointer':'/'+group+'/summary/'+config_key,'unchanged_data_object':True})
++    for index,value in enumerate(joint['supplement6']['mechanism_activation']):
++        reference=fragment('mechanisms/activation-'+str(index).zfill(3)+'.json',value)
++        mechanism_index.append({'identity':adapter.key_object(by_run[value['run_id']]),'ref':reference})
++        mappings.append({'fragment_ref':reference,'original_analysis_ref':original,'original_json_pointer':'/supplement6/mechanism_activation/'+str(index),'unchanged_data_object':True})
++    totals={field:joint[field] for field in ('total_actual_recorded_API_cost_usd','unknown_call_count')}
++    totals_ref=fragment('frozen-analysis-totals.json',totals)
++    mappings.append({'fragment_ref':totals_ref,'original_analysis_ref':original,'original_field_selectors':{field:'/'+field for field in totals},'unchanged_field_values':True})
++    def jsonl(name, values):
++        return out.write(name,b''.join((json.dumps(v,ensure_ascii=False,sort_keys=True,allow_nan=False)+'\n').encode() for v in values),raw=True)
++    planned_rows=[{'identity':adapter.key_object(adapter.identity(job)),'frozen_job':job,
++        'analysis_result_present':adapter.identity(job) in identities,'absence_is_not_proof_unexecuted':True} for job in context['freeze']['jobs']]
++    jsonl('planned-identities.jsonl',planned_rows)
++    out.write('original-unexecuted-labels.json',{'original_analysis_ref':original,'original_json_pointer':'/unexecuted_planned_identities',
++        'value':joint['unexecuted_planned_identities'],'interpretation':'Analyzer result-absence labels only; progress determines never-started versus missing evidence'})
++    artifacts={name:plan['artifacts'][name] for name in ('freeze','approval','quiescence','progress','status','ledger')}
++    artifacts.update(result_index=jsonl('result-index.jsonl',result_index),summary_index=jsonl('summary-index.jsonl',summary_index),
++        mechanism_index=jsonl('mechanism-index.jsonl',mechanism_index),frozen_analysis_totals=totals_ref)
++    for name in ('global_call_snapshot','semantic_review_index','registrations'):
++        if plan['artifacts'].get(name):
++            artifacts[name]=plan['artifacts'][name]
++    input_manifest={'version':'JOINT441_QUANTITATIVE_INPUT_v1','formal_root':str(root),'artifacts':artifacts,'oracles':plan['oracles'],'qa04':plan['qa04'],
++        'assembly_provenance':{'analysis_execution_ref':receipt_ref,'original_analysis_ref':original,'fragment_provenance_file':str(out.path/'fragment-provenance.json'),
++            'invocation_kind':receipt['invocation_kind'],'no_re_evaluation_or_semantic_judgment':True,'raw_pairs':'ABSENT_FROM_FROZEN_JOINT_OUTPUT_NOT_INVENTED'}}
++    if plan.get('adapter_read_limits'):
++        input_manifest['read_limits'] = plan['adapter_read_limits']
++    mapping_ref=out.write('fragment-provenance.json',{'original_analysis_ref':original,'analysis_execution_ref':receipt_ref,'fragments':mappings,
++        'result_objects':len(result_index),'planned_identities':441,'populations_kept_separate':True,'raw_pairs':'NOT_PROVIDED_BY_FROZEN_JOINT_ANALYZER'})
++    input_manifest['assembly_provenance']['fragment_provenance_ref']=mapping_ref
++    return out.write('adapter-input.json',input_manifest)
++
++
++def record_and_assemble(plan_path, plan_sha256, output, *, runner=None):
++    plan, root, plan_ref = read_plan(plan_path,plan_sha256)
++    out = ExclusiveOutput(output,root)
++    started = time.monotonic_ns()
++    try:
++        context=preflight(plan,root)
++        out.write('preflight.json',{'plan_ref':plan_ref,'inputs':context['reader_inputs'],'runs_ref':context['runs_ref'],
++            'analysis_max_bytes':context['analysis_limit'],'runs_max_bytes':context['runs_limit'],'fragment_max_bytes':context['fragment_limit'],'quiescence':'CONSUMED_INDEPENDENT_EVIDENCE_NO_PROCESS_CONTROL'})
++        receipt,receipt_ref,original,data=record_invocation(out,context,root,runner=runner)
++        # Pin all pre-analysis sources/snapshots and runs again after the actual
++        # invocation. This is byte identity, not a new evaluator or sample test.
++        for reference in context['reader_inputs']:
++            check_ref(reference,root,64*1024*1024)
++        check_ref(context['runs_ref'],root,context['runs_limit'])
++        check_ref(plan_ref,root,2*1024*1024)
++        check_ref(out.tool_ref,Path(__file__).resolve().parent,1024*1024)
++        require(adapter.sha(Path(adapter.__file__).read_bytes()) == ADAPTER_SHA, 'Accepted adapter changed during analysis')
++        joint=json.loads(data,parse_constant=lambda value: (_ for _ in ()).throw(InputError('Nonfinite joint JSON: '+value)))
++        del data
++        input_ref=assemble_fragments(out,plan,context,receipt,receipt_ref,original,joint,root)
++        return out.finish('ASSEMBLED_NOT_REPORTED',plan_ref=plan_ref,adapter_input_ref=input_ref,
++            elapsed_seconds=(time.monotonic_ns()-started)/1e9,invocation_kind=receipt['invocation_kind'],actual_report_or_adapter_execution=False)
++    except Exception as error:
++        out.write('assembly-failure.json',{'status':'ASSEMBLY_FAILED_EVIDENCE_PRESERVED','error_type':type(error).__name__,'message':str(error),
++            'plan_ref':plan_ref,'actual_report_or_adapter_execution':False,'elapsed_seconds':(time.monotonic_ns()-started)/1e9})
++        return out.finish('ASSEMBLY_FAILED_EVIDENCE_PRESERVED',plan_ref=plan_ref,invocation_kind='SYNTHETIC_FAKE_NO_PROCESS' if runner is not None else 'ACTUAL_FROZEN_ANALYSIS_ATTEMPT_OR_PREFLIGHT_REJECTION',actual_report_or_adapter_execution=False)
++
++
++def main():
++    parser=argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--plan',type=Path,required=True)
++    parser.add_argument('--plan-sha256',required=True)
++    parser.add_argument('--output',type=Path,required=True)
++    parser.add_argument('--execute-authorized-frozen-analysis',action='store_true')
++    args=parser.parse_args()
++    if not args.execute_authorized_frozen_analysis:
++        parser.error('No execution: explicit root-authorized frozen-analysis operation flag required')
++    result=record_and_assemble(args.plan,args.plan_sha256,args.output)
++    print(json.dumps({'status':result['status'],'output':str(args.output)}))
++    return 0 if result['status']=='ASSEMBLED_NOT_REPORTED' else 2
++
++
++if __name__=='__main__':
++    raise SystemExit(main())
+--- /dev/null
++++ test_record_joint_report_inputs.py
+@@ -0,0 +1,236 @@
++"""Temporary synthetic-only assembly checks; every analyzer runner is fake."""
++import argparse
++from contextlib import ExitStack
++import copy
++import io
++import json
++from pathlib import Path
++import tempfile
++import time
++import unittest
++from unittest.mock import patch
++
++import report_adapter as a
++import record_joint_report_inputs as g
++from test_report_adapter import synthetic_plan, record
++
++
++class Fixture:
++    def __init__(self, root):
++        self.root=root
++        self.jobs,self.oracles=synthetic_plan()
++        self.refs={}
++        self.source_refs=[]
++        self.oracles_refs={}
++        for pop,relative in [('COMMON9','benchmark/architecture/common9_poc_20261019/oracles.json'),('COMMON_SUPPLEMENT6','benchmark/architecture/common_supplement6_20261019/oracles.json')]:
++            reference=self.save('frozen/source/'+relative,self.oracles[pop])
++            self.oracles_refs[pop]=reference
++            self.source_refs.append(dict(relativePath=relative,frozen_path=reference['path'],sha256=reference['sha256']))
++        analyzer=self.save('frozen/source/'+g.ANALYZER_RELATIVE,'# synthetic: never executed\n',raw=True)
++        self.analyzer_sha=analyzer['sha256']
++        self.source_refs.append(dict(relativePath=g.ANALYZER_RELATIVE,frozen_path=analyzer['path'],sha256=analyzer['sha256']))
++        for i in range(109):
++            relative='synthetic-dependency-'+str(i)+'.txt'
++            reference=self.save('frozen/source/'+relative,'fake source only',raw=True)
++            self.source_refs.append(dict(relativePath=relative,frozen_path=reference['path'],sha256=reference['sha256']))
++        self.freeze={'version':'COMMON9_PLUS_SUPPLEMENT6_JOINT441_v1','jobs':self.jobs,'sources':self.source_refs,'binary':{'sha256':'b'*64},'ledger_path':str(root/'never-read-live-budget.json')}
++        self.refs['freeze']=self.save('freeze.json',self.freeze)
++        qa04={'accepted_independent_changes':42,'combined_regression_episodes':630,'actual_provider_api_calls':0,
++            'rows':[dict(configuration=cfg,task='C0'+str(i)) for cfg in a.CONFIGS for i in range(1,7)],
++            'all_counts_by_configuration':{cfg:[1,1,3,3,1,2] for cfg in a.CONFIGS},'mean_changed_operational_modules':{cfg:11/6 for cfg in a.CONFIGS}}
++        self.qa_refs={'report':self.save('approval/report.json',qa04),'classification':self.save('approval/count.json',{'fake':True}),'raw630':self.save('approval/raw.json',{'fake':True})}
++        review={'status':'PASS_QA04_FUNCTIONAL_AND_MODULE_ACCEPTANCE_WITH_RETAINED_RSS_DIAGNOSTICS','input_sha256':{'report_json':self.qa_refs['report']['sha256'],'count_classification_v2':self.qa_refs['classification']['sha256'],'raw630_audit':self.qa_refs['raw630']['sha256']}}
++        self.qa_refs['final_review']=self.save('approval/review.json',review)
++        self.qa_refs['checkpoint']=self.save('approval/checkpoint.json',{'status':'STABLE_QA04_WRITES_CLOSED','writes_closed':True,'report_json':self.qa_refs['report'],'count_classification':self.qa_refs['classification'],'independent_reviews':{'raw630':self.qa_refs['raw630'],'final_qa04_acceptance':self.qa_refs['final_review']}})
++        self.refs['approval']=self.save('approval/APPROVAL-BINDING.json',{'formal_freeze_sha256':self.refs['freeze']['sha256'],'artifacts':[dict(role=key,original_path=reference['path'],copied_path=reference['path'],sha256=reference['sha256'],bytes=reference['bytes'],status='historical-label-not-final-gate') for key,reference in self.qa_refs.items()]})
++        self.records=[record(self.oracles,('COMMON9','AAAA','S02',1),eligible=False),record(self.oracles,('COMMON_SUPPLEMENT6','AAAA','S80',1))]
++        self.records[0]['result']['functional_failures']=[{'kind':'WORKFLOW_FAILED','synthetic':True}]
++        traces=[]
++        provenance=[]
++        for r in self.records:
++            trace=dict(r['identity'],phase='FORMAL',run_id=r['run_id'],binary_sha256='b'*64,candidate_input_file=str(root/'raw/runs'/r['run_id']/'candidate-input.json'),returncode=0,end_ns=10,calls=[])
++            reference=self.save('raw/runs/'+r['run_id']+'/trace.json',trace)
++            traces.append(trace)
++            provenance.append({'run_id':r['run_id'],'trace_path':reference['path'],'sha256':reference['sha256']})
++        self.refs['runs']=self.save('runs.jsonl',''.join(json.dumps(t)+'\n' for t in traces),raw=True)
++        progress=[dict(r['identity'],state=state) for r in self.records for state in ['STARTED','DISPATCHED','TERMINATED']]
++        self.refs['progress']=self.save('snapshots/progress.jsonl',''.join(json.dumps(r)+'\n' for r in progress),raw=True)
++        self.refs['progress']['snapshot_of']=str(root/'campaign-progress.jsonl')
++        self.refs['status']=self.save('snapshots/status.json',{'planned':441,'completed':2})
++        self.refs['status']['snapshot_of']=str(root/'status.json')
++        self.refs['ledger']=self.save('snapshots/ledger.json',{'limit_usd':40,'calls':{'historical-unknown':{'state':'UNKNOWN','scope_root':'/prior','amount_usd':'.2'}}})
++        self.refs['ledger']['snapshot_of']=self.freeze['ledger_path']
++        evidence=self.save('snapshots/quiescence-evidence.txt','fake quiescence evidence; no PID inspection',raw=True)
++        self.refs['quiescence']=self.save('snapshots/quiescence.json',{'version':'JOINT441_QUIESCENT_SNAPSHOT_v1','controller_state':'STOPPED','no_active_episode_processes':True,'progress_complete':True,'evidence_refs':[evidence],**{name+'_snapshot_sha256':self.refs[name]['sha256'] for name in ['progress','status','ledger']}})
++        observed={a.identity(r['identity']) for r in self.records}
++        self.joint={'version':'JOINT441_SEPARATE_POPULATION_ANALYSIS_v1','freeze_sha256':self.refs['freeze']['sha256'],
++            'primary_common9':{'planned_episodes':315,'observed_episodes':1,'results':[self.records[0]['result']],'summary':{'FORMAL:AAAA':{'original_summary_marker':'keep primary'}}},
++            'supplement6':{'planned_episodes':126,'observed_episodes':1,'results':[self.records[1]['result']],'summary':{'FORMAL:AAAA':{'original_summary_marker':'keep supplement'}},'mechanism_activation':[dict(version='CONTRACT20_OBSERVED_ACTIVATION_v1',run_id=self.records[1]['run_id'],configuration='AAAA',episode='S80',rep=1,dp2={'activation':'SYNTHETIC_NOT_A_JUDGMENT'})]},
++            'trace_provenance':provenance,'total_actual_recorded_API_cost_usd':.2,'unknown_call_count':0,
++            'unexecuted_planned_identities':[{field:j[field] for field in ['configuration','episode','rep']} for j in self.jobs if a.identity(j) not in observed]}
++        self.plan={'version':g.PLAN_VERSION,'formal_root':str(root),'artifacts':self.refs,'oracles':self.oracles_refs,'qa04':{key:{'approval_role':key,'ref':reference} for key,reference in self.qa_refs.items()}}
++        self.plan_ref=self.save('postanalysis/synthetic-plan.json',self.plan)
++        self.calls=[]
++
++    def save(self,name,value,raw=False):
++        path=self.root/name
++        path.parent.mkdir(parents=True,exist_ok=True)
++        data=value.encode() if raw else a.json_bytes(value)
++        path.write_bytes(data)
++        return dict(path=str(path),sha256=a.sha(data),bytes=len(data))
++
++    def patches(self):
++        stack=ExitStack()
++        stack.enter_context(patch.object(g,'FREEZE_SHA',self.refs['freeze']['sha256']))
++        stack.enter_context(patch.object(g,'APPROVAL_SHA',self.refs['approval']['sha256']))
++        stack.enter_context(patch.object(g,'ANALYZER_SHA',self.analyzer_sha))
++        stack.enter_context(patch.dict(a.QA04_HASHES,{key:ref['sha256'] for key,ref in self.qa_refs.items()},clear=True))
++        return stack
++
++    def runner(self,argv,stdout,stderr,cwd):
++        self.calls.append(argv)
++        assert argv == [str(Path(__import__('sys').executable).resolve()),str(self.root/'frozen/source'/g.ANALYZER_RELATIVE),'--root',str(self.root),'--output',argv[-1]]
++        assert '--offline' not in argv
++        assert cwd == str((self.root/'frozen/source'/g.ANALYZER_RELATIVE).parent)
++        Path(argv[-1]).write_bytes(a.json_bytes(self.joint))
++        stdout.write(b'synthetic fake runner; no process\n')
++        return 0
++
++    def execute(self,runner=None,name='assembly'):
++        return g.record_and_assemble(Path(self.plan_ref['path']),self.plan_ref['sha256'],self.root/'postanalysis'/name,runner=runner or self.runner)
++
++
++class SplitChecks(unittest.TestCase):
++    def test_unchanged_split_and_associations_missing_jobs_both_populations(self):
++        with tempfile.TemporaryDirectory(prefix='input-assembly-synthetic-') as temp:
++            f=Fixture(Path(temp).resolve())
++            with f.patches():
++                manifest=f.execute()
++                self.assertEqual(manifest['status'],'ASSEMBLED_NOT_REPORTED')
++                self.assertEqual(len(f.calls),1)
++                reference=manifest['adapter_input_ref']
++                supplied=json.loads(Path(reference['path']).read_text())
++                mappings=json.loads((Path(reference['path']).parent/'fragment-provenance.json').read_text())
++                original=json.loads(Path(mappings['original_analysis_ref']['path']).read_text())
++                for mapping in mappings['fragments']:
++                    copy_value=json.loads(Path(mapping['fragment_ref']['path']).read_text())
++                    if 'original_json_pointer' in mapping:
++                        self.assertEqual(copy_value,a.get_pointer(original,mapping['original_json_pointer']))
++                    else:
++                        self.assertEqual(copy_value,{field:a.get_pointer(original,pointer) for field,pointer in mapping['original_field_selectors'].items()})
++                input_kwargs=a.load_inputs(Path(reference['path']),reference['sha256'],expected_freeze=f.refs['freeze']['sha256'],expected_approval=f.refs['approval']['sha256'])
++                self.assertEqual(len(input_kwargs['records']),2)
++                self.assertTrue(all(r['provenance_valid'] for r in input_kwargs['records']))
++                self.assertEqual(input_kwargs['records'][0]['result']['functional_failures'],f.records[0]['result']['functional_failures'])
++                self.assertEqual(input_kwargs['records'][0]['result']['primary_measurement_eligibility'],'NOT_CERTIFIED')
++                self.assertNotIn('raw_pairs',supplied['artifacts'])
++                self.assertEqual(len((Path(reference['path']).parent/'planned-identities.jsonl').read_text().splitlines()),441)
++                receipt=json.loads((Path(reference['path']).parent/'analysis-execution.json').read_text())
++                self.assertFalse(receipt['actual_process_invoked'])
++                self.assertEqual(receipt['invocation_kind'],'SYNTHETIC_FAKE_NO_PROCESS')
++                self.assertEqual(len(receipt['source_sha256']),112)
++                for name,ref in manifest['outputs'].items():
++                    self.assertEqual(a.sha(Path(ref['path']).read_bytes()),ref['sha256'],name)
++
++    def test_duplicate_mismatched_phase_job_and_trace_rejected_without_selection(self):
++        with tempfile.TemporaryDirectory(prefix='input-assembly-synthetic-') as temp:
++            f=Fixture(Path(temp).resolve())
++            for kind in ['duplicate','phase','job','trace','missing-label']:
++                bad=copy.deepcopy(f.joint)
++                if kind=='duplicate':
++                    bad['primary_common9']['results'].append(copy.deepcopy(bad['primary_common9']['results'][0]))
++                    bad['primary_common9']['observed_episodes']=2
++                elif kind=='phase':
++                    bad['primary_common9']['results'][0]['phase']='OFFLINE'
++                elif kind=='job':
++                    bad['primary_common9']['results'][0]['episode']='S80'
++                elif kind=='trace':
++                    bad['trace_provenance'][0]['trace_path']='/other-generation/trace.json'
++                else:
++                    bad['unexecuted_planned_identities']=[]
++                with f.patches(),self.assertRaises(a.InputError):
++                    g.validate_joint(bad,f.freeze,f.root)
++
++
++class FailureChecks(unittest.TestCase):
++    def test_failed_analysis_receipt_and_partial_output_preserved(self):
++        with tempfile.TemporaryDirectory(prefix='input-assembly-failure-synthetic-') as temp:
++            f=Fixture(Path(temp).resolve())
++            def failed(argv,stdout,stderr,cwd):
++                f.calls.append(argv)
++                stderr.write(b'synthetic analysis failure\n')
++                Path(argv[-1]).write_text('partial original output, not JSON')
++                return 7
++            with f.patches():
++                manifest=f.execute(failed)
++            self.assertEqual(manifest['status'],'ASSEMBLY_FAILED_EVIDENCE_PRESERVED')
++            output=f.root/'postanalysis/assembly'
++            receipt=json.loads((output/'analysis-execution.json').read_text())
++            self.assertEqual(receipt['returncode'],7)
++            self.assertEqual((output/'joint-analysis.json').read_text(),'partial original output, not JSON')
++            self.assertEqual(receipt['output_ref']['sha256'],a.sha((output/'joint-analysis.json').read_bytes()))
++            self.assertFalse((output/'adapter-input.json').exists())
++            self.assertIn('synthetic analysis failure',(output/'analysis.stderr.log').read_text())
++
++    def test_invalid_success_output_keeps_execution_and_original(self):
++        with tempfile.TemporaryDirectory(prefix='input-assembly-invalid-synthetic-') as temp:
++            f=Fixture(Path(temp).resolve())
++            f.joint['primary_common9']['results'][0]['run_id']='unmatched-run'
++            with f.patches():
++                manifest=f.execute()
++            self.assertEqual(manifest['status'],'ASSEMBLY_FAILED_EVIDENCE_PRESERVED')
++            self.assertTrue((f.root/'postanalysis/assembly/joint-analysis.json').exists())
++            self.assertEqual(json.loads((f.root/'postanalysis/assembly/analysis-execution.json').read_text())['returncode'],0)
++            self.assertFalse((f.root/'postanalysis/assembly/adapter-input.json').exists())
++
++    def test_source_mismatch_blocks_runner_and_output_is_immutable(self):
++        with tempfile.TemporaryDirectory(prefix='input-assembly-input-synthetic-') as temp:
++            f=Fixture(Path(temp).resolve())
++            Path(f.source_refs[-1]['frozen_path']).write_text('wrong source')
++            with f.patches():
++                manifest=f.execute()
++                self.assertEqual(manifest['status'],'ASSEMBLY_FAILED_EVIDENCE_PRESERVED')
++                self.assertEqual(f.calls,[])
++                with self.assertRaises(a.InputError):
++                    f.execute()
++            self.assertFalse((f.root/'postanalysis/assembly/analysis-execution.json').exists())
++
++    def test_oversized_analysis_and_runner_exception_are_preserved(self):
++        with tempfile.TemporaryDirectory(prefix='input-assembly-bounds-synthetic-') as temp:
++            f=Fixture(Path(temp).resolve())
++            f.plan['analysis_max_bytes']=1
++            f.plan_ref=f.save('postanalysis/synthetic-plan.json',f.plan)
++            with f.patches():
++                result=f.execute(name='oversize')
++                self.assertEqual(result['status'],'ASSEMBLY_FAILED_EVIDENCE_PRESERVED')
++                receipt=json.loads((f.root/'postanalysis/oversize/analysis-execution.json').read_text())
++                self.assertIsNone(receipt['output_ref'])
++                self.assertIsNotNone(receipt['output_error'])
++                def raises(argv,stdout,stderr,cwd):
++                    raise OSError('synthetic failed invocation')
++                result=f.execute(raises,name='exception')
++                self.assertEqual(result['status'],'ASSEMBLY_FAILED_EVIDENCE_PRESERVED')
++                receipt=json.loads((f.root/'postanalysis/exception/analysis-execution.json').read_text())
++                self.assertEqual(receipt['exception']['type'],'OSError')
++
++
++if __name__=='__main__':
++    parser=argparse.ArgumentParser()
++    parser.add_argument('--batch',choices=['split','failures'],required=True)
++    parser.add_argument('--record',type=Path,required=True)
++    args=parser.parse_args()
++    started=time.perf_counter()
++    stream=io.StringIO()
++    outcome=unittest.TextTestRunner(stream=stream,verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase({'split':SplitChecks,'failures':FailureChecks}[args.batch]))
++    elapsed=time.perf_counter()-started
++    result={'status':'PASS' if outcome.wasSuccessful() else 'FAIL','tests':outcome.testsRun,'elapsed_seconds':elapsed,'batch':args.batch,
++        'scope':'TEMPORARY_SYNTHETIC_ONLY_FAKE_RUNNER_NO_PROCESS_NO_CORPUS_OR_ANALYZER_EVALUATOR_MODEL_PARSER_BUILD_NETWORK',
++        'source_sha256':{'record_joint_report_inputs.py':a.sha(Path(g.__file__).read_bytes()),'test_record_joint_report_inputs.py':a.sha(Path(__file__).read_bytes()),'accepted_report_adapter.py':a.sha(Path(a.__file__).read_bytes()),'accepted_synthetic_fixture_helper.py':a.sha(Path(__file__).with_name('test_report_adapter.py').read_bytes())},'stdout':stream.getvalue()}
++    args.record.parent.mkdir(parents=True,exist_ok=True)
++    with args.record.open('x') as handle:
++        json.dump(result,handle,indent=2)
++        handle.write('\n')
++    print(json.dumps({k:v for k,v in result.items() if k!='stdout'}))
++    if not outcome.wasSuccessful():
++        print(stream.getvalue())
++        raise SystemExit(1)
+--- /dev/null
++++ INPUT-ASSEMBLY-README.md
+@@ -0,0 +1,62 @@
++# Frozen joint analysis input recorder v1
++
++`record_joint_report_inputs.py` is a separate reporting glue tool. The accepted report adapter, extractors, frozen experiment and QA04 remain unchanged. **Implementation/source review is not execution authorization.** Actual analyzer/assembly/corpus reads require established quiescence and a separate root GO. Only fake-runner temporary synthetic tests were executed during preparation.
++
++The tool implements the five-step plan in adapter stage03's independent closure (`59c797d8bb6b73bcdf9873c171335d16c5bf74b6caf1cc7b703a71ee2b8ab3f4`). It does not implement another evaluator, compute new QA values, launch an episode/model/parser/compiler, control processes, settle calls, infer semantics, or invoke the report adapter's CLI. It imports only the accepted adapter's pure helpers and verifies its exact source SHA `c0e369bab675d96cd2cbeb15c79523d89841cdc0a3e91bc2b12a477b94fe77a0`.
++
++## Root-provided plan
++
++An immutable, hash-bound `JOINT441_REPORT_INPUT_ASSEMBLY_PLAN_v1` object must be supplied inside the exact formal root. Concrete quiescence/snapshot paths are deliberately not guessed or created by this tool.
++
++Required fields:
++
++- `version`, `formal_root`.
++- `artifacts.freeze`: exact `<root>/freeze.json`, hash0753a648e97dbb831c70c127bce383de747333ee0737f1d5b75010cc1f510ebd.
++- `artifacts.approval`: exact `<root>/approval/APPROVAL-BINDING.json`, hashd3f78606f7a8bad161ee58a0c0fb5e7f7bf83e287140dbc9a4bbe2c028ce93bd.
++- `artifacts.quiescence`: independently established `JOINT441_QUIESCENT_SNAPSHOT_v1`. STOPPED/COMPLETED, no_active_episode_processes=true, boolean progress_complete, evidence_refs and exact progress/status/ledger snapshot hashes. This is consumed evidence, not a PID/time inference.
++- `artifacts.progress`, `artifacts.status`, `artifacts.ledger`: immutable refs with `snapshot_of` the exact controller files/freeze.ledger_path; their paths differ from the originals. UNKNOWN/RESERVED and incomplete termination remain unchanged.
++- `artifacts.runs`: exact `<root>/runs.jsonl` path/hash/bytes that the frozen analyzer actually reads after quiescence. No alternate corpus or snapshot is substituted for its fixed CLI input.
++- `oracles.COMMON9` and `oracles.COMMON_SUPPLEMENT6`: exact frozen source refs matching freeze112. Primary and supplement remain distinct.
++- `qa04`: five existing accepted-adapter `{approval_role,ref}` bindings: report, classification, final_review, raw630, checkpoint. Exact role/path/SHA/bytes and final acceptance links are checked by the accepted pure helper.
++
++Every ref has an absolute regular-file path, lowercase SHA256 and exact bytes. Symlink ancestors, traversal, mixed roots and silent restore relocation are rejected. Source paths must equal `<root>/frozen/source/<relativePath>`; all112 entries are pinned before and after analysis. No directories or arbitrary model files are discovered.
++
++Optional `artifacts.global_call_snapshot` is an immutable snapshot with snapshot_of=`<root>/model-calls.jsonl`, never the live log. Optional `semantic_review_index` and `registrations` are linked as supplied bound artifacts under the existing adapter ABI. No semantic/mechanism/ranking judgment is invented; the later adapter validates those optional nested joins. `raw_pairs` is deliberately absent because frozen joint analysis supplies none.
++
++Optional `analysis_max_bytes` defaults to128MiB, with hard cap512MiB. Runs are streaming-hashed (default4GiB, root-supplied runs_max_bytes up to8GiB hard; no runs JSON parse by this helper). Other adapter inputs/fragments use the existing adapter limits (default16MiB/file and8GiB aggregate); an optional explicit adapter_read_limits is passed unchanged to the accepted adapter, within its existing64MiB/16GiB hard limits. No cap is automatically raised. Logs have a64MiB hash cap. Fragment sizes must fit the selected existing adapter file limit before adapter-input publication. Oversize artifacts fail with evidence retained, never silently truncating or raising limits.
++
++## Recorded invocation
++
++After separate actual execution GO, the CLI requires `--execute-authorized-frozen-analysis`. It constructs one fixed command:
++
++```
++<current Python executable> <root>/frozen/source/benchmark/architecture/common_supplement6_20261019/analyze_joint.py --root <root> --output <new-assembly-root>/joint-analysis.json
++```
++
++The pinned analyzer SHA is `469a5c8a57ee1a3e6812b8c85182cc0e4b2fbd59b69fbca8eeb8591a0fcecb49`. The source accepts these exact flags; no `--offline`, arbitrary command, extra program or substituted evaluator is exposed. No shell is used. The environment is not dumped or copied. The unchanged frozen analyzer is responsible for its original strict metrics and actual raw-trace identity/content checks.
++
++The receipt records actual argv/cwd, source112/oracle/freeze/binary/runs bindings, Python version, UTC/monotonic begin/end, exit/exception and stdout/stderr/output refs. An invocation attempt with an exception does not assert a process was created. Failure and partial output remain preserved; no retry occurs. Logs and oversized outputs that cannot be hashed within bounds are explicitly identified as unavailable/oversized, not certified hashes. No adapter-input manifest is emitted after a failed invocation/provenance check.
++
++## Fragment assembly
++
++The original joint JSON is fully read exactly once under the declared cap, hashed and parsed once. No per-result pointer rereads of that large file occur. Original output stays unchanged. Each result/summary/mechanism data object is serialized unchanged into a small fragment, with exact original file hash and JSON selector; a mapping explicitly distinguishes object copies and the two financial field selectors.
++
++Observed result identities must be planned, FORMAL, strict COMMON9-EVALUATOR-v3, unique in their chosen population and unique by run ID. Each joins its exact recorded trace_provenance path/hash; preserved traces are streamed only for hashing, not parsed for new analysis. The actual pinned analyzer operation establishes the result-to-trace derivation; the later accepted adapter independently checks raw trace identity. Both ordinary failures and NOT_CERTIFIED results are retained, without filters. Duplicate/unplanned/mixed generation or conflicting joins reject assembly rather than choose a preferred record.
++
++Per-result `JOINT441_RESULT_ASSOCIATION_v1` files bind the actual execution receipt, original result selector, unchanged fragment, trace SHA/bytes, chosen population oracle, source112, binary/freeze and actual recorded command. This records a newly performed analysis operation; it never upgrades historical identity-only light results by hashing them later.
++
++All441 frozen ordered jobs remain in `planned-identities.jsonl`. Only actually observed results enter `result-index.jsonl`; absent results are not fabricated. The analyzer's original unexecuted labels are preserved separately and explicitly mean result absence, not proof of never-started execution. Quiescent progress still determines reporting lifecycle.
++
++Existing per-configuration summary objects, supplemental activation objects and two top-level financial totals are copied by selector without recomputing metrics or inferring activation. The tool emits the accepted `JOINT441_QUANTITATIVE_INPUT_v1` manifest and stops. A later root-directed adapter invocation writes a different immutable report directory. These are separate acceptance stages.
++
++## Outputs and tests
++
++The output must be a new directory under `<root>/postanalysis/`. Existing output is immutable. The final hash manifest is written last; it includes fragment/association/index/log/original refs and the plan/tool identities. On failure, the immutable failure record and any completed original/receipt/log artifacts remain. Output creation is not final quantitative acceptance.
++
++Tests inject a clearly marked SYNTHETIC_FAKE_NO_PROCESS runner that writes temporary fake joint JSON. There is no CLI fake-runner option. The synthetic source inventories/oracles/QA04 hashes are patched only inside those temporary tests; no accepted file is changed. Saved records bind source hashes, elapsed duration and their no-process/no-corpus scope. Split equality, source selectors, both populations, failures/missing jobs, duplicate/mismatched identity rejection, immutable output, oversize and failed analysis evidence are covered. Actual execution remains0 until separately authorized.
++
++Future authorized use, with concrete paths supplied later by root:
++
++```
++python3 -B scripts/architecture/common9_postanalysis/record_joint_report_inputs.py --plan /EXACT/ROOT/postanalysis/assembly-plan.json --plan-sha256 SHA256 --output /EXACT/ROOT/postanalysis/NEW-INPUT-ASSEMBLY --execute-authorized-frozen-analysis
++```

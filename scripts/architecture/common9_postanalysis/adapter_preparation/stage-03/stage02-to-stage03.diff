@@ -1,0 +1,336 @@
+--- stage-02/report_adapter.py
++++ stage-03/report_adapter.py
+@@ -99,8 +99,29 @@
+     return keys
+ 
+ 
++def progress_lifecycle(progress, has_record, progress_complete):
++    """Reconcile recorded controller order, not execution or evaluator semantics."""
++    expected = ['STARTED', 'DISPATCHED', 'TERMINATED']
++    if any(state not in expected for state in progress) or len(set(progress)) != len(progress):
++        return {'status': 'CONFLICT', 'reason': 'UNSUPPORTED_OR_DUPLICATE_LIFECYCLE_STATE'}
++    positions = [expected.index(state) for state in progress]
++    if positions != sorted(positions):
++        return {'status': 'CONFLICT', 'reason': 'OUT_OF_ORDER_LIFECYCLE'}
++    if progress == expected:
++        return {'status': 'EXACT_TERMINAL_LIFECYCLE', 'reason': None}
++    is_prefix = progress == expected[:len(progress)]
++    if progress_complete and (not is_prefix or has_record):
++        return {'status': 'CONFLICT', 'reason': 'COMPLETE_PROGRESS_CONTRADICTS_RESULT_OR_SUPPORTED_LIFECYCLE'}
++    if not progress_complete:
++        return {'status': 'RECOVERABLE_INCOMPLETE_PROGRESS', 'reason': 'NOT_ENOUGH_PROGRESS_EVIDENCE_FOR_CERTIFICATION'}
++    return {'status': 'SUPPORTED_UNSTARTED' if not progress else 'SUPPORTED_STARTED_UNCLOSED', 'reason': None}
++
++
+ def episode_state(records, progress, quiescence):
+     if len(records) > 1:
++        return 'IDENTITY_OR_SOURCE_CONFLICT'
++    lifecycle = progress_lifecycle(progress, bool(records), quiescence.get('progress_complete') is True)
++    if lifecycle['status'] == 'CONFLICT':
+         return 'IDENTITY_OR_SOURCE_CONFLICT'
+     states = set(progress)
+     if not records:
+@@ -114,7 +135,10 @@
+     record = records[0]
+     if record.get('conflicts'):
+         return 'IDENTITY_OR_SOURCE_CONFLICT'
+-    if not record.get('provenance_valid'):
++    unavailable = record.get('unavailable_evidence', [])
++    if any(e['artifact'] in ('trace', 'result') for e in unavailable):
++        return 'TERMINATED_TRACE_MISSING' if 'TERMINATED' in states else 'CLOSED_RESULT_UNVERIFIED'
++    if lifecycle['status'] != 'EXACT_TERMINAL_LIFECYCLE' or not record.get('provenance_valid'):
+         return 'CLOSED_RESULT_UNVERIFIED'
+     result = record['result']
+     eligibility = result.get('primary_measurement_eligibility')
+@@ -189,13 +213,30 @@
+             'scope': 'All known expenditure, including failed/unused/discarded work where actually recorded; no timing/semantic inclusion filter.'}
+ 
+ 
++def recorded_peak_consistency(qa06):
++    """Check saved peak arithmetic only. Never reclassify or select samples."""
++    value = qa06.get('peak_concurrent_sum_bytes')
++    sample = qa06.get('peak_same_sample')
++    if not finite(value) or value <= 0:
++        return 'ABSENT_OR_INVALID_RECORDED_PEAK'
++    if not isinstance(sample, dict) or not finite(sample.get('concurrent_sum_bytes')) or sample['concurrent_sum_bytes'] != value:
++        return 'ABSENT_OR_MISMATCHED_RECORDED_SAME_SAMPLE'
++    processes = sample.get('processes')
++    if not isinstance(processes, list) or not processes or any(not isinstance(p, dict) or not finite(p.get('rss_bytes')) for p in processes):
++        return 'ABSENT_OR_INVALID_RECORDED_PROCESS_CONTRIBUTIONS'
++    if sum(p['rss_bytes'] for p in processes) != value:
++        return 'RECORDED_PROCESS_CONTRIBUTIONS_DO_NOT_SUM_TO_PEAK'
++    return None
++
++
+ def rss_summary(episodes, planned):
+     values = [(e, e.get('qa06', {}).get('peak_concurrent_sum_bytes')) for e in episodes]
+-    valid = [(e, value) for e, value in values if finite(value)]
++    valid = [(e, value) for e, value in values if recorded_peak_consistency(e.get('qa06', {})) is None]
+     peak = max((v for _, v in valid), default=None)
+     tied = [{'identity': e['identity'], 'run_id': e.get('run_id'), 'result_ref': e.get('result_ref'),
+              'peak_same_sample': e['qa06'].get('peak_same_sample')} for e, value in valid if value == peak]
+-    complete = len(episodes) == planned and all(e['state'] == 'CLOSED_CERTIFIED' and e.get('qa06', {}).get('status') == 'OBSERVED' for e in episodes)
++    complete = len(episodes) == planned and all(e['state'] == 'CLOSED_CERTIFIED' and e.get('qa06', {}).get('status') == 'OBSERVED'
++        and recorded_peak_consistency(e.get('qa06', {})) is None for e in episodes)
+     counters = ('sample_count', 'valid_sample_count', 'invalid_sample_count', 'confirmed_exit_boundary_count', 'startup_zero_rss_count', 'incomplete_registered_process_samples')
+     return {'peak_concurrent_sum_bytes': peak, 'decimal_MB': peak / 1e6 if peak is not None else None,
+             'MiB': peak / 1048576 if peak is not None else None, 'tied_same_sample_refs': tied, 'comparison_complete': complete,
+@@ -204,6 +245,10 @@
+             'counters': {k: sum(e.get('qa06', {}).get(k, 0) for e in episodes if type(e.get('qa06', {}).get(k)) is int) for k in counters},
+             'max_sample_gap_ns': max((e.get('qa06', {}).get('max_sample_gap_ns') for e in episodes if exact_ns(e.get('qa06', {}).get('max_sample_gap_ns'))), default=None),
+             'sampler_failure_records': [{'identity': e['identity'], 'records': e.get('qa06', {}).get('sampler_failures')} for e in episodes if e.get('qa06', {}).get('sampler_failures')],
++            'unverified_peak_records': [{'identity': e['identity'], 'run_id': e.get('run_id'), 'result_ref': e.get('result_ref'),
++                'recorded_peak_concurrent_sum_bytes': value, 'recorded_peak_same_sample': e.get('qa06', {}).get('peak_same_sample'),
++                'reason': recorded_peak_consistency(e.get('qa06', {}))}
++                for e, value in values if recorded_peak_consistency(e.get('qa06', {})) is not None and e.get('qa06')],
+             'scope': LIMITATIONS[3], 'raw_values_and_incomplete_states_preserved': True}
+ 
+ 
+@@ -231,10 +276,18 @@
+             issues.append({'kind': 'UNPLANNED_RESULT', 'identity': record['identity'], 'result_ref': record.get('result_ref')})
+             continue
+         by_key[key].append(record)
+-        run_ids[record.get('run_id')].append(key)
+-    duplicate_runs = {run for run, values in run_ids.items() if run is None or len(values) > 1}
++        run_id = record.get('run_id')
++        if isinstance(run_id, str) and run_id:
++            run_ids[run_id].append(key)
++        elif record.get('result') or record.get('trace_ref'):
++            record.setdefault('conflicts', []).append({'detail': 'MISSING_RUN_ID_FOR_OBSERVED_ARTIFACT'})
++    duplicate_runs = {run for run, values in run_ids.items() if len(values) > 1}
+     for row in progress:
+         if row.get('state') in ('BLOCK_ADMITTED', 'BLOCK_BUDGET_STOP'):
++            if any(field in row for field in ('population', 'configuration', 'episode', 'rep')):
++                issues.append({'kind': 'BLOCK_CONTROL_WITH_EPISODE_IDENTITY', 'record': row})
++                if identity(row) in planned:
++                    by_progress[identity(row)].append(row['state'])
+             continue
+         key = identity(row)
+         if key not in planned:
+@@ -242,10 +295,14 @@
+         else:
+             by_progress[key].append(row.get('state'))
+     progress_conflicts = set()
+-    for key, states in by_progress.items():
+-        if states.count('STARTED') > 1 or states.count('TERMINATED') > 1 or ('TERMINATED' in states and 'STARTED' not in states):
++    lifecycles = {}
++    for key in keys:
++        lifecycle = progress_lifecycle(by_progress[key], bool(by_key[key]), quiescence.get('progress_complete') is True)
++        lifecycles[key] = lifecycle
++        if lifecycle['status'] == 'CONFLICT':
+             progress_conflicts.add(key)
+-            issues.append({'kind': 'PROGRESS_IDENTITY_CONFLICT', 'identity': key_object(key), 'states': states})
++            issues.append({'kind': 'PROGRESS_IDENTITY_CONFLICT', 'identity': key_object(key),
++                           'states': by_progress[key], 'reason': lifecycle['reason']})
+     episode_rows, obligations = [], []
+     for key in keys:
+         pop, cfg, case, rep = key
+@@ -278,11 +335,15 @@
+             issues.append({'kind': state, 'identity': key_object(key), 'all_result_refs': [r.get('result_ref') for r in found]})
+         ep = {'identity': key_object(key), 'state': state, 'run_id': record.get('run_id') if record else None,
+               'trace_ref': record.get('trace_ref') if record else None, 'result_ref': record.get('result_ref') if record else None,
+-              'progress_states': by_progress[key], 'functional_failures': result.get('functional_failures'),
++              'progress_states': by_progress[key], 'progress_lifecycle': lifecycles[key],
++              'unavailable_evidence': record.get('unavailable_evidence', []) if record else [], 'functional_failures': result.get('functional_failures'),
+               'raw_trace_facts': record.get('raw_trace_facts') if record else None,
+               'host_failures': result.get('host_failures'), 'returncode': result.get('returncode'),
+               'qa05': result.get('qa05', {}), 'qa06': result.get('qa06', {}),
+               'mechanism_annotation': (mechanisms or {}).get(key), 'source_conflicts': record.get('conflicts', []) if record else []}
++        if ep['qa06'].get('status') == 'OBSERVED' and recorded_peak_consistency(ep['qa06']) is not None:
++            issues.append({'kind': 'RSS_SAVED_PEAK_ABI_CONTRADICTION', 'identity': key_object(key),
++                           'reason': recorded_peak_consistency(ep['qa06']), 'result_ref': ep['result_ref']})
+         episode_rows.append(ep)
+         for qa, (group, id_field, _) in QA_FIELDS.items():
+             expected = oracles[pop][case][group]
+@@ -356,8 +417,13 @@
+             configurations.append(item)
+             for rep in range(1, rule['reps'] + 1):
+                 fixed_bundle = [e for e in eps if e['identity']['rep'] == rep]
++                bundle_obligations = [o for o in obs if o['identity']['rep'] == rep]
+                 case_rows.append({'kind': 'FIXED_REPETITION_BUNDLE', 'population': pop, 'configuration': cfg, 'rep': rep,
+-                                  'planned_cases': list(rule['cases']), 'qa05': cost_summary(fixed_bundle, len(rule['cases']), 1),
++                                  'planned_cases': list(rule['cases']),
++                                  'qa01': timing_summary([o for o in bundle_obligations if o['qa'] == 'qa01'], rule['qa01'] // rule['reps']),
++                                  'qa02': binding_summary([o for o in bundle_obligations if o['qa'] == 'qa02'], rule['qa02'] // rule['reps']),
++                                  'qa03': timing_summary([o for o in bundle_obligations if o['qa'] == 'qa03'], rule['qa03'] // rule['reps']),
++                                  'qa05': cost_summary(fixed_bundle, len(rule['cases']), 1),
+                                   'qa06': rss_summary(fixed_bundle, len(rule['cases']))})
+                 for case in rule['cases']:
+                     selected = [r for r in obs if r['identity']['rep'] == rep and r['identity']['episode'] == case]
+@@ -432,6 +498,7 @@
+         self.bytes_read, self.inputs = 0, {}
+ 
+     def read(self, ref, *, jsonl=False, raw=False):
++        require(isinstance(ref, dict), 'File reference must be an object')
+         require(type(ref.get('bytes')) is int and ref['bytes'] >= 0 and isinstance(ref.get('sha256'), str) and re.fullmatch('[0-9a-f]{64}', ref['sha256']), 'Invalid file hash/byte reference ABI')
+         name = ref['path']
+         require(isinstance(name, str) and Path(name).is_absolute() and '..' not in Path(name).parts, 'File reference must be explicit absolute path without traversal')
+@@ -540,7 +607,7 @@
+                         comparable = complete and all(v is not None for v in values) and all(type(e['qa05'].get('unknown_call_count')) is int and e['qa05']['unknown_call_count'] == 0 for e in sides)
+                     else:
+                         values = [e['qa06'].get('peak_concurrent_sum_bytes') for e in sides]
+-                        comparable = complete and all(e['qa06'].get('status') == 'OBSERVED' for e in sides) and all(finite(v) for v in values)
++                        comparable = complete and all(e['qa06'].get('status') == 'OBSERVED' for e in sides) and all(recorded_peak_consistency(e['qa06']) is None for e in sides)
+                     rows.append({'population': pop, 'dp': dp, 'left': left, 'right': right, 'episode': case, 'rep': rep, 'qa': qa,
+                         'obligation_id': None, 'side_states': [e['state'] for e in sides],
+                         'recorded_values': [decimal_text(v) for v in values] if qa == 'qa05' else values,
+@@ -575,7 +642,7 @@
+     result.update(identity=identity_value, run_id=run_id, record_kind=kind, trace_pointer=source_ref,
+                   raw_usage_ref={'source': source_ref, 'field': 'raw_usage', 'present': 'raw_usage' in raw},
+                   raw_usage_metadata=raw.get('raw_usage'),
+-                  recorded_work_disposition={k: raw[k] for k in ('discarded', 'unused', 'retried', 'retry_of', 'cancelled') if k in raw},
++                  recorded_work_disposition={k: raw[k] for k in ('discarded', 'discarded_after_candidate_end', 'unused', 'retried', 'retry_of', 'cancelled') if k in raw},
+                   request_response_file_refs={k: {'recorded_path': raw[k], 'content_read_by_adapter': False} for k in ('request_file', 'response_file') if k in raw},
+                   local_compute_monetized='NOT_MEASURED',
+                   token_interpretation='Recorded provider usage fields' if kind == 'ACTUAL_CLOUD_DISPATCH' and raw.get('raw_usage') is not None else 'Token zeros/fields are not assumed measured provider usage')
+@@ -583,11 +650,11 @@
+ 
+ 
+ def reconcile_calls(calls, ledger, formal_root):
+-    unique, anonymous, conflicts, discrepancies = {}, [], [], []
++    unique, anonymous, conflicts, discrepancies, annotation_disagreements = {}, [], [], [], []
+     for index, call in enumerate(calls):
+         value = dict(call)
+         uuid = value.get('call_uuid')
+-        signature = {k: v for k, v in value.items() if k not in ('trace_pointer', 'raw_usage_ref', 'occurrences')}
++        signature = {k: v for k, v in value.items() if k not in ('trace_pointer', 'raw_usage_ref', 'occurrences', 'recorded_work_disposition', 'work_disposition_occurrences')}
+         if uuid is None:
+             value['anonymous_record_index'] = index
+             anonymous.append(value)
+@@ -599,8 +666,18 @@
+             if previous['signature'] != signature:
+                 conflicts.append({'kind': 'CONFLICTING_UUID_COPIES', 'call_uuid': uuid, 'first': previous['value'], 'other': value})
+             previous['value']['occurrences'].append(value.get('trace_pointer'))
++            previous['value']['work_disposition_occurrences'].append({'source': value.get('trace_pointer'), 'recorded_fields': value.get('recorded_work_disposition', {})})
++            merged = previous['value'].setdefault('recorded_work_disposition', {})
++            for field, recorded in value.get('recorded_work_disposition', {}).items():
++                if field in merged and merged[field] != recorded:
++                    annotation_disagreements.append({'call_uuid': uuid, 'field': field, 'first': merged[field], 'other': recorded,
++                                                    'source': value.get('trace_pointer'), 'changes_financial_identity': False})
++                else:
++                    merged[field] = recorded
+         else:
++            value['recorded_work_disposition'] = dict(value.get('recorded_work_disposition', {}))
+             value['occurrences'] = [value.get('trace_pointer')]
++            value['work_disposition_occurrences'] = [{'source': value.get('trace_pointer'), 'recorded_fields': dict(value.get('recorded_work_disposition', {}))}]
+             unique[uuid] = {'signature': signature, 'value': value}
+     rows = [entry['value'] for entry in unique.values()] + anonymous
+     ledger_calls = ledger.get('calls', {})
+@@ -673,7 +750,7 @@
+         'formal_call_minus_ledger_known_residual_usd': str(formal_known - formal_ledger['known']) if formal_ledger else None,
+         'calls': rows, 'uuid_joins': joins, 'groups': groups_output, 'ledger_scopes': scope_output,
+         'actual_cloud_dispatch_count': sum(c.get('actual_api_sent') is True for c in rows), 'local_record_count': sum(c.get('record_kind') == 'LOCAL_MODEL' for c in rows),
+-        'input_record_count': len(calls), 'deduplicated_record_count': len(rows), 'conflicts': conflicts, 'discrepancies': discrepancies,
++        'input_record_count': len(calls), 'deduplicated_record_count': len(rows), 'disposition_annotation_disagreements': annotation_disagreements, 'conflicts': conflicts, 'discrepancies': discrepancies,
+         'global': {**{k + '_usd': str(v) for k, v in totals.items()}, 'known_plus_RESERVED_plus_UNKNOWN_usd': str(held),
+                    'cap_usd': decimal_text(cap), 'remaining_reservation_aware_usd': str(cap - held) if cap is not None else None},
+         'reconciliation_complete': not conflicts and not discrepancies and cap == Decimal('40') and totals['reserved'] == 0 and totals['unknown'] == 0 and not any(g['invalid_amount_records'] for g in ledger_scopes.values()),
+@@ -698,6 +775,24 @@
+     return cells
+ 
+ 
++def read_record_artifact(reader, item, artifact, record):
++    """Unavailable evidence is not a hash/identity contradiction."""
++    reference = item.get(artifact + '_ref')
++    if not reference:
++        record['unavailable_evidence'].append({'artifact': artifact, 'reason': 'NO_DECLARED_REFERENCE', 'ref': reference})
++        return None
++    try:
++        value = reader.read(reference)
++        require(isinstance(value, dict), 'Expected object artifact: ' + artifact)
++        return value
++    except OSError as error:
++        record['unavailable_evidence'].append({'artifact': artifact, 'reason': 'REFERENCED_EVIDENCE_UNAVAILABLE',
++                                              'error_type': type(error).__name__, 'detail': str(error), 'ref': reference})
++    except (InputError, KeyError, ValueError, TypeError) as error:
++        record['conflicts'].append({'artifact': artifact, 'detail': str(error), 'ref': reference})
++    return None
++
++
+ def load_inputs(manifest_path, manifest_sha256, *, expected_freeze=FREEZE_SHA, expected_approval=APPROVAL_SHA, context=None):
+     """Supported final-input ABI is explicit; no actual collection/discovery."""
+     manifest_path = Path(manifest_path)
+@@ -705,6 +800,7 @@
+     data = manifest_path.read_bytes()
+     require(sha(data) == manifest_sha256, 'Input manifest hash mismatch')
+     supplied = json.loads(data)
++    require(isinstance(supplied, dict), 'Input manifest must be an object')
+     require(supplied.get('version') == 'JOINT441_QUANTITATIVE_INPUT_v1', 'Unsupported input manifest ABI')
+     declared_root = Path(supplied['formal_root'])
+     require(declared_root.is_absolute() and '..' not in declared_root.parts and not any(p.is_symlink() for p in (declared_root, *declared_root.parents)), 'Unsafe formal root')
+@@ -754,16 +850,23 @@
+     require(len(index) <= 882, 'Result index exceeds bounded441 plan plus conflict diagnostics')
+     records, calls, issues = [], [], []
+     for item in index:
++        require(isinstance(item, dict) and isinstance(item.get('identity'), dict), 'Result index item/identity must be objects')
++        require(all(item.get(field) is None or isinstance(item[field], dict) for field in ('result_ref','trace_ref','association_ref')), 'Result index references must be objects or null')
+         record = {'identity': item['identity'], 'run_id': item.get('run_id'), 'result_ref': item.get('result_ref'),
+-                  'trace_ref': item.get('trace_ref'), 'result': {}, 'provenance_valid': False, 'conflicts': []}
++                  'trace_ref': item.get('trace_ref'), 'result': {}, 'provenance_valid': False, 'conflicts': [], 'unavailable_evidence': []}
+         if identity(item['identity']) not in planned_keys:
+             records.append(record)
+             continue
+-        try:
+-            if item.get('result_ref'):
+-                record['result'] = reader.read(item['result_ref'])
+-            if item.get('trace_ref'):
+-                trace = reader.read(item['trace_ref'])
++        run_id = item.get('run_id')
++        if item.get('trace_ref') and (not isinstance(run_id, str) or not run_id or run_id in ('.','..') or '/' in run_id
++                or item['trace_ref'].get('path') != str(root / 'raw/runs' / run_id / 'trace.json')):
++            record['conflicts'].append({'artifact': 'trace', 'detail': 'Trace path/run association mismatch before availability check', 'ref': item.get('trace_ref')})
++        result = read_record_artifact(reader, item, 'result', record)
++        if result is not None:
++            record['result'] = result
++        trace = read_record_artifact(reader, item, 'trace', record)
++        if trace is not None:
++            try:
+                 key = identity(item['identity'])
+                 require(type(trace.get('rep')) is int and all(trace.get(k) == v for k, v in [('configuration', key[1]), ('episode', key[2]), ('rep', key[3]), ('run_id', item['run_id']), ('phase', 'FORMAL')]), 'Mixed trace phase/identity')
+                 require(trace.get('binary_sha256') == freeze['binary']['sha256'], 'Mixed trace binary generation')
+@@ -773,13 +876,16 @@
+                 record['raw_trace_facts'] = {k: trace.get(k) for k in ('returncode', 'host_failures', 'technical_failures', 'technical_abort_reason', 'unprovided_mandatory_events', 'cancellation_requested_ns', 'effective_admission_stop_ns')}
+                 for i, call in enumerate(trace.get('calls', [])):
+                     calls.append(project_call(call, item['identity'], item['run_id'], {'file': item['trace_ref'], 'json_pointer': '/calls/' + str(i)}))
+-                del trace
+-            if item.get('association_ref') and item.get('result_ref') and item.get('trace_ref'):
+-                association = reader.read(item['association_ref'])
++            except (InputError, KeyError, ValueError, TypeError) as error:
++                record['conflicts'].append({'artifact': 'trace', 'detail': str(error), 'ref': item.get('trace_ref')})
++            del trace
++        association = read_record_artifact(reader, item, 'association', record)
++        if association is not None and result is not None and not record['conflicts'] and not any(e['artifact'] in ('trace', 'result') for e in record['unavailable_evidence']):
++            try:
+                 record['provenance_valid'] = validate_association(association, record, freeze, refs['freeze'], oracle_refs[item['identity']['population']], root)
+                 record['association_ref'] = item['association_ref']
+-        except (InputError, KeyError, ValueError, OSError) as error:
+-            record['conflicts'].append(str(error))
++            except (InputError, KeyError, ValueError, TypeError) as error:
++                record['conflicts'].append({'artifact': 'association', 'detail': str(error), 'ref': item.get('association_ref')})
+         records.append(record)
+     terminated = {identity(row) for row in progress if row.get('state') == 'TERMINATED'}
+     if terminal.get('completed') != len(terminated):
+@@ -898,7 +1004,13 @@
+     predictions = report['prediction_worklist']
+     require(len(predictions) == 24 and {(p['dp'], p['qa']) for p in predictions} == {(dp, qa) for dp in PAIRS for qa in ('qa01','qa02','qa03','qa04','qa05','qa06')}, 'Prediction worklist differs')
+     require(all(p['judgment_status'] == 'UNREVIEWED' and p['judgment'] is None and p['reviewer'] is None for p in predictions), 'Automatic prediction judgment forbidden')
+-    require(len(rows['paired.jsonl']) == 4872 and report['pairs']['planned_rows'] == 4872, 'Planned pair rows differ')
++    paired = rows['paired.jsonl']
++    require(len(paired) == 4872 and report['pairs']['planned_rows'] == 4872 and len({(p['population'],p['dp'],p['left'],p['right'],p['episode'],p['rep'],p['qa'],p['obligation_id']) for p in paired}) == 4872, 'Planned pair rows differ')
++    bundles = [r for r in rows['case-repetition.jsonl'] if r['kind'] == 'FIXED_REPETITION_BUNDLE']
++    require(len(bundles) == 56 and len({(b['population'],b['configuration'],b['rep']) for b in bundles}) == 56, 'Fixed repetition bundles differ')
++    for bundle in bundles:
++        rule = POPULATIONS[bundle['population']]
++        require(all(bundle[q]['planned'] == rule[q] // rule['reps'] and sum(bundle[q]['partition'].values()) == bundle[q]['planned'] for q in QA_FIELDS), 'Repetition bundle obligation partitions differ')
+ 
+ 
+ def write_outputs(output, report, rows, command):
+@@ -939,7 +1051,7 @@
+     context = {}
+     try:
+         report, rows = build_report(**load_inputs(args.input_manifest, args.input_sha256, context=context))
+-    except (InputError, OSError, ValueError, KeyError, TypeError) as error:
++    except (InputError, OSError, ValueError, KeyError, TypeError, AttributeError) as error:
+         if 'jobs' in context and 'oracles' in context:
+             report, rows = build_report(context['jobs'], context['oracles'], [], [], {},
+                 external_issues=[{'kind': 'INPUT_REJECTED', 'message': str(error)}],

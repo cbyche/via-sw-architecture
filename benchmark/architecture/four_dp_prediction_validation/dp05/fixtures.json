@@ -1,0 +1,585 @@
+[
+  {
+    "id": "dp05-no-handoff",
+    "condition": "no-handoff",
+    "description": "no-handoff",
+    "dp": "05",
+    "fixture_version": "prediction-validation-v1",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+    "first_response_policy": "ADOPTION_ONLY",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 1,
+          "title": "해안 센서 도입 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v1.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "observe",
+        "stimulus_id": "close",
+        "goal_id": "close",
+        "utterance": "센서 비교 자료 확인을 마쳤어. 지금은 다른 Agent에 맡길 업무가 없으니 여기서 마쳐줘."
+      }
+    ]
+  },
+  {
+    "id": "dp05-single",
+    "condition": "single-prepared",
+    "description": "single",
+    "dp": "05",
+    "fixture_version": "prediction-validation-v1",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+    "first_response_policy": "ADOPTION_ONLY",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 1,
+          "title": "해안 센서 도입 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v1.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft",
+        "goal_id": "draft",
+        "delegation_id": "draft-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      }
+    ]
+  },
+  {
+    "id": "dp05-valid-low",
+    "condition": "valid-low",
+    "description": "repeated-valid",
+    "dp": "05",
+    "fixture_version": "prediction-validation-v1",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+    "first_response_policy": "ADOPTION_ONLY",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 1,
+          "title": "해안 센서 도입 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v1.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "acquire",
+        "reads": [
+          {
+            "source_id": "harbor",
+            "start_line": 1,
+            "end_line": 6
+          }
+        ],
+        "reason": "Common prior VIA read completed before first handoff; identical externally given evidence event for ABC, not an A-only tactic."
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft",
+        "goal_id": "draft",
+        "delegation_id": "draft-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      }
+    ]
+  },
+  {
+    "id": "dp05-valid-high",
+    "condition": "valid-high",
+    "description": "repeated-valid",
+    "dp": "05",
+    "fixture_version": "prediction-validation-v1",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+    "first_response_policy": "ADOPTION_ONLY",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 1,
+          "title": "해안 센서 도입 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v1.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "acquire",
+        "reads": [
+          {
+            "source_id": "harbor",
+            "start_line": 1,
+            "end_line": 6
+          }
+        ],
+        "reason": "Common prior VIA read completed before first handoff; identical externally given evidence event for ABC, not an A-only tactic."
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft",
+        "goal_id": "draft",
+        "delegation_id": "draft-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft2",
+        "goal_id": "draft2",
+        "delegation_id": "draft2-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft3",
+        "goal_id": "draft3",
+        "delegation_id": "draft3-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      }
+    ]
+  },
+  {
+    "id": "dp05-changed-revoked",
+    "condition": "changed-revoked",
+    "description": "changed-revoked",
+    "dp": "05",
+    "fixture_version": "prediction-validation-v1",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+    "first_response_policy": "ADOPTION_ONLY",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 1,
+          "title": "해안 센서 도입 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v1.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "private",
+          "revision": 1,
+          "title": "내부 연락 부록",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/private-v1.txt",
+          "line_count": 2,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                2
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            2
+          ]
+        }
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft",
+        "goal_id": "draft",
+        "delegation_id": "draft-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      },
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 2,
+          "title": "해안 센서 도입 정정 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v2.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 2,
+          "condition_revision": 2,
+          "access_epoch": 2,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost",
+            "private_contact_details"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "revoke",
+        "source_id": "private"
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "changed",
+        "goal_id": "changed",
+        "delegation_id": "changed-delegation",
+        "delegation_revision": 1,
+        "utterance": "정정 공개 비교로 현재 단가와 납기, 유지보수, 염수 미검증을 포함한 구매 메일 초안을 작성해줘. 내부 연락 부록 접근은 철회했으니 사용하지 마. 기존 18대, 부가세 포함, 운영비 제외와 발송 금지를 지켜."
+      }
+    ]
+  },
+  {
+    "id": "dp05-repeated-prepared-no-prior-read",
+    "condition": "repeated-prepared-no-prior-read",
+    "description": "Same prepared public source and three identical handoff goals, without externally given prior VIA original read",
+    "dp": "05",
+    "fixture_version": "prediction-validation-v1",
+    "fixture_class": "CONSTRUCTED_SYNTHETIC_POC",
+    "first_response_policy": "ADOPTION_ONLY",
+    "events": [
+      {
+        "kind": "source",
+        "source": {
+          "id": "harbor",
+          "revision": 1,
+          "title": "해안 센서 도입 공개 비교",
+          "path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp05/sources/harbor-v1.txt",
+          "line_count": 6,
+          "outline": [
+            {
+              "section": "관측 자료",
+              "lines": [
+                1,
+                6
+              ]
+            }
+          ],
+          "revoked": false,
+          "conversation": "validation",
+          "kind": "public_result",
+          "allowed_lines": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "kind": "adopt",
+        "state": {
+          "task_id": "T-HARBOR",
+          "request_revision": 1,
+          "condition_revision": 1,
+          "access_epoch": 1,
+          "constraints": {
+            "currency": "KRW",
+            "tax_included": true,
+            "quantity": 18,
+            "price_tie_break": "longer_maintenance"
+          },
+          "exclusions": [
+            "unverified_operating_cost"
+          ],
+          "allowed_actions": [
+            "draft_only"
+          ],
+          "already_completed_actions": [],
+          "unknown_actions": [
+            "send_previous_message"
+          ],
+          "required_source_ids": [
+            "harbor"
+          ]
+        }
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft",
+        "goal_id": "draft",
+        "delegation_id": "draft-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft2",
+        "goal_id": "draft2",
+        "delegation_id": "draft2-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      },
+      {
+        "kind": "delegate",
+        "stimulus_id": "draft3",
+        "goal_id": "draft3",
+        "delegation_id": "draft3-delegation",
+        "delegation_revision": 1,
+        "utterance": "해안 센서 공개 비교로 가격과 납기, 유지보수, 염수 내구성 미검증을 포함한 제안 메모 초안을 작성해줘. 18대, 부가세 포함 및 운영비 제외 조건을 지켜. 초안만 만들고 실제 발송 금지."
+      }
+    ]
+  }
+]

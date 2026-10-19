@@ -1,0 +1,746 @@
+--- preserved-v1/extract_closed_block.py
++++ active-v2/extract_closed_block.py
+@@ -11,12 +11,16 @@
+ import re
+ 
+ CONFIGS = ('AAAA', 'BAAA', 'CAAA', 'ABAA', 'AABA', 'AAAB', 'AAAC')
+-VERSION = 'COMMON9_CLOSED_BLOCK_EVIDENCE_v1'
++VERSION = 'COMMON9_CLOSED_BLOCK_EVIDENCE_v2'
+ GENERATION = 'COMMON9_PLUS_SUPPLEMENT6_JOINT441_v1'
+ DIMENSIONS = ('body', 'task_revision', 'approval_authority', 'handoff')
+ MAX_TRACE = 16 * 1024 * 1024
+ MAX_TOTAL = 128 * 1024 * 1024
+ MAX_TEXT = 65536
++CLOSURE_ABI = {
++    'FIRST_FIXED7_CONFIGURATION_BLOCK_CLOSED_NOT_CAMPAIGN_COMPLETE':
++        ('COMMON9', 'S02', 1, 'FIRST-BLOCK-S02-SUMMARY-v1.json'),
++}
+ ORACLES = {
+     'COMMON9': 'benchmark/architecture/common9_poc_20261019/oracles.json',
+     'COMMON_SUPPLEMENT6': 'benchmark/architecture/common_supplement6_20261019/oracles.json',
+@@ -42,7 +46,7 @@
+ 
+ 
+ def pointer(parts):
+-    return '/' + '/'.join(str(p).replace('~', '~0').replace('/', '~1') for p in parts)
++    return ''.join('/' + str(p).replace('~', '~0').replace('/', '~1') for p in parts)
+ 
+ 
+ def inside(path, root):
+@@ -125,30 +129,56 @@
+     return {'file': source, 'json_pointer': pointer(('events', index)), 'event_index': index, 'event_id': event.get('event_id')}
+ 
+ 
+-def stimulus_ids(event):
++def stimulus_links(event):
++    """Only explicitly recorded, known typed fields; not inferred causality."""
+     data = event.get('data', {})
+     if not isinstance(data, dict):
+-        return set()
++        return []
+     request = data.get('request', {})
+-    return {v for v in (data.get('stimulus_id'), data.get('origin_event_id'), request.get('stimulus_id') if isinstance(request, dict) else None) if isinstance(v, str)}
+-
+-
+-def selected_callback(saved, response_id, trace, trace_ref):
+-    rows = [r for r in saved.get('qa01', []) if r.get('response_id') == response_id]
+-    if not rows:
+-        return {'status': 'MISSING_SAVED_QA01_ROW', 'selected': None}
+-    if len(rows) != 1:
+-        return {'status': 'AMBIGUOUS_SAVED_QA01_ROW', 'selected': None}
+-    row = rows[0]
+-    event_id = row.get('accepted_callback_id')
+-    matches = [(i, e) for i, e in enumerate(trace.get('events', [])) if e.get('event_id') == event_id] if event_id else []
+-    return {'status': 'SAVED_SELECTION_WITH_UNIQUE_EVENT' if len(matches) == 1 else 'AMBIGUOUS_OR_MISSING_SAVED_EVENT',
+-            'saved_value': row, 'selected': event_ref(trace_ref, matches[0][1], matches[0][0]) if len(matches) == 1 else None,
+-            'matching_event_refs': [event_ref(trace_ref, e, i) for i, e in matches]}
++    candidates = [(('data', 'stimulus_id'), data.get('stimulus_id')),
++                  (('data', 'origin_event_id'), data.get('origin_event_id'))]
++    if isinstance(request, dict):
++        candidates.append((('data', 'request', 'stimulus_id'), request.get('stimulus_id')))
++    if event.get('kind') == 'WORKFLOW_FAILED':
++        candidates.append((('data', 'event_id'), data.get('event_id')))
++    nested = data.get('data', {})
++    if event.get('kind') == 'STATE_EFFECT_COMMIT' and isinstance(nested, dict):
++        candidates.append((('data', 'data', 'stimulus_id'), nested.get('stimulus_id')))
++    return [{'value': value, 'event_relative_pointer': pointer(parts), 'link_type': 'EXPLICIT_RECORDED_STIMULUS_FIELD'}
++            for parts, value in candidates if isinstance(value, str)]
++
++
++def stimulus_ids(event):
++    return {link['value'] for link in stimulus_links(event)}
++
++
++def typed_fact_refs(events, trace_ref):
++    facts = []
++    for index, event in enumerate(events):
++        kind = event.get('kind', '')
++        tags = []
++        if kind.startswith('STATE_EFFECT_'):
++            tags.append('RECORDED_STATE_EFFECT_LEDGER')
++        if kind == 'WORKFLOW_FAILED' or kind.endswith('_FAILED'):
++            tags.append('RECORDED_FAILURE_KIND')
++        if 'REJECT' in kind:
++            tags.append('RECORDED_REJECTION_KIND')
++        if 'CANCEL' in kind:
++            tags.append('RECORDED_CANCELLATION_KIND')
++        if kind.startswith('PUBLICATION_'):
++            tags.append('RECORDED_PUBLICATION_KIND')
++        if 'AUTHORITY' in kind or 'PERMISSION' in kind:
++            tags.append('RECORDED_AUTHORITY_OR_PERMISSION_KIND')
++        if tags:
++            facts.append({'raw_ref': event_ref(trace_ref, event, index), 'recorded_kind': kind,
++                          'fact_types': tags, 'explicit_stimulus_links': stimulus_links(event),
++                          'interpretation': 'Raw kind/field classification only; not causal, timely, authorized or successful effect proof.'})
++    return facts
+ 
+ 
+ def build_bundle(root, closure, population, episode, rep, freeze_sha256, saved_index=None,
+                  max_trace=MAX_TRACE, max_total=MAX_TOTAL):
++    require(saved_index is None, 'UNSUPPORTED_SAVED_EVALUATION_PROVENANCE: this version does not accept saved evaluations, including new envelopes')
+     root = Path(root).resolve()
+     reader = Reader(root, max_trace, max_total)
+     freeze, freeze_ref = reader.read(root / 'freeze.json')
+@@ -156,8 +186,12 @@
+     require(freeze['version'] == GENERATION, 'Wrong generation')
+     require(population in ORACLES and isinstance(rep, int) and rep > 0, 'Invalid explicit block identity')
+     closed, closure_ref = reader.read(closure)
+-    require('CLOSED' in closed.get('status', '') and closed.get('population') == population
+-            and closed.get('episode') == episode and closed.get('rep') == rep, 'Not the explicitly named closed block')
++    supported = CLOSURE_ABI.get(closed.get('status'))
++    require(supported is not None and supported[:3] == (population, episode, rep)
++            and Path(closure).resolve() == root / supported[3]
++            and closed.get('population') == population and closed.get('episode') == episode and closed.get('rep') == rep
++            and closed.get('closed_episodes') == 7 and closed.get('planned_joint_episodes') == 441 and freeze.get('total_episode_runs') == 441
++            and isinstance(closed.get('rows'), list), 'Unsupported closure status/path/shape; no closure proof')
+     planned = [j for j in freeze['jobs'] if j.get('population') == population and j.get('episode') == episode and j.get('rep') == rep]
+     require(len(planned) == 7 and Counter(j['configuration'] for j in planned) == Counter(CONFIGS), 'Planned block must contain all seven configurations exactly once')
+     listed = {}
+@@ -192,10 +226,6 @@
+                                 'json_pointer': pointer((episode,)) if episode in value else None}
+     require(len({r['response_id'] for r in oracle['responses']}) == len(oracle['responses']), 'Duplicate frozen response obligations')
+     require(len({r['id'] for r in oracle['goals']}) == len(oracle['goals']), 'Duplicate frozen goal obligations')
+-    saved_mapping = {}
+-    if saved_index is not None:
+-        saved_mapping, _ = reader.read(saved_index)
+-        require(isinstance(saved_mapping, dict) and set(saved_mapping).issubset(run_ids), 'Saved evaluation index contains another block')
+     worklist, evidence, executions, issues = [], [], [], []
+     for cfg in CONFIGS:
+         listed_row = listed.get(cfg)
+@@ -220,7 +250,10 @@
+                     'host_display_receipts': reader.project(trace.get('host_display_receipts', []), trace_ref, ('host_display_receipts',)),
+                     'provided_sources': reader.project(trace.get('provided_sources', []), trace_ref, ('provided_sources',)),
+                     'source_nodes': reader.project(trace.get('source_nodes', []), trace_ref, ('source_nodes',)),
+-                    'candidate_input': None, 'raw_model_files': []})
++                    'candidate_input': None, 'raw_model_files': [],
++                    'typed_failure_effect_control_refs': typed_fact_refs(events, trace_ref),
++                    'candidate_input_scope': 'SINGLE_INITIAL_JSON_OBJECT_ONLY; later streamed ingress/control remains separately in trace/raw evidence',
++                    'prompt_context_state': 'RECORDED_RAW_REQUEST_FILE_REFERENCES_ONLY_NO_INFERRED_PROMPT'})
+                 if candidate.is_file():
+                     initial, initial_ref = reader.read(candidate, limit=max_trace)
+                     evidence[-1]['candidate_input'] = {'file': initial_ref, 'plain_evidence': reader.project(initial, initial_ref)}
+@@ -236,26 +269,20 @@
+                                 _, file_ref = reader.read(path, limit=max_trace, parse=False)
+                                 record.update(status='HASHED_REFERENCE_ONLY', file=file_ref)
+                             evidence[-1]['raw_model_files'].append(record)
+-                if run_id in saved_mapping:
+-                    entry = saved_mapping[run_id]
+-                    saved_value, saved_ref = reader.read(entry['path'], limit=max_trace)
+-                    require(saved_ref['sha256'] == entry['sha256'], 'Saved evaluation hash mismatch')
+-                    saved = saved_value.get('evaluation', saved_value)
+-                    require(all(saved.get(k) == v for k, v in [('run_id', run_id), ('configuration', cfg), ('episode', episode), ('rep', rep), ('phase', 'FORMAL')]), 'Mixed or unidentified saved evaluation')
+-                    saved = reader.project(saved, saved_ref, ('evaluation',) if 'evaluation' in saved_value else ())
+-                    del saved_value
+-                    saved_state = 'SAVED_FROZEN_RESULT_REFERENCED_NOT_RECOMPUTED'
+             else:
+                 execution_state = 'MISSING_TRACE'
+         if execution_state != 'CLOSED_TRACE_PRESENT':
+             issues.append({'configuration': cfg, 'run_id': run_id, 'reason': execution_state})
+         events = trace.get('events', [])
+         event_ids = Counter(e.get('event_id') for e in events if e.get('event_id'))
++        facts = typed_fact_refs(events, trace_ref)
+         executions.append({'identity': dict(population=population, configuration=cfg, episode=episode, rep=rep, run_id=run_id),
+             'execution_state': execution_state, 'saved_evaluation_state': saved_state, 'trace': trace_ref, 'saved_evaluation': saved_ref,
+             'recorded_technical_state': {k: reader.project(trace[k], trace_ref, (k,)) for k in ('technical_certification', 'technical_failures', 'technical_abort_reason', 'returncode', 'unprovided_mandatory_events') if k in trace},
+             'saved_primary_measurement_eligibility': saved.get('primary_measurement_eligibility', 'MISSING_SAVED_EVALUATION'),
+-            'saved_deadline_audit_status': saved.get('deadline_audit', {}).get('status', 'MISSING_SAVED_EVALUATION')})
++            'saved_deadline_audit_status': 'MISSING_SAVED_EVALUATION',
++            'typed_failure_effect_control_refs': facts,
++            'association_limit': 'Only known explicit stimulus fields are linked. Other run-level facts remain context, not inferred causes. Absence from a row timeline cannot establish absence from the trace.'})
+         declarations = [('response', 'responses', r, r['response_id']) for r in oracle['responses']]
+         declarations += [('goal_relation', 'goals', r, r['id']) for r in oracle['goals']]
+         observed = [('observed_handoff_control', None, e, e.get('event_id') or 'raw-index-' + str(i)) for i, e in enumerate(events)
+@@ -266,12 +293,13 @@
+             linked = [(i, e) for i, e in enumerate(events) if stimulus_ids(e).intersection(members)]
+             displays = [(i, e) for i, e in linked if e.get('kind') == 'DISPLAY_PROXY']
+             adoptions = [(i, e) for i, e in linked if e.get('kind') == 'SEMANTIC_ADOPTION']
+-            ordered = sorted(displays, key=lambda pair: (pair[1].get('observed_ns') if isinstance(pair[1].get('observed_ns'), int) else float('inf'), pair[0]))
++            usable_clocks = all(type(e.get('observed_ns')) is int for _, e in displays)
++            ordered = sorted(displays, key=lambda pair: (pair[1].get('observed_ns') if type(pair[1].get('observed_ns')) is int else float('inf'), pair[0]))
+             first = None
+             first_status = 'NOT_OBSERVED' if execution_state == 'CLOSED_TRACE_PRESENT' else 'MISSING_RUN_EVIDENCE'
+             if ordered:
+                 at = ordered[0][1].get('observed_ns')
+-                ambiguous = not isinstance(at, int) or sum(e.get('observed_ns') == at for _, e in ordered) > 1 or event_ids[ordered[0][1].get('event_id')] > 1
++                ambiguous = not usable_clocks or sum(e.get('observed_ns') == at for _, e in ordered) > 1 or event_ids[ordered[0][1].get('event_id')] > 1
+                 first_status = 'AMBIGUOUS_RAW_CALLBACK' if ambiguous else 'FIRST_RAW_MATCHING_DISPLAY_NOT_A_QA01_SELECTION'
+                 if not ambiguous:
+                     first = event_ref(trace_ref, ordered[0][1], ordered[0][0])
+@@ -283,9 +311,12 @@
+                 'all_matching_display_refs': [event_ref(trace_ref, e, i) for i, e in displays],
+                 'actual_adopted_plan_Task_goal_revision_refs': [event_ref(trace_ref, e, i) for i, e in adoptions],
+                 'explicit_stimulus_linked_timeline_refs': [event_ref(trace_ref, e, i) for i, e in linked],
++                'matched_typed_fact_refs': [f for f in facts if any(link['value'] in members for link in f['explicit_stimulus_links'])],
++                'other_run_typed_fact_event_indexes': [f['raw_ref']['event_index'] for f in facts if not any(link['value'] in members for link in f['explicit_stimulus_links'])],
++                'association_limit': 'Unmatched facts remain visible run context. No inferred causal relation or absence claim.',
+                 'full_trace_context_ref': trace_ref, 'review': unreviewed()}
+             if kind == 'response':
+-                row['saved_QA01_selection'] = selected_callback(saved, obligation_id, trace, trace_ref) if saved else {'status': 'MISSING_SAVED_EVALUATION', 'selected': None}
++                row['saved_QA01_selection'] = {'status': 'MISSING_SAVED_EVALUATION_NO_CERTIFIED_ENDPOINT_SUPPLIED', 'selected': None}
+             if kind == 'goal_relation':
+                 row['saved_QA03_rows'] = [r for r in saved.get('qa03', []) if r.get('id') == obligation_id]
+             if not group:
+@@ -301,7 +332,8 @@
+         'observed_event_review_rows': sum(r['origin'] != 'DECLARED_FROZEN_ORACLE' for r in worklist),
+         'executions': executions, 'issues': issues, 'omissions': reader.omissions, 'inputs': list(reader.files.values()),
+         'bytes_read': reader.total_bytes, 'limits': {'trace_bytes': max_trace, 'total_input_bytes': max_total, 'inline_text_characters': MAX_TEXT},
+-        'interpretation': 'No semantic PASS/FAIL, replacement QA01 filter, metric/paired aggregate, inferred command/source, evaluator or episode execution. Missing output does not establish technically complete failure. Populations remain separate.'}
++        'saved_evaluation_support': 'UNSUPPORTED_IN_V2; identity/hash match alone is not trace/evaluator provenance. No certified selected endpoint or eligibility is supplied.',
++        'interpretation': 'No semantic PASS/FAIL, replacement QA01 filter, metric/paired aggregate, inferred command/source/prompt, evaluator or episode execution. Actual user input, recorded prompt references and frozen oracle conditions remain distinct. Missing output does not establish technically complete failure. Populations remain separate.'}
+     return manifest, evidence, worklist
+ 
+ 
+@@ -316,9 +348,15 @@
+             handle.write(data)
+         manifest.setdefault('outputs', {})[name] = {'sha256': digest(data), 'bytes': len(data)}
+     text = readable_review(manifest, evidence, worklist)
+-    with(output / 'review.md').open('x') as handle:
+-        handle.write(text)
++    text_bytes = text.encode('utf-8')
++    with(output / 'review.md').open('xb') as handle:
++        handle.write(text_bytes)
++    manifest['outputs']['review.md'] = {'sha256': digest(text_bytes), 'bytes': len(text_bytes)}
+     manifest['tool'] = {'path': str(Path(__file__).resolve()), 'sha256': digest(Path(__file__).read_bytes())}
++    schema = Path(__file__).with_name('bundle-schema-v2.json')
++    manifest['schema'] = {'path': str(schema.resolve()), 'sha256': digest(schema.read_bytes()), 'bytes': schema.stat().st_size}
++    checkpoint = Path(__file__).with_name('source-checkpoint-v2.json')
++    manifest['tool_checkpoint'] = {'path': str(checkpoint.resolve()), 'sha256': digest(checkpoint.read_bytes()), 'bytes': checkpoint.stat().st_size} if checkpoint.exists() else {'status': 'NOT_PRESENT_PRECHECKPOINT_SYNTHETIC_RUN'}
+     with(output / 'manifest.json').open('x') as handle:
+         json.dump(manifest, handle, ensure_ascii=False, indent=2)
+         handle.write('\n')
+@@ -329,7 +367,8 @@
+     by_run = {e['identity']['run_id']: e for e in evidence}
+     lines = ['# Closed-block evidence: UNREVIEWED', '',
+         'No callback, adoption, receipt or literal equality implies semantic PASS. All new dimensions remain UNREVIEWED.', '',
+-        'Saved QA01 selection and the first raw matching display are distinct. Missing saved evaluation means no certified endpoint is supplied here.', '']
++        'This v2 accepts no saved evaluator input: no certified selected endpoint or primary eligibility is supplied. Raw first display is not a QA01 selection.', '',
++        'Actual initial/streamed input, recorded raw prompt references and frozen oracle conditions are distinct. A literal oracle difference does not automatically establish failure against the actual request.', '']
+     for execution in manifest['executions']:
+         key = execution['identity']
+         lines += ['## ' + key['configuration'] + ' / ' + str(key['run_id']), '',
+@@ -338,6 +377,12 @@
+         if source:
+             lines += ['### Recorded source/input context', '', 'Image/binary fields are reference-only. This context is not an inferred source association.', '',
+                       '```json', json.dumps(source['candidate_input'], ensure_ascii=False, indent=2), '```', '']
++            lines += ['The candidate input file is only the initial JSON object. Later streamed input/control is in the retained events. Recorded model request/response references (no replacement prompt is inferred):', '',
++                      '```json', json.dumps(source['raw_model_files'], ensure_ascii=False, indent=2), '```', '',
++                      '### Run-level failure/effect/control context', '',
++                      'These raw kinds and typed fields do not establish causality, authority or timeliness. No absence claim follows from a shorter row timeline.', '']
++            for fact in source['typed_failure_effect_control_refs']:
++                lines += ['```json', json.dumps({'typed_reference': fact, 'record': source['events'][fact['raw_ref']['event_index']]['record']}, ensure_ascii=False, indent=2), '```', '']
+         for row in worklist:
+             if row['key']['configuration'] != key['configuration']:
+                 continue
+@@ -381,6 +426,11 @@
+     parser.add_argument('--saved-evaluations', type=Path)
+     parser.add_argument('--output', type=Path, required=True)
+     args = parser.parse_args()
++    checkpoint = Path(__file__).with_name('source-checkpoint-v2.json')
++    require(checkpoint.exists(), 'Reviewed-source checkpoint v2 is required before actual extraction')
++    recorded = json.loads(checkpoint.read_bytes())
++    require(any(Path(entry['path']).resolve() == Path(__file__).resolve() and entry['sha256'] == digest(Path(__file__).read_bytes())
++                for entry in recorded['files']), 'Helper source changed after v2 checkpoint')
+     require(not args.output.exists(), 'Immutable output already exists')
+     require(not args.output.resolve().is_relative_to(args.root.resolve() / 'frozen'), 'Output may not enter frozen sources')
+     bundle = build_bundle(args.root, args.closure, args.population, args.episode, args.rep,
+--- preserved-v1/bundle-schema-v2.json
++++ active-v2/bundle-schema-v2.json
+@@ -0,0 +1,288 @@
++{
++  "$schema": "https://json-schema.org/draft/2020-12/schema",
++  "$id": "urn:via:common9:closed-block-evidence:v2",
++  "description": "V2 manifest and named evidence/worklist schemas. Saved evaluation input is unsupported; no certified endpoint/eligibility is supplied. All new semantic dimensions remain UNREVIEWED.",
++  "$ref": "#/$defs/manifest",
++  "$defs": {
++    "file_ref": {
++      "type": "object",
++      "required": [
++        "path",
++        "sha256",
++        "bytes"
++      ],
++      "properties": {
++        "path": {
++          "type": "string"
++        },
++        "sha256": {
++          "type": "string",
++          "pattern": "^[0-9a-f]{64}$"
++        },
++        "bytes": {
++          "type": "integer",
++          "minimum": 0
++        }
++      }
++    },
++    "key": {
++      "type": "object",
++      "required": [
++        "population",
++        "configuration",
++        "episode",
++        "rep",
++        "run_id",
++        "obligation_kind",
++        "obligation_id"
++      ],
++      "properties": {
++        "population": {
++          "enum": [
++            "COMMON9",
++            "COMMON_SUPPLEMENT6"
++          ]
++        },
++        "configuration": {
++          "enum": [
++            "AAAA",
++            "BAAA",
++            "CAAA",
++            "ABAA",
++            "AABA",
++            "AAAB",
++            "AAAC"
++          ]
++        },
++        "episode": {
++          "type": "string"
++        },
++        "rep": {
++          "type": "integer",
++          "minimum": 1
++        },
++        "run_id": {
++          "type": [
++            "string",
++            "null"
++          ]
++        },
++        "obligation_kind": {
++          "enum": [
++            "response",
++            "goal_relation",
++            "observed_handoff_control"
++          ]
++        },
++        "obligation_id": {
++          "type": "string"
++        }
++      }
++    },
++    "review_dimension": {
++      "type": "object",
++      "required": [
++        "status",
++        "reason",
++        "reviewer",
++        "evidence_refs"
++      ],
++      "properties": {
++        "status": {
++          "const": "UNREVIEWED"
++        },
++        "reason": {
++          "type": "string"
++        },
++        "reviewer": {
++          "type": "null"
++        },
++        "evidence_refs": {
++          "type": "array",
++          "maxItems": 0
++        }
++      }
++    },
++    "worklist": {
++      "type": "array",
++      "items": {
++        "type": "object",
++        "required": [
++          "key",
++          "origin",
++          "frozen_expectation",
++          "execution_state",
++          "saved_evaluation_state",
++          "raw_callback_state",
++          "first_raw_callback",
++          "all_matching_display_refs",
++          "actual_adopted_plan_Task_goal_revision_refs",
++          "explicit_stimulus_linked_timeline_refs",
++          "full_trace_context_ref",
++          "review",
++          "matched_typed_fact_refs",
++          "other_run_typed_fact_event_indexes",
++          "association_limit"
++        ],
++        "properties": {
++          "key": {
++            "$ref": "#/$defs/key"
++          },
++          "origin": {
++            "enum": [
++              "DECLARED_FROZEN_ORACLE",
++              "OBSERVED_EVENT_ONLY_NOT_A_NEW_PLANNED_DENOMINATOR"
++            ]
++          },
++          "execution_state": {
++            "enum": [
++              "CLOSED_TRACE_PRESENT",
++              "MISSING_RUN_RECORD",
++              "MISSING_TRACE"
++            ]
++          },
++          "review": {
++            "type": "object",
++            "required": [
++              "body",
++              "task_revision",
++              "approval_authority",
++              "handoff"
++            ],
++            "additionalProperties": {
++              "$ref": "#/$defs/review_dimension"
++            }
++          },
++          "matched_typed_fact_refs": {
++            "type": "array",
++            "description": "Only explicit typed stimulus matches; no inferred causal relation."
++          },
++          "other_run_typed_fact_event_indexes": {
++            "type": "array",
++            "items": {
++              "type": "integer",
++              "minimum": 0
++            },
++            "description": "Unmatched run-context event indexes, not inferred association."
++          }
++        }
++      }
++    },
++    "evidence": {
++      "type": "array",
++      "items": {
++        "type": "object",
++        "required": [
++          "identity",
++          "trace",
++          "events",
++          "host_display_receipts",
++          "provided_sources",
++          "source_nodes",
++          "candidate_input",
++          "raw_model_files",
++          "typed_failure_effect_control_refs",
++          "candidate_input_scope",
++          "prompt_context_state"
++        ],
++        "properties": {
++          "trace": {
++            "$ref": "#/$defs/file_ref"
++          },
++          "events": {
++            "type": "array",
++            "items": {
++              "type": "object",
++              "required": [
++                "raw_ref",
++                "record"
++              ]
++            }
++          }
++        }
++      }
++    },
++    "manifest": {
++      "type": "object",
++      "required": [
++        "version",
++        "status",
++        "block",
++        "freeze",
++        "closure",
++        "source_references",
++        "planned_configurations",
++        "planned_run_count",
++        "declared_obligations",
++        "observed_event_review_rows",
++        "executions",
++        "issues",
++        "omissions",
++        "inputs",
++        "bytes_read",
++        "limits",
++        "interpretation",
++        "saved_evaluation_support"
++      ],
++      "properties": {
++        "version": {
++          "const": "COMMON9_CLOSED_BLOCK_EVIDENCE_v2"
++        },
++        "status": {
++          "enum": [
++            "EVIDENCE_READY_UNREVIEWED",
++            "INCOMPLETE_EVIDENCE_UNREVIEWED"
++          ]
++        },
++        "freeze": {
++          "$ref": "#/$defs/file_ref"
++        },
++        "closure": {
++          "$ref": "#/$defs/file_ref"
++        },
++        "planned_run_count": {
++          "const": 7
++        },
++        "planned_configurations": {
++          "type": "array",
++          "minItems": 7,
++          "maxItems": 7,
++          "uniqueItems": true
++        },
++        "inputs": {
++          "type": "array",
++          "items": {
++            "$ref": "#/$defs/file_ref"
++          }
++        },
++        "declared_obligations": {
++          "type": "object",
++          "required": [
++            "response",
++            "goal_relation"
++          ],
++          "properties": {
++            "response": {
++              "type": "integer",
++              "minimum": 0
++            },
++            "goal_relation": {
++              "type": "integer",
++              "minimum": 0
++            }
++          }
++        },
++        "observed_event_review_rows": {
++          "type": "integer",
++          "minimum": 0
++        },
++        "issues": {
++          "type": "array"
++        },
++        "omissions": {
++          "type": "array"
++        }
++      }
++    }
++  }
++}
+--- preserved-v1/README.md
++++ active-v2/README.md
+@@ -4,11 +4,11 @@
+ 
+ ## Scope and input
+ 
+-Root must explicitly name one already closed seven-configuration population/episode/repetition block. The immutable freeze must name all seven planned identities. The supplied closure summary supplies only the seven explicit run IDs. No recursive scan or whole runs.jsonl read occurs. A duplicate identity/run, mixed phase/configuration/binary, wrong-root path, changed frozen source or oversized input is rejected. A missing listed run/trace retains every declared response/goal obligation as missing evidence and UNREVIEWED; absence alone is not evidence that a run never executed.
++Root must explicitly name one already closed seven-configuration population/episode/repetition block. V2 supports only the initial COMMON9/S02/rep1 ABI: the exact status FIRST_FIXED7_CONFIGURATION_BLOCK_CLOSED_NOT_CAMPAIGN_COMPLETE at root/FIRST-BLOCK-S02-SUMMARY-v1.json, closed_episodes7, planned_joint_episodes441 and a rows list. Substrings such as NOT_CLOSED and unsupported manually named summaries are rejected. Other closure ABIs need separate review before support is added. The immutable freeze must name all seven planned identities. The supplied closure summary supplies only explicit run IDs. No recursive scan or whole runs.jsonl read occurs. A duplicate identity/run, mixed phase/configuration/binary, wrong-root path, changed frozen source or oversized input is rejected. A missing listed run/trace retains every declared response/goal obligation as missing evidence and UNREVIEWED; absence alone is not evidence that a run never executed.
+ 
+ The freeze contains absolute frozen_path references. Those must resolve exactly under the supplied root's frozen/source tree; active source files or relocated snapshots cannot substitute. The helper checks only explicitly relevant frozen oracle/evaluator/analyze_joint/contract files, never all runtime files or large dependencies. Supplement functional-oracles is additionally referenced when that population is explicitly selected. An unknown functional-oracle shape is retained as an unresolved reference, without normalization.
+ 
+-The CLI requires root, closure, population, episode, rep, freeze-sha256 and a new output path. It must not be launched against actual evidence until root approves a bounded extraction. An optional saved-evaluations JSON index maps only this block's run IDs to exact absolute path/sha256 pairs. Missing saved evaluations are explicit; the helper never executes an evaluator to fill them.
++The CLI requires root, closure, population, episode, rep, freeze-sha256 and a new output path. It must not be launched against actual evidence until root approves a bounded extraction. V2 rejects any saved-evaluations input as UNSUPPORTED_SAVED_EVALUATION_PROVENANCE, including newer envelopes not implemented here. Matching identity and saved-file hashes do not establish trace/evaluator provenance. Initial extraction omits that option and explicitly supplies no certified selected endpoint, primary eligibility or deadline-audit result. The helper never executes an evaluator to fill missing results. No same-stimulus replacement eligibility rule is implemented: frozen BG newer same-Task RESULT behavior is not reinterpreted by this helper.
+ 
+ ## Resource bounds
+ 
+@@ -19,20 +19,22 @@
+ ## Outputs and association
+ 
+ - `manifest.json`: exact input/source/tool hashes, explicit planned7 identities, declared oracle response/goal counts, separate observed handoff/control event count, missing/omitted records and byte limits.
+-- `evidence.json`: recorded events in unchanged raw index order with ID/ns/data and exact JSON pointers; source/revision/extent/read/authority facts stay in these records. Recorded candidate input and source plain text remain context, without invented associations or commands. Base64/images are reference-only.
++- `evidence.json`: recorded events in unchanged raw index order with ID/ns/data and exact JSON pointers; source/revision/extent/read/authority facts stay in these records. The candidate_input_file is a single initial JSON object, not the full streamed runtime ingress. Later input/source/deadline/cancel/ACK facts remain in trace events and raw records. Initial user input, recorded model request/prompt references and frozen oracle conditions stay distinct; no literal oracle difference automatically establishes an actual-request failure. Base64/images are reference-only.
+ - `worklist.json`: stable population/configuration/episode/rep/run_id/obligation_kind/obligation_id keys, frozen expectations and raw evidence links. Expected oracle obligations and observed ingress events have distinct origins. Automatic QA02 binding obligations are not a new manual denominator.
+-- `review.md`: readable expectation, original selected endpoint fact when saved, all matching actual callback bodies, adopted plans and stimulus-linked timeline; full preceding/following trace context remains in evidence.json.
++- `review.md`: readable frozen expectation, explicit unavailable selected endpoint, all matching actual callback bodies, adopted plans and typed stimulus-linked timeline; run-level failure/effect/rejection/cancellation facts and full preceding/following context remain visible. Its exact UTF-8 SHA/bytes are in manifest.outputs alongside evidence.json and worklist.json.
+ 
+-Association uses only exact recorded stimulus_id/origin_event_id/request.stimulus_id values. All raw events remain available, including prior/later Task/revision, source/permission changes, control, approval, actual ingress/receipt/result and rejection facts. Unknown wire formats are not reconstructed from the oracle. The helper makes no claim that a linked event or recorded source is semantically correct.
++Association uses only exact recorded stimulus_id/origin_event_id/request.stimulus_id and two known typed fields: WORKFLOW_FAILED.data.event_id and STATE_EFFECT_COMMIT.data.data.stimulus_id. Failure/effect/control kinds have explicit run-level references. Rows expose exact matched typed references plus unmatched run-context event indexes. Unmatched facts are not assigned inferred causal relations; absence from a row timeline cannot establish absence from the full trace. All raw events remain available, including prior/later Task/revision, source/permission changes, control, approval, actual ingress/receipt/result and rejection/late-effect facts. Unknown wire formats are not reconstructed from the oracle. The helper makes no claim that a linked event or recorded source is semantically correct.
+ 
+-The raw first matching display is ordered by actual observed_ns. A tie, missing clock or duplicate event ID is explicitly ambiguous; the helper does not choose a replacement. Saved frozen QA01 accepted_callback_id and saved QA03 rows are separate, unchanged facts. A later callback never replaces the original selected endpoint. A missing saved evaluation supplies no certified primary eligibility or latency. Missing output is distinct from missing execution/technical evidence; none produces a new automatic semantic FAIL.
++The raw first matching display is ordered by actual observed_ns only if every matching display has a usable integer clock. Any missing/non-integer/boolean clock, earliest tie or duplicate earliest event ID makes raw-first ambiguous; the helper does not sort an unknown clock after known clocks and claim a first event. The raw-first field is never a QA01 selected endpoint. No saved result is accepted in v2. Missing output is distinct from missing execution/technical evidence; none produces a new automatic semantic FAIL.
+ 
+ All four new review dimensions—body, Task/revision, approval/authority and handoff—are UNREVIEWED. Subsequent Astra PASS/FAIL/UNREVIEWED judgments belong to separate versioned artifacts that bind this bundle's hashes. Existing frozen diagnostic statuses, if present in the saved artifact, are evidence rather than new judgments. Partial semantic review never changes QA01's original timestamp or denominator.
+ 
+-`bundle-schema-v1.json` defines the manifest and named evidence/worklist schemas. Output files use exclusive creation, with the manifest written last. An existing output directory is never overwritten. A failed write may leave an incomplete new directory, which must be preserved and replaced by a fresh output name.
++`bundle-schema-v2.json` defines the current manifest and named evidence/worklist schemas. The CLI requires source-checkpoint-v2.json to bind the unchanged helper. A generated manifest references that v2 checkpoint and schema; the synthetic pre-checkpoint write is explicitly labeled as such. Output files use exclusive creation, with the manifest written last. An existing output directory is never overwritten. A failed write may leave an incomplete new directory, which must be preserved and replaced by a fresh output name. Root JSON Pointer is the empty string; slash is not used as a substitute.
++
++Exact v1 source, schema, README, tests,14-check result and checkpoint remain under preparation/source-v1/, bound by its immutable manifest. V1's NOT READY findings and the six v2 repairs are recorded in source-checkpoint-v2.json and v2-review-handoff.md. The original bundle-schema-v1.json remains historical.
+ 
+ ## Synthetic checks
+ 
+-`test_extract_closed_block.py` constructs only temporary tiny synthetic roots and checks wrong root/phase/configuration, duplicate/missing runs, ambiguous callbacks, oversize rejection, payload omission, immutable output, absent saved evaluation, no-output distinction, and raw-first versus saved-selected callback separation. It never opens actual campaign evidence. Test execution requires root's explicit clearance; the authorized synthetic-only result is recorded immutably in synthetic-check-v1.json.
++`test_extract_closed_block.py` constructs only temporary tiny synthetic roots and checks wrong root/phase/configuration, duplicate/missing runs, ambiguous or partially unclocked callbacks, exact closure ABI, oversize rejection, payload omission, immutable output, absent/unsupported saved evaluation, no-output distinction, empty JSON Pointer, review.md hash, and typed failure/effect links without invented association. It never opens actual campaign evidence. The authorized synthetic-only result is recorded immutably in synthetic-check-v2.json; v1's14-check record is preserved.
+ 
+ Planning source: joint-formal-v1/postanalysis/planning/astra-final-report-plan-v1.md, SHA256 bb23355ba50776e1096ccb009e1fd8d170d46a9d55abff8fe8eae273b9234e41. This helper is outside the112 frozen runtime sources and changes no running experiment or QA04 artifact.
+--- preserved-v1/test_extract_closed_block.py
++++ active-v2/test_extract_closed_block.py
+@@ -1,5 +1,4 @@
+ """Tiny synthetic fixtures only. Never opens the actual campaign corpus."""
+-import copy
+ import hashlib
+ import io
+ import json
+@@ -27,13 +26,14 @@
+             path.parent.mkdir(parents=True, exist_ok=True)
+             path.write_text(json.dumps(oracle) if relative.endswith('.json') else 'synthetic reference only\n')
+             self.sources.append({'relativePath': relative, 'frozen_path': str(path), 'sha256': x.digest(path.read_bytes())})
+-        self.freeze = {'version': x.GENERATION, 'sources': self.sources, 'binary': {'sha256': 'synthetic-binary'},
++        self.freeze = {'version': x.GENERATION, 'total_episode_runs': 441, 'sources': self.sources, 'binary': {'sha256': 'synthetic-binary'},
+                        'jobs': [dict(population='COMMON9', configuration=cfg, episode='S02', rep=1) for cfg in x.CONFIGS]}
+         dump(root / 'freeze.json', self.freeze)
+         self.freeze_hash = x.digest((root / 'freeze.json').read_bytes())
+-        self.closed = {'status': 'SYNTHETIC_BLOCK_CLOSED', 'population': 'COMMON9', 'episode': 'S02', 'rep': 1,
++        self.closed = {'status': 'FIRST_FIXED7_CONFIGURATION_BLOCK_CLOSED_NOT_CAMPAIGN_COMPLETE', 'closed_episodes': 7, 'planned_joint_episodes': 441,
++                       'population': 'COMMON9', 'episode': 'S02', 'rep': 1,
+                        'rows': [{'configuration': cfg, 'run_id': cfg + '-S02-r1-test'} for cfg in x.CONFIGS]}
+-        self.closure = root / 'closure.json'
++        self.closure = root / 'FIRST-BLOCK-S02-SUMMARY-v1.json'
+         dump(self.closure, self.closed)
+         self.first = root / 'raw/runs/AAAA-S02-r1-test/trace.json'
+         self.payload = 'data:image/png;base64,' + 'QUJD' * 100
+@@ -139,15 +139,20 @@
+         with self.assertRaisesRegex(x.EvidenceError, 'Immutable output'):
+             x.write_bundle(out, bundle)
+         self.assertEqual(before, (out / 'manifest.json').read_bytes())
++        manifest = json.loads(before)
++        for name in ['evidence.json', 'worklist.json', 'review.md']:
++            data = (out / name).read_bytes()
++            self.assertEqual(manifest['outputs'][name], {'sha256': x.digest(data), 'bytes': len(data)})
+ 
+     def test_missing_saved_evaluation_explicit(self):
+         manifest, _, rows = self.f.build()
+         self.assertTrue(all(r['saved_evaluation_state'] == 'MISSING_SAVED_EVALUATION' for r in rows))
+-        self.assertEqual(rows[0]['saved_QA01_selection']['status'], 'MISSING_SAVED_EVALUATION')
++        self.assertEqual(rows[0]['saved_QA01_selection']['status'], 'MISSING_SAVED_EVALUATION_NO_CERTIFIED_ENDPOINT_SUPPLIED')
++        self.assertTrue(all(r['saved_primary_measurement_eligibility'] == 'MISSING_SAVED_EVALUATION' for r in manifest['executions']))
+         self.assertTrue(all(v['status'] == 'UNREVIEWED' for r in rows for v in r['review'].values()))
+         self.assertEqual(manifest['declared_obligations'], {'response': 7, 'goal_relation': 7})
+ 
+-    def test_saved_selected_callback_does_not_replace_raw_first(self):
++    def test_saved_evaluation_provenance_is_unsupported(self):
+         self.f.change_trace(lambda t: t['events'].append(dict(t['events'][-1], event_id='selected-later', observed_ns=20)))
+         saved = dict(run_id='AAAA-S02-r1-test', configuration='AAAA', episode='S02', rep=1, phase='FORMAL',
+                      primary_measurement_eligibility='ELIGIBLE', deadline_audit={'status': 'CONSISTENT'},
+@@ -156,10 +161,67 @@
+         dump(path, saved)
+         index = self.f.root / 'saved-index.json'
+         dump(index, {'AAAA-S02-r1-test': {'path': str(path), 'sha256': x.digest(path.read_bytes())}})
+-        _, _, rows = self.f.build(saved_index=index)
++        with self.assertRaisesRegex(x.EvidenceError, 'UNSUPPORTED_SAVED_EVALUATION_PROVENANCE'):
++            self.f.build(saved_index=index)
++        _, _, rows = self.f.build()
+         self.assertEqual(rows[0]['first_raw_callback']['event_id'], 'display')
+-        self.assertEqual(rows[0]['saved_QA01_selection']['selected']['event_id'], 'selected-later')
++        self.assertIsNone(rows[0]['saved_QA01_selection']['selected'])
+         self.assertTrue(all(v['status'] == 'UNREVIEWED' for v in rows[0]['review'].values()))
++
++    def test_any_missing_or_noninteger_callback_clock_is_ambiguous(self):
++        for clock in [None, '20', True, 20.5]:
++            self.f.change_trace(lambda t: t['events'].append(dict(t['events'][1], event_id='unknown-' + str(clock), observed_ns=clock)))
++            _, _, rows = self.f.build()
++            self.assertEqual(rows[0]['raw_callback_state'], 'AMBIGUOUS_RAW_CALLBACK')
++            self.assertIsNone(rows[0]['first_raw_callback'])
++
++    def test_closed_substring_and_unsupported_status_rejected(self):
++        for status in ['NOT_CLOSED', 'SYNTHETIC_BLOCK_CLOSED', 'SECOND_FIXED7_CONFIGURATION_BLOCK_CLOSED_NOT_CAMPAIGN_COMPLETE']:
++            self.f.closed['status'] = status
++            dump(self.f.closure, self.f.closed)
++            with self.assertRaisesRegex(x.EvidenceError, 'Unsupported closure'):
++                self.f.build()
++
++    def test_supported_status_with_wrong_shape_rejected(self):
++        del self.f.closed['closed_episodes']
++        dump(self.f.closure, self.f.closed)
++        with self.assertRaisesRegex(x.EvidenceError, 'Unsupported closure'):
++            self.f.build()
++
++    def test_supported_status_with_wrong_file_rejected(self):
++        another = self.f.root / 'manual-summary.json'
++        dump(another, self.f.closed)
++        with self.assertRaisesRegex(x.EvidenceError, 'Unsupported closure'):
++            x.build_bundle(self.f.root, another, 'COMMON9', 'S02', 1, self.f.freeze_hash)
++
++    def test_root_json_pointer_is_empty(self):
++        self.assertEqual(x.pointer(()), '')
++        self.assertEqual(x.pointer(('a/b', '~x')), '/a~1b/~0x')
++        reader = x.Reader(self.f.root)
++        projected = reader.project(self.f.payload, {'path': 'synthetic', 'sha256': 'synthetic'})
++        self.assertEqual(projected['raw_ref']['json_pointer'], '')
++
++    def test_typed_failure_effect_links_and_unmatched_context(self):
++        facts = [
++            {'event_id': 'failure', 'kind': 'WORKFLOW_FAILED', 'observed_ns': 30, 'data': {'event_id': 'U1', 'reason': 'recorded anchor failed'}},
++            {'event_id': 'effect', 'kind': 'STATE_EFFECT_COMMIT', 'observed_ns': 31,
++             'data': {'effect_kind': 'DRAFT', 'data': {'stimulus_id': 'U1'}, 'status': 'recorded late effect status'}},
++            {'event_id': 'reject-unmatched', 'kind': 'PUBLICATION_REJECTED', 'observed_ns': 32, 'data': {'reason': 'recorded rejection without stimulus'}},
++            {'event_id': 'cancel-unmatched', 'kind': 'WORK_CANCELLATION_ACK', 'observed_ns': 33, 'data': {'reason': 'recorded cancellation'}},
++        ]
++        self.f.change_trace(lambda t: t['events'].extend(facts))
++        manifest, evidence, rows = self.f.build()
++        row = rows[0]
++        self.assertTrue({'failure', 'effect'}.issubset({r['event_id'] for r in row['explicit_stimulus_linked_timeline_refs']}))
++        self.assertEqual({f['raw_ref']['event_id'] for f in row['matched_typed_fact_refs']}, {'failure', 'effect'})
++        self.assertEqual(set(row['other_run_typed_fact_event_indexes']), {4, 5})
++        links = {f['raw_ref']['event_id']: f['explicit_stimulus_links'] for f in manifest['executions'][0]['typed_failure_effect_control_refs']}
++        self.assertEqual(links['failure'][0]['event_relative_pointer'], '/data/event_id')
++        self.assertEqual(links['effect'][0]['event_relative_pointer'], '/data/data/stimulus_id')
++        text = x.readable_review(manifest, evidence, rows)
++        self.assertIn('recorded rejection without stimulus', text)
++        self.assertIn('recorded late effect status', text)
++        self.assertTrue(all(v['status'] == 'UNREVIEWED' for v in row['review'].values()))
+ 
+     def test_no_output_stays_explicit_unreviewed(self):
+         self.f.change_trace(lambda t: t.update(events=t['events'][:1]))
+@@ -176,7 +238,7 @@
+     record = {'status': 'PASS' if result.wasSuccessful() else 'FAIL', 'scope': 'Temporary synthetic fixtures only; no actual corpus/evaluator/candidate/model/parser/build/network execution',
+               'tests': result.testsRun, 'elapsed_seconds': elapsed, 'stdout': output.getvalue(),
+               'source_sha256': {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(x.__file__), Path(__file__)]}}
+-    target = Path(__file__).with_name('synthetic-check-v1.json')
++    target = Path(__file__).with_name('synthetic-check-v2.json')
+     with target.open('x') as handle:
+         json.dump(record, handle, indent=2)
+         handle.write('\n')
+--- preserved-v1/v2-review-handoff.md
++++ active-v2/v2-review-handoff.md
+@@ -0,0 +1,14 @@
++# Helper v2: bounded repair handoff
++
++V1 is NOT READY for actual extraction. Its six exact original files and14-check PASS record remain unchanged in preparation/source-v1/. Snapshot manifest SHA256:251340643634f015450bb7fb93cdf3b2292a64bdb4b71264957dfd90a3b06468. A synthetic PASS is not independent source acceptance; v1's later static findings are preserved here.
++
++| V1 finding | V2 repair | Synthetic evidence |
++| --- | --- | --- |
++| A matching display with unknown clock sorted after known clocks could yield a false raw first | Any matching clock that is missing, non-integer or boolean makes raw-first ambiguous; no selected endpoint is manufactured | test_any_missing_or_noninteger_callback_clock_is_ambiguous |
++| Substring CLOSED accepted NOT_CLOSED or unsupported summaries | Exact initial S02 status, root-relative file, population/episode/rep and count/rows shape only; missing rows remain explicit UNREVIEWED | test_closed_substring_and_unsupported_status_rejected; test_supported_status_with_wrong_shape_rejected; test_supported_status_with_wrong_file_rejected |
++| Identity/hash-only saved evaluation lacked trace/evaluator provenance | Reject every saved-evaluation input as unsupported; initial extraction has no certified endpoint or primary eligibility, and no new strict-envelope parser or BG same-stimulus rule | test_saved_evaluation_provenance_is_unsupported; test_missing_saved_evaluation_explicit |
++| Root JSON Pointer was slash instead of empty string | Empty root pointer and normal escaping | test_root_json_pointer_is_empty |
++| review.md missing from output hashes | Hash exact UTF-8 review bytes and size before final manifest write | test_no_base64_copy_and_immutable_output |
++| Failure/effect facts were absent from short row timeline | Known WORKFLOW_FAILED and STATE_EFFECT_COMMIT nested typed ID fields exposed; all run-level failure/effect/cancel/rejection references remain visible, unmatched events stay unassociated context | test_typed_failure_effect_links_and_unmatched_context |
++
++Actual initial user/source context and frozen oracle expectation remain separate. Recorded model request/response files are hash references; the helper does not infer common prompt text or actual-request success from oracle strings. Candidate input is only the initial object; later streamed ingress remains in trace/raw events. All new semantic dimensions remain UNREVIEWED. No actual corpus, evaluator, model, parser, candidate, compiler, network or block extraction was executed for this repair. Actual extraction requires subsequent Astra review and root GO.

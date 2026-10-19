@@ -1,0 +1,617 @@
+{
+  "S02": {
+    "responses": [
+      {
+        "event_id": "S02-U01",
+        "response_id": "S02-RU01",
+        "required_content": "F01 결론의 두 문장 요약"
+      },
+      {
+        "event_id": "S02-U02",
+        "response_id": "S02-RU02",
+        "required_content": "M01 제목과 발신 시각"
+      },
+      {
+        "event_id": "S02-U03",
+        "response_id": "S02-RU03",
+        "required_content": "CAL01 시간과 제목"
+      },
+      {
+        "event_id": "S02-U04",
+        "response_id": "S02-RU04",
+        "required_content": "WEB01에 표시된 가격과 기준 시각"
+      },
+      {
+        "event_id": "S02-U05",
+        "response_id": "S02-RU05",
+        "required_content": "PUB01의 운영 시간과 출처"
+      },
+      {
+        "event_id": "S02-U06",
+        "response_id": "S02-RU06",
+        "required_content": "허용한 BK01의 지정 제품 설명"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S02-G01",
+        "start_event": "S02-U01",
+        "member_events": [
+          "S02-U01"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S02-G02",
+        "start_event": "S02-U02",
+        "member_events": [
+          "S02-U02"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S02-G03",
+        "start_event": "S02-U03",
+        "member_events": [
+          "S02-U03"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S02-G04",
+        "start_event": "S02-U04",
+        "member_events": [
+          "S02-U04"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S02-G05",
+        "start_event": "S02-U05",
+        "member_events": [
+          "S02-U05"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S02-G06",
+        "start_event": "S02-U06",
+        "member_events": [
+          "S02-U06"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      }
+    ],
+    "bindings": []
+  },
+  "S08": {
+    "responses": [
+      {
+        "event_id": "S08-U01",
+        "response_id": "S08-RU01",
+        "required_content": "T1/T2를 보존하고 최종 P2만 수정한다는 안내"
+      },
+      {
+        "event_id": "S08-U02",
+        "response_id": "S08-RU02",
+        "required_content": "보존 집합을 T1/T3로 변경하고 P2 수정 요청은 그대로 유지"
+      },
+      {
+        "event_id": "S08-A01",
+        "response_id": "S08-RA01",
+        "required_content": "P2 수정 완료와 원본 참조"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S08-G01",
+        "start_event": "S08-U01",
+        "member_events": [
+          "S08-U01",
+          "S08-U02",
+          "S08-A01"
+        ],
+        "completion": "두 입력의 정정 관계를 유지한 최종 요청에서 T1/T3 보존과 P2 수정 완료를 확인하고 자료를 표시 및 음성 준비. 이전 revision 결과는 현재 결과로 표시하지 않음 최종 revision의 P2/T1/T3을 기준으로 완료한다. U01에서 대체된 T2 설명의 미생성 음성 나머지는 준비 의무가 없으며 이미 수행한 처리와 폐기 비용은 남긴다."
+      }
+    ],
+    "bindings": [
+      {
+        "id": "S08-B01",
+        "event_id": "S08-U01",
+        "expression": "이 표들",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v1:T1",
+          "DOC-A:v1:T2"
+        ]
+      },
+      {
+        "id": "S08-B02",
+        "event_id": "S08-U01",
+        "expression": "저 문단",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v1:P2"
+        ]
+      },
+      {
+        "id": "S08-B03",
+        "event_id": "S08-U02",
+        "expression": "첫째",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v1:T1"
+        ]
+      },
+      {
+        "id": "S08-B04",
+        "event_id": "S08-U02",
+        "expression": "이 표",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v1:T3"
+        ]
+      }
+    ]
+  },
+  "S11": {
+    "responses": [
+      {
+        "event_id": "S11-U01",
+        "response_id": "S11-RU01",
+        "required_content": "H10 실제 전달 결과"
+      },
+      {
+        "event_id": "S11-U02",
+        "response_id": "S11-RU02",
+        "required_content": "같은 H10 결과"
+      },
+      {
+        "event_id": "S11-U03",
+        "response_id": "S11-RU03",
+        "required_content": "H10과 H11에 근거한 관계 설명"
+      },
+      {
+        "event_id": "S11-A01",
+        "response_id": "S11-RA01",
+        "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지"
+      },
+      {
+        "event_id": "S11-A02",
+        "response_id": "S11-RA02",
+        "required_content": "다른 Task BG의 최종 파일 완료"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S11-G01",
+        "start_event": "S11-U01",
+        "member_events": [
+          "S11-U01"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S11-G02",
+        "start_event": "S11-U02",
+        "member_events": [
+          "S11-U02"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S11-G03",
+        "start_event": "S11-U03",
+        "member_events": [
+          "S11-U03"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      }
+    ],
+    "bindings": [
+      {
+        "id": "S11-B01",
+        "event_id": "S11-U01",
+        "expression": "비용 비교 결과",
+        "revision": "final",
+        "expected_set": [
+          "H10:v1:delivered"
+        ]
+      },
+      {
+        "id": "S11-B02",
+        "event_id": "S11-U02",
+        "expression": "그 비교 결과",
+        "revision": "final",
+        "expected_set": [
+          "H10:v1:delivered"
+        ]
+      },
+      {
+        "id": "S11-B03",
+        "event_id": "S11-U03",
+        "expression": "그 결과",
+        "revision": "final",
+        "expected_set": [
+          "H10:v1:delivered"
+        ]
+      },
+      {
+        "id": "S11-B04",
+        "event_id": "S11-U03",
+        "expression": "일정 설명",
+        "revision": "final",
+        "expected_set": [
+          "H11:v1:delivered"
+        ]
+      }
+    ]
+  },
+  "S12": {
+    "responses": [
+      {
+        "event_id": "S12-U01",
+        "response_id": "S12-RU01",
+        "required_content": "H20이 참조한 DOC-A v1 P1"
+      },
+      {
+        "event_id": "S12-U02",
+        "response_id": "S12-RU02",
+        "required_content": "DOC-A v2 P1의 최신 값 설명"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S12-G01",
+        "start_event": "S12-U01",
+        "member_events": [
+          "S12-U01"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S12-G02",
+        "start_event": "S12-U02",
+        "member_events": [
+          "S12-U02"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      }
+    ],
+    "bindings": [
+      {
+        "id": "S12-B01",
+        "event_id": "S12-U01",
+        "expression": "설명했던 원본 부분",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v1:P1"
+        ]
+      },
+      {
+        "id": "S12-B02",
+        "event_id": "S12-U02",
+        "expression": "바뀐 그 부분",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v2:P1"
+        ]
+      }
+    ]
+  },
+  "S15": {
+    "responses": [
+      {
+        "event_id": "S15-U01",
+        "response_id": "S15-RU01",
+        "required_content": "DOC-A P1의 핵심 설명"
+      },
+      {
+        "event_id": "S15-U02",
+        "response_id": "S15-RU02",
+        "required_content": "TCP 설명"
+      },
+      {
+        "event_id": "S15-U03",
+        "response_id": "S15-RU03",
+        "required_content": "S15 첫 설명을 근거로 새 Task를 만든다는 안내"
+      },
+      {
+        "event_id": "S15-A01",
+        "response_id": "S15-RA01",
+        "required_content": "새 Task 결과 R15 링크"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S15-G01",
+        "start_event": "S15-U01",
+        "member_events": [
+          "S15-U01"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S15-G02",
+        "start_event": "S15-U02",
+        "member_events": [
+          "S15-U02"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S15-G03",
+        "start_event": "S15-U03",
+        "member_events": [
+          "S15-U03",
+          "S15-A01"
+        ],
+        "completion": "새 Task의 Agent 결과 파일 참조를 Text에 표시. Voice OFF이므로 음성 생성 불필요"
+      }
+    ],
+    "bindings": [
+      {
+        "id": "S15-B01",
+        "event_id": "S15-U01",
+        "expression": "이 문단",
+        "revision": "final",
+        "expected_set": [
+          "DOC-A:v1:P1"
+        ]
+      },
+      {
+        "id": "S15-B02",
+        "event_id": "S15-U03",
+        "expression": "아까 문단 설명",
+        "revision": "final",
+        "expected_set": [
+          "S15:answer01:delivered"
+        ]
+      }
+    ]
+  },
+  "S18": {
+    "responses": [
+      {
+        "event_id": "S18-U01",
+        "response_id": "S18-RU01",
+        "required_content": "TA의 확인된 현재 진행 상태"
+      },
+      {
+        "event_id": "S18-U02",
+        "response_id": "S18-RU02",
+        "required_content": "TA의 범위와 형식 수정 안내"
+      },
+      {
+        "event_id": "S18-A01",
+        "response_id": "S18-RA01",
+        "required_content": "TA 수정본 결과"
+      },
+      {
+        "event_id": "S18-U03",
+        "response_id": "S18-RU03",
+        "required_content": "TA 수정본을 근거로 별도 목표와 결과물의 새 Task TC 생성 안내"
+      },
+      {
+        "event_id": "S18-A02",
+        "response_id": "S18-RA02",
+        "required_content": "TC 결과 파일"
+      },
+      {
+        "event_id": "S18-A03",
+        "response_id": "S18-RA03",
+        "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지"
+      },
+      {
+        "event_id": "S18-A04",
+        "response_id": "S18-RA04",
+        "required_content": "다른 Task BG의 최종 파일 완료"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S18-G01",
+        "start_event": "S18-U01",
+        "member_events": [
+          "S18-U01"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S18-G02",
+        "start_event": "S18-U02",
+        "member_events": [
+          "S18-U02",
+          "S18-A01"
+        ],
+        "completion": "TA 정정 접수와 수정 결과 및 현재 revision 표시와 음성 준비"
+      },
+      {
+        "id": "S18-G03",
+        "start_event": "S18-U03",
+        "member_events": [
+          "S18-U03",
+          "S18-A02"
+        ],
+        "completion": "TC 결과 연결과 상세 표시 및 음성 준비"
+      }
+    ],
+    "bindings": [
+      {
+        "id": "S18-B01",
+        "event_id": "S18-U02",
+        "expression": "그 보고서",
+        "revision": "final",
+        "expected_set": [
+          "TA:current-request"
+        ]
+      },
+      {
+        "id": "S18-B02",
+        "event_id": "S18-U03",
+        "expression": "그 수정본",
+        "revision": "final",
+        "expected_set": [
+          "TA:revised-result"
+        ]
+      }
+    ]
+  },
+  "S19": {
+    "responses": [
+      {
+        "event_id": "S19-U01",
+        "response_id": "S19-RU01",
+        "required_content": "현재 질문의 두 방식 차이"
+      },
+      {
+        "event_id": "S19-A01",
+        "response_id": "S19-RA01",
+        "required_content": "다른 Task BG의 확인된 진행 50% 동일 Task의 더 최신 완료가 먼저 표시되면 그 완료 카드로 진행 응답 의무도 충족하며 시작 시각은 이 진행 source 시각을 유지"
+      },
+      {
+        "event_id": "S19-A02",
+        "response_id": "S19-RA02",
+        "required_content": "다른 Task BG의 최종 파일 완료"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S19-G01",
+        "start_event": "S19-U01",
+        "member_events": [
+          "S19-U01"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      }
+    ],
+    "bindings": []
+  },
+  "S20": {
+    "responses": [
+      {
+        "event_id": "S20-A01",
+        "response_id": "S20-RA01",
+        "required_content": "TA의 PDF 형식 확인 질문"
+      },
+      {
+        "event_id": "S20-A02",
+        "response_id": "S20-RA02",
+        "required_content": "TB의 수신자 확인 질문"
+      },
+      {
+        "event_id": "S20-U01",
+        "response_id": "S20-RU01",
+        "required_content": "어느 질문에 대한 답인지 확인"
+      },
+      {
+        "event_id": "S20-U02",
+        "response_id": "S20-RU02",
+        "required_content": "TA 형식 승인과 TB 발송 거부를 각각 연결"
+      },
+      {
+        "event_id": "S20-A03",
+        "response_id": "S20-RA03",
+        "required_content": "TA 결과와 TB 미발송 상태"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S20-G01",
+        "start_event": "S20-U01",
+        "member_events": [
+          "S20-U01",
+          "S20-U02",
+          "S20-A03"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      }
+    ],
+    "bindings": []
+  },
+  "S26": {
+    "responses": [
+      {
+        "event_id": "S26-U01",
+        "response_id": "S26-RU01",
+        "required_content": "파일 접근 목적과 범위를 설명하고 동의 요청"
+      },
+      {
+        "event_id": "S26-U02",
+        "response_id": "S26-RU02",
+        "required_content": "본문만 읽어 요약하고 첨부는 제외"
+      },
+      {
+        "event_id": "S26-U03",
+        "response_id": "S26-RU03",
+        "required_content": "외부 Agent에 보낼 요약 범위를 설명하고 동의 요청"
+      },
+      {
+        "event_id": "S26-U04",
+        "response_id": "S26-RU04",
+        "required_content": "외부 전달 거부와 미전송 상태"
+      },
+      {
+        "event_id": "S26-A01",
+        "response_id": "S26-RA01",
+        "required_content": "서로 다른 Task의 두 승인 질문"
+      },
+      {
+        "event_id": "S26-U05",
+        "response_id": "S26-RU05",
+        "required_content": "어느 발송을 승인하는지 확인"
+      },
+      {
+        "event_id": "S26-U06",
+        "response_id": "S26-RU06",
+        "required_content": "TA 승인과 TB 거부를 각각 연결"
+      },
+      {
+        "event_id": "S26-A02",
+        "response_id": "S26-RA02",
+        "required_content": "각각 실제 발송과 미발송 사실"
+      }
+    ],
+    "goals": [
+      {
+        "id": "S26-G01",
+        "start_event": "S26-U01",
+        "member_events": [
+          "S26-U01",
+          "S26-U02"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S26-G02",
+        "start_event": "S26-U03",
+        "member_events": [
+          "S26-U03",
+          "S26-U04"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      },
+      {
+        "id": "S26-G03",
+        "start_event": "S26-U05",
+        "member_events": [
+          "S26-U05",
+          "S26-U06",
+          "S26-A02"
+        ],
+        "completion": "해당 입력에 요구된 상세 응답과 상태 확정 및 필요한 전체 음성 요약 준비 완료"
+      }
+    ],
+    "bindings": [
+      {
+        "id": "S26-B01",
+        "event_id": "S26-U03",
+        "expression": "이 요약",
+        "revision": "final",
+        "expected_set": [
+          "S26:summary:body-only"
+        ]
+      }
+    ]
+  }
+}

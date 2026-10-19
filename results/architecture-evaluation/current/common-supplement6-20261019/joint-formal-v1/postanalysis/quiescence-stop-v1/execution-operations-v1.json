@@ -1,0 +1,132 @@
+{
+  "version": "JOINT441_POSTSTOP_EXECUTION_OPERATIONS_v1",
+  "recorded_at_utc": "2026-10-19T18:06:57.555214+00:00",
+  "evidence_basis": "Exact already-executed argv/session/exit facts from execution-agent tool responses; output receipts independently hashed now. This is an append-only retrospective ledger, not replay or newly measured command timing.",
+  "operations": [
+    {
+      "operation": "ASSEMBLER_WITH_ONE_FROZEN_ANALYZER",
+      "session_id": 56219,
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/architecture/common9_postanalysis/record_joint_report_inputs.py",
+        "--plan",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/planning/sol-stopped258-assembly-plan-v1.json",
+        "--plan-sha256",
+        "ff35cc1532cae6fd04d69c463b6fac02b85326d821e9ff3d7f13d333f6749a39",
+        "--output",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-input-assembly-v1",
+        "--execute-authorized-frozen-analysis"
+      ],
+      "observed_stdout_status": "ASSEMBLED_NOT_REPORTED",
+      "receipt": {
+        "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-input-assembly-v1/analysis-execution.json",
+        "sha256": "de5e374952aab91363fb4037443321777208cef47d881f97a7ecd65721322468",
+        "bytes": 20389
+      },
+      "manifest": {
+        "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-input-assembly-v1/manifest.json",
+        "sha256": "827bb46d7f5f012f446727e2bd9dda1aaab6efd7fcb1fd7d5597aab1b43a7b49",
+        "bytes": 237558
+      },
+      "cwd": "/Users/changbae/Workspace/via-sw-architecture",
+      "tool": "functions.exec tools.exec_command then tools.write_stdin",
+      "observed_exit_code": 0,
+      "reexecution_performed_for_this_ledger": false
+    },
+    {
+      "operation": "REPORT_ADAPTER",
+      "session_id": 8005,
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/architecture/common9_postanalysis/report_adapter.py",
+        "--input-manifest",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-input-assembly-v1/adapter-input.json",
+        "--input-sha256",
+        "58410cd675b57d356eb8f0c8797ac40ae32cad76242c07d37e4855c9fb6ea027",
+        "--output",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-report-v1"
+      ],
+      "observed_stdout_status": "COMPLETE_INPUT_REPORT",
+      "manifest": {
+        "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-report-v1/manifest.json",
+        "sha256": "84b92183ff3cf4d7ec199ea9b16283e0b84ea0b07df85f3d2d2ed07ca0680451",
+        "bytes": 340187
+      },
+      "cwd": "/Users/changbae/Workspace/via-sw-architecture",
+      "tool": "functions.exec tools.exec_command then tools.write_stdin",
+      "observed_exit_code": 0,
+      "reexecution_performed_for_this_ledger": false
+    },
+    {
+      "operation": "MECHANISM_SIDECAR_v1",
+      "session_id": 33921,
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/architecture/common9_postanalysis/extract_dp1_dp4_mechanism_evidence.py",
+        "--formal-root",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1",
+        "--input-manifest",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-input-assembly-v1/adapter-input.json",
+        "--input-sha256",
+        "58410cd675b57d356eb8f0c8797ac40ae32cad76242c07d37e4855c9fb6ea027",
+        "--accepted-report-manifest",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-report-v1/manifest.json",
+        "--accepted-report-sha256",
+        "84b92183ff3cf4d7ec199ea9b16283e0b84ea0b07df85f3d2d2ed07ca0680451",
+        "--output",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-mechanism-v1"
+      ],
+      "source_sha256_verified_before_invocation": "fdea28eef16c61a10e731e3c67006b28c0b547619db04d63c9796d8fec43fdc6",
+      "observed_stdout_status": "PARTIAL",
+      "receipt": {
+        "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-mechanism-v1/execution-receipt.json",
+        "sha256": "977f90c077a342b3f785e4f504da682e185855e2e1d1000d715bec7bd1f55ef7",
+        "bytes": 1412879
+      },
+      "receipt_started_at_utc": "2026-10-19T17:53:56.590154+00:00",
+      "receipt_finished_at_utc": "2026-10-19T17:54:03.291868+00:00",
+      "cwd": "/Users/changbae/Workspace/via-sw-architecture",
+      "tool": "functions.exec tools.exec_command then tools.write_stdin",
+      "observed_exit_code": 0,
+      "reexecution_performed_for_this_ledger": false
+    },
+    {
+      "operation": "MECHANISM_SIDECAR_v2",
+      "session_id": 29715,
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/architecture/common9_postanalysis/extract_dp1_dp4_mechanism_evidence.py",
+        "--formal-root",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1",
+        "--input-manifest",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-input-assembly-v1/adapter-input.json",
+        "--input-sha256",
+        "58410cd675b57d356eb8f0c8797ac40ae32cad76242c07d37e4855c9fb6ea027",
+        "--accepted-report-manifest",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-report-v1/manifest.json",
+        "--accepted-report-sha256",
+        "84b92183ff3cf4d7ec199ea9b16283e0b84ea0b07df85f3d2d2ed07ca0680451",
+        "--output",
+        "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-mechanism-v2"
+      ],
+      "source_sha256_verified_before_invocation": "dc3d96a70cc8de27582455edfda47525be78458bbc0069e379d7411287f38a9e",
+      "observed_stdout_status": "PARTIAL",
+      "receipt": {
+        "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/postanalysis/stopped258-mechanism-v2/execution-receipt.json",
+        "sha256": "5c9dd39304d54de8680ec2cd6f9bfd302bcc5053f14c41a84c16181937d1241e",
+        "bytes": 1412880
+      },
+      "receipt_started_at_utc": "2026-10-19T17:59:43.950098+00:00",
+      "receipt_finished_at_utc": "2026-10-19T17:59:50.377718+00:00",
+      "cwd": "/Users/changbae/Workspace/via-sw-architecture",
+      "tool": "functions.exec tools.exec_command then tools.write_stdin",
+      "observed_exit_code": 0,
+      "reexecution_performed_for_this_ledger": false
+    }
+  ],
+  "limits": "No source/report mutation, invocation/retry, model/parser/build/controller/analyzer/adapter/sidecar/package execution in this ledger-recording step."
+}

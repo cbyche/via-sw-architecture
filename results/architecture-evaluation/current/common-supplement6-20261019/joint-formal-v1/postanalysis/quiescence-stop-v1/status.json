@@ -1,0 +1,36 @@
+{
+  "controller_pid": 33177,
+  "completed": 258,
+  "planned": 441,
+  "latest": {
+    "configuration": "ABAA",
+    "episode": "S12",
+    "rep": 3,
+    "population": "COMMON9",
+    "block_id": "PRIMARY-r3-S12",
+    "state": "TERMINATED",
+    "harness_pid": 28191,
+    "returncode": 0,
+    "stdout": "{\"run_id\": \"ABAA-S12-r3-90923b\", \"calls\": 4, \"sources\": 2, \"failures\": [{\"kind\": \"CANCELLATION_CONTROL_PIPE_CLOSED\", \"control\": {\"type\": \"end_input\"}}], \"returncode\": 0, \"technical_failure\": true, \"budget_stop\": false}\n",
+    "stderr": "Exception ignored while finalizing file <_io.TextIOWrapper name=4 encoding='UTF-8'>:\nTraceback (most recent call last):\n  File \"/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/common9_poc_20261019/harness.py\", line 304, in <module>\n    p=argparse.ArgumentParser();p.add_argument('--episode',required=True);p.add_argument('--configuration',choices=CONFIGS,required=True);p.add_argument('--rep',type=int,default=1);p.add_argument('--root',type=Path,default=DEFAULT/'development');p.add_argument('--offline',action='store_true');p.add_argument('--time-scale',type=float,default=1);a=p.parse_args();ep=next(s for s in read(H/'fixtures.json')if s['id']==a.episode);r=execute(a.root,ep,a.configuration,a.rep,a.offline,a.time_scale);print(json.dumps({'run_id':r['run_id'],'calls':len(r['calls']),'sources':len(r['provided_sources']),'failures':r['host_failures'],'returncode':r['returncode'],'technical_failure':bool(r['technical_failures']or r['technical_abort_reason']),'budget_stop':any(c.get('status')in ['BUDGET_BLOCKED_NO_API','PROBE_BUDGET_BLOCKED_NO_API']for c in r['calls'])}))\nBrokenPipeError: [Errno 32] Broken pipe\n",
+    "technical_failure": true,
+    "budget_stop": false,
+    "budget": {
+      "limit_usd": 40,
+      "known_usd": 7.3272788,
+      "inflight_reservation_usd": 0,
+      "unknown_reservation_usd": 0,
+      "remaining_reservation_aware_usd": 32.6727212
+    },
+    "episode_elapsed_seconds": 89.056926833,
+    "at_ns": 2007419181124083
+  },
+  "budget": {
+    "limit_usd": 40,
+    "known_usd": 7.3272788,
+    "inflight_reservation_usd": 0,
+    "unknown_reservation_usd": 0,
+    "remaining_reservation_aware_usd": 32.6727212
+  },
+  "planned_counts_unchanged": true
+}

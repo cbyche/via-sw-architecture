@@ -1,0 +1,427 @@
+[
+  {
+    "id": "dp04-held-dense",
+    "dp": "04",
+    "description": "Repeated labels and edge-near pointer extents",
+    "revisions": [
+      {
+        "revision": 1,
+        "transcript": "이 항목과 이 항목의 실적을 비교해줘.",
+        "expressions": [
+          {
+            "expression_id": "one",
+            "text": "이 항목",
+            "start_ms": 100,
+            "end_ms": 500,
+            "time_uncertainty_ms": 20
+          },
+          {
+            "expression_id": "two",
+            "text": "이 항목",
+            "start_ms": 900,
+            "end_ms": 1300,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [
+          {
+            "event_id": "p1",
+            "type": "pointer_move",
+            "frame_id": "dense_new",
+            "x": 464,
+            "y": 390,
+            "t_ms": 300,
+            "button": "none"
+          },
+          {
+            "event_id": "p2",
+            "type": "pointer_move",
+            "frame_id": "dense_new",
+            "x": 781,
+            "y": 594,
+            "t_ms": 1100,
+            "button": "none"
+          }
+        ],
+        "frames": [
+          {
+            "frame_id": "dense_new",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/dense_new.png",
+            "sha256": "04114607a1764142478c12c0471daf2ad7f8188d902f58c69599de0ea8df8cd7",
+            "overlay_image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/dp04-held-dense-r1-dense_new-events.png",
+            "overlay_sha256": "32a5ec4ac28419bcfa10b787510a3d58b8db207d291fa0f66796ecaf35d09238",
+            "overlay_encoding": "RAW_EVENT_OVERLAY_V1 no inferred targets"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 1400
+      }
+    ],
+    "late_result_replay": false,
+    "provenance": "FRESH_AUTHORED_HELDOUT_20261019; no recorded user/native API data",
+    "prediction_condition": "B may gain OCR candidate legibility; inaccurate item extents can defeat code binding"
+  },
+  {
+    "id": "dp04-held-small-text",
+    "dp": "04",
+    "description": "Small repeated text and explicit unique condition",
+    "revisions": [
+      {
+        "revision": 1,
+        "transcript": "Cedar 항목 중에서 HOLD 상태인 T14만 설명해줘.",
+        "expressions": [
+          {
+            "expression_id": "item",
+            "text": "HOLD 상태인 T14",
+            "start_ms": 100,
+            "end_ms": 900,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [],
+        "frames": [
+          {
+            "frame_id": "small_text",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/small_text.png",
+            "sha256": "ea45471f69426a5a3ae869f8a72b8f700db129015830cf0b4888932033e515f9"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 1000
+      }
+    ],
+    "late_result_replay": false,
+    "provenance": "FRESH_AUTHORED_HELDOUT_20261019; no recorded user/native API data",
+    "prediction_condition": "Actual OCR text may reduce small-label confusion; both may directly read IDs without helper benefit"
+  },
+  {
+    "id": "dp04-held-region",
+    "dp": "04",
+    "description": "Free region containing three irregular samples",
+    "revisions": [
+      {
+        "revision": 1,
+        "transcript": "이렇게 둘러싼 세 점만 평균을 내줘.",
+        "expressions": [
+          {
+            "expression_id": "group",
+            "text": "둘러싼 세 점",
+            "start_ms": 100,
+            "end_ms": 1200,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [
+          {
+            "event_id": "loop",
+            "type": "pointer_path",
+            "start_ms": 200,
+            "end_ms": 1100,
+            "frame_id": "graph_new",
+            "button": "none",
+            "points": [
+              [
+                300,
+                180
+              ],
+              [
+                620,
+                180
+              ],
+              [
+                620,
+                470
+              ],
+              [
+                310,
+                470
+              ],
+              [
+                300,
+                180
+              ]
+            ]
+          }
+        ],
+        "frames": [
+          {
+            "frame_id": "graph_new",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/graph_new.png",
+            "sha256": "12f8e6ecc6999f14c226988e5a232f79022e9137d59304bae92ecdeaf61134af",
+            "overlay_image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/dp04-held-region-r1-graph_new-events.png",
+            "overlay_sha256": "222406cff1f092ad0b93405d550e481cd2946afa8c33f4d8ea8228dcb9bf4692",
+            "overlay_encoding": "RAW_EVENT_OVERLAY_V1 no inferred targets"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 1300
+      }
+    ],
+    "late_result_replay": false,
+    "provenance": "FRESH_AUTHORED_HELDOUT_20261019; no recorded user/native API data",
+    "prediction_condition": "OCR boxes cover labels, not sample centers; joint raw interpretation may avoid parser granularity mismatch"
+  },
+  {
+    "id": "dp04-held-language-region",
+    "dp": "04",
+    "description": "Language defines pair, excluding outer plots",
+    "revisions": [
+      {
+        "revision": 1,
+        "transcript": "바깥쪽 두 개는 빼고 안쪽 두 그래프만 비교해줘.",
+        "expressions": [
+          {
+            "expression_id": "inner",
+            "text": "안쪽 두 그래프",
+            "start_ms": 100,
+            "end_ms": 1000,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [],
+        "frames": [
+          {
+            "frame_id": "nested_graphs",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/nested_graphs.png",
+            "sha256": "1209ff33b93d611d3f3b0829a3ce4820a57f72577e68056c1c78b39230eee362"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 1100
+      }
+    ],
+    "late_result_replay": false,
+    "provenance": "FRESH_AUTHORED_HELDOUT_20261019; no recorded user/native API data",
+    "prediction_condition": "Joint access to original language and plot grouping may help; well-complete candidates can also bind correctly"
+  },
+  {
+    "id": "dp04-held-page",
+    "dp": "04",
+    "description": "Historic target before navigation",
+    "revisions": [
+      {
+        "revision": 1,
+        "transcript": "방금 가리켰던 항목을 다음 작업 자료로 써줘.",
+        "expressions": [
+          {
+            "expression_id": "historic",
+            "text": "방금 가리켰던 항목",
+            "start_ms": 100,
+            "end_ms": 600,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [
+          {
+            "event_id": "old-point",
+            "type": "pointer_move",
+            "frame_id": "page_h",
+            "x": 765,
+            "y": 488,
+            "t_ms": 300,
+            "button": "none"
+          },
+          {
+            "event_id": "scroll",
+            "type": "pointer_drag",
+            "start_ms": 680,
+            "end_ms": 850,
+            "frame_id": "page_h",
+            "points": [
+              [
+                960,
+                150
+              ],
+              [
+                960,
+                500
+              ]
+            ],
+            "button": "left"
+          },
+          {
+            "event_id": "nav",
+            "type": "source_change",
+            "t_ms": 800,
+            "from_frame": "page_h",
+            "to_frame": "page_j",
+            "source_revision": 2
+          }
+        ],
+        "frames": [
+          {
+            "frame_id": "page_h",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/page_h.png",
+            "sha256": "950311d1f190bfa8638dd4db1055a7448cd0c213ea8c02319f61b21c9fbc7392",
+            "overlay_image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/dp04-held-page-r1-page_h-events.png",
+            "overlay_sha256": "8cbf3b807907089fa1b2c942ef86d5570b6224bdceaa87175a66b13578491af8",
+            "overlay_encoding": "RAW_EVENT_OVERLAY_V1 no inferred targets"
+          },
+          {
+            "frame_id": "page_j",
+            "source_id": "authored-document",
+            "source_revision": 2,
+            "observed_at_ms": 800,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/page_j.png",
+            "sha256": "19f39753710506386c2f59cc5459583a87dc57642b2d16e9c4f7890e42d8ff01"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 700
+      }
+    ],
+    "late_result_replay": false,
+    "provenance": "FRESH_AUTHORED_HELDOUT_20261019; no recorded user/native API data",
+    "prediction_condition": "Frame-owned candidates may protect history; extra production of unused new page costs both parser branches"
+  },
+  {
+    "id": "dp04-held-correction",
+    "dp": "04",
+    "description": "Partial correction across same frame and delayed stale replay",
+    "revisions": [
+      {
+        "revision": 1,
+        "transcript": "왼쪽 첫 그래프와 오른쪽 끝 그래프를 비교해줘.",
+        "expressions": [
+          {
+            "expression_id": "keep",
+            "text": "왼쪽 첫 그래프",
+            "start_ms": 100,
+            "end_ms": 500,
+            "time_uncertainty_ms": 20
+          },
+          {
+            "expression_id": "replace",
+            "text": "오른쪽 끝 그래프",
+            "start_ms": 700,
+            "end_ms": 1200,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [],
+        "frames": [
+          {
+            "frame_id": "nested_graphs",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/nested_graphs.png",
+            "sha256": "1209ff33b93d611d3f3b0829a3ce4820a57f72577e68056c1c78b39230eee362"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 1300
+      },
+      {
+        "revision": 2,
+        "transcript": "첫 번째는 그대로 두고 두 번째는 오른쪽 끝 말고 왼쪽에서 두 번째 그래프로 바꿔줘.",
+        "expressions": [
+          {
+            "expression_id": "keep",
+            "text": "첫 번째는 그대로",
+            "start_ms": 2000,
+            "end_ms": 2400,
+            "time_uncertainty_ms": 20
+          },
+          {
+            "expression_id": "replace",
+            "text": "두 번째는 왼쪽에서 두 번째 그래프",
+            "start_ms": 2600,
+            "end_ms": 3500,
+            "time_uncertainty_ms": 20
+          }
+        ],
+        "events": [],
+        "frames": [
+          {
+            "frame_id": "nested_graphs",
+            "source_id": "authored-document",
+            "source_revision": 1,
+            "observed_at_ms": 0,
+            "width": 1000,
+            "height": 700,
+            "coordinate_space": "frame_pixels",
+            "image_path": "/Users/changbae/Workspace/via-sw-architecture/benchmark/architecture/four_dp_prediction_validation/dp04/assets/nested_graphs.png",
+            "sha256": "1209ff33b93d611d3f3b0829a3ce4820a57f72577e68056c1c78b39230eee362"
+          }
+        ],
+        "native_selection": {
+          "status": "unsupported",
+          "reason": "PNG-only authored evidence; no native object source exists"
+        },
+        "capture_gaps": [],
+        "permission": "allowed",
+        "transcript_ready_ms": 3600
+      }
+    ],
+    "late_result_replay": true,
+    "provenance": "FRESH_AUTHORED_HELDOUT_20261019; no recorded user/native API data",
+    "prediction_condition": "Explicit producer revision/retention may help; semantic split can lose correction scope and costs repeated screen production"
+  }
+]

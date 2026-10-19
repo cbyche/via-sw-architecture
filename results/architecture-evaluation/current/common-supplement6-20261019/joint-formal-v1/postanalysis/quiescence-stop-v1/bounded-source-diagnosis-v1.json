@@ -1,0 +1,350 @@
+{
+  "scope": "BOUNDED_LAST_FAILED_RUN_SOURCE_AND_RAW_READ_ONLY_NOT_METRIC_ANALYSIS",
+  "at_utc": "2026-10-19T17:51:12.136848+00:00",
+  "trace": {
+    "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/raw/runs/ABAA-S12-r3-90923b/trace.json",
+    "sha256": "fc20fd3820dbc53ed269fa932ee3daeaed73e08939bced3f2b30b315d72e952a",
+    "bytes": 2938455
+  },
+  "source_refs": [
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/frozen/source/benchmark/architecture/common9_poc_20261019/harness.py",
+      "sha256": "d30750622e97978f769da8366a8c12510e91cbd482ead32d1111ed9cc7e079d9",
+      "bytes": 30809
+    },
+    {
+      "path": "/Users/changbae/Workspace/via-sw-architecture/results/architecture-evaluation/current/common-supplement6-20261019/joint-formal-v1/frozen/source/prototypes/candidates/common9_poc_20261019/src/runtime.rs",
+      "sha256": "d96f61406119d870bf65bb9045a8fe2bb8eb1aa68ae8319a65a09845a4437402",
+      "bytes": 69074
+    }
+  ],
+  "run_id": "ABAA-S12-r3-90923b",
+  "candidate_returncode": 0,
+  "candidate_stderr": "",
+  "technical_certification_recorded": "NOT_CERTIFIED",
+  "technical_failures_recorded": [
+    {
+      "kind": "CANCELLATION_CONTROL_PIPE_CLOSED",
+      "control": {
+        "type": "end_input"
+      }
+    }
+  ],
+  "technical_abort_reason": null,
+  "contract_observation_deadline_ns": 2007419116071208,
+  "cancellation_requested_ns": 2007419120896000,
+  "control_sends": [
+    {
+      "type": "cancel_work",
+      "reason": "FINAL_ACTUAL_MANDATORY_SOURCE_PLUS_60_SECONDS",
+      "observation_deadline_ns": 2007419116071208,
+      "settlement_deadline_ns": 2007539116071208,
+      "requested_ns": 2007419120896000,
+      "send_begin_ns": 2007419120952166,
+      "send_end_ns": 2007419124701625,
+      "provided_at_ns": 2007419124701625
+    },
+    {
+      "type": "end_input",
+      "requested_ns": 2007419120896000,
+      "send_error": "BROKEN_PIPE",
+      "at_ns": 2007419124897333
+    }
+  ],
+  "terminal_event_sequence": [
+    {
+      "data": {
+        "control": {
+          "observation_deadline_ns": 2007419116071208,
+          "reason": "FINAL_ACTUAL_MANDATORY_SOURCE_PLUS_60_SECONDS",
+          "settlement_deadline_ns": 2007539116071208,
+          "type": "cancel_work"
+        },
+        "host_monotonic_ns": 2007419121156041
+      },
+      "elapsed_ns": 88894518625,
+      "event_id": "event-94",
+      "goal_ids": [],
+      "host_clock_semantics": "EVENT_ASSEMBLY_BEFORE_STDOUT_LOCK_NOT_DISPATCH_OR_DELIVERY",
+      "host_monotonic_ns": 2007419121186750,
+      "kind": "WORK_CANCELLATION_ACK",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 2007419124144041
+    },
+    {
+      "data": {
+        "active": 0,
+        "configuration": "ABAA",
+        "delivered": [
+          {
+            "id": "H20",
+            "kind": "delivered",
+            "revision": 1,
+            "source_spans": [
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "DOC-A",
+                "start_line": 4
+              }
+            ],
+            "text": "실제 표시한 설명: DOC-A v1 P1은 준비된 파일이10개이며 결론을 먼저 제시한다고 설명했다."
+          },
+          {
+            "actual_host_observed_ns": 2007351110730458,
+            "bindings": [
+              {
+                "expression": "아까 설명했던 원본 부분을 보여줘.",
+                "targets": [
+                  "DOC-A:v1:P1"
+                ]
+              }
+            ],
+            "checks": [
+              "atomic_goal_revision",
+              "current_source_range_authority",
+              "actual_host_display_receipt"
+            ],
+            "completion_ineligible_reason": null,
+            "content_contract_checked": true,
+            "content_type": "DETAILED_RESULT",
+            "current_completion_eligible": true,
+            "delivery_history_semantics": "ACTUAL_HOST_OBSERVED_HISTORICAL_FACT_AUTHORITY_RECHECK_REQUIRED_FOR_REUSE",
+            "delivery_source_id": "S12:answer01:delivered",
+            "event_class": null,
+            "goal_complete": true,
+            "goal_id": "goal:S12-U01",
+            "origin_event_id": "S12-U01",
+            "phase": "DIRECT",
+            "publication_id": "publication-36",
+            "revision": 1,
+            "source_revisions": {
+              "DOC-A": 1
+            },
+            "source_spans": [
+              {
+                "end_line": 4,
+                "revision": 1,
+                "source_id": "DOC-A",
+                "start_line": 4
+              }
+            ],
+            "stimulus_id": "S12-U01",
+            "targets": [
+              "DOC-A:v1:P1"
+            ],
+            "task_id": null,
+            "text": "P1 | 핵심 설명 | 준비된 파일은 10개이며 결론을 먼저 제시한다."
+          },
+          {
+            "actual_host_observed_ns": 2007370467128166,
+            "bindings": [
+              {
+                "expression": "지금 바뀐 그 부분",
+                "targets": [
+                  "DOC-A:v2:P1"
+                ]
+              }
+            ],
+            "checks": [
+              "atomic_goal_revision",
+              "current_source_range_authority",
+              "actual_host_display_receipt"
+            ],
+            "completion_ineligible_reason": null,
+            "content_contract_checked": true,
+            "content_type": "DETAILED_RESULT",
+            "current_completion_eligible": true,
+            "delivery_history_semantics": "ACTUAL_HOST_OBSERVED_HISTORICAL_FACT_AUTHORITY_RECHECK_REQUIRED_FOR_REUSE",
+            "delivery_source_id": "S12:answer02:delivered",
+            "event_class": null,
+            "goal_complete": true,
+            "goal_id": "goal:S12-U02",
+            "origin_event_id": "S12-U02",
+            "phase": "DIRECT",
+            "publication_id": "publication-83",
+            "revision": 1,
+            "source_revisions": {
+              "DOC-A": 2
+            },
+            "source_spans": [
+              {
+                "end_line": 4,
+                "revision": 2,
+                "source_id": "DOC-A",
+                "start_line": 4
+              }
+            ],
+            "stimulus_id": "S12-U02",
+            "targets": [
+              "DOC-A:v2:P1"
+            ],
+            "task_id": null,
+            "text": "DOC-A의 최신 버전(v2) P1 부분은 '준비된 파일은 12개이며 결론을 먼저 제시한다.'로 변경되었습니다. 이전 버전(v1)에서는 파일 수가 10개였으나, 현재는 12개로 수정되었습니다."
+          }
+        ],
+        "failures": [],
+        "ingress": {},
+        "pending_inputs": [],
+        "requests": {
+          "goal:S12-U01": {
+            "adoption": {
+              "_provider_usage": {
+                "input_tokens": 3765,
+                "output_tokens": 357
+              },
+              "allowed_actions": [],
+              "answer": "P1 | 핵심 설명 | 준비된 파일은 10개이며 결론을 먼저 제시한다.",
+              "artifact_type": null,
+              "bindings": [
+                {
+                  "expression": "아까 설명했던 원본 부분을 보여줘.",
+                  "targets": [
+                    "DOC-A:v1:P1"
+                  ]
+                }
+              ],
+              "completed_actions": [],
+              "completion_condition": null,
+              "constraints": [],
+              "control_operations": [],
+              "exclusions": [],
+              "handling_text": "Displaying the original text from DOC-A v1 P1 as requested.",
+              "permission_operations": [],
+              "purpose": "Show the original source text referenced in the previous explanation.",
+              "recipient": null,
+              "relation": "FOLLOWUP",
+              "route": "DIRECT",
+              "source_claims": [
+                {
+                  "end_line": 4,
+                  "quote": "P1 | 핵심 설명 | 준비된 파일은 10개이며 결론을 먼저 제시한다.",
+                  "revision": 1,
+                  "source_id": "DOC-A",
+                  "start_line": 4
+                }
+              ],
+              "source_revisions": {
+                "DOC-A": 1
+              },
+              "target_event_id": "S12-U01",
+              "target_goal_id": null,
+              "targets": [
+                "DOC-A:v1:P1"
+              ],
+              "task_id": null,
+              "unknown_actions": []
+            },
+            "goal_id": "goal:S12-U01",
+            "last_event_id": "S12-U01",
+            "origin_event_id": "S12-U01",
+            "raw_text": "아까 설명했던 원본 부분을 보여줘.",
+            "revision": 1,
+            "status": "HOST_COMPLETE"
+          },
+          "goal:S12-U02": {
+            "adoption": {
+              "_provider_usage": {
+                "input_tokens": 5561,
+                "output_tokens": 397
+              },
+              "allowed_actions": [],
+              "answer": "DOC-A의 최신 버전(v2) P1 부분은 '준비된 파일은 12개이며 결론을 먼저 제시한다.'로 변경되었습니다. 이전 버전(v1)에서는 파일 수가 10개였으나, 현재는 12개로 수정되었습니다.",
+              "artifact_type": null,
+              "bindings": [
+                {
+                  "expression": "지금 바뀐 그 부분",
+                  "targets": [
+                    "DOC-A:v2:P1"
+                  ]
+                }
+              ],
+              "completed_actions": [],
+              "completion_condition": null,
+              "constraints": [],
+              "control_operations": [],
+              "exclusions": [],
+              "handling_text": "Explaining the changed part in DOC-A revision 2, section P1.",
+              "permission_operations": [],
+              "purpose": "Explain the updated content of DOC-A v2 P1 as requested by the user.",
+              "recipient": null,
+              "relation": "FOLLOWUP",
+              "route": "DIRECT",
+              "source_claims": [
+                {
+                  "end_line": 4,
+                  "quote": "P1 | 핵심 설명 | 준비된 파일은 12개이며 결론을 먼저 제시한다.",
+                  "revision": 2,
+                  "source_id": "DOC-A",
+                  "start_line": 4
+                }
+              ],
+              "source_revisions": {
+                "DOC-A": 2
+              },
+              "target_event_id": "S12-U01",
+              "target_goal_id": null,
+              "targets": [
+                "DOC-A:v2:P1"
+              ],
+              "task_id": null,
+              "unknown_actions": []
+            },
+            "goal_id": "goal:S12-U02",
+            "last_event_id": "S12-U02",
+            "origin_event_id": "S12-U02",
+            "raw_text": "지금 바뀐 그 부분을 다시 설명해줘.",
+            "revision": 1,
+            "status": "HOST_COMPLETE"
+          }
+        }
+      },
+      "elapsed_ns": 88896139459,
+      "event_id": "event-95",
+      "goal_ids": [],
+      "host_clock_semantics": "EVENT_ASSEMBLY_BEFORE_STDOUT_LOCK_NOT_DISPATCH_OR_DELIVERY",
+      "host_monotonic_ns": 2007419122807541,
+      "kind": "EPISODE_RESULT",
+      "parent_ids": [],
+      "type": "event",
+      "observed_ns": 2007419124422666
+    },
+    {
+      "kind": "PROCESS_STDOUT_CLOSED",
+      "observed_ns": 2007419124443875
+    }
+  ],
+  "call_statuses": [
+    {
+      "call_id": null,
+      "stage": "evidence_select_ranges",
+      "status": "COMPLETED"
+    },
+    {
+      "call_id": null,
+      "stage": "meaning_interpret_and_respond",
+      "status": "COMPLETED"
+    },
+    {
+      "call_id": null,
+      "stage": "evidence_select_ranges",
+      "status": "COMPLETED"
+    },
+    {
+      "call_id": null,
+      "stage": "meaning_interpret_and_respond",
+      "status": "COMPLETED"
+    }
+  ],
+  "source_observations": [
+    "Frozen harness.py:187-190 attempts separately flushed cancel_work and end_input writes. Any BrokenPipeError appends CANCELLATION_CONTROL_PIPE_CLOSED.",
+    "Frozen runtime.rs:1006-1009 treats either cancel_work or end_input as end, notifies workers, and breaks its capture loop."
+  ],
+  "bounded_inference": "The observed normal cancellation ACK, final result and candidate exit0 together with failure specifically on the second end_input write support a race between candidate closing after cancel_work and host flushing redundant end_input. Candidate crash/model failure is not established by this evidence.",
+  "limits": [
+    "No reproduction/test/fix/model call or changed certification.",
+    "Frozen controller correctly followed its recorded technical_failure stop rule.",
+    "Final evaluator eligibility and all258 raw outcomes remain pending separate approved analysis."
+  ]
+}

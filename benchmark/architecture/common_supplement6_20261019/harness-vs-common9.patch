@@ -1,0 +1,142 @@
+--- common9/harness.py
++++ supplement6/harness.py
+@@ -1,9 +1,12 @@
+-"""Common9 actual-time event driver. Candidate never receives future schedule or oracle."""
++"""Contract20 supplemental actual-time fork; future schedule/oracles remain host-only."""
+ import argparse,copy,hashlib,heapq,json,os,queue,re,subprocess,sys,threading,time,uuid
+ from pathlib import Path
++COMMON=Path(__file__).resolve().parent.parent/'common9_poc_20261019'
++sys.path.append(str(COMMON));sys.path.append(str(Path(__file__).resolve().parent))
+ from bridge import Client,ModelError,dump
+ from memory import LogicalBuffers,sample_processes
+ from lifecycle import ObservationGate,ObservationCancelled
++from trigger_rules import FinalAnchorRegistry
+ H=Path(__file__).resolve().parent;REPO=H.parents[2];CRATE=REPO/'prototypes/candidates/common9_poc_20261019';DEFAULT=REPO/'results/architecture-evaluation/current/common9-poc-20261019'
+ CONFIGS=['AAAA','BAAA','CAAA','ABAA','AABA','AAAB','AAAC']
+ def read(p):return json.loads(Path(p).read_text())
+@@ -32,10 +35,10 @@
+  return result
+ class OfflineClient:
+  def __init__(self,root):
+-  import offline
++  import supplement_offline as offline
+   self.root=root;self.buffers=LogicalBuffers();self.semaphore=threading.Semaphore(2);self.lock=threading.Lock();self.observation_gate=ObservationGate()
+  def call(self,payload,meta):
+-  import offline
++  import supplement_offline as offline
+   self.observation_gate.check();at=time.monotonic_ns();result=offline.respond(payload,meta);end=time.monotonic_ns();return result,{**meta,'input_text_bytes':len(json.dumps(payload.get('input',{}),ensure_ascii=False).encode()),'instruction_bytes':len(payload.get('instruction','').encode()),'max_output_tokens':payload.get('max_tokens',1800),'offline_response_utf8_bytes':len(json.dumps(result,ensure_ascii=False).encode()),'image_bytes':sum(Path(p).stat().st_size for p in payload.get('images',[])),'call_uuid':'OFFLINE-'+uuid.uuid4().hex,'causal_trace':payload.get('_trace',{}),'enqueue_ns':at,'send_ns':at,'terminal_ns':end,'status':'OFFLINE_DOUBLE','input_tokens':0,'output_tokens':0,'cost_usd':0,'role':payload.get('role','VIA'),'evidence_kind':'MEASURED_REFERENCE_HARNESS','response_value':result}
+  def configure_slots(self,k):self.semaphore=threading.Semaphore(k)
+ 
+@@ -56,7 +59,7 @@
+  if not offline:
+   from grounding_adapter import GroundingAdapter
+   adapter=GroundingAdapter(root,client.buffers,observation_gate)
+- rust_spawn_begin_ns=time.monotonic_ns();proc=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,bufsize=1);rust_spawn_return_ns=time.monotonic_ns();first_positive_rss_ns={};write_lock=threading.Lock();events=[];calls=[];memory=[];provided={};source_nodes=[];threads=[];messages=queue.Queue();stop=threading.Event();ready_signal=threading.Event();clock_ready=threading.Event();clock_validation_finished=threading.Event();clock_proof=None;pending=[];serial=0;started=time.monotonic_ns();host_origin=None;firstseen={};finalseen={};fallbackseen={};ingresses={};receipts={};host_display_receipts=[];scheduled=set();completed=set();failures=[];deadline_updates=[];observation_deadline_ns=None;cancellation_requested_ns=None;effective_admission_stop_ns=None;settlement_deadline_ns=None;technical_abort_reason=None;technical_abort_detection_ns=None;technical_abort_requested_bound_ns=None;control_sends=[]
++ rust_spawn_begin_ns=time.monotonic_ns();proc=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,bufsize=1);rust_spawn_return_ns=time.monotonic_ns();first_positive_rss_ns={};write_lock=threading.Lock();events=[];calls=[];memory=[];provided={};source_nodes=[];threads=[];messages=queue.Queue();stop=threading.Event();ready_signal=threading.Event();clock_ready=threading.Event();clock_validation_finished=threading.Event();clock_proof=None;pending=[];serial=0;started=time.monotonic_ns();host_origin=None;firstseen={};finalseen={};fallbackseen={};ingresses={};receipts={};host_display_receipts=[];scheduled=set();completed=set();failures=[];deadline_updates=[];observation_deadline_ns=None;cancellation_requested_ns=None;effective_admission_stop_ns=None;settlement_deadline_ns=None;technical_abort_reason=None;technical_abort_detection_ns=None;technical_abort_requested_bound_ns=None;control_sends=[];final_anchors=FinalAnchorRegistry();final_anchor_choices=final_anchors.choices;trigger_audit=[]
+  def send(value):
+   with write_lock:
+    before=time.monotonic_ns();proc.stdin.write(json.dumps(input_transform(value)if input_transform else value,ensure_ascii=False)+'\n');proc.stdin.flush();after=time.monotonic_ns()
+@@ -101,7 +104,9 @@
+   for line in proc.stdout:
+    try:m=json.loads(line)
+    except ValueError:messages.put({'kind':'INVALID_STDOUT','line':line});continue
+-   m['observed_ns']=time.monotonic_ns()
++   if m.get('kind')=='RESPONSE_FINAL' and m.get('data',{}).get('stimulus_id'):
++    d=m['data'];parent=d.get('node_id')or next(reversed(m.get('parent_ids',[])),None);m['observed_ns']=final_anchors.observe(d['stimulus_id'],parent)
++   else:m['observed_ns']=time.monotonic_ns()
+    if m.get('kind')=='OBSERVATION_DEADLINE_ACK':
+     d=m.get('data',{});control=d.get('control',{});update=next((u for u in deadline_updates if u['update_id']==control.get('update_id')),None)
+     if update is not None:
+@@ -142,27 +147,16 @@
+   if cancellation_requested_ns is not None:return
+   for spec in specs.values():
+    if spec['event_id']in scheduled:continue
+-   trigger=spec['original_trigger'];refs=re.findall(r'S\d\d-[UA]\d\d',trigger)
+-   if not refs or refs[0]!=anchor:continue
+-   if 'ingress'in trigger:continue
+-   if which=='source'and'source'in trigger:
+-    schedule(spec,at+int(.1*time_scale*1e9),[parent]if parent else[],at)
+-   elif which=='first'and'첫 내용'in trigger:
+-    schedule(spec,at+int(.2*time_scale*1e9),[parent]if parent else[],at)
+-   elif which=='final'and'첫 내용'not in trigger and 'source'not in trigger and '발화 종료'not in trigger:
+-    if '원본 v2 변경'in trigger:
+-     source=copy.deepcopy(next(s for s in episode['initial']['sources']if s['id']=='DOC-A'));source['revision']=2;source['text']=source['text'].replace('파일은 10개','파일은 12개')
+-     try:
+-      with observation_gate.lock:
+-       observation_gate.check_locked();send({'type':'input_event','event':{'kind':'source','source':source,'source_monotonic_ns':at}})
+-     except ObservationCancelled:return
+-    schedule(spec,at+int(2*time_scale*1e9),[parent]if parent else[],at)
++   trigger=spec['trigger']
++   if trigger.get('anchor_event_id')!=anchor:continue
++   kind=trigger['kind']
++   if (which=='actual_provided'and kind=='after_actual_provided')or(which=='final'and kind=='after_actual_final_or_missing_anchor'):
++    due=at+int(trigger['offset_seconds']*time_scale*1e9)
++    trigger_audit.append({'event_id':spec['event_id'],'anchor_event_id':anchor,'trigger_kind':kind,'observed_anchor_kind':which,'anchor_ns':at,'scheduled_input_begin_ns':due,'anchor_is_actual_final':which=='final'and final_anchor_choices.get(anchor,{}).get('kind')=='ACTUAL_FINAL','missing_anchor_failure_retained':anchor in fallbackseen})
++    schedule(spec,due,[parent]if parent else[],at)
+  base=initial_source_provided_ns+int(5*time_scale*1e9)
+  for spec in specs.values():
+-  t=spec['original_trigger']
+-  if't=0'in t:schedule(spec,base,[],base)
+-  elif'발화 종료'in t:
+-   ref=re.findall(r'S\d\d-U\d\d',t)[0];end=base+int(duration[ref]*1e9);offset=-.1 if'-100ms'in t else .1;schedule(spec,end+int(offset*time_scale*1e9),[],base)
++  if spec['trigger']['kind']=='initial':schedule(spec,initial_source_provided_ns+int(spec['trigger']['offset_seconds']*time_scale*1e9),[],base)
+  def update_deadline(last_actual_source,reason):
+   nonlocal observation_deadline_ns
+   deadline=last_actual_source+int(60*time_scale*1e9)
+@@ -221,7 +215,7 @@
+       observation_gate.check_locked()
+       if observation_deadline_ns is not None:update_deadline(sent['provided_at_ns'],'LATE_ACTUAL_MANDATORY_SOURCE')
+       lastsource=sent['provided_at_ns']
+-     trigger_dependents(eid,'source',due,e['source_node'])
++     trigger_dependents(eid,'actual_provided',sent['provided_at_ns'],e['source_node'])
+     except ObservationCancelled as error:
+      failures.append({'kind':'SOURCE_PROVISION_CONTROL_BOUNDARY_FAILURE','event_id':eid,'at_ns':time.monotonic_ns(),'error':str(error),'provided':provided.get(eid)});cancel_at_deadline('HOST_CLOCK_CUTOFF_BEFORE_ACTUAL_SOURCE');ended=True
+    try:m=messages.get(timeout=.01)
+@@ -242,7 +236,7 @@
+       if update['ack_status']!='ACCEPTED':
+        failures.append({'kind':'DEADLINE_CONTROL_REJECTED','at_ns':at,'data':d,'update':update.copy()});cancel_at_deadline('DEADLINE_CONTROL_REJECTED',min(at,update['previous_deadline_ns']or at));ended=True
+     if kind=='DISPLAY_PROXY'and sid and sid not in firstseen:firstseen[sid]=at;trigger_dependents(sid,'first',at,node)
+-    if kind=='RESPONSE_FINAL'and sid and sid not in finalseen:finalseen[sid]=at;trigger_dependents(sid,'final',at,node)
++    if kind=='RESPONSE_FINAL'and sid and sid not in finalseen:finalseen[sid]=at
+     if kind in ['AGENT_INGRESS','CONTROL_INGRESS']:
+      record=wire_data(d,'request');ingresses[record['stimulus_id']]={**record,'observed_ns':at}
+     if kind=='RECEIVER_RESULT_AVAILABLE':
+@@ -257,10 +251,15 @@
+      if cancellation_requested_ns is None:
+       failures.append({'kind':'CANDIDATE_EXIT_BEFORE_OBSERVATION_CUTOFF','at_ns':at});cancel_at_deadline('CANDIDATE_EXIT_BEFORE_OBSERVATION_CUTOFF',at)
+      break
+-   # Missing predecessor response retains failure and provides later inputs after30s.
++   # Decide by actual reader receipt clock, not delayed main-loop polling.
++   # A timely queued final wins; a truly late final cannot erase missing-at30.
+    for eid,source in list(provided.items()):
+-    if not ended and eid not in finalseen and eid not in fallbackseen and now-source['source_ns']>=30*time_scale*1e9:
+-     fallbackseen[eid]=now;failures.append({'event_id':eid,'kind':'RESPONSE_ANCHOR_TIMEOUT','at_ns':now});trigger_dependents(eid,'final',now,source['source_node']);trigger_dependents(eid,'first',now,source['source_node'])
++    if ended or eid in final_anchor_choices:continue
++    choice=final_anchors.choose(eid,source['provided_at_ns'],int(30*time_scale*1e9))
++    if choice is None:continue
++    if choice['kind']=='ACTUAL_FINAL':trigger_dependents(eid,'final',choice['at_ns'],choice['parent_node'])
++    else:
++     fallbackseen[eid]=choice['at_ns'];failures.append({'event_id':eid,'kind':'RESPONSE_ANCHOR_TIMEOUT','at_ns':choice['at_ns'],'detected_at_ns':time.monotonic_ns(),'late_actual_final_ns':choice.get('late_actual_final_ns')});trigger_dependents(eid,'final',choice['at_ns'],source['source_node']);trigger_dependents(eid,'first',choice['at_ns'],source['source_node'])
+    # A missing actual ingress must not fabricate Agent success or deadlock later user input.
+    for spec in specs.values():
+     eid=spec['event_id'];trigger=spec['original_trigger']
+@@ -294,6 +293,7 @@
+   if adapter:adapter.close()
+  stderr=proc.stderr.read();record={'run_id':folder.name,'episode':episode['id'],'configuration':configuration,'rep':rep,'phase':'OFFLINE'if offline else'FORMAL','binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'initial_source_provided_ns':initial_source_provided_ns,'start_ns':started,'end_ns':time.monotonic_ns(),'events':events,'calls':calls,'provided_sources':provided,'source_nodes':source_nodes,'memory':memory,'memory_interval_ms':50,'host_failures':failures,'stderr':stderr,'returncode':proc.returncode,'candidate_input_file':str(folder/'candidate-initial.json'),'voice':'OFF','observation':'COMMON_HOST_TEXT_CALLBACK_PROXY','authored_time_scale':time_scale,'external_profile':{'work_seconds':8,'technical_receipt_seconds':.1,'readiness_rule':'max(ingress + 8s, actual_receiver_ready, ingress + 100ms)'},'actual_API_calls':sum(c.get('actual_api_sent',c.get('evidence_kind')not in ['LOCAL_MODEL','LOCAL_MODEL_FAILED','MEASURED_REFERENCE_HARNESS'])for c in calls)if not offline else 0}
+  technical_failures=[f for f in failures if f['kind']not in ['RESPONSE_ANCHOR_TIMEOUT','MISSING_INGRESS_OR_AGENT_ANCHOR']]
++ record.update({'population':'COMMON_SUPPLEMENT6','source_scheduler_version':'CONTRACT20_ACTUAL_PROVIDED_TRIGGER_v1','trigger_audit':trigger_audit,'final_anchor_choices':final_anchor_choices,'actual_final_reader_records':final_anchors.snapshot()})
+  record.update({'lifecycle_contract':'COMMON9_DEADLINE_V3','initial_source_send':initial_send,'initialization_scope':{'initial_source_provided_ns':initial_source_provided_ns,'episode_ready_observed_ns':host_origin},'clock_probe_send':clock_probe_send,'host_clock_proof':clock_proof,'host_display_receipts':host_display_receipts,'observation_deadline_ns':observation_deadline_ns,'observation_deadline_updates':deadline_updates,'last_actual_mandatory_source_ns':lastsource,'cancellation_requested_ns':cancellation_requested_ns,'effective_admission_stop_ns':effective_admission_stop_ns,'settlement_deadline_ns':settlement_deadline_ns,'technical_abort_reason':technical_abort_reason,'technical_certification':'NOT_CERTIFIED'if technical_abort_reason or technical_failures else'PENDING_INDEPENDENT_EVALUATOR_AUDIT','technical_failures':technical_failures,'control_sends':control_sends,'actual_response_final_ns':finalseen,'anchor_fallback_ns':fallbackseen,'unprovided_mandatory_events':sorted(specids-set(provided))})
+  accepted_updates=[u for u in deadline_updates if u['ack_status']=='ACCEPTED']
+  record.update({'contract_observation_deadline_ns':observation_deadline_ns,'proposed_observation_deadline_ns':deadline_updates[-1]['deadline_ns']if deadline_updates else None,'last_accepted_observation_deadline_ns':accepted_updates[-1]['deadline_ns']if accepted_updates else None,'technical_abort_requested_ns':cancellation_requested_ns if technical_abort_reason else None,'technical_abort_detection_ns':technical_abort_detection_ns if technical_abort_reason else None,'technical_abort_requested_bound_ns':technical_abort_requested_bound_ns,'settlement_anchor_ns':effective_admission_stop_ns,'pending_deadline_update_cutoffs_at_cancel':observation_gate.pending_update_cutoffs.copy()})
+@@ -301,4 +301,10 @@
+  with(root/'runs.jsonl').open('a')as f:f.write(json.dumps(record,ensure_ascii=False)+'\n')
+  return record
+ if __name__=='__main__':
+- p=argparse.ArgumentParser();p.add_argument('--episode',required=True);p.add_argument('--configuration',choices=CONFIGS,required=True);p.add_argument('--rep',type=int,default=1);p.add_argument('--root',type=Path,default=DEFAULT/'development');p.add_argument('--offline',action='store_true');p.add_argument('--time-scale',type=float,default=1);a=p.parse_args();ep=next(s for s in read(H/'fixtures.json')if s['id']==a.episode);r=execute(a.root,ep,a.configuration,a.rep,a.offline,a.time_scale);print(json.dumps({'run_id':r['run_id'],'calls':len(r['calls']),'sources':len(r['provided_sources']),'failures':r['host_failures'],'returncode':r['returncode'],'technical_failure':bool(r['technical_failures']or r['technical_abort_reason']),'budget_stop':any(c.get('status')in ['BUDGET_BLOCKED_NO_API','PROBE_BUDGET_BLOCKED_NO_API']for c in r['calls'])}))
++ p=argparse.ArgumentParser();p.add_argument('--episode',required=True);p.add_argument('--configuration',choices=CONFIGS,required=True);p.add_argument('--rep',type=int,default=1);p.add_argument('--root',type=Path,default=REPO/'results/architecture-evaluation/current/common-supplement6-20261019/development');p.add_argument('--offline',action='store_true');p.add_argument('--time-scale',type=float,default=1);p.add_argument('--crate',type=Path,default=CRATE);p.add_argument('--input-transform-module',type=Path);a=p.parse_args();CRATE=a.crate.resolve();transform=None
++ if a.input_transform_module:
++  if not a.offline:p.error('Input wire transforms are offline QA04 acceptance only')
++  import importlib.util
++  path=a.input_transform_module.resolve();sys.path.insert(0,str(path.parent));spec=importlib.util.spec_from_file_location('qa04_supplement_input_transform',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);transform=module.migrate_c03
++  dump(a.root/'input-transform-provenance.json',{'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'callable':'migrate_c03','scope':'OFFLINE_QA04_ONLY'})
++ ep=next(s for s in read(H/'fixtures.json')if s['id']==a.episode);r=execute(a.root,ep,a.configuration,a.rep,a.offline,a.time_scale,input_transform=transform);print(json.dumps({'run_id':r['run_id'],'calls':len(r['calls']),'sources':len(r['provided_sources']),'failures':r['host_failures'],'returncode':r['returncode'],'technical_failure':bool(r['technical_failures']or r['technical_abort_reason']),'budget_stop':any(c.get('status')in ['BUDGET_BLOCKED_NO_API','PROBE_BUDGET_BLOCKED_NO_API']for c in r['calls'])}))

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:via:common9:closed-block-evidence:v1",
+  "description": "Manifest schema. evidence.json and worklist.json use the named definitions. New semantic review values are always UNREVIEWED; later Astra judgments are separate immutable artifacts.",
+  "$ref": "#/$defs/manifest",
+  "$defs": {
+    "file_ref": {"type": "object", "required": ["path", "sha256", "bytes"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "bytes": {"type": "integer", "minimum": 0}}},
+    "key": {"type": "object", "required": ["population", "configuration", "episode", "rep", "run_id", "obligation_kind", "obligation_id"], "properties": {
+      "population": {"enum": ["COMMON9", "COMMON_SUPPLEMENT6"]}, "configuration": {"enum": ["AAAA", "BAAA", "CAAA", "ABAA", "AABA", "AAAB", "AAAC"]},
+      "episode": {"type": "string"}, "rep": {"type": "integer", "minimum": 1}, "run_id": {"type": ["string", "null"]},
+      "obligation_kind": {"enum": ["response", "goal_relation", "observed_handoff_control"]}, "obligation_id": {"type": "string"}}},
+    "review_dimension": {"type": "object", "required": ["status", "reason", "reviewer", "evidence_refs"], "properties": {"status": {"const": "UNREVIEWED"}, "reason": {"type": "string"}, "reviewer": {"type": "null"}, "evidence_refs": {"type": "array", "maxItems": 0}}},
+    "worklist": {"type": "array", "items": {"type": "object", "required": ["key", "origin", "frozen_expectation", "execution_state", "saved_evaluation_state", "raw_callback_state", "first_raw_callback", "all_matching_display_refs", "actual_adopted_plan_Task_goal_revision_refs", "explicit_stimulus_linked_timeline_refs", "full_trace_context_ref", "review"], "properties": {
+      "key": {"$ref": "#/$defs/key"}, "origin": {"enum": ["DECLARED_FROZEN_ORACLE", "OBSERVED_EVENT_ONLY_NOT_A_NEW_PLANNED_DENOMINATOR"]},
+      "execution_state": {"enum": ["CLOSED_TRACE_PRESENT", "MISSING_RUN_RECORD", "MISSING_TRACE"]},
+      "review": {"type": "object", "required": ["body", "task_revision", "approval_authority", "handoff"], "additionalProperties": {"$ref": "#/$defs/review_dimension"}}
+    }}},
+    "evidence": {"type": "array", "items": {"type": "object", "required": ["identity", "trace", "events", "host_display_receipts", "provided_sources", "source_nodes", "candidate_input", "raw_model_files"], "properties": {"trace": {"$ref": "#/$defs/file_ref"}, "events": {"type": "array", "items": {"type": "object", "required": ["raw_ref", "record"]}}}}},
+    "manifest": {"type": "object", "required": ["version", "status", "block", "freeze", "closure", "source_references", "planned_configurations", "planned_run_count", "declared_obligations", "observed_event_review_rows", "executions", "issues", "omissions", "inputs", "bytes_read", "limits", "interpretation"], "properties": {
+      "version": {"const": "COMMON9_CLOSED_BLOCK_EVIDENCE_v1"}, "status": {"enum": ["EVIDENCE_READY_UNREVIEWED", "INCOMPLETE_EVIDENCE_UNREVIEWED"]},
+      "freeze": {"$ref": "#/$defs/file_ref"}, "closure": {"$ref": "#/$defs/file_ref"}, "planned_run_count": {"const": 7},
+      "planned_configurations": {"type": "array", "minItems": 7, "maxItems": 7, "uniqueItems": true}, "inputs": {"type": "array", "items": {"$ref": "#/$defs/file_ref"}},
+      "declared_obligations": {"type": "object", "required": ["response", "goal_relation"], "properties": {"response": {"type": "integer", "minimum": 0}, "goal_relation": {"type": "integer", "minimum": 0}}},
+      "observed_event_review_rows": {"type": "integer", "minimum": 0}, "issues": {"type": "array"}, "omissions": {"type": "array"}
+    }}
+  }
+}

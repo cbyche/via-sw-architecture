@@ -1,0 +1,9 @@
+# Stage04: normal host lifecycle marker compatibility
+
+This reporting-only revision follows the preserved `stopped258-mechanism-v1` result:255 rows reported `Invalid event/data shape`; the inspected first pointer is the frozen harness's normal `PROCESS_STDOUT_CLOSED` marker with `kind` and integer `observed_ns`, without a candidate `data` envelope. This is a helper coverage issue, not evidence that a mechanism was unused or that the measurement was corrupted.
+
+The only source changes from stage03 are the output version v2 and an early continuation for that exact two-key marker shape with a nonnegative integer clock. Boolean clocks, additional keys, null data, unknown data-less events and malformed candidate events still retain UNSUPPORTED and prior facts. No measurement, frozen source, trace, contract, endpoint, eligibility or QA denominator changes. The original source copy and failed output remain preserved.
+
+Eight targeted in-memory synthetic checks passed once in0.000366s. They read no campaign input and create no fake input files; this is source preparation, not campaign validation. Existing caps have identical AST expressions, including2MiB projected rows,16MiB traces and16GiB aggregate input. The three previously capped rows are not given a larger allowance. An initial metadata-checkpoint attempt used `ast.literal_eval` on arithmetic expressions and failed after copying the source; that preparation failure is saved separately. No extraction or test was repeated by the corrected metadata comparison.
+
+See `CHECKPOINT.json`, copied source, test and exact result. Independent closure and a separate exact coordinator GO are required before one fresh actual extraction into `postanalysis/stopped258-mechanism-v2`. That extraction cannot replace or certify the prior output. No paid campaign/model call, parser, build or controller restart is authorized here.

@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:via:joint441:quantitative-input:v1",
+  "type": "object",
+  "required": [
+    "version",
+    "formal_root",
+    "artifacts",
+    "oracles",
+    "qa04"
+  ],
+  "properties": {
+    "version": {
+      "const": "JOINT441_QUANTITATIVE_INPUT_v1"
+    },
+    "formal_root": {
+      "type": "string",
+      "pattern": "^/"
+    },
+    "artifacts": {
+      "type": "object",
+      "required": [
+        "freeze",
+        "approval",
+        "quiescence",
+        "progress",
+        "status",
+        "ledger",
+        "result_index"
+      ],
+      "additionalProperties": {
+        "$ref": "#/$defs/file_ref"
+      }
+    },
+    "oracles": {
+      "type": "object",
+      "required": [
+        "COMMON9",
+        "COMMON_SUPPLEMENT6"
+      ],
+      "additionalProperties": {
+        "$ref": "#/$defs/file_ref"
+      }
+    },
+    "qa04": {
+      "type": "object",
+      "required": [
+        "report",
+        "classification",
+        "final_review",
+        "raw630",
+        "checkpoint"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "approval_role",
+          "ref"
+        ],
+        "properties": {
+          "approval_role": {
+            "type": "string"
+          },
+          "ref": {
+            "$ref": "#/$defs/file_ref"
+          }
+        }
+      }
+    },
+    "read_limits": {
+      "type": "object",
+      "properties": {
+        "file_limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864
+        },
+        "total_limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 17179869184
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "file_ref": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "json_pointer": {
+          "type": "string",
+          "pattern": "^(/.*)?$"
+        }
+      }
+    }
+  },
+  "$comment": "Semantic/provenance conditions and auxiliary index/association ABIs are specified in ADAPTER-README.md and validated by Python. No automatic file discovery or evaluator execution."
+}

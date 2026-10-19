@@ -1,0 +1,475 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:via:joint441:quantitative-report:v1",
+  "type": "object",
+  "required": [
+    "version",
+    "status",
+    "provenance",
+    "populations",
+    "qa04_reference",
+    "pairs",
+    "cost_reconciliation",
+    "prediction_worklist",
+    "limitations",
+    "planned_totals",
+    "execution_coverage",
+    "input_issues"
+  ],
+  "properties": {
+    "version": {
+      "const": "JOINT441_QUANTITATIVE_REPORT_v1"
+    },
+    "status": {
+      "enum": [
+        "COMPLETE_INPUT_REPORT",
+        "INCOMPLETE_EVIDENCE_REPORT",
+        "INVALID_REPORT_INPUT"
+      ]
+    },
+    "populations": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "#/$defs/population"
+      }
+    },
+    "pairs": {
+      "type": "object",
+      "required": [
+        "planned_rows",
+        "rows_file",
+        "certified_timing_summaries",
+        "raw_analyzer_paired_diagnostics"
+      ]
+    },
+    "prediction_worklist": {
+      "type": "array",
+      "minItems": 24,
+      "maxItems": 24,
+      "items": {
+        "$ref": "#/$defs/prediction"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "file_ref": {
+      "type": "object",
+      "required": [
+        "path",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "json_pointer": {
+          "type": "string",
+          "pattern": "^(/.*)?$"
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "required": [
+        "planned",
+        "partition",
+        "observed_count",
+        "sum_ns",
+        "mean_ms",
+        "aggregate_valid",
+        "frozen_summary_ref",
+        "raw_diagnostic_ref"
+      ],
+      "properties": {
+        "planned": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "partition": {
+          "type": "object"
+        },
+        "observed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sum_ns": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "mean_ms": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "aggregate_valid": {
+          "type": "boolean"
+        },
+        "frozen_summary_ref": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/file_ref"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "raw_diagnostic_ref": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "required": [
+        "planned",
+        "partition",
+        "known_correct",
+        "known_judgments",
+        "known_correct_over_planned_lower_bound",
+        "fixed_denominator_accuracy",
+        "coverage_incomplete"
+      ],
+      "properties": {
+        "planned": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "partition": {
+          "type": "object"
+        },
+        "known_correct": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "known_judgments": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "known_correct_over_planned_lower_bound": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "fixed_denominator_accuracy": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "coverage_incomplete": {
+          "type": "boolean"
+        }
+      }
+    },
+    "cost": {
+      "type": "object",
+      "required": [
+        "known_expenditure_usd",
+        "unknown_call_count_observed",
+        "unknown_reservation_usd_observed",
+        "comparison_complete",
+        "representative_fixed_bundle_mean_usd",
+        "planned_episode_count",
+        "observed_cost_records",
+        "local_compute_monetized",
+        "scope"
+      ],
+      "properties": {
+        "known_expenditure_usd": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "comparison_complete": {
+          "type": "boolean"
+        },
+        "representative_fixed_bundle_mean_usd": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope": {
+          "type": "string"
+        },
+        "local_compute_monetized": {
+          "const": "NOT_MEASURED"
+        }
+      }
+    },
+    "rss": {
+      "type": "object",
+      "required": [
+        "peak_concurrent_sum_bytes",
+        "decimal_MB",
+        "MiB",
+        "tied_same_sample_refs",
+        "comparison_complete",
+        "maximum_status",
+        "status_counts",
+        "scope",
+        "unverified_peak_records"
+      ],
+      "properties": {
+        "peak_concurrent_sum_bytes": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "decimal_MB": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "MiB": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "comparison_complete": {
+          "type": "boolean"
+        },
+        "tied_same_sample_refs": {
+          "type": "array"
+        },
+        "maximum_status": {
+          "enum": [
+            "COMPLETE_OBSERVED_MAXIMUM",
+            "OBSERVED_LOWER_BOUND_DIAGNOSTIC",
+            "NOT_OBSERVED"
+          ]
+        },
+        "scope": {
+          "type": "string"
+        },
+        "unverified_peak_records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "identity",
+              "recorded_peak_concurrent_sum_bytes",
+              "recorded_peak_same_sample",
+              "reason"
+            ]
+          }
+        }
+      }
+    },
+    "configuration": {
+      "type": "object",
+      "required": [
+        "configuration",
+        "execution_partition",
+        "qa01",
+        "qa02",
+        "qa03",
+        "qa04_ref",
+        "qa05",
+        "qa06",
+        "semantic_coverage"
+      ],
+      "properties": {
+        "configuration": {
+          "enum": [
+            "AAAA",
+            "BAAA",
+            "CAAA",
+            "ABAA",
+            "AABA",
+            "AAAB",
+            "AAAC"
+          ]
+        },
+        "qa01": {
+          "$ref": "#/$defs/timing"
+        },
+        "qa02": {
+          "$ref": "#/$defs/binding"
+        },
+        "qa03": {
+          "$ref": "#/$defs/timing"
+        },
+        "qa05": {
+          "$ref": "#/$defs/cost"
+        },
+        "qa06": {
+          "$ref": "#/$defs/rss"
+        }
+      }
+    },
+    "population": {
+      "type": "object",
+      "required": [
+        "population",
+        "planned",
+        "configurations",
+        "case_repetition_refs"
+      ],
+      "properties": {
+        "population": {
+          "enum": [
+            "COMMON9",
+            "COMMON_SUPPLEMENT6"
+          ]
+        },
+        "configurations": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "items": {
+            "$ref": "#/$defs/configuration"
+          }
+        },
+        "case_repetition_refs": {
+          "type": "object",
+          "required": [
+            "file",
+            "population"
+          ],
+          "properties": {
+            "file": {
+              "const": "case-repetition.jsonl"
+            },
+            "population": {
+              "enum": [
+                "COMMON9",
+                "COMMON_SUPPLEMENT6"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "prediction": {
+      "type": "object",
+      "required": [
+        "dp",
+        "qa",
+        "alternatives",
+        "preregistered_statement_ref",
+        "prior_direction_or_NO_PRIOR_RANKING",
+        "favorable_conditions",
+        "counterconditions",
+        "fixed_population_summary_refs",
+        "case_rep_refs",
+        "certified_pair_refs",
+        "raw_pair_refs",
+        "actual_mechanism_refs",
+        "semantic_review_coverage_refs",
+        "limitations",
+        "judgment_status",
+        "judgment",
+        "reviewer",
+        "reason"
+      ],
+      "properties": {
+        "dp": {
+          "enum": [
+            "DP1",
+            "DP2",
+            "DP3",
+            "DP4"
+          ]
+        },
+        "qa": {
+          "enum": [
+            "qa01",
+            "qa02",
+            "qa03",
+            "qa04",
+            "qa05",
+            "qa06"
+          ]
+        },
+        "judgment_status": {
+          "const": "UNREVIEWED"
+        },
+        "judgment": {
+          "type": "null"
+        },
+        "reviewer": {
+          "type": "null"
+        },
+        "fixed_population_summary_refs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    },
+    "repetition_bundle": {
+      "type": "object",
+      "required": [
+        "kind",
+        "population",
+        "configuration",
+        "rep",
+        "planned_cases",
+        "qa01",
+        "qa02",
+        "qa03",
+        "qa05",
+        "qa06"
+      ],
+      "properties": {
+        "kind": {
+          "const": "FIXED_REPETITION_BUNDLE"
+        },
+        "qa01": {
+          "$ref": "#/$defs/timing"
+        },
+        "qa02": {
+          "$ref": "#/$defs/binding"
+        },
+        "qa03": {
+          "$ref": "#/$defs/timing"
+        },
+        "qa05": {
+          "$ref": "#/$defs/cost"
+        },
+        "qa06": {
+          "$ref": "#/$defs/rss"
+        }
+      }
+    }
+  },
+  "$comment": "Explicit clarification of spec section8 illustrative arrays: pairs is a diagnostics object with rows_file; each population has its own case_repetition_refs object. Python validates identity uniqueness, fixed denominators and arithmetic."
+}

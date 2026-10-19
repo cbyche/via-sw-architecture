@@ -1,0 +1,87 @@
+--- source-v1/record_joint_report_inputs.py
++++ source-v2/record_joint_report_inputs.py
+@@ -23,6 +23,16 @@
+ APPROVAL_SHA = adapter.APPROVAL_SHA
+ ANALYZER_RELATIVE = 'benchmark/architecture/common_supplement6_20261019/analyze_joint.py'
+ ANALYZER_SHA = '469a5c8a57ee1a3e6812b8c85182cc0e4b2fbd59b69fbca8eeb8591a0fcecb49'
++CHILD_PYTHON_FLAGS = ('-E', '-S', '-B')
++CHILD_STARTUP_POLICY = {
++    'python_flags': list(CHILD_PYTHON_FLAGS),
++    'python_environment_configuration': 'IGNORED_BY_-E',
++    'site_initialization': 'SKIPPED_BY_-S',
++    'bytecode_writes': 'DISABLED_BY_-B',
++    'script_directory': 'RETAINED_STANDARD_SCRIPT_MODE_NO_-I',
++    'named_dependency_path': 'ANALYZER_SIBLINGS_AND_EXPLICIT_FROZEN_COMMON_PLUS_STANDARD_LIBRARY',
++    'environment_values_recorded': False,
++}
+ MAX_ANALYSIS_BYTES = 128 * 1024 * 1024
+ HARD_ANALYSIS_BYTES = 512 * 1024 * 1024
+ MAX_RUNS_BYTES = 4 * 1024 * 1024 * 1024
+@@ -177,7 +187,7 @@
+ 
+ def record_invocation(out, context, root, *, runner=None):
+     synthetic = runner is not None
+-    argv = [str(Path(sys.executable).resolve()), context['analyzer_path'], '--root', str(root), '--output', str(out.path / 'joint-analysis.json')]
++    argv = [str(Path(sys.executable).resolve()), *CHILD_PYTHON_FLAGS, context['analyzer_path'], '--root', str(root), '--output', str(out.path / 'joint-analysis.json')]
+     started_ns, started_at = time.monotonic_ns(), utc()
+     error, returncode = None, None
+     with (out.path / 'analysis.stdout.log').open('xb') as stdout, (out.path / 'analysis.stderr.log').open('xb') as stderr:
+@@ -210,7 +220,7 @@
+             output_error = {'type': type(caught).__name__, 'message': str(caught), 'path': str(output_path)}
+     receipt = {'version': 'JOINT441_RECORDED_ANALYSIS_EXECUTION_v1', 'invocation_kind': 'SYNTHETIC_FAKE_NO_PROCESS' if synthetic else 'ACTUAL_FROZEN_ANALYZER',
+                'actual_invocation_attempted': not synthetic, 'actual_process_invoked': False if synthetic else True if type(returncode) is int else None, 'argv': argv, 'cwd': str(Path(context['analyzer_path']).parent),
+-               'python_version': sys.version, 'started_monotonic_ns': started_ns, 'ended_monotonic_ns': ended_ns,
++               'python_version': sys.version, 'child_startup_policy': CHILD_STARTUP_POLICY, 'started_monotonic_ns': started_ns, 'ended_monotonic_ns': ended_ns,
+                'started_at_utc': started_at, 'ended_at_utc': ended_at, 'elapsed_seconds': (ended_ns-started_ns)/1e9,
+                'returncode': returncode, 'exception': error, 'log_errors': log_errors, 'stdout_ref': stdout_ref, 'stderr_ref': stderr_ref,
+                'output_ref': output_ref, 'output_error': output_error, 'mode': 'FORMAL_STRICT_FROZEN_JOINT_CLI_NO_OFFLINE',
+--- source-v1/test_record_joint_report_inputs.py
++++ source-v2/test_record_joint_report_inputs.py
+@@ -89,7 +89,7 @@
+ 
+     def runner(self,argv,stdout,stderr,cwd):
+         self.calls.append(argv)
+-        assert argv == [str(Path(__import__('sys').executable).resolve()),str(self.root/'frozen/source'/g.ANALYZER_RELATIVE),'--root',str(self.root),'--output',argv[-1]]
++        assert argv == [str(Path(__import__('sys').executable).resolve()),'-E','-S','-B',str(self.root/'frozen/source'/g.ANALYZER_RELATIVE),'--root',str(self.root),'--output',argv[-1]]
+         assert '--offline' not in argv
+         assert cwd == str((self.root/'frozen/source'/g.ANALYZER_RELATIVE).parent)
+         Path(argv[-1]).write_bytes(a.json_bytes(self.joint))
+@@ -128,6 +128,12 @@
+                 receipt=json.loads((Path(reference['path']).parent/'analysis-execution.json').read_text())
+                 self.assertFalse(receipt['actual_process_invoked'])
+                 self.assertEqual(receipt['invocation_kind'],'SYNTHETIC_FAKE_NO_PROCESS')
++                self.assertEqual(receipt['argv'][1:4],['-E','-S','-B'])
++                self.assertEqual(receipt['child_startup_policy']['python_flags'],['-E','-S','-B'])
++                self.assertEqual(receipt['child_startup_policy']['python_environment_configuration'],'IGNORED_BY_-E')
++                self.assertEqual(receipt['child_startup_policy']['site_initialization'],'SKIPPED_BY_-S')
++                self.assertEqual(receipt['child_startup_policy']['bytecode_writes'],'DISABLED_BY_-B')
++                self.assertFalse(receipt['child_startup_policy']['environment_values_recorded'])
+                 self.assertEqual(len(receipt['source_sha256']),112)
+                 for name,ref in manifest['outputs'].items():
+                     self.assertEqual(a.sha(Path(ref['path']).read_bytes()),ref['sha256'],name)
+--- source-v1/INPUT-ASSEMBLY-README.md
++++ source-v2/INPUT-ASSEMBLY-README.md
+@@ -30,10 +30,10 @@
+ After separate actual execution GO, the CLI requires `--execute-authorized-frozen-analysis`. It constructs one fixed command:
+ 
+ ```
+-<current Python executable> <root>/frozen/source/benchmark/architecture/common_supplement6_20261019/analyze_joint.py --root <root> --output <new-assembly-root>/joint-analysis.json
++<current Python executable> -E -S -B <root>/frozen/source/benchmark/architecture/common_supplement6_20261019/analyze_joint.py --root <root> --output <new-assembly-root>/joint-analysis.json
+ ```
+ 
+-The pinned analyzer SHA is `469a5c8a57ee1a3e6812b8c85182cc0e4b2fbd59b69fbca8eeb8591a0fcecb49`. The source accepts these exact flags; no `--offline`, arbitrary command, extra program or substituted evaluator is exposed. No shell is used. The environment is not dumped or copied. The unchanged frozen analyzer is responsible for its original strict metrics and actual raw-trace identity/content checks.
++The pinned analyzer SHA is `469a5c8a57ee1a3e6812b8c85182cc0e4b2fbd59b69fbca8eeb8591a0fcecb49`. The source accepts these exact flags; no `--offline`, arbitrary command, extra program or substituted evaluator is exposed. No shell is used. The child explicitly uses -E to ignore Python environment configuration, -S to skip site initialization, and -B to suppress bytecode writes. Standard script mode retains the analyzer directory; -I is not used. Its frozen sibling imports and the supplemental evaluator's explicit frozen COMMON path remain available. No environment values are recorded or dumped. The unchanged frozen analyzer is responsible for its original strict metrics and actual raw-trace identity/content checks.
+ 
+ The receipt records actual argv/cwd, source112/oracle/freeze/binary/runs bindings, Python version, UTC/monotonic begin/end, exit/exception and stdout/stderr/output refs. An invocation attempt with an exception does not assert a process was created. Failure and partial output remain preserved; no retry occurs. Logs and oversized outputs that cannot be hashed within bounds are explicitly identified as unavailable/oversized, not certified hashes. No adapter-input manifest is emitted after a failed invocation/provenance check.
+ 
+@@ -60,3 +60,10 @@
+ ```
+ python3 -B scripts/architecture/common9_postanalysis/record_joint_report_inputs.py --plan /EXACT/ROOT/postanalysis/assembly-plan.json --plan-sha256 SHA256 --output /EXACT/ROOT/postanalysis/NEW-INPUT-ASSEMBLY --execute-authorized-frozen-analysis
+ ```
++
++
++## Source-v2 IA1-01 repair
++
++The preserved source-v1 review (`76ed0f70e8c3a6147d57f9f2e15149d5477877aeb9cccb7103d736d03360bba2`) required the child interpreter policy above. Source-v2 changes only the wrapper command, its recorded startup-policy metadata, the exact fake-runner assertion and this documentation. The frozen analyzer and accepted adapter are unchanged. The receipt now carries child_startup_policy with actual flags, the three individual Python startup/cache settings, retained script-directory policy and environment_values_recorded=false. The outer Python's -B is no longer relied upon to propagate to a child.
++
++Bounded static confirmation followed the frozen analyzer's sibling evaluate/joint_campaign/mechanism imports, supplement evaluate's appended frozen COMMON, evaluation_v3's relative endpoints/deadlines/publications and explicit legacy file load, and legacy causal_timing's standard-library dataclasses. Those named imports require standard-library and frozen modules, not site initialization or ambient PYTHONPATH. No imported frozen module or child interpreter was executed for this confirmation. Tiny synthetic tests assert exact -E/-S/-B argv and receipt metadata; they remain fake-runner tests, not runtime import validation or actual analysis acceptance.
