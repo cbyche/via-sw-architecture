@@ -18,7 +18,8 @@ Earlier versions remain in place. This revision keeps the same sixteen-slide con
 - The OOXML finalization compared slide text, shape/table/picture counts, positions and media before and after the typography pass. All matched. See each deck's `windows-validation.json` and this folder's `windows-v2-validation.json`.
 - The combined deck contains sixteen native PowerPoint slides with editable shapes and native tables. Every slide has native shapes, fourteen have native tables, and none rely on a raster picture for the structure diagram or table.
 - The combined deck and all four individual decks rendered successfully with LibreOffice on macOS. Calibri's Korean glyphs used an explicitly configured local fallback for this visual check. All sixteen combined slide previews were inspected; dense comparison/selection slides 6, 7, 10, 11, 14 and 15 received a closer inspection after layout adjustment. The final overview is in `windows-v2-contact-sheet.png`.
+- [Windows workflow run 39222161081](https://github.com/cbyche/via-sw-architecture/actions/runs/39222161081) completed successfully. On `windows-2022`, the typography/Korean-language check and Microsoft Open XML SDK open/validation steps both passed for the combined deck.
 
 ## Verification limit
 
-The local visual render was not Microsoft PowerPoint on Windows. Native PowerPoint was not installed or exercised in this environment. The repository's `presentation-windows-check` workflow can validate the package on Windows with Microsoft's Open XML SDK; that validation also does not establish native PowerPoint rendering.
+The local visual render was not Microsoft PowerPoint on Windows. Native PowerPoint was not installed or exercised locally, and its installation on the Windows runner was not confirmed from the workflow output. The Windows SDK validation does not establish native PowerPoint rendering.
