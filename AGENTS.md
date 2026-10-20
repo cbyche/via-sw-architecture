@@ -2,6 +2,8 @@
 
 This file is the operating contract for LLMs and automation working in this repository. The Git repository is the persistent source of truth; a chat session is not.
 
+**Required reading and compliance:** Read and follow [INTENT.md](INTENT.md) before any Architecture design, QA/DP review, implementation, evaluation, documentation or presentation work. It defines the user's enduring SW Architect task intent, including problem discovery, meaningful alternatives, QA relationships, priority-based selection, basic designs versus tactics, and the QA02/new QA07 boundary. Apply it together with this file and the relevant current contracts. Do not revive superseded instructions from dated checkpoints below.
+
 ## 1. Understand the project before changing it
 
 VIA is PC software that owns the continuous Voice/Text/screen interaction with the user. It may answer directly or delegate real work to a Downstream Agent, then reconnect progress and results to the same conversation and Task state.
@@ -11,14 +13,15 @@ VIA owns interaction and orchestration. A Downstream Agent owns domain reasoning
 For any non-trivial Architecture or measurement task, read these files in order:
 
 1. `README.md`
-2. `docs/architecture/README.md`
-3. `docs/architecture/01-system-mission-and-boundary.md`
-4. `docs/architecture/03-fixed-architecture-scope.md` and `docs/architecture/05-representative-use-cases.md` for the fixed functional requirements
-5. `docs/architecture/08-quality-attributes/core-asr-contract.md` for the current quality semantics
-6. `docs/architecture/12-decisions/README.md` and `docs/architecture/12-decisions/target-architecture/README.md` for the current Architecture work
-7. the relevant target-Architecture or quality-attribute document
-8. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
-9. `docs/architecture/11-measurement/README.md` and the relevant ADR for measurement or accepted-decision work
+2. [INTENT.md](INTENT.md) for the mandatory task intent and judgment principles
+3. `docs/architecture/README.md`
+4. `docs/architecture/01-system-mission-and-boundary.md`
+5. `docs/architecture/03-fixed-architecture-scope.md` and `docs/architecture/05-representative-use-cases.md` for the fixed functional requirements
+6. `docs/architecture/08-quality-attributes/core-asr-contract.md` for the current quality semantics
+7. `docs/architecture/12-decisions/README.md` and `docs/architecture/12-decisions/target-architecture/README.md` for the current Architecture work
+8. the relevant target-Architecture or quality-attribute document
+9. `docs/architecture/11-measurement/event-boundary-contract.md` for endpoint work
+10. `docs/architecture/11-measurement/README.md` and the relevant ADR for measurement or accepted-decision work
 
 Do not infer the current project from filenames found by search alone.
 
@@ -27,12 +30,15 @@ Do not infer the current project from filenames found by search alone.
 When documents disagree, use this order:
 
 1. Explicit instructions in the current user request
-2. `docs/architecture/` active baseline
-3. `docs/adr/` decision records, interpreted with their status and caveats
-4. Active code under `benchmark/architecture/`, `prototypes/candidates/`, and `scripts/architecture/`
-5. Current evidence under `results/architecture-evaluation/current/`
-6. `docs/references/` as supporting context only
-7. Any `archive/` path as historical provenance only
+2. [INTENT.md](INTENT.md) for task intent and judgment principles, including later user corrections to older methodological instructions
+3. `docs/architecture/` active baseline for detailed product requirements, designs and versioned measurement contracts
+4. `docs/adr/` decision records, interpreted with their status and caveats
+5. Active code under `benchmark/architecture/`, `prototypes/candidates/`, and `scripts/architecture/`
+6. Current evidence under `results/architecture-evaluation/current/`
+7. `docs/references/` as supporting context only
+8. Any `archive/` path as historical provenance only
+
+INTENT.md does not silently revise detailed evaluation contracts, past results or accepted ADRs. In particular, the new QA07 request-meaning accuracy and the older QA07 load-added delay are different definitions; preserve their names, versions and evidence separately. Recording the new definition does not assign its priority, target, score bands or replacement of QA02.
 
 Never treat content under `docs/archive/`, `benchmark/archive/`, `prototypes/archive/`, `results/architecture-evaluation/archive/`, or `results/gate2/archive/` as a current requirement, contract, result, or recommendation. Historical files may contain old paths and commands preserved from their original layout.
 

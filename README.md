@@ -1,5 +1,7 @@
 # VIA Software Architecture
 
+> **필수 읽기와 준수:** 이 저장소의 과제 의도와 판단 기준은 [INTENT.md](INTENT.md)에 있다. 설계, QA와 DP 검토, 구현과 평가, 문서와 발표 작업을 시작하기 전에 반드시 읽고 따른다. LLM과 automation은 [AGENTS.md](AGENTS.md)의 작업 규칙도 함께 따른다. 아래 날짜별 기록의 과거 지침과 현재 원칙을 구별한다.
+
 > **2026-10-20 공통 평가의 기술 중단 후 부분 결과:** 승인된 대표315회와 별도 보완126회 중258회가 종료됐다. 동결 분석은257회 기술 인증,1회 미인증,183회 미실행으로 구분했다. 종료 제어 pipe 경합으로 중단했고 재시작하지 않았다. 이전 비용을 포함한 환산 비용은$7.3272788/$40이며 미확정·예약은0이다. [17의 부분 실측·전체24셀 판정·한계](docs/architecture/12-decisions/decision-packages/seven-problem-review/17-presentation-results.md#12-기술-중단-후의-최종-부분-집계)를 먼저 읽는다. 두 모집단의 예정 분모와 이전 실패를 보존하며 완주 결과나 최종 승자로 제시하지 않는다. QA04의42변경·630회귀는 별도로 완료했다.
 
 > **2026-10-19 이전 발표 캠페인의 재검토 완료:** [17 QA 우선순위별 결과](docs/architecture/12-decisions/decision-packages/seven-problem-review/17-presentation-results.md)와 [편집 가능한 30장 발표자료 안내](docs/presentations_files/four-dp-final-20261019/README.md)를 먼저 읽는다. QA01→QA02→QA03→QA04→QA05→QA06의 고정 순서로 재검토한 권고는 발표 번호 기준 **DP1 조건부 A, DP2 B, DP3 정규화 출력 계약의 조건부 A, DP4 조건부 C**다. DP1/DP4의 QA01 우열은 미확정이며, 추가 실제 모델 비교96회와 응답 재생을 분리했다. [16 추가 실행 계약](docs/architecture/12-decisions/decision-packages/seven-problem-review/16-presentation-selection-contract.md), [추가 증거](results/architecture-evaluation/current/four-dp-presentation-20261019/README.md)에 범위와 이력을 남겼다. 아래 이전 권고와 실패·원값은 보존한다.
@@ -137,13 +139,14 @@ Model·Agent·Context·저장 계약이 바뀌어도 사용자 기능을 유지�
 
 ## Start here
 
-처음 접속한 사람과 LLM은 아래 **최소 경로만 먼저** 읽는다. 이 순서로 과제의 목적, 고정 기능, 핵심 QA, 핵심 DP와 바로 다음 작업까지 파악한 뒤 필요한 상세 문서만 연다.
+처음 접속한 사람과 LLM은 아래 **최소 경로만 먼저** 읽는다. 첫 문서인 INTENT.md의 원칙을 반드시 읽고 적용한 뒤 과제의 고정 기능, 핵심 QA, 핵심 DP와 바로 다음 작업을 확인한다. 필요한 상세 문서는 그다음에 연다.
 
-1. [Architecture Baseline](docs/architecture/README.md) — 현재 기준선과 문서 위계
-2. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 VIA/Agent 책임 경계
-3. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md)와 [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 모든 후보가 제공해야 할 기능과 사용자 완료 조건
-4. [Target Architecture](docs/architecture/12-decisions/target-architecture/README.md) — 검토 완료 기준선과 확정 범위·후속 작업
-5. [Architecture Decisions](docs/architecture/12-decisions/README.md) — 목표 구조에서 Decision Package를 도출하는 12번 작업 흐름
+1. [SW Architect 과제의 의도와 판단 원칙](INTENT.md) — 문제 탐색, QA와 DP 관계, 대안 선택과 보완, QA02와 새 QA07의 평가 경계
+2. [Architecture Baseline](docs/architecture/README.md) — 현재 기준선과 문서 위계
+3. [System Mission & Boundary](docs/architecture/01-system-mission-and-boundary.md) — VIA의 목적과 VIA/Agent 책임 경계
+4. [Fixed Architecture Scope](docs/architecture/03-fixed-architecture-scope.md)와 [Representative Use Cases](docs/architecture/05-representative-use-cases.md) — 모든 후보가 제공해야 할 기능과 사용자 완료 조건
+5. [Target Architecture](docs/architecture/12-decisions/target-architecture/README.md) — 검토 완료 기준선과 확정 범위, 후속 작업
+6. [Architecture Decisions](docs/architecture/12-decisions/README.md) — 목표 구조에서 Decision Package를 도출하는 12번 작업 흐름
 
 다음 문서는 해당 작업을 할 때만 추가로 읽는다.
 

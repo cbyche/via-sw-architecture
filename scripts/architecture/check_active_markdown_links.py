@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CURRENT_EVIDENCE = ROOT / "results" / "architecture-evaluation" / "current"
 ACTIVE_INPUTS = (
     ROOT / "README.md",
+    ROOT / "INTENT.md",
     ROOT / "AGENTS.md",
     ROOT / "CONTRIBUTING.md",
     ROOT / "docs" / "architecture",

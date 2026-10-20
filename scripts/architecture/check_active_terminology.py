@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 ROOT = Path(__file__).resolve().parents[2]
 ACTIVE_INPUTS = (
     ROOT / "README.md",
+    ROOT / "INTENT.md",
     ROOT / "AGENTS.md",
     ROOT / "CONTRIBUTING.md",
     ROOT / ".github" / "workflows",
