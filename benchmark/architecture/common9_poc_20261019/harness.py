@@ -184,10 +184,13 @@ def execute(root,episode,configuration,rep,offline=False,time_scale=1,input_tran
   cutoff=effective_admission_stop_ns
   settlement_deadline_ns=cutoff+int(120*max(time_scale,.01)*1e9)
   observation_gate.settlement_deadline_ns=settlement_deadline_ns
-  for control in [{'type':'cancel_work','reason':reason,'observation_deadline_ns':cutoff,'settlement_deadline_ns':settlement_deadline_ns},{'type':'end_input'}]:
-   try:bracket=send(control)
-   except BrokenPipeError:bracket={'send_error':'BROKEN_PIPE','at_ns':time.monotonic_ns()};failures.append({'kind':'CANCELLATION_CONTROL_PIPE_CLOSED','control':control})
-   control_sends.append({**control,'requested_ns':cancellation_requested_ns,**bracket})
+  # The Rust input loop treats cancel_work as terminal. A second end_input
+  # write races with its normal exit and can turn a complete run into a false
+  # technical failure. Keep a failed cancel_work send as a real failure.
+  control={'type':'cancel_work','reason':reason,'observation_deadline_ns':cutoff,'settlement_deadline_ns':settlement_deadline_ns}
+  try:bracket=send(control)
+  except BrokenPipeError:bracket={'send_error':'BROKEN_PIPE','at_ns':time.monotonic_ns()};failures.append({'kind':'CANCELLATION_CONTROL_PIPE_CLOSED','control':control})
+  control_sends.append({**control,'requested_ns':cancellation_requested_ns,**bracket})
  try:
   ended=False;ready=False;lastsource=None
   while True:
@@ -292,6 +295,10 @@ def execute(root,episode,configuration,rep,offline=False,time_scale=1,input_tran
  finally:
   stop.set();monitor.join(timeout=5)
   if adapter:adapter.close()
+  # Closing the writer after the child has exited is local cleanup, not a
+  # second protocol message. TextIOWrapper may flush into the closed pipe.
+  try:proc.stdin.close()
+  except BrokenPipeError:pass
  stderr=proc.stderr.read();record={'run_id':folder.name,'episode':episode['id'],'configuration':configuration,'rep':rep,'phase':'OFFLINE'if offline else'FORMAL','binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'initial_source_provided_ns':initial_source_provided_ns,'start_ns':started,'end_ns':time.monotonic_ns(),'events':events,'calls':calls,'provided_sources':provided,'source_nodes':source_nodes,'memory':memory,'memory_interval_ms':50,'host_failures':failures,'stderr':stderr,'returncode':proc.returncode,'candidate_input_file':str(folder/'candidate-initial.json'),'voice':'OFF','observation':'COMMON_HOST_TEXT_CALLBACK_PROXY','authored_time_scale':time_scale,'external_profile':{'work_seconds':8,'technical_receipt_seconds':.1,'readiness_rule':'max(ingress + 8s, actual_receiver_ready, ingress + 100ms)'},'actual_API_calls':sum(c.get('actual_api_sent',c.get('evidence_kind')not in ['LOCAL_MODEL','LOCAL_MODEL_FAILED','MEASURED_REFERENCE_HARNESS'])for c in calls)if not offline else 0}
  technical_failures=[f for f in failures if f['kind']not in ['RESPONSE_ANCHOR_TIMEOUT','MISSING_INGRESS_OR_AGENT_ANCHOR']]
  record.update({'lifecycle_contract':'COMMON9_DEADLINE_V3','initial_source_send':initial_send,'initialization_scope':{'initial_source_provided_ns':initial_source_provided_ns,'episode_ready_observed_ns':host_origin},'clock_probe_send':clock_probe_send,'host_clock_proof':clock_proof,'host_display_receipts':host_display_receipts,'observation_deadline_ns':observation_deadline_ns,'observation_deadline_updates':deadline_updates,'last_actual_mandatory_source_ns':lastsource,'cancellation_requested_ns':cancellation_requested_ns,'effective_admission_stop_ns':effective_admission_stop_ns,'settlement_deadline_ns':settlement_deadline_ns,'technical_abort_reason':technical_abort_reason,'technical_certification':'NOT_CERTIFIED'if technical_abort_reason or technical_failures else'PENDING_INDEPENDENT_EVALUATOR_AUDIT','technical_failures':technical_failures,'control_sends':control_sends,'actual_response_final_ns':finalseen,'anchor_fallback_ns':fallbackseen,'unprovided_mandatory_events':sorted(specids-set(provided))})
