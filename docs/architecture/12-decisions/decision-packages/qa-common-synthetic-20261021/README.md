@@ -1,5 +1,7 @@
 # DP2와 DP5 공통 QA 비교
 
+> 후속 통합: [DP2, DP3, DP5의 공통 QA 층별 평가 v2](../qa-common-synthetic-v2-20261021/README.md). 이 문서와 v1 원장은 원래 Text 조건의 이전 세대로 보존한다.
+
 2026-10-21 / `COMMON-QA-SYN-1.0`
 
 DP별로 달랐던 QA01~07의 의미, 모집단과 계산 경계를 맞춘 **가상 시나리오 기반 설계 평가**다. 같은 120개 에피소드와 240개 입력을 공통 기준 BASE, DP2만 바꾼 EXEC, DP5만 바꾼 REL에 적용했다. DP2 A와 DP5 A는 같은 BASE를 참조한다.

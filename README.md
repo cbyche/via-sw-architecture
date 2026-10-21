@@ -2,7 +2,7 @@
 
 > **필수 읽기와 준수:** 이 저장소의 과제 의도와 판단 기준은 [INTENT.md](INTENT.md)에 있다. 설계, QA와 DP 검토, 구현과 평가, 문서와 발표 작업을 시작하기 전에 반드시 읽고 따른다. LLM과 automation은 [AGENTS.md](AGENTS.md)의 작업 규칙도 함께 따른다. 아래 날짜별 기록의 과거 지침과 현재 원칙을 구별한다.
 
-> **2026-10-21 DP2와 DP5 공통 QA 합성 비교:** [공통 평가와 사례 원장](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-20261021/README.md)에 120개 에피소드와 QA01~07의 같은 관측 기준을 정리했다. 두 DP의 A가 같은 BASE를 공유하며, 다른 DP를 추가할 때의 판본과 재산출 규칙을 포함한다. 가상 시나리오 기반 설계 평가이며 이전 실측 결과와 구별한다.
+> **2026-10-21 DP2, DP3, DP5 공통 QA 층별 비교:** [공통 평가 v2와 사례 원장](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v2-20261021/README.md)에 Text 이력과 Voice/Screen의 18개 사례군, 7구성과 QA01~07의 같은 의미 및 층별 관측 기준을 정리했다. 49개 대표값, 준비 비용, 메모리와 조건부 개별 선택을 재검토했다. 서로 다른 profile의 값과 DP 결합 효과는 합산하지 않는다. [DP2와 DP5 v1](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-20261021/README.md)은 보존하며 모두 가상 시나리오 기반 설계 평가로 이전 실측과 구별한다.
 
 > **2026-10-20 공통 평가의 기술 중단 후 부분 결과:** 승인된 대표315회와 별도 보완126회 중258회가 종료됐다. 동결 분석은257회 기술 인증,1회 미인증,183회 미실행으로 구분했다. 종료 제어 pipe 경합으로 중단했고 재시작하지 않았다. 이전 비용을 포함한 환산 비용은$7.3272788/$40이며 미확정·예약은0이다. [17의 부분 실측·전체24셀 판정·한계](docs/architecture/12-decisions/decision-packages/seven-problem-review/17-presentation-results.md#12-기술-중단-후의-최종-부분-집계)를 먼저 읽는다. 두 모집단의 예정 분모와 이전 실패를 보존하며 완주 결과나 최종 승자로 제시하지 않는다. QA04의42변경·630회귀는 별도로 완료했다.
 
