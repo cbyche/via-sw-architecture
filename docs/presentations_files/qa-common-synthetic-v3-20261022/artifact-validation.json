@@ -2,8 +2,8 @@
   "dataset": "COMMON-QA-SYN-3.0",
   "contract": "QA-COMMON-SYN-CONTRACT-v3-STRATIFIED",
   "evidence_kind": "SYNTHETIC_AUTHORED_NOT_MEASURED",
-  "source_sha256": "9ed86349876d8c094622d05d975bff17237749a926c26715498466a471370646",
-  "xlsx_sha256": "a845ed6252436eaa6e840b35ee36657fa9de41f0f12bc80ee59d8e4255f1c171",
+  "source_sha256": "7518598b478c428ef7dd3b5bdd16e2037569abc61d943a1675bd1304a5832e35",
+  "xlsx_sha256": "fac48507b076c86190349d572fff3d66c984de6c00c97d7c8ce2417de1023da5",
   "primary_qa_cached_values_checked": 63,
   "voice_diagnostic_cached_values_checked": 2,
   "cost_numeric_cached_values_checked": 50,
@@ -15,11 +15,54 @@
   ],
   "formula_errors": [],
   "formula_cache_missing": [],
-  "formula_cells": 6756,
-  "delivery_order_preserved_rows": 160,
+  "formula_cells": 8122,
+  "delivery_rows_checked": 160,
+  "meaning_rows_checked_under_field_policy": 1360,
+  "first_display_content_rows_checked": 1360,
+  "referent_set_rows_checked": 1470,
+  "metric_number_formats_checked": 65,
   "unmodeled_voice_blank_rows": 1200,
-  "rendered_sheets": 9,
-  "visually_reviewed_pngs": 15,
+  "rendered_sheets": 10,
+  "visually_reviewed_pngs": 22,
+  "review_revision": "COMMON-QA-SYN-3.0-REVIEW-2",
+  "semantic_comparison_policy": {
+    "id": "QA07-FIELD-SEMANTICS-1",
+    "same_rule_for_all_strata": true,
+    "unordered_set_paths": [
+      "targets",
+      "conditions",
+      "exclusions"
+    ],
+    "ordered_sequence_paths": [
+      "conditions.order"
+    ],
+    "dictionary_key_order": "IGNORED",
+    "strings": "CASE_SENSITIVE",
+    "missing_fields": "DISTINCT_FROM_FALSE_OR_NULL",
+    "scalar_types": "JSON_NULL_BOOLEAN_NUMBER_STRING; BOOLEAN_DISTINCT_FROM_NUMBER; 1_EQUALS_1.0",
+    "unknown_list_path": "REJECT_REQUIRE_EXPLICIT_POLICY_EXTENSION",
+    "duplicates_in_set_fields": "DEDUPLICATED"
+  },
+  "first_partial_display_rows": 70,
+  "range_numeric_cells_checked": 99,
+  "case_sensitive_perturbation_and_restore": [
+    {
+      "qa": "qa02",
+      "cell": "지칭판정!F6",
+      "original": 0.952,
+      "case_only_changed": 0.948,
+      "restored": 0.952,
+      "qa01_unchanged": true
+    },
+    {
+      "qa": "qa07",
+      "cell": "의미판정!E6",
+      "original": 0.9333333333333333,
+      "case_only_changed": 0.9291666666666667,
+      "restored": 0.9333333333333333,
+      "qa01_unchanged": true
+    }
+  ],
   "native_windows_excel_verified": false,
   "actual_model_calls": 0,
   "review_findings": [
@@ -27,8 +70,8 @@
       "id": "R-ART-01",
       "severity": "P2",
       "issue": "Recursive canonicalization sorted DELIVERY semantic order arrays.",
-      "fix": "Preserve semantic array order for DELIVERY; retain set normalization for QA02.",
-      "recheck": "160 DELIVERY meanings keep array order; S07 order-only edit changed QA07 1 to 79/80, then restored."
+      "fix": "Preserve conditions.order sequence under the shared field policy; set-valued targets, conditions, exclusions are normalized before export.",
+      "recheck": "1,360 meanings including 160 DELIVERY rows match the common field policy; S07 order-only edit changed QA07 1 to 79/80, then restored."
     },
     {
       "id": "R-ART-02",
@@ -45,8 +88,30 @@
       "recheck": "Offline DOM harness selects each configuration; source detail filtering inspected."
     }
   ],
+  "review2_findings": [
+    {
+      "id": "R2-ART-01",
+      "severity": "P2",
+      "issue": "Excel equality was case insensitive for exact JSON verdicts.",
+      "fix": "EXACT in QA02/QA07; case-only edit/recalc/restore confirms accuracy changes while QA01 is unchanged."
+    },
+    {
+      "id": "R2-ART-02",
+      "severity": "P2",
+      "issue": "First display and full meaning adoption were presented without their distinct time boundaries.",
+      "fix": "Keep partial-display flag, both stage IDs, exact full-adoption timestamp or source interval, and QA07 verdict next to displayed content."
+    },
+    {
+      "id": "R2-ART-03",
+      "severity": "P2",
+      "issue": "Semantic array comparison differed by stratum.",
+      "fix": "One field-based set/sequence policy across all layers."
+    }
+  ],
   "limits": [
     "Workbook formulas aggregate authored rows. QA03 DAG computation occurs in the Python normalizer, not the workbook.",
+    "Excel EXACT compares strings normalized before export; direct edits to JSON set or key order require rebuilding from the ledger.",
+    "Range-review tables preserve the baseline ledger distribution and do not recalculate after workbook tariff edits.",
     "No native Windows Excel verification.",
     "HTML browser visual verification was blocked by in-app file URL policy; offline minimal DOM checks are separate."
   ]

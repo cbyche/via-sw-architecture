@@ -4,6 +4,8 @@
 
 > **2026-10-22 DP44를 포함한 공통 QA v3:** [공통 평가 v3와 사례 원장](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/README.md)에 Text 이력, Voice/Screen과 별도 Voice Delivery의 3층, 9구성, 26사례군을 통합했다. 기존 v2의 49개 값을 보존하고 DP44의 공통 QA 14개와 별도 첫 음성 지연 2개를 추가했다. 공통 QA01은 화면 표시이며 음성과 평균하거나 대체하지 않는다. DP44의 정확도는 고정 정답 제어 조건이고 수신 Agent 비용은 미모델링이다. 문서, JSON, Excel과 HTML 및 검토 범위는 같은 자료에서 연결하며 모두 가상 작성 평가다.
 
+> **v3 일관성과 범위 재검토:** [수치 범위와 해석](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/05-numeric-ranges-and-interpretation.md)에 최소/최대, 분모와 512 MB 초과를 공개했다. 기존 65개 원값을 보존하고 QA07 판정, 부분 표시와 전체 의미 확정의 추적 및 표시 정밀도를 통일했다. Voice/Screen과 Delivery의 권고는 확대된 합성 profile 안의 상대 비교이며 제품 RAM 요구 충족을 뜻하지 않는다.
+
 > **2026-10-21 DP2, DP3, DP5 공통 QA 층별 비교:** [공통 평가 v2와 사례 원장](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v2-20261021/README.md)에 Text 이력과 Voice/Screen의 18개 사례군, 7구성과 QA01~07의 같은 의미 및 층별 관측 기준을 정리했다. 49개 대표값, 준비 비용, 메모리와 조건부 개별 선택을 재검토했다. 서로 다른 profile의 값과 DP 결합 효과는 합산하지 않는다. [DP2와 DP5 v1](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-20261021/README.md)은 보존하며 모두 가상 시나리오 기반 설계 평가로 이전 실측과 구별한다.
 
 > **2026-10-20 공통 평가의 기술 중단 후 부분 결과:** 승인된 대표315회와 별도 보완126회 중258회가 종료됐다. 동결 분석은257회 기술 인증,1회 미인증,183회 미실행으로 구분했다. 종료 제어 pipe 경합으로 중단했고 재시작하지 않았다. 이전 비용을 포함한 환산 비용은$7.3272788/$40이며 미확정·예약은0이다. [17의 부분 실측·전체24셀 판정·한계](docs/architecture/12-decisions/decision-packages/seven-problem-review/17-presentation-results.md#12-기술-중단-후의-최종-부분-집계)를 먼저 읽는다. 두 모집단의 예정 분모와 이전 실패를 보존하며 완주 결과나 최종 승자로 제시하지 않는다. QA04의42변경·630회귀는 별도로 완료했다.

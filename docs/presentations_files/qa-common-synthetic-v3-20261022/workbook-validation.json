@@ -1,8 +1,8 @@
 {
   "dataset": "COMMON-QA-SYN-3.0",
   "evidence_kind": "SYNTHETIC_AUTHORED_NOT_MEASURED",
-  "source_sha256": "9ed86349876d8c094622d05d975bff17237749a926c26715498466a471370646",
-  "sheet_count": 9,
+  "source_sha256": "7518598b478c428ef7dd3b5bdd16e2037569abc61d943a1675bd1304a5832e35",
+  "sheet_count": 10,
   "qa_cells_checked": 63,
   "voice_diagnostic_cells_checked": 2,
   "voice_cells": [
@@ -430,6 +430,45 @@
       "restored": true
     }
   ],
+  "case_sensitive_perturbation_and_restore": [
+    {
+      "qa": "qa02",
+      "cell": "지칭판정!F6",
+      "original": 0.952,
+      "case_only_changed": 0.948,
+      "restored": 0.952,
+      "qa01_unchanged": true
+    },
+    {
+      "qa": "qa07",
+      "cell": "의미판정!E6",
+      "original": 0.9333333333333333,
+      "case_only_changed": 0.9291666666666667,
+      "restored": 0.9333333333333333,
+      "qa01_unchanged": true
+    }
+  ],
+  "semantic_comparison_policy": {
+    "id": "QA07-FIELD-SEMANTICS-1",
+    "same_rule_for_all_strata": true,
+    "unordered_set_paths": [
+      "targets",
+      "conditions",
+      "exclusions"
+    ],
+    "ordered_sequence_paths": [
+      "conditions.order"
+    ],
+    "dictionary_key_order": "IGNORED",
+    "strings": "CASE_SENSITIVE",
+    "missing_fields": "DISTINCT_FROM_FALSE_OR_NULL",
+    "scalar_types": "JSON_NULL_BOOLEAN_NUMBER_STRING; BOOLEAN_DISTINCT_FROM_NUMBER; 1_EQUALS_1.0",
+    "unknown_list_path": "REJECT_REQUIRE_EXPLICIT_POLICY_EXTENSION",
+    "duplicates_in_set_fields": "DEDUPLICATED"
+  },
+  "review_revision": "COMMON-QA-SYN-3.0-REVIEW-2",
+  "first_partial_display_rows": 70,
+  "range_snapshot_configurations": 9,
   "delivery_order_only_perturbation_and_restore": {
     "input_id": "DELIVERY:S07-01:input",
     "edited_cell": "의미판정!E1326",
@@ -443,6 +482,7 @@
   "usage_equal_bucket_rows": 91,
   "rendered_sheets": [
     "비교요약",
+    "범위검토",
     "계산기준",
     "첫응답",
     "지칭판정",
@@ -452,7 +492,7 @@
     "메모리상태",
     "변경과제"
   ],
-  "preview_policy": "REUSED_UNCHANGED_VISIBLE_CONTENT",
+  "preview_policy": "RENDERED_OR_RETAINED_UNCHANGED_SHEETS",
   "native_excel_verified": false,
   "actual_model_calls": 0
 }

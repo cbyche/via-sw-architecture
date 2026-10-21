@@ -20,6 +20,29 @@ OUT = ROOT / 'docs/presentations_files/qa-common-synthetic-v3-20261022'
 DOC = ROOT / 'docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022'
 VERSION = 'COMMON-QA-SYN-3.0'
 EVIDENCE = 'SYNTHETIC_AUTHORED_NOT_MEASURED'
+REVIEW_REVISION = 'COMMON-QA-SYN-3.0-REVIEW-2'
+FIRST_V3_COMMIT = '8b2f555f8b89eaa5a6a7085ca6323cd44a1adbd7'
+FIRST_V3_NUMERIC_SHA256 = 'bb4804e1e0ff5b55546b239ad2e54db2f04e1fc9e6e1e6a9f0770df512876409'
+METRIC_CATALOG = {
+    'qa01': {'label': '첫 응답 지연시간 (화면)', 'unit': '초', 'display_decimals': 3, 'aggregation': 'ARITHMETIC_MEAN_PER_INPUT', 'direction': 'LOWER_IS_BETTER'},
+    'qa02': {'label': '지칭 대상 식별 정확도', 'unit': '%', 'storage_unit': 'ratio', 'display_scale': 100, 'display_decimals': 2, 'aggregation': 'EXACT_SET_SUCCESS_PER_EXPRESSION_REVISION', 'direction': 'HIGHER_IS_BETTER'},
+    'qa03': {'label': 'VIA 처리시간', 'unit': '초', 'display_decimals': 3, 'aggregation': 'ARITHMETIC_MEAN_PER_ORIGINAL_GOAL_FINAL_REVISION', 'direction': 'LOWER_IS_BETTER'},
+    'qa04': {'label': '변경 범위 (예상 운영 모듈 수)', 'unit': '모듈/과제', 'display_decimals': 3, 'aggregation': 'MEAN_UNIQUE_CONCEPTUAL_MODULES_PER_CHANGE', 'direction': 'LOWER_IS_BETTER'},
+    'qa05': {'label': '모델 사용 비용 (VIA)', 'unit': 'USD/활동 묶음', 'display_decimals': 6, 'aggregation': 'VIA_COST_SUM_ALL_PHASES', 'direction': 'LOWER_IS_BETTER'},
+    'qa06': {'label': '최대 로컬 RAM 사용량', 'unit': 'MB', 'display_decimals': 3, 'aggregation': 'MAX_SIMULTANEOUS_OWNED_STATE_DECIMAL_MB', 'direction': 'LOWER_IS_BETTER'},
+    'qa07': {'label': '요청 의미 해석 정확도', 'unit': '%', 'storage_unit': 'ratio', 'display_scale': 100, 'display_decimals': 2, 'aggregation': 'ALL_REQUIRED_MEANING_SUCCESS_PER_INPUT_REVISION', 'direction': 'HIGHER_IS_BETTER'},
+    'first_voice_latency': {'label': '첫 음성 지연 (별도 진단)', 'unit': '초', 'display_decimals': 3, 'aggregation': 'ARITHMETIC_MEAN_PER_MODELED_DELIVERY_INPUT', 'direction': 'LOWER_IS_BETTER'},
+}
+SEMANTIC_COMPARISON_POLICY = {
+    'id': 'QA07-FIELD-SEMANTICS-1', 'same_rule_for_all_strata': True,
+    'unordered_set_paths': ['targets', 'conditions', 'exclusions'],
+    'ordered_sequence_paths': ['conditions.order'],
+    'dictionary_key_order': 'IGNORED', 'strings': 'CASE_SENSITIVE',
+    'missing_fields': 'DISTINCT_FROM_FALSE_OR_NULL',
+    'scalar_types': 'JSON_NULL_BOOLEAN_NUMBER_STRING; BOOLEAN_DISTINCT_FROM_NUMBER; 1_EQUALS_1.0',
+    'unknown_list_path': 'REJECT_REQUIRE_EXPLICIT_POLICY_EXTENSION',
+    'duplicates_in_set_fields': 'DEDUPLICATED',
+}
 PARENTS = {
     'TEXT': 'docs/presentations_files/qa-common-synthetic-v2-20261021/parents/text.json',
     'VOICE': 'docs/presentations_files/qa-common-synthetic-v2-20261021/parents/voice.json',
@@ -53,19 +76,167 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
 
 
-def canon(value):
+def canonical_meaning(value, path=()):
+    """Compare required meaning by field semantics, not by input modality."""
     if isinstance(value, dict):
-        return {k: canon(v) for k, v in sorted(value.items())}
+        return ('object', tuple((k, canonical_meaning(v, path + (k,))) for k, v in sorted(value.items())))
     if isinstance(value, list):
-        return sorted((canon(v) for v in value), key=lambda x: json.dumps(x, ensure_ascii=False, sort_keys=True))
-    return value
+        location = '.'.join(path)
+        items = [canonical_meaning(v, path + ('*',)) for v in value]
+        if location in SEMANTIC_COMPARISON_POLICY['unordered_set_paths']:
+            return ('set', tuple(sorted(set(items), key=lambda x: json.dumps(x, ensure_ascii=False))))
+        assert location in SEMANTIC_COMPARISON_POLICY['ordered_sequence_paths'], ('unknown meaning list path', location)
+        return ('sequence', tuple(items))
+    if value is None:
+        return ('null', None)
+    if isinstance(value, bool):
+        return ('boolean', value)
+    if isinstance(value, (int, float)):
+        assert math.isfinite(value), ('nonfinite meaning number', path)
+        return ('number', value)
+    assert isinstance(value, str), ('unsupported meaning scalar', path, type(value).__name__)
+    return ('string', value)
+
+
+def verify_semantic_policy():
+    examples = [
+        {'targets': ['A', 'B'], 'conditions': ['x', 'y'], 'keep': False},
+        {'targets': ['A', 'B'], 'exclusions': ['x', 'y'], 'keep': False},
+        {'targets': ['A', 'B'], 'conditions': {'order': ['A', 'B']}, 'keep': False},
+    ]
+    for expected in examples:
+        adopted = copy.deepcopy(expected)
+        adopted['targets'].reverse()
+        assert canonical_meaning(expected) == canonical_meaning(adopted)
+        adopted['targets'].append(adopted['targets'][0])
+        assert canonical_meaning(expected) == canonical_meaning(adopted)
+        adopted['targets'][0] = adopted['targets'][0].lower()
+        assert canonical_meaning(expected) != canonical_meaning(adopted)
+        missing = copy.deepcopy(expected); missing.pop('keep')
+        assert canonical_meaning(expected) != canonical_meaning(missing)
+        null = copy.deepcopy(expected); null['keep'] = None
+        assert canonical_meaning(expected) != canonical_meaning(null)
+    reordered = copy.deepcopy(examples[-1]); reordered['conditions']['order'].reverse()
+    assert canonical_meaning(examples[-1]) != canonical_meaning(reordered)
+    assert canonical_meaning({'value': False}) != canonical_meaning({'value': 0})
+    assert canonical_meaning({'value': 1}) == canonical_meaning({'value': 1.0})
+    try:
+        canonical_meaning({'unregistered_list': ['A', 'B']})
+    except AssertionError as error:
+        assert 'unknown meaning list path' in str(error)
+    else:
+        raise AssertionError('unknown meaning lists must be rejected')
 
 
 def close(a, b, tolerance=0.000003):
     assert math.isclose(a, b, abs_tol=tolerance), (a, b)
 
 
+def review_ranges(configs, profiles, records, summary, families):
+    """Audit mathematical domains of authored values, not product feasibility."""
+    def span(values):
+        assert values and all(math.isfinite(v) for v in values)
+        return {'min': min(values), 'max': max(values), 'n': len(values), 'mean': mean(values)}
+
+    reviewed = {}
+    for c in configs:
+        cid, layer = c['id'], c['stratum']
+        rows = {name: [r for r in records[name] if r.get('config_id') == cid]
+                for name in ['responses', 'referents', 'goals', 'changes', 'usage', 'memory', 'stages']}
+        q, ref, goals, changes, usage, memory, stages = (rows[name] for name in
+                ['responses', 'referents', 'goals', 'changes', 'usage', 'memory', 'stages'])
+        nonnegative = ([r['qa01_s'] for r in q] + [r['via_s'] for r in goals] +
+                       [r['wall_s'] for r in goals] + [r['duration_s'] for r in stages] +
+                       [r[k] for r in usage for k in ['amount', 'rate_usd', 'usd']] +
+                       [r['total_mb'] for r in memory] +
+                       [v for r in memory for v in r['components_mb'].values()])
+        assert all(math.isfinite(v) and v >= 0 for v in nonnegative), cid
+        assert all(r['via_s'] <= r['wall_s'] + 3e-6 for r in goals), cid
+        assert all(r['correct'] in (0, 1) for r in ref), cid
+        assert all(r['qa07_success'] in (0, 1) for r in q), cid
+        assert all(isinstance(r['module_count'], int) and r['module_count'] >= 0
+                   and r['module_count'] == len(r['modules']) == len(set(r['modules'])) for r in changes), cid
+        s = summary[cid]
+        assert 0 <= s['qa02'] <= 1 and 0 <= s['qa07'] <= 1
+        case_costs, case_peaks = defaultdict(float), {}
+        for u in usage:
+            if u['role'] == 'VIA': case_costs[u['case_id']] += u['usd']
+        for m in memory:
+            case_peaks[m['case_id']] = max(case_peaks.get(m['case_id'], 0), m['total_mb'])
+        assert len(case_costs) == len(case_peaks) == profiles[layer]['episodes'], cid
+        close(sum(case_costs.values()), s['qa05'], 1e-8)
+        base_mb = 238 if layer == 'TEXT' else 560
+        assert all(m['total_mb'] >= base_mb for m in memory), cid
+        offset_values = [r[k] for r in stages for k in ['start_s', 'end_s']]
+        offset_values += [r['time_s'] for r in memory] + [r['start_s'] for r in goals]
+        assert all(math.isfinite(t) for t in offset_values), cid
+        voice = [r['qa01_voice_s'] for r in q if r['qa01_voice_s'] is not None]
+        assert all(math.isfinite(v) and v >= 0 for v in voice), cid
+        if voice:
+            assert all(r['qa01_voice_s'] >= r['qa01_s'] - 1e-7 for r in q)
+        peak_span = span(list(case_peaks.values()))
+        peak_span.pop('mean')  # The mean of episode peaks is not QA06.
+        peak_span['peak_witness'] = s['peak_witness']
+        cost_span = span(list(case_costs.values()))
+        cost_span.pop('mean')  # The mean cost per case is not QA05.
+        cost_span.update(total_usd=s['qa05'], basis='VIA_COST_PER_CASE_ALL_PHASES')
+        margin = 512 - s['qa06']
+        fs = [r for r in families if r['config_id'] == cid]
+        reviewed[cid] = {
+            'config_id': cid, 'stratum': layer, 'profile_id': c['profile_id'],
+            'qa01': span([r['qa01_s'] for r in q]),
+            'qa02': {'correct': s['referent_correct'], 'denominator': s['referent_n'], 'ratio': s['qa02']},
+            'qa03': span([r['via_s'] for r in goals]),
+            'qa04': span([r['module_count'] for r in changes]), 'qa05': cost_span, 'qa06': peak_span,
+            'qa07': {'correct': s['meaning_correct'], 'denominator': s['input_n'], 'ratio': s['qa07']},
+            'first_partial_display_n': sum(r['first_is_partial'] for r in q),
+            'first_voice_latency': {**span(voice), 'status': 'AUTHORED_AVAILABLE'} if voice else
+                {'min': None, 'max': None, 'mean': None, 'n': 0, 'status': 'NOT_MODELED'},
+            'goal_wall_seconds': span([r['wall_s'] for r in goals]),
+            'family_mean_ranges': {key: {'min': min(r[key] for r in fs), 'max': max(r[key] for r in fs),
+                                         'family_n': len(fs)} for key in ['qa01', 'qa02', 'qa03', 'qa07']},
+            'family_statistics': fs,
+            'timestamp_offsets': {'min': min(offset_values), 'max': max(offset_values),
+                'negative_count': sum(t < 0 for t in offset_values), 'negative_allowed': True,
+                'reason': 'Episode-relative preparation and original-goal timestamps may precede evaluation t=0; latency and duration cannot be negative.'},
+            'memory_budget_reference': {'reference_mb': 512, 'model_peak_mb': s['qa06'],
+                'model_base_mb': base_mb, 'model_base_excess_mb': max(0, base_mb - 512),
+                'excess_mb': max(0, -margin), 'headroom_mb': max(0, margin), 'signed_headroom_mb': margin,
+                'status': 'MODEL_EXCEEDS' if margin < 0 else 'BELOW_MODEL_ONLY',
+                'real_qualification': False, 'score_assigned': None,
+                'source': 'docs/architecture/12-decisions/decision-packages/qa-candidate-package/targets-source-qa06-platform.md'},
+            'domain_status': 'PASS_AUTHORED_DOMAIN_ONLY',
+            'domain_checks': ['all durations, latencies, quantities, rates, cost and RAM are finite/nonnegative',
+                'exact-set and all-meaning verdicts are binary; aggregate ratios are within [0,1]',
+                'change counts equal unique conceptual module integers',
+                'goal projected VIA duration does not exceed its authored wall duration',
+                'all RAM states meet the explicit profile baseline floor',
+                'negative timestamp offsets are retained separately from nonnegative durations'],
+        }
+    # Audio source_offset_s is a position within audio, unlike episode-relative
+    # source arrival timestamps: it must not be negative.
+    assert all(math.isfinite(p['source_offset_s']) and p['source_offset_s'] >= 0 for p in records['playback'])
+    numbers = {cid: {key: row[key] for key in [f'qa{i:02}' for i in range(1, 8)] +
+                    (['qa01_voice'] if row['qa01_voice'] is not None else [])} for cid, row in summary.items()}
+    fingerprint = sha(json.dumps(numbers, sort_keys=True, separators=(',', ':')).encode())
+    assert fingerprint == FIRST_V3_NUMERIC_SHA256, 'Review metadata must preserve the first published v3 63+2 values'
+    return {'dataset_id': VERSION, 'review_revision': REVIEW_REVISION, 'evidence_kind': EVIDENCE,
+        'status': 'PASS_AUTHORED_DOMAIN_ONLY', 'configs': reviewed,
+        'numeric_preservation': {'reference_commit': FIRST_V3_COMMIT, 'primary_values': 63,
+            'separate_voice_values': 2, 'canonical_numeric_sha256': fingerprint, 'unchanged': True},
+        'metric_catalog': METRIC_CATALOG,
+        'interpretation': ['Min/max describe authored cases, not confidence intervals or empirical model limits.',
+            'Family QA03 means are not averaged again: the original goal denominator weights the headline.',
+            'QA05 ranges are per-case VIA costs including all phases; headline QA05 remains the whole-stratum activity sum.',
+            'QA06 ranges contain one simultaneous peak per case; the headline is their maximum and alternatives may peak at different cases/times.',
+            '512 MB is a preserved system-budget reference, not a new scoring boundary or a qualification result.',
+            'VOICE and DELIVERY base 560 MB already exceeds the 512 MB reference; conditional comparisons do not establish a deployable product.',
+            'No score bands or thresholds from another population are applied; no empirical realism validation is claimed.'],
+        'audio_source_offset_domain': 'NONNEGATIVE_AUDIO_POSITION; distinct from possibly negative source-arrival timestamps'}
+
+
 def build():
+    verify_semantic_policy()
     OUT.mkdir(parents=True, exist_ok=True)
     parent_records, data = [], {}
     existing_manifest = json.loads((OUT / 'manifest.json').read_text()) if (OUT / 'manifest.json').exists() else None
@@ -154,7 +325,7 @@ def build():
     times = {(r['config'], r['input_id']): r for r in text['times']}
     for r in text['responses']:
         t = times[(r['config'], r['input_id'])]
-        correct = int(canon(r['expected_meaning']) == canon(r['adopted_meaning']))
+        correct = int(canonical_meaning(r['expected_meaning']) == canonical_meaning(r['adopted_meaning']))
         assert correct == r['qa07']
         close(t['first_s'] - t['start_s'], t['qa01_s'])
         records['responses'].append({**base('TEXT', r['config'], r['episode_id']),
@@ -162,7 +333,10 @@ def build():
             'goal_id': 'TEXT:' + r['goal_id'], 'start_s': t['start_s'], 'first_display_s': t['first_s'],
             'qa01_s': t['qa01_s'], 'expected': r['expected_meaning'], 'adopted': r['adopted_meaning'],
             'qa07_success': correct, 'first_content': r['first_content'], 'error_reason': r['error_reason'],
-            'adopted_at_s': r['full_meaning_adopted_s'], 'adoption_interval': None})
+            'adopted_at_s': r['full_meaning_adopted_s'], 'adoption_interval': None,
+            'first_is_partial': r['first_is_partial'],
+            'first_display_node_id': 'TEXT:' + t['first_node'],
+            'full_meaning_adoption_node_id': 'TEXT:' + t['adopt_node']})
     for r in text['referents']:
         correct = int(set(r['expected']) == set(r['adopted']))
         assert correct == r['correct']
@@ -232,13 +406,15 @@ def build():
         close(projected[terminal['id']], r['qa03_seconds'])
         close(first['end'], r['first_seconds'])
         qa02 = int(set(r['oracle']['targets']) == set(r['first_adopted']['targets']))
-        qa07 = int(canon(r['oracle']) == canon(r['first_adopted']))
+        qa07 = int(canonical_meaning(r['oracle']) == canonical_meaning(r['first_adopted']))
         assert qa02 == r['qa02_success'] and qa07 == r['qa07_success']
         records['responses'].append({**common, 'family_id': 'V-' + r['family'], 'input_id': 'VOICE:' + r['input_id'],
             'revision': 1, 'goal_id': 'VOICE:' + r['goal_id'], 'start_s': 0, 'first_display_s': first['end'],
             'qa01_s': first['end'], 'expected': r['oracle'], 'adopted': r['first_adopted'],
             'qa07_success': qa07, 'first_content': r['first_response'], 'error_reason': r['error_reason'],
-            'adopted_at_s': None, 'adoption_interval': [first['start'], first['end']]})
+            'adopted_at_s': None, 'adoption_interval': [first['start'], first['end']],
+            'first_is_partial': False, 'first_display_node_id': 'VOICE:' + first['id'],
+            'full_meaning_adoption_node_id': 'VOICE:' + first['id']})
         records['referents'].append({**common, 'family_id': 'V-' + r['family'], 'input_id': 'VOICE:' + r['input_id'],
             'expression_id': 'VOICE:' + r['expression_id'], 'revision': 1, 'expected': r['oracle']['targets'],
             'adopted': r['first_adopted']['targets'], 'correct': qa02})
@@ -314,7 +490,7 @@ def build():
     for r in delivery['responses']:
         inp = dinputs[r['input_id']]
         # Order is meaningful in DP44 (calendar, mail, report). Keep full meaning equality.
-        qa07 = int(inp['oracle_meaning'] == r['adopted_meaning'])
+        qa07 = int(canonical_meaning(inp['oracle_meaning']) == canonical_meaning(r['adopted_meaning']))
         assert qa07 == r['qa07_correct'] == 1
         ui = dnodes[r['episode'] + ':' + r['option'] + ':evaluation_first_display']
         close(ui['end_s'], r['first_ui_s'])
@@ -332,7 +508,9 @@ def build():
             'qa07_success': qa07, 'first_content': r['first_ui_text'],
             'error_reason': 'FIXED_CORRECT_SEMANTIC_FIXTURE; not model accuracy evidence',
             'semantic_evidence': 'FIXED_CORRECT_SEMANTIC_FIXTURE',
-            'adopted_at_s': r['first_meaning_s'], 'adoption_interval': None})
+            'adopted_at_s': r['first_meaning_s'], 'adoption_interval': None,
+            'first_is_partial': False, 'first_display_node_id': did(ui['id']),
+            'full_meaning_adoption_node_id': did(r['episode'] + ':' + r['option'] + ':meaning_adoption')})
         for expression in inp['expressions']:
             correct = int(set(expression['oracle']) == set(expression['adopted']))
             assert correct == 1
@@ -547,6 +725,19 @@ def build():
         expected = inp.get('oracle',inp.get('expected_meaning'))
         if expected is not None: assert r['expected'] == expected
         close(r['first_display_s']-r['start_s'],r['qa01_s'])
+        display_node = stages[(r['config_id'], r['first_display_node_id'])]
+        adoption_node = stages[(r['config_id'], r['full_meaning_adoption_node_id'])]
+        assert display_node['case_id'] == adoption_node['case_id'] == r['case_id']
+        close(display_node['end_s'], r['first_display_s'])
+        if r['adoption_interval'] is not None:
+            assert r['adopted_at_s'] is None
+            assert r['adoption_interval'] == [adoption_node['start_s'], adoption_node['end_s']]
+        else:
+            close(adoption_node['end_s'], r['adopted_at_s'])
+        assert r['qa07_success'] == int(canonical_meaning(r['expected']) == canonical_meaning(r['adopted']))
+        if r['first_is_partial']:
+            assert r['first_display_s'] < r['adopted_at_s']
+    assert sum(r['first_is_partial'] for r in records['responses']) == 70
     for r in records['referents']:
         assert r['input_id'] in input_registry and r['expression_id'] in expression_registry
         assert set(r['expected']) == set(expression_registry[r['expression_id']]['expected'])
@@ -601,9 +792,24 @@ def build():
             'Voice endpoint remains NOT_MODELED/null for legacy strata.',
             'QA04 is conceptual module review; no actual Rust change in this dataset.',
             'First voice and QA03 differences are distinct endpoints; S08 50ms voice difference is not the larger projected QA03 difference.']}
+    range_review = review_ranges(configs, profiles, records, summary, families)
+    display_policy = {'source_values': 'PRESERVE_UNROUNDED_JSON_AND_CSV',
+        'metric_format_source': 'metric_catalog', 'accuracy_storage': 'RATIO_0_TO_1',
+        'accuracy_display': 'PERCENT_WITH_NUMERATOR_AND_DENOMINATOR',
+        'accuracy_delta_display': 'RAW_RATIO_DELTA_TIMES_100_PERCENTAGE_POINTS',
+        'relative_change_display_decimals': 2,
+        'precision_meaning': 'Consistent display rounding; not empirical measurement precision.'}
+    result.update(review_revision=REVIEW_REVISION, metric_catalog=METRIC_CATALOG,
+                  display_policy=display_policy, range_review=range_review,
+                  semantic_comparison_policy=SEMANTIC_COMPARISON_POLICY,
+                  first_display_disclosure={'partial_input_count': 70,
+                      'rule': 'first_content and first_display_node_id describe the first screen content. adopted describes full meaning at adopted_at_s or adoption_interval; never backfill its targets/data_source into an earlier partial display.',
+                      'false_partial_flag': 'Not flagged as a partial handling intention; does not imply identical display and meaning-adoption timestamps.'})
     validation={'dataset_id':VERSION,'evidence_kind':EVIDENCE,'status':'PASS',
         'checks':['immutable v2 parent hashes and v2 summary hash','unique configuration-scoped IDs',
             'same-input and expression oracle joins','first display and independent voice endpoint',
+            'one field-based semantic policy across all strata; ordered meaning preserved and unknown list fields rejected',
+            '70 partial first displays retain separate full-meaning adoption nodes/timestamps without backfill',
             'DELIVERY same fixed-correct semantic fixture A/B','causal DAG with external/playback duration removed',
             'DELIVERY 10 original goals retain -6 start and 80 additional goals',
             '80 setup activities outside 80 evaluation-input and 120-expression denominators',
@@ -614,22 +820,31 @@ def build():
             'no overlapping playback, discarded audio, or premature source use',
             'QA04 common C01-C06 task identity and unique conceptual modules',
             '49 v2 and 14 DP44 primary values plus 2 voice diagnostics reproduced',
+            'first published v3 63+2 raw values unchanged under REVIEW-2 metadata',
+            'authored domain/range and model-only memory-budget reference audit',
             'all comparison pairs are within one profile','missing values remain null/NOT_MODELED'],
         'counts':{k:len(v) for k,v in records.items()}, 'family_definitions':26,'configurations':9,
         'primary_qa_values_verified':63,'legacy_qa_values_unchanged':49,'separate_voice_values_verified':2,
         'input_registry_n':440,'expression_registry_n':490,'goal_registry_n':390,
-        'model_calls':0,'product_runs':0,'limitations':result['scope_limitations']}
+        'model_calls':0,'product_runs':0,'limitations':result['scope_limitations'],
+        'review_revision':REVIEW_REVISION,'range_review_status':range_review['status'],
+        'first_published_v3_numeric_preservation':range_review['numeric_preservation']}
     write_json(OUT/'normalized-data.json',result)
     write_json(OUT/'summary.json',{'dataset_id':VERSION,'evidence_kind':EVIDENCE,
-        'aggregation_policy':result['aggregation_policy'],'configs':summary,'comparisons':comparisons,'families':families})
+        'aggregation_policy':result['aggregation_policy'],'configs':summary,'comparisons':comparisons,'families':families,
+        'review_revision':REVIEW_REVISION,'metric_catalog':METRIC_CATALOG,'display_policy':display_policy,
+        'semantic_comparison_policy':SEMANTIC_COMPARISON_POLICY,
+        'first_display_disclosure':result['first_display_disclosure']})
     write_json(OUT/'validation.json',validation)
+    write_json(OUT/'range-review.json',range_review)
     with (OUT/'comparison.csv').open('w',newline='') as f:
         fields=['config_id','stratum','profile_id']+[f'qa{n:02}' for n in range(1,8)]+['qa01_voice','qa01_voice_status',
             'semantic_evidence','input_n','referent_n','goal_n','change_n','preparation_usd','maintenance_usd',
             'scored_usd','discarded_usd','receiver_cost','receiver_cost_status','total_cost','total_cost_status','terminal_content_incorrect_n']
         writer=csv.DictWriter(f,fieldnames=fields,extrasaction='ignore',lineterminator='\n');writer.writeheader();writer.writerows(summary.values())
-    outputs={p.name:sha(p.read_bytes()) for p in [OUT/'normalized-data.json',OUT/'summary.json',OUT/'validation.json',OUT/'comparison.csv']}
+    outputs={p.name:sha(p.read_bytes()) for p in [OUT/'normalized-data.json',OUT/'summary.json',OUT/'validation.json',OUT/'comparison.csv',OUT/'range-review.json']}
     write_json(OUT/'manifest.json',{'dataset_id':VERSION,'evidence_kind':EVIDENCE,'schema_version':'STRATIFIED-LEDGER-2',
+        'review_revision':REVIEW_REVISION,
         'corpus_id':'COMMON-QA-CORPUS-3.0-STRATIFIED','contract_id':result['contract_id'],
         'registry_id':'COMMON-QA-CONFIG-3.0','parent_sources':parent_records,'outputs':outputs,
         'generator':{'path':str(Path(__file__).resolve().relative_to(ROOT)),'sha256':sha(Path(__file__).read_bytes())},

@@ -1,0 +1,53 @@
+{
+  "dataset": "COMMON-QA-SYN-3.0",
+  "contract": "QA-COMMON-SYN-CONTRACT-v3-STRATIFIED",
+  "evidence_kind": "SYNTHETIC_AUTHORED_NOT_MEASURED",
+  "source_sha256": "9ed86349876d8c094622d05d975bff17237749a926c26715498466a471370646",
+  "xlsx_sha256": "a845ed6252436eaa6e840b35ee36657fa9de41f0f12bc80ee59d8e4255f1c171",
+  "primary_qa_cached_values_checked": 63,
+  "voice_diagnostic_cached_values_checked": 2,
+  "cost_numeric_cached_values_checked": 50,
+  "missing_delivery_cost_cells": [
+    "F53",
+    "G53",
+    "F54",
+    "G54"
+  ],
+  "formula_errors": [],
+  "formula_cache_missing": [],
+  "formula_cells": 6756,
+  "delivery_order_preserved_rows": 160,
+  "unmodeled_voice_blank_rows": 1200,
+  "rendered_sheets": 9,
+  "visually_reviewed_pngs": 15,
+  "native_windows_excel_verified": false,
+  "actual_model_calls": 0,
+  "review_findings": [
+    {
+      "id": "R-ART-01",
+      "severity": "P2",
+      "issue": "Recursive canonicalization sorted DELIVERY semantic order arrays.",
+      "fix": "Preserve semantic array order for DELIVERY; retain set normalization for QA02.",
+      "recheck": "160 DELIVERY meanings keep array order; S07 order-only edit changed QA07 1 to 79/80, then restored."
+    },
+    {
+      "id": "R-ART-02",
+      "severity": "P2",
+      "issue": "HTML stage dependencies referenced deps rather than parents.",
+      "fix": "Serialize and show parents and preserve stage IDs.",
+      "recheck": "Offline DOM harness verifies a nonempty parent ID is visible for both DELIVERY configurations."
+    },
+    {
+      "id": "R-ART-03",
+      "severity": "P2",
+      "issue": "DELIVERY response source drilldown included the other configuration.",
+      "fix": "Filter sources by config_id and case_id.",
+      "recheck": "Offline DOM harness selects each configuration; source detail filtering inspected."
+    }
+  ],
+  "limits": [
+    "Workbook formulas aggregate authored rows. QA03 DAG computation occurs in the Python normalizer, not the workbook.",
+    "No native Windows Excel verification.",
+    "HTML browser visual verification was blocked by in-app file URL policy; offline minimal DOM checks are separate."
+  ]
+}

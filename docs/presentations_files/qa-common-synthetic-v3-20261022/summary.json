@@ -1793,5 +1793,100 @@
       "referent_n": 10,
       "goal_n": 10
     }
-  ]
+  ],
+  "review_revision": "COMMON-QA-SYN-3.0-REVIEW-2",
+  "metric_catalog": {
+    "qa01": {
+      "label": "첫 응답 지연시간 (화면)",
+      "unit": "초",
+      "display_decimals": 3,
+      "aggregation": "ARITHMETIC_MEAN_PER_INPUT",
+      "direction": "LOWER_IS_BETTER"
+    },
+    "qa02": {
+      "label": "지칭 대상 식별 정확도",
+      "unit": "%",
+      "storage_unit": "ratio",
+      "display_scale": 100,
+      "display_decimals": 2,
+      "aggregation": "EXACT_SET_SUCCESS_PER_EXPRESSION_REVISION",
+      "direction": "HIGHER_IS_BETTER"
+    },
+    "qa03": {
+      "label": "VIA 처리시간",
+      "unit": "초",
+      "display_decimals": 3,
+      "aggregation": "ARITHMETIC_MEAN_PER_ORIGINAL_GOAL_FINAL_REVISION",
+      "direction": "LOWER_IS_BETTER"
+    },
+    "qa04": {
+      "label": "변경 범위 (예상 운영 모듈 수)",
+      "unit": "모듈/과제",
+      "display_decimals": 3,
+      "aggregation": "MEAN_UNIQUE_CONCEPTUAL_MODULES_PER_CHANGE",
+      "direction": "LOWER_IS_BETTER"
+    },
+    "qa05": {
+      "label": "모델 사용 비용 (VIA)",
+      "unit": "USD/활동 묶음",
+      "display_decimals": 6,
+      "aggregation": "VIA_COST_SUM_ALL_PHASES",
+      "direction": "LOWER_IS_BETTER"
+    },
+    "qa06": {
+      "label": "최대 로컬 RAM 사용량",
+      "unit": "MB",
+      "display_decimals": 3,
+      "aggregation": "MAX_SIMULTANEOUS_OWNED_STATE_DECIMAL_MB",
+      "direction": "LOWER_IS_BETTER"
+    },
+    "qa07": {
+      "label": "요청 의미 해석 정확도",
+      "unit": "%",
+      "storage_unit": "ratio",
+      "display_scale": 100,
+      "display_decimals": 2,
+      "aggregation": "ALL_REQUIRED_MEANING_SUCCESS_PER_INPUT_REVISION",
+      "direction": "HIGHER_IS_BETTER"
+    },
+    "first_voice_latency": {
+      "label": "첫 음성 지연 (별도 진단)",
+      "unit": "초",
+      "display_decimals": 3,
+      "aggregation": "ARITHMETIC_MEAN_PER_MODELED_DELIVERY_INPUT",
+      "direction": "LOWER_IS_BETTER"
+    }
+  },
+  "display_policy": {
+    "source_values": "PRESERVE_UNROUNDED_JSON_AND_CSV",
+    "metric_format_source": "metric_catalog",
+    "accuracy_storage": "RATIO_0_TO_1",
+    "accuracy_display": "PERCENT_WITH_NUMERATOR_AND_DENOMINATOR",
+    "accuracy_delta_display": "RAW_RATIO_DELTA_TIMES_100_PERCENTAGE_POINTS",
+    "relative_change_display_decimals": 2,
+    "precision_meaning": "Consistent display rounding; not empirical measurement precision."
+  },
+  "semantic_comparison_policy": {
+    "id": "QA07-FIELD-SEMANTICS-1",
+    "same_rule_for_all_strata": true,
+    "unordered_set_paths": [
+      "targets",
+      "conditions",
+      "exclusions"
+    ],
+    "ordered_sequence_paths": [
+      "conditions.order"
+    ],
+    "dictionary_key_order": "IGNORED",
+    "strings": "CASE_SENSITIVE",
+    "missing_fields": "DISTINCT_FROM_FALSE_OR_NULL",
+    "scalar_types": "JSON_NULL_BOOLEAN_NUMBER_STRING; BOOLEAN_DISTINCT_FROM_NUMBER; 1_EQUALS_1.0",
+    "unknown_list_path": "REJECT_REQUIRE_EXPLICIT_POLICY_EXTENSION",
+    "duplicates_in_set_fields": "DEDUPLICATED"
+  },
+  "first_display_disclosure": {
+    "partial_input_count": 70,
+    "rule": "first_content and first_display_node_id describe the first screen content. adopted describes full meaning at adopted_at_s or adoption_interval; never backfill its targets/data_source into an earlier partial display.",
+    "false_partial_flag": "Not flagged as a partial handling intention; does not imply identical display and meaning-adoption timestamps."
+  }
 }

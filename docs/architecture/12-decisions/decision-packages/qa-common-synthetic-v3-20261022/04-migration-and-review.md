@@ -40,9 +40,9 @@
 
 v2의 전체 링크 기록은 보존 복사본의 기존 14건 누락으로 실패했다. DP44 부모의 [발행 기록](../../../../presentations_files/dp44-synthetic-backdata-20261022/publication-validation.json)은 926개 활성 Markdown의 전체 링크 PASS를 남겼지만, 당시 검사기에 다른 세션의 커밋되지 않은 변경이 있었고 전체 저장소도 동시 작업을 포함했다. 따라서 이 PASS만으로 v2의 14건이 이 작업에서 해결됐다거나 DP44만으로 전체 통과를 확보했다고 설명하지 않는다. v3에서는 실제 검사 상태와 변경 범위 검사 결과를 구분해 기록한다.
 
-## 4. v3 독립 검토와 검증 상태
+## 4. 최초 v3의 독립 검토와 검증 이력
 
-**현재 상태: PASS_WITH_RECORDED_LIMITS.** 데이터 작성자와 다른 검토자가 원장 및 생성기를 검토했고, 문서와 표시 생성기는 해당 작성과 분리한 검토자가 확인했다. 아래는 v3의 commit 직전 검증 기록이다. 실제 발행 commit과 push 상태는 Git 이력으로 확인한다.
+**최초 v3 상태: PASS_WITH_RECORDED_LIMITS.** 데이터 작성자와 다른 검토자가 원장 및 생성기를 검토했고, 문서와 표시 생성기는 해당 작성과 분리한 검토자가 확인했다. 아래는 최초 v3 `8b2f555`의 검증 이력이며 이후 재검토 완료를 대신하지 않는다. 당시 JSON 보고서는 [validation-history](../../../../presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/README.md)에 그대로 보존했다.
 
 | 항목 | v3 상태 | 확인한 범위 |
 | --- | --- | --- |
@@ -69,9 +69,27 @@ v2의 전체 링크 기록은 보존 복사본의 기존 14건 누락으로 실�
 | P2: Excel의 의미 정규화가 순서 배열도 정렬 | 읽기 순서만 틀린 의미를 구별할 수 없음 | DELIVERY 의미 순서를 보존하고 순서 변경/재계산/원복 확인. QA02 집합 정규화는 유지 |
 | P3: 계약/corpus ID 불일치와 “화면 63개” 표현 | 판본과 값 개수의 의미 혼동 | ID 통일, 화면 QA01을 포함한 총 63개 QA 값으로 명확화 |
 
-원장 [자체 검증](../../../../presentations_files/qa-common-synthetic-v3-20261022/validation.json)과 [직렬화 재읽기](../../../../presentations_files/qa-common-synthetic-v3-20261022/data-readback-validation.json), 별도 검사기의 [산출물 교차 대조](../../../../presentations_files/qa-common-synthetic-v3-20261022/cross-artifact-validation.json), [발행 전 검사](../../../../presentations_files/qa-common-synthetic-v3-20261022/publication-validation.json)를 구분한다. Excel과 HTML의 자세한 범위는 [산출물 안내](../../../../presentations_files/qa-common-synthetic-v3-20261022/README.md)에 연결한다. 계산 검사, 독립 의미 검토, 표시 검사, 실제 모델 및 장치 성능은 각각 다른 근거다. 한 종류의 PASS로 다른 종류를 완료 처리하지 않는다.
+원장 자체 검증과 별도 검사기의 교차 대조를 구분한다. 최초 검증 보고서는 위 보존 폴더에, 재검토 판본의 보고서는 산출물 루트에 둔다. 이전 검토 문서는 당시 확인 범위와 hash를 유지한다. 계산 검사, 독립 의미 검토, 표시 검사, 실제 모델 및 장치 성능은 각각 다른 근거다. 한 종류의 PASS로 다른 종류를 완료 처리하지 않는다.
 
-## 5. 다음 DP 또는 결합안을 추가할 때
+## 5. 일관성과 수치 범위 재검토
+
+사용자의 추가 전체 검토 요청에 따라 같은 dataset에 `COMMON-QA-SYN-3.0-REVIEW-2`를 기록했다. 원본과 원값은 바꾸지 않고 판정 규칙, 추적 metadata, 표시 및 검증을 보완했다. 기존 63개 공통 QA와 음성 2개 원값은 최초 v3와 정확히 같다. v2, DP44 부모와 기존 점수 및 목표는 보존한다.
+
+| 보완 | 적용과 확인 |
+| --- | --- |
+| QA07 의미 비교 | 세 층의 집합/순서 규칙과 JSON scalar 범주 통일. 대소문자, missing/false/null/0, 순서 변경을 구별하고 미등록 배열 거부 |
+| 표시와 확정의 경계 | 1,360행의 표시/확정 node와 시각 또는 구간 확인. T-EXEC 부분 표시 70행 보존, 전체 의미를 부분 표시 시점으로 소급하지 않음 |
+| Excel 판정 | `EXACT` 비교, 순서와 대소문자 변경 후 요약 재계산 및 원복. 8,122수식과 65개 QA 및 비용 저장값 대조 |
+| 범위와 분모 | 9구성의 입력/목표/과제 범위, 사례별 비용과 동시 RAM peak 및 분모를 독립 재집계 |
+| 수치 해석 | 정확도 `%p`, USD 6자리, 시간/모듈 평균/RAM 3자리 통일. QA01 화면과 첫 음성 진단 구분 |
+| RAM 요구 | 560 MB 기반과 512 MB 요구의 충돌 및 전 구성 초과/여유 표시. 두 안의 peak가 다른 사례와 시각임을 명시 |
+| 산출물 | 범위검토를 포함한 Excel 10시트와 PNG 22개, HTML 범위/경계 상세를 재생성 |
+
+코드 및 원장과 export 내용은 작성자와 다른 검토자가 확인했다. 문서는 데이터 작성자가 원장과 독립 대조했으며 이는 자신의 생성기에 대한 독립 검토와 구별한다. 현재 발견과 수정 및 검증 범위는 [재검토 기록](reviews/03-consistency-and-range-review.md)에 둔다.
+
+현재 [원장 자체 검증](../../../../presentations_files/qa-common-synthetic-v3-20261022/validation.json), [재읽기](../../../../presentations_files/qa-common-synthetic-v3-20261022/data-readback-validation.json), [산출물 교차 대조](../../../../presentations_files/qa-common-synthetic-v3-20261022/cross-artifact-validation.json), [발행 전 검사](../../../../presentations_files/qa-common-synthetic-v3-20261022/publication-validation.json)를 따로 남긴다. Excel/HTML의 실제 확인 범위는 [산출물 안내](../../../../presentations_files/qa-common-synthetic-v3-20261022/README.md)에서 확인한다. 브라우저 시각 검증과 native Windows Excel은 여전히 미완료이며 실제 모델/제품 실행은 0회다.
+
+## 6. 다음 DP 또는 결합안을 추가할 때
 
 1. 새 DP의 최신 구조와 사용자 합의를 확인하고 실행, 상태 및 근거 생산에서 실제 바꾸는 축을 등록한다. 원본 파일이 있다는 사실만으로 준비 완료를 추정하지 않는다.
 2. 현재 층과 원본, 정답, 자원 및 완료 조건이 같으면 그 층의 새 구성을 작성한다. 다르면 새 profile과 예정 분모를 먼저 기록한다. 미적용이나 미모델링 값은 0이나 동점으로 채우지 않는다.
