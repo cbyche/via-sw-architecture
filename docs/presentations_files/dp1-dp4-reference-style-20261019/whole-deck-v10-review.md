@@ -55,7 +55,7 @@ v9 원본 SHA-256: `ff3e7849df698c49e97e72a9e2a4dc61858b57d07b72a07702951dcaf87a
 
 v10 최종 SHA-256: `459fe15be4cb4f620e4e33d26aa9a2b7654f8d6dc204fe5975f5a21211231a75`.
 
-[Artifact Tool 검사](whole-deck-v10-artifact-validation.json), [보존 보고서](whole-deck-v10-preservation.json), [독립 XML/원본 검증](whole-deck-v10-independent-check.json), [Scene 검사](whole-deck-v10-scene-checks.json), [전체 렌더 비교](whole-deck-v10-render-comparison.json)를 보존한다. Windows 검증 결과는 아래 발행 기록에 추가한다. 이전 v8/v9 또는 push-trigger 기본 파일의 성공을 v10 검증으로 세지 않는다.
+[Artifact Tool 검사](whole-deck-v10-artifact-validation.json), [보존 보고서](whole-deck-v10-preservation.json), [독립 XML/원본 검증](whole-deck-v10-independent-check.json), [Scene 검사](whole-deck-v10-scene-checks.json), [전체 렌더 비교](whole-deck-v10-render-comparison.json)를 보존한다. Windows 검증 결과는 아래 발행 기록에 연결한다. 이전 v8/v9 또는 push-trigger 기본 파일의 성공을 v10 검증으로 세지 않는다.
 
 검증은 표현, 구조 계약 일치와 파일 형식에 한정된다. 실제 VIA 구현·모델 실행·성능을 새로 검증한 결과가 아니다. DP1/2/4 기존 PoC, DP3/DP44 합성 예시, DP5 미평가 설계의 근거 상태를 유지한다. DP44 정확도 100%는 고정 정답 fixture이며 일반 정확도 우세의 측정값이 아니다.
 
@@ -79,3 +79,12 @@ cp scripts/presentations/build_reference_guide_v10.mjs "$build_dir/"
 ln -s "$runtime_root/node/node_modules" "$build_dir/node_modules"
 "$runtime_root/node/bin/node" "$build_dir/build_reference_guide_v10.mjs" "$PWD" "$build_dir" "$PWD/docs/presentations_files/dp1-dp4-reference-style-20261019/VIA-DP1-DP5-DP44-reference-style-36slides-v9-windows.pptx" "$PWD/scripts/presentations"
 ```
+
+
+## GitHub 발행과 최종 Windows 결과
+
+산출물 커밋 `d0f255476de6e5a038123020031d34e71eb358e0`을 `main`에 push했다. **실제 v10 파일 경로를 지정한** [Windows workflow_dispatch](https://github.com/cbyche/via-sw-architecture/actions/runs/39635290107)가 success이며, 같은 커밋의 [Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/39635259279)도 success다. push 자동 실행의 과거 기본 PPTX 검증을 v10 결과로 세지 않는다.
+
+[SDK 보고서](whole-deck-v10-windows-openxml.json)의 SHA-256은 위 최종 v10과 같다. Microsoft Windows 10.0.20348, Open XML SDK 3.3.0, Office2021 형식으로 36쪽 열기 성공과 schema 오류 0개를 확인했다. Windows의 Calibri/정수 pt/ko-KR 검사도 통과했다. [환경 기록](whole-deck-v10-windows-environment.json)에 PowerPoint 미설치가 명시되어 있으므로 native PowerPoint 앱의 실행·편집·렌더링은 검증했다고 주장하지 않는다.
+
+이 발행 기록을 추가하는 후속 커밋은 PPTX와 그림 원본을 바꾸지 않는다. 최종 검증 범위에 남은 고신뢰 P1/P2는 발견하지 못했으며, 과거 수치의 관측·합성·미평가 구분과 조건부 권고를 그대로 유지한다.
