@@ -2,6 +2,8 @@
 
 > **필수 읽기와 준수:** 이 저장소의 과제 의도와 판단 기준은 [INTENT.md](INTENT.md)에 있다. 설계, QA와 DP 검토, 구현과 평가, 문서와 발표 작업을 시작하기 전에 반드시 읽고 따른다. LLM과 automation은 [AGENTS.md](AGENTS.md)의 작업 규칙도 함께 따른다. 아래 날짜별 기록의 과거 지침과 현재 원칙을 구별한다.
 
+> **2026-10-21 DP2와 DP5 공통 QA 합성 비교:** [공통 평가와 사례 원장](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-20261021/README.md)에 120개 에피소드와 QA01~07의 같은 관측 기준을 정리했다. 두 DP의 A가 같은 BASE를 공유하며, 다른 DP를 추가할 때의 판본과 재산출 규칙을 포함한다. 가상 시나리오 기반 설계 평가이며 이전 실측 결과와 구별한다.
+
 > **2026-10-20 공통 평가의 기술 중단 후 부분 결과:** 승인된 대표315회와 별도 보완126회 중258회가 종료됐다. 동결 분석은257회 기술 인증,1회 미인증,183회 미실행으로 구분했다. 종료 제어 pipe 경합으로 중단했고 재시작하지 않았다. 이전 비용을 포함한 환산 비용은$7.3272788/$40이며 미확정·예약은0이다. [17의 부분 실측·전체24셀 판정·한계](docs/architecture/12-decisions/decision-packages/seven-problem-review/17-presentation-results.md#12-기술-중단-후의-최종-부분-집계)를 먼저 읽는다. 두 모집단의 예정 분모와 이전 실패를 보존하며 완주 결과나 최종 승자로 제시하지 않는다. QA04의42변경·630회귀는 별도로 완료했다.
 
 > **2026-10-19 이전 발표 캠페인의 재검토 완료:** [17 QA 우선순위별 결과](docs/architecture/12-decisions/decision-packages/seven-problem-review/17-presentation-results.md)와 [편집 가능한 30장 발표자료 안내](docs/presentations_files/four-dp-final-20261019/README.md)를 먼저 읽는다. QA01→QA02→QA03→QA04→QA05→QA06의 고정 순서로 재검토한 권고는 발표 번호 기준 **DP1 조건부 A, DP2 B, DP3 정규화 출력 계약의 조건부 A, DP4 조건부 C**다. DP1/DP4의 QA01 우열은 미확정이며, 추가 실제 모델 비교96회와 응답 재생을 분리했다. [16 추가 실행 계약](docs/architecture/12-decisions/decision-packages/seven-problem-review/16-presentation-selection-contract.md), [추가 증거](results/architecture-evaluation/current/four-dp-presentation-20261019/README.md)에 범위와 이력을 남겼다. 아래 이전 권고와 실패·원값은 보존한다.
