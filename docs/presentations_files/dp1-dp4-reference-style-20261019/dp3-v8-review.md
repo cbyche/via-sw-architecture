@@ -43,7 +43,7 @@
 | PPTX 형식 | package integrity, layout geometry, Calibri 서체 정책, native table, ArtifactTool 재import 통과 |
 | Windows 서체 정책 | Calibri, 정수 pt, ko-KR 검사 위반 0 |
 | 기존 합성 QA | QA01~07 페이지와 수치 보존. 12쪽 RAM 합계 592 / 1,954 / 2,374 / 2,662 MB 산술 재확인. 실측으로 재분류하지 않음 |
-| Windows Open XML SDK | push 후 실제 v8 경로를 지정한 workflow_dispatch로 별도 확인. 이 절 아래에 수행 결과 기록 예정 |
+| Windows Open XML SDK | 실제 v8 경로를 지정한 Windows workflow_dispatch 통과. 29쪽 열기 성공, schema 오류 0. 검사 파일 hash가 최종 PPTX와 일치 |
 
 [패키지 보존](dp3-v8-preservation.json), [렌더와 원본 대조](dp3-v8-render-preservation.json), [파일 검사](dp3-v8-validation.json), [연결 및 포함 검사](dp3-v8-scene-checks.json), [수정 세 페이지 preview](previews-v8-dp3-guide-fixed/).
 
@@ -60,3 +60,9 @@
 - [26쪽 보존 패키징](../../../scripts/presentations/package_dp3_cpu_v8.py)
 
 생성기는 repository와 새 private build directory를 인자로 받는다. build에 v7 파일을 `source-v7.pptx`로 복사하고 위 네 `.mjs` 파일을 같은 디렉터리에 둔다. bundled Node, Python, `@oai/artifact-tool`과 같은 경로의 `node_modules`를 사용하는 로컬 환경을 전제로 한다. `DP3_RENDER_ALL=1`은 전체 29쪽을 렌더하고, 기본값은 변경한 세 쪽을 렌더한다. `DP3_EXPORT_FIGURES_ONLY=1`은 같은 scene에서 SVG/draw.io만 다시 내보내며 PPTX를 변경하지 않는다. 구조를 바꾸면 전체 생성과 렌더 검토를 다시 수행한다.
+
+## GitHub 발행과 Windows 확인
+
+그림과 문서는 `1756c50504a8a444757f84f65c3f52824ce47d06`으로 main에 발행했다. [실제 v8 파일을 지정한 Windows 검사](https://github.com/cbyche/via-sw-architecture/actions/runs/39626212881)가 통과했다. Microsoft Open XML SDK 3.3.0이 Office2021 형식으로 29쪽을 열고 schema 오류 0개를 보고했으며, 보고서 SHA-256은 위 최종 파일과 일치한다. Calibri, 정수 pt와 ko-KR 정책도 통과했다. [SDK 원본 보고서](dp3-v8-windows-openxml.json), [Windows 환경 기록](dp3-v8-windows-environment.json)을 보존한다. 해당 runner에는 PowerPoint가 설치되어 있지 않아 native PowerPoint 실행 검증을 주장하지 않는다.
+
+동일 커밋의 [전체 Architecture CI](https://github.com/cbyche/via-sw-architecture/actions/runs/39626176694)는 기존 `four-dp-presentation-20261019`의 frozen source 복사본에 있는 상대 링크 14건에서 실패했다. 이는 DP3 변경 범위 밖이며 이전 v7 CI에서도 보고된 실패다. 다른 세션의 진행 중인 링크 검사 및 DP44 변경을 이 커밋에 포함하지 않았다. 로컬 링크 검사 통과에는 그 별도 진행 중인 검사기 변경이 포함되므로 원격 전체 CI 통과로 보고하지 않는다.
