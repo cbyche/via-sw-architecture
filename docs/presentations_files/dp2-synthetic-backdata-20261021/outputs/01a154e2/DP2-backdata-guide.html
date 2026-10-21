@@ -1,0 +1,57 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><title>DP2 합성 백데이터 설명</title><style>body{font:16px/1.65 -apple-system,BlinkMacSystemFont,'Arial',sans-serif;color:#243447;max-width:1280px;margin:40px auto;padding:0 28px}h1,h2{color:#203e59}h1{font-size:32px}h2{margin-top:40px}table{width:100%;border-collapse:collapse;font-size:14px;margin:18px 0}th{background:#243f5b;color:white;text-align:left}th,td{padding:12px;border-bottom:1px solid #dae2e9;vertical-align:top;overflow-wrap:anywhere}tr:nth-child(even){background:#f4f7fa}.notice{padding:16px;background:#fff2d9;border-left:5px solid #b77817}blockquote{border-left:4px solid #527c9c;padding:10px 20px;background:#eef4f8}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7f9;padding:16px;font-size:13px}section{border-bottom:1px solid #d8e1e8;padding-bottom:24px}a{color:#1467a6}</style><h1>DP2 A/B 합성 백데이터</h1><p class="notice">설명용 합성 데이터 · 수치에 맞춰 작성한 예시 · 실제 모델/제품/실험 관측 아님. 앞선 가상 평균을 설명하기 위해 상세 행을 역구성했다. 문서 생성일 2026-10-21은 실험일이 아니다. 실측 근거·통계적 유의성·후보 선택을 제공하지 않는다.</p><p>A는 기존 해석 실행의 다음 step에서 새 입력을 함께 판단한다. B는 공통 대화가 별도로 새 입력을 판단하고 기존 실행 또는 새 목표에 연결한다. B에 새 모델 가중치나 매 입력 새 loop를 강제하지 않는다.</p><table><thead><tr><th>QA</th><th>A</th><th>B</th><th>단위</th></tr></thead><tbody><tr><td>QA01</td><td>1.40</td><td>0.80</td><td>초</td></tr><tr><td>QA02</td><td>97%</td><td>95%</td><td>표현 집합 일치율</td></tr><tr><td>QA03</td><td>5.00</td><td>4.40</td><td>초</td></tr><tr><td>QA04</td><td>2.00</td><td>2.00</td><td>가상 모듈</td></tr><tr><td>QA05</td><td>2.10</td><td>2.35</td><td>가상 USD/명목28묶음</td></tr><tr><td>QA06</td><td>310.00</td><td>365.00</td><td>가상 MB</td></tr><tr><td>QA07</td><td>96%</td><td>93%</td><td>입력 전체 의미 일치율</td></tr></tbody></table><h2>구성 및 분모</h2><p>네 유형 각 50입력, 총 200입력이다. 20개 표현 템플릿을 10개 가상 프로젝트에 적용했다. 독립적인 실제 시행 200회가 아니다. A/B 응답 400행, 지칭 판정 400행, 시간 내역 400행을 연결했다.</p><p>QA02는 G1의 표현 2개×50 + G2 50 + G3 50 = 200표현/안이다. G4는 비적용이다. QA07은 200입력/안으로 모든 필수 의미가 맞아야 성공이다. A 대상오류 입력 5건이 지칭오류 6건을 만들며 의미만 오류는 3건이다. B 대상오류 입력 7건이 지칭오류 10건을 만들며 의미만 오류는 7건이다.</p><p>QA01은 오답을 포함한 첫 구체적 내용 표시까지다. G2/G3의 B는 변경 조건 또는 추가 목표 의도를 먼저 안내하고, 원본 조회 뒤 대상까지 포함한 전체 의미를 확정할 수 있다. 단순 접수 인사는 세지 않는다.</p><section><h2>G1 결과 의존 정정</h2><p><b>원래 요청:</b> 어제 메일로 받은 물류 장비 견적서 두 개를 비교하는 보고서 초안을 만들어줘. 설치비는 제외해.</p><blockquote>그 두 견적 비교는 취소하고, 나중에 온 것 하나만 요약하는 초안으로 변경해줘.</blockquote><p>원본 P: D-1 09:10 / Q: D-1 15:40 / R: D-7 도착이나 파일 수정은 D0. 조회 반환 t=0.665초. A/B는 같은 근거를 받는다.</p><p><b>지칭 정답:</b> 그 두 견적 → SYN-DP2-G1-014-P, SYN-DP2-G1-014-Q ; 나중에 온 것 하나 → SYN-DP2-G1-014-Q</p><pre>{
+  &quot;goal&quot;: &quot;SUMMARY_DRAFT&quot;,
+  &quot;targets&quot;: [
+    &quot;SYN-DP2-G1-014-Q&quot;
+  ],
+  &quot;relation&quot;: &quot;REVISE_R1&quot;,
+  &quot;base_request&quot;: &quot;SYN-DP2-G1-014-R1&quot;,
+  &quot;installation&quot;: &quot;EXCLUDE&quot;,
+  &quot;delivery&quot;: &quot;UNSPECIFIED&quot;,
+  &quot;audience&quot;: &quot;USER&quot;,
+  &quot;output&quot;: &quot;DRAFT_ONLY&quot;,
+  &quot;external_send&quot;: false,
+  &quot;original_goal&quot;: &quot;REPLACE_COMPARISON_WITH_SUMMARY&quot;,
+  &quot;base_pair&quot;: [
+    &quot;SYN-DP2-G1-014-P&quot;,
+    &quot;SYN-DP2-G1-014-Q&quot;
+  ]
+}</pre><table><thead><tr><th>방안</th><th>첫 표시 문장</th><th>QA01</th><th>전체 의미 확정 t</th><th>QA03</th><th>QA07</th><th>오류</th></tr></thead><tbody><tr><td>A</td><td>“가온 물류 장비 공급사 Q 견적” 하나의 요약 초안 작성으로 변경하겠습니다.</td><td>1.354s</td><td>1.254s</td><td>5.131s</td><td>성공</td><td>필수 의미 전체 일치</td></tr><tr><td>B</td><td>“가온 물류 장비 공급사 R 견적” 하나의 요약 초안 작성으로 변경하겠습니다.</td><td>1.254s</td><td>1.154s</td><td>5.531s</td><td>실패</td><td>메일 도착과 수정 시각/이전 판본을 혼동한 가상 오류</td></tr></tbody></table><p>이 예시의 시각과 응답은 합성이다. 문장에 나타나지 않은 필수 의미도 최초 채택 JSON으로 판정한다.</p></section><section><h2>G2 조건 수정</h2><p><b>원래 요청:</b> 어제 메일로 받은 물류 장비 견적서 두 개를 비교하는 보고서 초안을 만들어줘. 설치비는 제외해.</p><blockquote>그 두 견적의 설치비도 포함하고, 납기는 비교에서 빼줘.</blockquote><p>원본 P: D-1 09:10 / Q: D-1 15:40 / R: D-7 도착이나 파일 수정은 D0. 조회 반환 t=0.72초. A/B는 같은 근거를 받는다.</p><p><b>지칭 정답:</b> 그 두 견적 → SYN-DP2-G2-011-P, SYN-DP2-G2-011-Q</p><pre>{
+  &quot;goal&quot;: &quot;COMPARISON_REPORT_DRAFT&quot;,
+  &quot;targets&quot;: [
+    &quot;SYN-DP2-G2-011-P&quot;,
+    &quot;SYN-DP2-G2-011-Q&quot;
+  ],
+  &quot;relation&quot;: &quot;REVISE_R1&quot;,
+  &quot;base_request&quot;: &quot;SYN-DP2-G2-011-R1&quot;,
+  &quot;installation&quot;: &quot;INCLUDE&quot;,
+  &quot;delivery&quot;: &quot;EXCLUDE&quot;,
+  &quot;audience&quot;: &quot;USER&quot;,
+  &quot;output&quot;: &quot;DRAFT_ONLY&quot;,
+  &quot;external_send&quot;: false,
+  &quot;original_goal&quot;: &quot;KEEP_WITH_UPDATED_CONDITIONS&quot;
+}</pre><table><thead><tr><th>방안</th><th>첫 표시 문장</th><th>QA01</th><th>전체 의미 확정 t</th><th>QA03</th><th>QA07</th><th>오류</th></tr></thead><tbody><tr><td>A</td><td>비교 조건을 설치비 포함, 납기 제외로 변경하겠습니다.</td><td>1.142s</td><td>1.042s</td><td>4.713s</td><td>성공</td><td>필수 의미 전체 일치</td></tr><tr><td>B</td><td>비교 조건을 설치비 포함, 납기 제외로 변경하겠습니다.</td><td>0.542s</td><td>0.970s</td><td>4.513s</td><td>성공</td><td>필수 의미 전체 일치</td></tr></tbody></table><p>이 예시의 시각과 응답은 합성이다. 문장에 나타나지 않은 필수 의미도 최초 채택 JSON으로 판정한다.</p></section><section><h2>G3 공유 근거 추가 목표</h2><p><b>원래 요청:</b> 어제 메일로 받은 매장 단말 견적서 두 개를 비교하는 보고서 초안을 만들어줘. 설치비는 제외해.</p><blockquote>같은 두 견적에 대해 구매팀에 보낼 질문 목록도 만들어줘. 보고서 작성도 계속해. 설치비는 질문 목록에서도 제외해.</blockquote><p>원본 P: D-1 09:10 / Q: D-1 15:40 / R: D-7 도착이나 파일 수정은 D0. 조회 반환 t=0.82초. A/B는 같은 근거를 받는다.</p><p><b>지칭 정답:</b> 같은 두 견적 → SYN-DP2-G3-016-P, SYN-DP2-G3-016-Q</p><pre>{
+  &quot;goal&quot;: &quot;PURCHASE_QUESTION_LIST&quot;,
+  &quot;targets&quot;: [
+    &quot;SYN-DP2-G3-016-P&quot;,
+    &quot;SYN-DP2-G3-016-Q&quot;
+  ],
+  &quot;relation&quot;: &quot;ADD_KEEP_R1&quot;,
+  &quot;base_request&quot;: &quot;SYN-DP2-G3-016-R1&quot;,
+  &quot;installation&quot;: &quot;EXCLUDE&quot;,
+  &quot;delivery&quot;: &quot;UNSPECIFIED&quot;,
+  &quot;audience&quot;: &quot;PURCHASE_TEAM&quot;,
+  &quot;output&quot;: &quot;DRAFT_ONLY&quot;,
+  &quot;external_send&quot;: false,
+  &quot;original_goal&quot;: &quot;KEEP&quot;
+}</pre><table><thead><tr><th>방안</th><th>첫 표시 문장</th><th>QA01</th><th>전체 의미 확정 t</th><th>QA03</th><th>QA07</th><th>오류</th></tr></thead><tbody><tr><td>A</td><td>기존 보고서는 유지하고 구매팀 질문 목록 작성을 추가하겠습니다.</td><td>1.362s</td><td>1.262s</td><td>5.543s</td><td>성공</td><td>필수 의미 전체 일치</td></tr><tr><td>B</td><td>기존 보고서는 유지하고 구매팀 질문 목록 작성을 추가하겠습니다.</td><td>0.662s</td><td>1.120s</td><td>5.143s</td><td>실패</td><td>메일 도착과 수정 시각/이전 판본을 혼동한 가상 오류</td></tr></tbody></table><p>이 예시의 시각과 응답은 합성이다. 문장에 나타나지 않은 필수 의미도 최초 채택 JSON으로 판정한다.</p></section><section><h2>G4 독립 질문</h2><p><b>원래 요청:</b> 어제 메일로 받은 출시 행사 견적서 두 개를 비교하는 보고서 초안을 만들어줘. 설치비는 제외해.</p><blockquote>원래 보고서는 유지해. 별개로 TCP와 UDP 차이를 세 문장으로 알려줘.</blockquote><p>원본 P: D-1 09:10 / Q: D-1 15:40 / R: D-7 도착이나 파일 수정은 D0. 조회 반환 t=0.935초. A/B는 같은 근거를 받는다.</p><p><b>지칭 정답:</b> 비적용 — 명시된 일반 개념 질문</p><pre>{
+  &quot;goal&quot;: &quot;EXPLAIN_TCP_UDP&quot;,
+  &quot;targets&quot;: [],
+  &quot;relation&quot;: &quot;INDEPENDENT_KEEP_R1&quot;,
+  &quot;base_request&quot;: &quot;SYN-DP2-G4-027-R1&quot;,
+  &quot;installation&quot;: &quot;NOT_APPLICABLE&quot;,
+  &quot;delivery&quot;: &quot;NOT_APPLICABLE&quot;,
+  &quot;audience&quot;: &quot;USER&quot;,
+  &quot;output&quot;: &quot;THREE_SENTENCES&quot;,
+  &quot;external_send&quot;: false,
+  &quot;original_goal&quot;: &quot;KEEP&quot;
+}</pre><table><thead><tr><th>방안</th><th>첫 표시 문장</th><th>QA01</th><th>전체 의미 확정 t</th><th>QA03</th><th>QA07</th><th>오류</th></tr></thead><tbody><tr><td>A</td><td>TCP는 신뢰성 있는 순서 전달을 제공하고, UDP는 전달과 순서를 보장하지 않는 데이터그램 방식입니다.</td><td>1.606s</td><td>1.506s</td><td>4.409s</td><td>실패</td><td>독립 질문을 처리하면서 기존 목표를 취소로 잘못 확정</td></tr><tr><td>B</td><td>TCP는 신뢰성 있는 순서 전달을 제공하고, UDP는 전달과 순서를 보장하지 않는 데이터그램 방식입니다.</td><td>0.606s</td><td>0.506s</td><td>2.209s</td><td>성공</td><td>필수 의미 전체 일치</td></tr></tbody></table><p>이 예시의 시각과 응답은 합성이다. 문장에 나타나지 않은 필수 의미도 최초 채택 JSON으로 판정한다.</p></section><h2>시간 분해와 병행 경로</h2><table><thead><tr><th>평균 단계</th><th>A 초</th><th>B 초</th></tr></thead><tbody><tr><td>정정 전 처리</td><td>0.300</td><td>0.300</td></tr><tr><td>입력 접수</td><td>0.080</td><td>0.080</td></tr><tr><td>별도 관계 판단</td><td>0.000</td><td>0.180</td></tr><tr><td>첫 판단 선행 대기</td><td>0.720</td><td>0.098</td></tr><tr><td>첫 내용 판단</td><td>0.500</td><td>0.343</td></tr><tr><td>첫 표시</td><td>0.100</td><td>0.100</td></tr><tr><td>첫 표시 후 추가 결합</td><td>0.000</td><td>0.212</td></tr><tr><td>후속 준비/전체 설명</td><td>2.438</td><td>2.225</td></tr><tr><td>전달·접수</td><td>0.188</td><td>0.188</td></tr><tr><td>결과 연결</td><td>0.262</td><td>0.262</td></tr><tr><td>전체 음성 준비</td><td>0.413</td><td>0.413</td></tr></tbody></table><p>QA01 = 접수 + 별도 관계 판단 + 선행 대기 + 첫 내용 판단 + 표시. QA03 = 정정 전 원래 목표 처리 + QA01 + 이후 결합/준비/전달/결과/음성 경로. 실제 식은 실행단계 DAG에서 외부 업무 노드 시간을 0으로 만든 완료경로로 검산했다. 조회와 관계 판단의 겹친 시간을 두 번 더하지 않는다.</p><p>G1/G2는 원래 목표 t=-0.6부터 QA03를 계산한다. G3/G4는 새 목표 t=0부터 계산한다. 원래 목표의 유지와 경합은 별도 기존목표진단 표에 남겼다. 주표는 사전 지정한 200개 목표만의 합성 평균이며 전체 시스템의 모든 목표 평균이 아니다.</p><p>각 그룹의 시간은 이전 가상 평균에 대칭 오프셋을 더한 것이다. QA01 오프셋=(j−24.5)×0.004초, QA03는 그 1.5배다. 이 변형을 실제 반복 측정의 분산처럼 해석하면 안 된다. 모든 외부 처리와 completion 역시 설정값이다.</p><p class="notice"><b>QA03의 추가 가정:</b> 독립 질문 G4의 첫 표시 이후 전체 설명 생성은 A 2.35초, B 1.15초로 설정했다. 큰 공통 문맥과 좁은 문맥의 후속 생성 차이를 가정한 것으로, 기존 step 대기만으로 설명되는 차이가 아니다. 이 1.20초 차이를 제거하면 G4의 A는 3.20초, 전체 A는 4.70초가 되고 B는 4.40초를 유지한다. 실측에서는 이 별도 가정을 검증해야 한다.</p><h2>비용 및 다른 QA</h2><table><thead><tr><th>비용 단계</th><th>A USD</th><th>B USD</th></tr></thead><tbody><tr><td>입출력 음성</td><td>1.12</td><td>1.12</td></tr><tr><td>요청 의미·응답 판단</td><td>0.62</td><td>0.54</td></tr><tr><td>후속 입력 관계 판단</td><td>0.06</td><td>0.20</td></tr><tr><td>문맥 전달·재결합</td><td>0.06</td><td>0.18</td></tr><tr><td>폐기·재판단</td><td>0.10</td><td>0.14</td></tr><tr><td>초기 준비</td><td>0.08</td><td>0.08</td></tr><tr><td>마지막 입력 이후 처리</td><td>0.06</td><td>0.09</td></tr></tbody></table><p>비용은 200건에서 외삽하지 않았다. 기존 S01~S28 명칭을 읽어 별도 명목 원장을 만들고 합계를 맞췄다. 가상 단가는 입력 $1/M token, 출력 $4/M token, 음성 $0.002/초다. 실제 provider 가격이 아니며 5회 묶음을 실행하지 않았다. 분할 전 목표 금액에서 가상 usage를 역구성했다. Downstream 비용은 포함하지 않는다.</p><p>QA04의 경로는 SYNTHETIC_DESIGN_ONLY 이름의 가상 모듈이며 실제 Rust 수정이 아니다. QA06은 cloud 모델을 사용하는 로컬 프로필의 가상 동시 합이다. 온디바이스 Omni 가중치/KV를 측정하거나 512MB 요구 충족을 증명하지 않는다. 시점별 총합의 최대치를 사용하며 구성요소의 서로 다른 시점 최고치를 합산하지 않는다.</p><h2>DP5 및 향후 DP 통합</h2><p>참고 채팅: <a href="codex://threads/01a154e4-11ce-7582-841b-347900047d61">DP5 = DP4+1+45</a>. 사례→원본→최초 응답/의미→시간→비용 연결 방식을 참고했다. DP5 파일은 변경하지 않았다.</p><p>DP5의 비용은 정규화 단위이고 수신 Agent 비용을 포함한다. DP2는 가상 USD 명목묶음에서 VIA만 포함하므로 숫자를 직접 비교할 수 없다. 두 자료의 입력 수나 적용 표현 수도 다르다. 공통 스키마 DP-BACKDATA-0.1에 evidence_kind, DP/대안, 사례/요청/revision/목표/표현 ID, oracle/최초 채택, DAG, 비용 범위, 프로필을 두고 통합 전에 판본과 분모를 검토하도록 했다.</p><h2>확인한 범위</h2><p>평균·분모·오류 건수·정답/채택 비교·근거 참조·DAG 경로·가상 비용·시점별 메모리 합계와 스프레드시트 수식의 재계산을 확인했다. 모델/제품 실행이나 실측 결과의 유효성을 확인한 것은 아니다. 실제 데이터는 별도 dataset_id와 evidence_kind로 수집해야 한다.</p></html>

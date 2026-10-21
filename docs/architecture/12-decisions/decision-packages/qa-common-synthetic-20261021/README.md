@@ -13,6 +13,7 @@ DP별로 달랐던 QA01~07의 의미, 모집단과 계산 경계를 맞춘 **가
 | [03 이관과 확장](03-migration-and-extension.md) | 이전 자료의 보존, 다른 DP 추가와 판본 관리 |
 | [04 결과와 사례](04-results-and-walkthrough.md) | 전체 비교, 유형별 결과, 입력을 따라가는 설명 |
 | [05 검토 기록](05-review-and-validation.md) | 독립 감사의 발견과 수정 및 검증 범위 |
+| [06 다음 세션 지침](06-session-handoff.md) | 새 DP 준비 후의 재개 요청, 읽기 순서, 확장과 검증 절차 |
 | [산출물과 재생성](../../../../presentations_files/qa-common-synthetic-20261021/README.md) | JSON, manifest, workbook 및 생성 명령 |
 
 지칭은 250개 표현, 의미는 240개 입력, 시간은 180개 목표, 변경 범위는 6개 과제로 각각 계산한다. 수치는 작성 가정에서 산출했으며 실제 시험 기록이 아니다. 기존 QA 목표와 점수, accepted ADR 및 이전 결과는 유지한다.
