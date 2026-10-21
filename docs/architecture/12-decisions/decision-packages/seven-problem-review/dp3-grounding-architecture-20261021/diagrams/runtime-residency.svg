@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2820" height="2130" viewBox="0 0 2820 2130" role="img" aria-labelledby="diagram-title diagram-desc">
+<title id="diagram-title">B의 CPU 모델 실행: 교체 상주, 동시 상주, worker 분리</title>
+<desc id="diagram-desc">위에는 VIA 로컬 Core와 CPU 추론 worker의 공통 실행 계약, 아래에는 R1 단일 세션 교체, R2 공유 worker 복수 세션 상주, R3 전용 worker 분리를 표시한다. 모델 가중치와 episode 상태를 구별하며 상주가 병렬 실행을 뜻하지 않는다.</desc>
+<style>text{font-family:"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif}</style>
+<rect x="0" y="0" width="2820" height="2130" fill="#ffffff"/>
+<rect x="40" y="140" width="2740" height="450" rx="9" fill="#f8fafc" stroke="#243247" stroke-width="2"/>
+<text x="60" y="175" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">공통 실행 계약 — 아래 R1/R2/R3 중 하나로 CPU 추론 Worker를 배치</text>
+<rect x="70" y="195" width="1360" height="345" rx="9" fill="#ffffff" stroke="#243247" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="90" y="230" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">VIA Core Process</text>
+<rect x="1880" y="195" width="420" height="345" rx="9" fill="#ffffff" stroke="#243247" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="1900" y="230" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">VIA Core (동일 Process)</text>
+<rect x="40" y="640" width="900" height="1390" rx="9" fill="#f7fcf9" stroke="#13724c" stroke-width="2"/>
+<text x="60" y="675" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">R1  공유 Worker · 한 모델 세션 교체</text>
+<rect x="960" y="640" width="900" height="1390" rx="9" fill="#f7fcf9" stroke="#13724c" stroke-width="2"/>
+<text x="980" y="675" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">R2  공유 Worker · 모델 세션 동시 상주</text>
+<rect x="1880" y="640" width="900" height="1390" rx="9" fill="#f7fcf9" stroke="#13724c" stroke-width="2"/>
+<text x="1900" y="675" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">R3  모델군별 전용 Worker 상주</text>
+<rect x="80" y="810" width="820" height="860" rx="9" fill="#ffffff" stroke="#13724c" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="100" y="845" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">CPU Worker Process</text>
+<rect x="1000" y="810" width="820" height="860" rx="9" fill="#ffffff" stroke="#13724c" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="1020" y="845" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">CPU Worker Process</text>
+<rect x="1920" y="810" width="400" height="860" rx="9" fill="#ffffff" stroke="#13724c" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="1940" y="845" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">UI Worker Process</text>
+<rect x="2340" y="810" width="400" height="860" rx="9" fill="#ffffff" stroke="#13724c" stroke-width="2" stroke-dasharray="9 7"/>
+<text x="2360" y="845" text-anchor="start" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="25" font-weight="700">SAM Worker Process</text>
+<polyline points="580,325 440,325" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="440,365 580,365" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="910,345 1050,345" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1380,325 1550,325" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1550,365 1380,365" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="1215,385 1215,485 745,485 745,385" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="745,305 745,245 2090,245 2090,305" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2240,325 2430,325" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2430,365 2240,365" fill="none" stroke="#243247" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="370,755 370,920" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="630,920 630,755" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="370,1000 370,1080" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="630,1080 630,1000" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="690,1160 690,1280" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1290,755 1290,920" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1550,920 1550,755" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="1290,1000 1290,1080" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1550,1080 1550,1000" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="1610,1160 1610,1280" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="295,1780 295,1385" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="295,1160 295,1280" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1215,1780 1215,1585" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1095,1830 1000,1830 1000,1330 1050,1330" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1215,1160 1215,1280" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="1050,1120 1030,1120 1030,1530 1050,1530" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2250,755 2250,920" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2290,920 2290,755" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="2045,1000 2045,1080" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2195,1080 2195,1000" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="2120,1160 2120,1270" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2120,1370 2120,1490" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2670,755 2670,920" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2710,920 2710,755" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="2465,1000 2465,1080" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2615,1080 2615,1000" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="9 6"/>
+<polyline points="2540,1160 2540,1270" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2540,1370 2540,1490" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2015,1830 1900,1830 1900,1320 1945,1320" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="2645,1830 2770,1830 2770,1320 2715,1320" fill="none" stroke="#13724c" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M110,313 A165.0,18 0 0 1 440,313 V377 A165.0,18 0 0 1 110,377 Z" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<ellipse cx="275.0" cy="313" rx="165.0" ry="18" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="275" y="352.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">원본 근거 저장소</text>
+<rect x="580" y="305" width="330" height="80" rx="4" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="745" y="352.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">화면 대상 생산기</text>
+<rect x="1050" y="305" width="330" height="80" rx="4" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="1215" y="352.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">모델 실행 제어기</text>
+<polygon points="1570,305 1770,305 1790,345.0 1770,385 1570,385 1550,345.0" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="1670" y="352.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">CPU 추론 Worker</text>
+<rect x="1940" y="305" width="300" height="80" rx="4" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="2090" y="352.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">지칭 결합기</text>
+<polygon points="2450,305 2690,305 2710,345.0 2690,385 2450,385 2430,345.0" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="2570" y="352.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">클라우드 의미 LLM</text>
+<rect x="130" y="920" width="720" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="490" y="967.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">검출·OCR·SAM2 Adapter</text>
+<rect x="130" y="1080" width="720" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="490" y="1127.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">PyTorch CPU Runtime</text>
+<path d="M525,1298 A162.5,18 0 0 1 850,1298 V1367 A162.5,18 0 0 1 525,1367 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="687.5" cy="1298" rx="162.5" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="687.5" y="1340.42" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">Episode 상태</text>
+<path d="M175,1798 A315.0,18 0 0 1 805,1798 V1862 A315.0,18 0 0 1 175,1862 Z" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<ellipse cx="490.0" cy="1798" rx="315.0" ry="18" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="490" y="1837.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">모델 파일 저장소</text>
+<rect x="1050" y="920" width="720" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="1410" y="967.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">검출·OCR·SAM2 Adapter</text>
+<rect x="1050" y="1080" width="720" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="1410" y="1127.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">PyTorch CPU Runtime</text>
+<path d="M1445,1298 A162.5,18 0 0 1 1770,1298 V1367 A162.5,18 0 0 1 1445,1367 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="1607.5" cy="1298" rx="162.5" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="1607.5" y="1340.42" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">Episode 상태</text>
+<path d="M1095,1798 A315.0,18 0 0 1 1725,1798 V1862 A315.0,18 0 0 1 1095,1862 Z" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<ellipse cx="1410.0" cy="1798" rx="315.0" ry="18" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="1410" y="1837.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">모델 파일 저장소</text>
+<path d="M130,1298 A162.5,18 0 0 1 455,1298 V1367 A162.5,18 0 0 1 130,1367 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="292.5" cy="1298" rx="162.5" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="292.5" y="1340.42" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">모델 세션 슬롯</text>
+<path d="M1050,1298 A162.5,18 0 0 1 1375,1298 V1367 A162.5,18 0 0 1 1050,1367 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="1212.5" cy="1298" rx="162.5" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="1212.5" y="1340.42" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">검출·OCR 세션</text>
+<path d="M1050,1498 A162.5,18 0 0 1 1375,1498 V1567 A162.5,18 0 0 1 1050,1567 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="1212.5" cy="1498" rx="162.5" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="1212.5" y="1540.42" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">SAM2 세션</text>
+<rect x="1945" y="920" width="350" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2120" y="967.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">검출·OCR Adapter</text>
+<rect x="1945" y="1080" width="350" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2120" y="1127.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">PyTorch CPU Runtime</text>
+<path d="M1945,1288 A175.0,18 0 0 1 2295,1288 V1352 A175.0,18 0 0 1 1945,1352 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="2120.0" cy="1288" rx="175.0" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2120" y="1327.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">검출·OCR 세션</text>
+<path d="M1945,1508 A175.0,18 0 0 1 2295,1508 V1572 A175.0,18 0 0 1 1945,1572 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="2120.0" cy="1508" rx="175.0" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2120" y="1547.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">Episode 상태</text>
+<rect x="2365" y="920" width="350" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2540" y="967.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">SAM2 Adapter</text>
+<rect x="2365" y="1080" width="350" height="80" rx="4" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2540" y="1127.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">PyTorch CPU Runtime</text>
+<path d="M2365,1288 A175.0,18 0 0 1 2715,1288 V1352 A175.0,18 0 0 1 2365,1352 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="2540.0" cy="1288" rx="175.0" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2540" y="1327.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">SAM2 세션</text>
+<path d="M2365,1508 A175.0,18 0 0 1 2715,1508 V1572 A175.0,18 0 0 1 2365,1572 Z" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<ellipse cx="2540.0" cy="1508" rx="175.0" ry="18" fill="#e7f5ed" stroke="#13724c" stroke-width="2.5"/>
+<text x="2540" y="1547.92" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">Episode 상태</text>
+<path d="M2015,1798 A315.0,18 0 0 1 2645,1798 V1862 A315.0,18 0 0 1 2015,1862 Z" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<ellipse cx="2330.0" cy="1798" rx="315.0" ry="18" fill="#ffffff" stroke="#243247" stroke-width="2.5"/>
+<text x="2330" y="1837.92" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="24" font-weight="700">모델 파일 저장소</text>
+<polygon points="440,325 452,319 452,331" fill="#243247"/>
+<polygon points="580,365 568,371 568,359" fill="#243247"/>
+<polygon points="1050,345 1038,351 1038,339" fill="#243247"/>
+<polygon points="1550,325 1538,331 1538,319" fill="#243247"/>
+<polygon points="1380,365 1392,359 1392,371" fill="#243247"/>
+<polygon points="745,385 751,397 739,397" fill="#243247"/>
+<polygon points="2090,305 2084,293 2096,293" fill="#243247"/>
+<polygon points="2430,325 2418,331 2418,319" fill="#243247"/>
+<polygon points="2240,365 2252,359 2252,371" fill="#243247"/>
+<polygon points="370,920 364,908 376,908" fill="#13724c"/>
+<polygon points="630,755 636,767 624,767" fill="#13724c"/>
+<polygon points="370,1080 364,1068 376,1068" fill="#13724c"/>
+<polygon points="630,1000 636,1012 624,1012" fill="#13724c"/>
+<polygon points="690,1280 684,1268 696,1268" fill="#13724c"/>
+<polygon points="1290,920 1284,908 1296,908" fill="#13724c"/>
+<polygon points="1550,755 1556,767 1544,767" fill="#13724c"/>
+<polygon points="1290,1080 1284,1068 1296,1068" fill="#13724c"/>
+<polygon points="1550,1000 1556,1012 1544,1012" fill="#13724c"/>
+<polygon points="1610,1280 1604,1268 1616,1268" fill="#13724c"/>
+<polygon points="295,1385 301,1397 289,1397" fill="#13724c"/>
+<polygon points="295,1280 289,1268 301,1268" fill="#13724c"/>
+<polygon points="1215,1585 1221,1597 1209,1597" fill="#13724c"/>
+<polygon points="1050,1330 1038,1336 1038,1324" fill="#13724c"/>
+<polygon points="1215,1280 1209,1268 1221,1268" fill="#13724c"/>
+<polygon points="1050,1530 1038,1536 1038,1524" fill="#13724c"/>
+<polygon points="2250,920 2244,908 2256,908" fill="#13724c"/>
+<polygon points="2290,755 2296,767 2284,767" fill="#13724c"/>
+<polygon points="2045,1080 2039,1068 2051,1068" fill="#13724c"/>
+<polygon points="2195,1000 2201,1012 2189,1012" fill="#13724c"/>
+<polygon points="2120,1270 2114,1258 2126,1258" fill="#13724c"/>
+<polygon points="2120,1490 2114,1478 2126,1478" fill="#13724c"/>
+<polygon points="2670,920 2664,908 2676,908" fill="#13724c"/>
+<polygon points="2710,755 2716,767 2704,767" fill="#13724c"/>
+<polygon points="2465,1080 2459,1068 2471,1068" fill="#13724c"/>
+<polygon points="2615,1000 2621,1012 2609,1012" fill="#13724c"/>
+<polygon points="2540,1270 2534,1258 2546,1258" fill="#13724c"/>
+<polygon points="2540,1490 2534,1478 2546,1478" fill="#13724c"/>
+<polygon points="1945,1320 1933,1326 1933,1314" fill="#13724c"/>
+<polygon points="2715,1320 2727,1314 2727,1326" fill="#13724c"/>
+<text x="50" y="56" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="36" font-weight="700">B의 CPU 모델 실행: 모델 수명과 process 경계를 분리해서 선택</text>
+<text x="50" y="99" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="22" font-weight="400">검정: 공통 계약  |  초록: 비교하는 로컬 실행 구조  |  실선: 요청·호출  |  점선 화살표: 결과·복원  |  점선 경계: 실제 process</text>
+<text x="275" y="425" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">RAM 원본·판본·시각</text>
+<text x="1215" y="425" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">작업큐·CPU 실행 허용·취소·재시작</text>
+<text x="1670" y="425" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">논리적 연결점</text><text x="1670" y="448.94" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">실제 process 배치는 아래 비교</text>
+<text x="2090" y="285" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">VIA 로컬</text>
+<text x="510" y="280" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">1 원본 조회</text>
+<text x="980" y="290" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">2 생산 작업</text>
+<text x="1465" y="280" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">3 IPC 요청</text>
+<text x="1465" y="400" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">4 결과·판본</text>
+<text x="980" y="472" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">5 후보·경계·추적 결과 반환</text>
+<text x="1510" y="229" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">6 후보·동작 관계·원본 crop + 동일 전사·timestamp</text>
+<text x="2335" y="280" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">7 최종 해석</text>
+<text x="2335" y="421" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">대상·요청 의미 제안</text>
+<text x="90" y="565" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">화면 근거가 필요할 때만 시작. Core는 worker 장애와 오래된 판본을 처리하고 원본을 보존한다. IPC는 파일/공유 메모리 참조와 작은 메시지를 전달한다.</text>
+<text x="490" y="719" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">같은 3 IPC 요청 / 4 결과 반환 계약</text>
+<text x="1410" y="719" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">같은 3 IPC 요청 / 4 결과 반환 계약</text>
+<text x="2330" y="719" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">같은 3 IPC 요청 / 4 결과 반환 계약</text>
+<text x="290" y="780" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">3 요청</text>
+<text x="715" y="780" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">4 결과</text>
+<text x="490" y="1205" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">공유 thread pool · 기본 실행 허용 1건</text>
+<text x="677.5" y="1250" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">요청별 생성·해제</text>
+<text x="490" y="1917" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">디스크 가중치 + 모델 구성 파일</text>
+<text x="1210" y="780" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">3 요청</text>
+<text x="1635" y="780" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">4 결과</text>
+<text x="1410" y="1205" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">공유 thread pool · 기본 실행 허용 1건</text>
+<text x="1597.5" y="1250" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">요청별 생성·해제</text>
+<text x="1410" y="1917" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">디스크 가중치 + 모델 구성 파일</text>
+<text x="180" y="1550" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="21" font-weight="400">모델 전환 시</text><text x="180" y="1577.93" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="21" font-weight="400">읽기·로드 / 해제</text>
+<text x="300" y="1430" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="21" font-weight="400">검출 또는 OCR 또는 SAM2</text>
+<text x="690" y="1430" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">RAM: embedding·mask·추적 상태</text><text x="690" y="1453.94" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="18" font-weight="400">모델 해제 후에도 호환성 확인 후 보존</text>
+<text x="85" y="1975" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">Runtime는 유지한다. 가중치·실행 메모리를 해제해도</text><text x="85" y="2000.27" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">allocator가 OS에 RAM을 즉시 반환한다고 보장하지 않는다.</text>
+<text x="1570" y="1585" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">최초 필요 시 로드</text><text x="1570" y="1611.6" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">모델 가중치 유지</text>
+<text x="1620" y="1430" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">R1과 같은 Episode 보존 정책</text><text x="1620" y="1455.27" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">Episode 종료·무효화 시 재계산</text>
+<text x="1005" y="1975" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">가중치는 함께 상주하되 CPU 작업은 기본 직렬 실행.</text><text x="1005" y="2000.27" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">상주 ≠ 병렬. 실행 허용 정책은 별도 선택이다.</text>
+<text x="2075" y="785" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">개별 IPC 큐</text>
+<text x="2120" y="1205" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">개별 thread pool</text>
+<text x="2120" y="1435" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">요청별 생성·해제</text>
+<text x="2495" y="785" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">개별 IPC 큐</text>
+<text x="2540" y="1205" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">개별 thread pool</text>
+<text x="2540" y="1435" text-anchor="middle" fill="#13724c" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">요청별 생성·해제</text>
+<text x="2330" y="1917" text-anchor="middle" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">각 Worker 시작 시 자기 모델 로드</text>
+<text x="1925" y="1975" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">Core가 전체 CPU 실행량을 제한. 장애·재시작 경계 2개.</text><text x="1925" y="2000.27" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="19" font-weight="400">private RAM 증가; 공유 library 페이지 전체를 중복 합산하지 않는다.</text>
+<text x="50" y="2070" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="22" font-weight="700">R1/R2는 같은 Component·IPC·Episode 보존 정책에서 가중치 수명만 비교한다. R3는 process·큐·runtime·장애 경계가 달라진다. 모델 가중치 ≠ Episode 상태.</text>
+<text x="50" y="2110" text-anchor="start" fill="#243247" font-family="Apple SD Gothic Neo, Noto Sans KR, Malgun Gothic, sans-serif" font-size="20" font-weight="400">세 안은 대안이며 동시에 배치하지 않는다. 위의 논리 Worker 연결을 아래에서 각각 펼쳤다. 모든 추론은 CPU; 모델 크기·성능의 측정 결과를 나타내지 않는다.</text>
+</svg>

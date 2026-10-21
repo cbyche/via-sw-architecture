@@ -1,10 +1,44 @@
 # DP3: 원본 직접 해석과 대상·동작 기록을 통한 지칭 해석
 
+> **네 안의 수치 비교:** [동일 시나리오와 합성 QA 평가](synthetic-comparison/README.md)에 120평가 입력·60준비 활동의 가정 원장과 QA01~07, 대표 장면의 처리시간 분해 및 선택 결론을 추가했다. CPU 가정과 현재 QA 우선순위에서는 A를 선택하며, 실제 측정·제품 채택은 아니다.
+
+> **현재 비교는 [A / B-R1 / B-R2 / B-R3의 네 대안](cpu-runtime-architecture.md#11-a와-b-r1b-r2b-r3의-네-대안-비교)이다.** 사용자가 GPU 없는 실행을 유지하면서 이번 검토의 512 MB 상한을 유보했다. [CPU runtime 설계](cpu-runtime-architecture.md)는 공개 FP32 모델과 실제 CPU API 경로, 공유/전용 worker와 모델·episode 수명을 구분한다. [local 생산기](local-producer.md)는 기본 grounding 계약, [이전 소형 CPU 가상 예산](cpu-small-synthetic-budget.md)은 역사적 합성 가정이며 현재 성능값이 아니다. 아래 cloud 생산기 본문과 `comparison` 그림도 앞선 설계 근거로 보존한다.
+
 2026-10-21 / 사용자 요청에 따른 A 고정 및 B 상세 설계 / 설계 가설, 미구현·미측정·미선정
 
 **A는 의미 LLM이 당시 화면과 조작 이력에서 지칭 대상을 직접 생산한다. B는 전문 시각 처리로 당시 대상의 경계와 이동, 포인터와의 공간 관계를 먼저 복원하고, 의미 LLM이 그 대상들을 발화에 연결한다.** B의 선택 이유는 전사를 더 잘 만드는 것이 아니라, 정확한 전사와 timestamp만으로는 해결되지 않는 대상의 경계·동일성·집합 범위 오류를 줄이는 것이다. 그 대가가 대상 생산을 기다리는 시간과 추가 모델 비용이다.
 
 이번 B는 기존 [원본 공동 해석과 후보 생산·결합](../04-screen-speech-grounding.md) 계열을 **전용 검출·분할·추적 처리와 시간별 대상 기록으로 구체화한 판본**이다. 전혀 새로운 구조를 발견했다고 주장하지 않는다. 기존의 별도 발화 의미 생산자와 일반 VLM 화면 설명을 필수 단계로 계승하지 않는다. 과거 Qwen vision 실행, 점수와 추천을 이번 구성의 결과로 옮기지 않는다. [19일 재탐색](../dp3-reconstruction-20261019/README.md)의 speculative execution은 이번 비교에서 제외한다.
+
+## 현재 발표의 SW 구조 그림
+
+2026-10-21 재작성. [Component·상태·실행 계약](presentation-architecture-contract.md)을 먼저 정리하고, 저장소 [그림 가이드](../../diagram-design-guide.md)와 DP1·DP2·DP4의 Component/내부 Module/원통 상태 표현을 적용했다. A/B의 기능이나 QA 수치를 변경하지 않고, 원본 조회·후보 생산·모델 실행·최종 채택의 소유자와 실제 process 배치를 펼쳤다.
+
+### A와 B-R1: 해석과 후보 생산의 책임
+
+![A와 B-R1의 책임·상태·호출 구조](diagrams/dp3-v7-ab-responsibilities.svg)
+
+[편집 가능한 draw.io](diagrams/dp3-v7-ab-responsibilities.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v7-ab-responsibilities.png)
+
+Context Manager의 원통은 원본의 소유권을 옮긴 저장소가 아니라 허가된 원본 참조·cache다. Read/Produce는 기허가 범위에서 수행하고 새 범위는 Request Controller의 허가를 거친다. 후보 부족 시 생산기로 확장 요청을 보내며 최종 의미의 채택 주체는 양쪽 모두 Request Controller다.
+
+### B-R2와 B-R3: process·runtime·상태 배치
+
+![B-R2와 B-R3의 실행 배치](diagrams/dp3-v7-resident-processes.svg)
+
+[편집 가능한 draw.io](diagrams/dp3-v7-resident-processes.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v7-resident-processes.png)
+
+Model Access는 하나의 논리 Component이며 host와 worker에 나뉘어 배치된다. UI 결과가 host로 돌아온 다음 필요한 SAM 작업을 발행한다. 두 process로 나뉘는 R3도 같은 총 CPU 예산과 순차 heavy stage 조건이다. 작은 후보 기록은 host, model session과 영상 tensor는 해당 worker에 있다.
+
+### 실제 CPU 실행과 상태 수명
+
+![CPU worker와 IPC·모델·episode 수명](diagrams/dp3-v7-runtime-lifetimes.svg)
+
+[편집 가능한 draw.io](diagrams/dp3-v7-runtime-lifetimes.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v7-runtime-lifetimes.png)
+
+모델은 disk의 파일에서 worker runtime의 RAM session으로 로딩된다. ReleaseModel과 CloseEpisode는 서로 다른 명령이다. 모델 상주 여부와 episode 보존, 후보 기록 보존을 분리한다. 표의 RAM 값은 기존 합성 원장이며 실측으로 바꾸지 않았다.
+
+세 그림은 [동일 scene 모델](diagrams/dp3-v7-scene-model.json)과 [생성기](../../../../../../scripts/presentations/build_dp3_cpu_v7.mjs)에서 native PowerPoint 도형·SVG·draw.io로 함께 생성했다. [발표 v7과 검토 기록](../../../../../presentations_files/dp1-dp4-reference-style-20261019/dp3-v7-review.md). 아래 기존 cloud 생산기 본문과 그림은 앞선 설계 근거로 보존한다.
 
 ## 1. 결론과 적용 범위
 
