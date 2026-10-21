@@ -1,5 +1,7 @@
 # 구조 중심 Decision Reconstruction 작업 계획
 
+> **2026-10-22 DP44 합성 QA 비교:** 사용자 요청에 따라 [응답별 독립 준비 A와 현재 발화 준비 B의 시나리오 및 백데이터](./seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md)를 작성했다. 80입력, 120표현, 90목표에서 화면과 음성 QA01을 별도로 계산하고 QA02~07 및 선택 조건을 연결했다. 가정 아래 A 권고이며 실제 모델 실행, 제품 측정 또는 accepted ADR 변경은 아니다. [공통판 통합 인계](./seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/handoff.md)에서 QA01 종료점 차이와 고정 정확도 fixture, 별도 profile을 명시한다. 아래의 선행 준비 폐기 기록은 이전 UI 정의 아래 탐색 이력이며 최신 사용자 요청과 비교는 이 자료를 따른다.
+
 > **2026-10-21 DP44 화면·음성 분리 고정:** 사용자 지시로 채널 결합 비교를 기각하고 [여러 전달 의무의 제어 상태와 실행](./seven-problem-review/dp44-conversation-delivery-reset-20261021.md#0-지금까지의-결론과-dp44를-이어갈-방향)을 현재 설계 출발점으로 구체화했다. 보고서 중단과 메일 질문 보존, 판본별 무효화, 실제 전달·질문 제시 기록을 다룬다. 새 강한 A/B·QA 변경·측정 결과는 아니다.
 
 > **2026-10-21 DP44 논의 종합:** 사용자 요청에 따라 [DP44 현재 결론](./seven-problem-review/dp44-conversation-delivery-reset-20261021.md#0-지금까지의-결론과-dp44를-이어갈-방향)을 정리했다. 음성 선행 준비 비교도 주요 대안에서 폐기하고, 대화·채널 전달 생명주기의 실제 소유·의존과 현재 QA의 관측 범위를 함께 재검토하는 방향을 제안한다. QA01~07의 실질 손익을 우선하며 새 QA 채택·기존 QA 변경·새 A/B 선정·구현·측정은 하지 않았다.
