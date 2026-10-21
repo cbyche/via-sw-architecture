@@ -6,6 +6,7 @@
 
 ```bash
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
+.venv/bin/python scripts/architecture/test_active_markdown_links.py
 .venv/bin/python scripts/architecture/check_active_terminology.py
 .venv/bin/python scripts/architecture/check_qa_catalog.py
 .venv/bin/python scripts/architecture/generate_target_architecture_diagrams.py --check
@@ -17,6 +18,7 @@
 ```
 
 - `check_active_markdown_links.py`는 active Markdown의 local link와 archive 경계 문제를 찾는다.
+- 발표 실험의 DP04/DP05 보존 문서 14개는 동결된 SHA256과 일치할 때만 원래 문서 위치를 기준으로 링크를 검사한다. DP05 candidate README의 원래 위치는 교정 prototype 디렉터리다. 보존 문서 자체를 고치거나 검사에서 제외하지 않으며, `test_active_markdown_links.py`는 원본 변경, 대상 누락, 미등록 복사본과 저장소 밖 링크의 실패도 검증한다.
 - `check_active_terminology.py`는 legacy metric ID과 과거 lifecycle 번호가 active 문서에 다시 섞이지 않는지 확인한다.
 - `check_qa_catalog.py`는 draft QA registry의 active/retired ID와 normative Markdown 표가 일치하는지 확인한다.
 - `generate_target_architecture_diagrams.py --check`는 파일을 변경하지 않고 target 그림의 선 교차·박스 관통, XML ID, 생성 source와 draw.io/SVG 쌍의 일치를 검사한다. 글자·화살촉 배치는 렌더링으로 별도 검토한다.

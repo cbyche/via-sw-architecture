@@ -45,6 +45,41 @@ COMMON15_CAMPAIGNS = (
 )
 
 
+def presentation_markdown_contexts() -> dict[Path, dict]:
+    """Locate exact presentation snapshots in their original link contexts.
+
+    Hashes are the source pins in the DP04/DP05 freeze.json generations.
+    DP05's candidate README was copied from the corrected prototype, whose
+    relative links still assume prototypes/candidates/<crate>/, even inside
+    the presentation harness. Do not infer context from its copied pathname.
+    Only these fourteen known copies qualify; they still receive every link
+    check, and main rejects changed snapshot bytes before using the context.
+    """
+    campaign = CURRENT_EVIDENCE / "four-dp-presentation-20261019"
+    contexts = {}
+    dp04_sources = (
+        ("FINAL-REPRODUCTION.md", "0555fd39a02024a0c7dbf493302a1f9f674bfabcb72a1c108f43fc69ae270201"),
+        ("IMPLEMENTATION-dp01-dp05.md", "d9248489c8ce8cc462d7d4e90bc1339093f21c0c4530729c21ad354be5b796c6"),
+    )
+    for generation in ("basic", "normalized", "tactics",
+                       "pre-live-preparation-v1/basic", "pre-live-preparation-v1/tactics"):
+        for name, digest in dp04_sources:
+            original = ROOT / "benchmark/architecture/four_dp_poc_v2" / name
+            snapshot = campaign / "dp04" / generation / "frozen/source/benchmark/architecture/four_dp_poc_v2" / name
+            contexts[snapshot.resolve()] = {
+                "sha256": digest, "original_root": ROOT, "context": original,
+            }
+    for generation in ("frozen", "frozen-v1-preflight-error",
+                       "frozen-v2-before-evaluator-pin", "frozen-v3-preflight-guard-review"):
+        snapshot = campaign / "dp05" / generation / "source/benchmark/architecture/four_dp_presentation/dp05/candidate/README.md"
+        contexts[snapshot.resolve()] = {
+            "sha256": "3fb0d0b28f6bf59e29cbbafb77975f3048a2387bc5c34c5bc136c8076d8d3e04",
+            "original_root": ROOT,
+            "context": ROOT / "prototypes/candidates/four_dp_poc_v2_dp05_reuse_corrected/README.md",
+        }
+    return contexts
+
+
 def published_common15_contexts() -> tuple[dict[Path, dict], set[Path], list[str]]:
     """Resolve published evidence locators without rewriting preserved bytes.
 
@@ -246,6 +281,7 @@ def local_target(raw: str) -> str | None:
 
 def main() -> int:
     contexts, violations = restored_markdown_contexts()
+    contexts.update(presentation_markdown_contexts())
     common15_contexts, packaged_targets, package_violations = published_common15_contexts()
     contexts.update(common15_contexts)
     violations.extend(package_violations)
