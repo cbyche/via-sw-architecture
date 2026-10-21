@@ -39,3 +39,7 @@ Package integrity, layout geometry, Calibri font policy, native table 존재, Ar
 AGENTS의 도형 라벨 규칙에 따라 새 10~12쪽의 Component·Module·원통·process 제목 등을 해당 native 도형 자체의 text body로 결합했다. 텍스트 사각형은 inset으로 유지했으며 원통 geometry에 따른 작은 내부 위치 차이는 최종 렌더에서 다시 확인했다. 새 페이지별 58/50/21개 라벨을 결합했고 기존 26장의 byte·pixel 보존은 재확인했다. v7 PPTX와 preview·hash·검사 보고서를 함께 갱신했다.
 
 발행 전 local 검사에서 DP3 관련 링크와 그림 동기화·용어·PPTX 검사는 통과했다. 전체 active-link 검사에서는 이 변경 범위 밖의 기존 `four-dp-presentation-20261019` frozen source 복사본에서 14개 누락 상대 링크가 보고됐다. 해당 기존 근거 파일은 수정하지 않았다.
+
+## Windows Open XML 검사 후 master registry 보정
+
+발행한 v7을 직접 지정한 [Windows CI](https://github.com/cbyche/via-sw-architecture/actions/runs/39619401280)는 package를 열었으나 master registry 오류 3개를 검출했다. 이전 합본에서 계승하고 import가 추가한 `slideMasterId` 태그를 정식 `sldMasterId`로 보정했으며, PresentationPart의 notesMaster 등록을 규격상 허용되는 한 개로 정리했다. 실제 master part, 슬라이드, 노트, 개별 노트의 관계 파일은 그대로 보존했다. 패키징 생성기에 보정을 포함하고 새 검증 보고서를 생성했다. 29장 전체의 보정 전후 렌더 픽셀이 동일하다. Windows 재검사는 후속 커밋의 CI 결과로 확인한다.

@@ -117,6 +117,39 @@ def own_shape_labels(data):
     return F.xml(root), paired
 
 
+def normalize_master_registry(parts):
+    """Repair inherited/imported presentation registries without changing any master.
+
+    Open XML names the entry sldMasterId, and PresentationPart may register only
+    one notesMaster. Individual notes-slide relationships and master parts remain
+    byte-identical; only redundant presentation-level registrations are removed.
+    """
+    root = E.fromstring(parts['ppt/presentation.xml'])
+    rels = E.fromstring(parts['ppt/_rels/presentation.xml.rels'])
+    repaired = 0
+    for node in root.find('p:sldMasterIdLst', F.NS):
+        if node.tag == '{' + F.P + '}slideMasterId':
+            node.tag = '{' + F.P + '}sldMasterId'
+            repaired += 1
+    notes = root.find('p:notesMasterIdLst', F.NS)
+    assert notes is not None and len(notes) >= 1
+    keep = notes[0].get('{' + F.R + '}id')
+    removed = []
+    for node in list(notes)[1:]:
+        notes.remove(node)
+    for rel in list(rels):
+        if rel.get('Type') == F.R + '/notesMaster' and rel.get('Id') != keep:
+            removed.append(rel.get('Id'))
+            rels.remove(rel)
+    assert len([r for r in rels if r.get('Type') == F.R + '/notesMaster']) == 1
+    parts['ppt/presentation.xml'] = F.xml(root)
+    parts['ppt/_rels/presentation.xml.rels'] = F.xml(rels)
+    return {'corrected_sldMasterId_tags': repaired,
+            'removed_duplicate_notes_master_relationship_ids': removed,
+            'preserved_notes_master_relationship_id': keep,
+            'master_parts_and_notes_slide_relationships_unchanged': True}
+
+
 def main(repo, build):
     repo, build = repo.resolve(), build.resolve()
     assert (repo / 'INTENT.md').is_file(), ('Not the VIA repository', str(repo))
@@ -159,6 +192,7 @@ def main(repo, build):
     assert scale == 1
     assert [imported[p] for _, p in authored_order] == list(NEW_PARTS)
     F.add_registry(parts, importer)
+    registry_report = normalize_master_registry(parts)
 
     source_presentation = E.fromstring(source['ppt/presentation.xml'])
     presentation = E.fromstring(parts['ppt/presentation.xml'])
@@ -185,6 +219,9 @@ def main(repo, build):
     # Only selected slide relationship targets may change among old entries.
     replaced_rids = {old_nodes[p - 1].get('{' + F.R + '}id') for p in REPLACED_PAGES}
     for old_rel in F.relations(source, 'ppt/presentation.xml'):
+        if old_rel.get('Id') in registry_report['removed_duplicate_notes_master_relationship_ids']:
+            assert old_rel.get('Type') == F.R + '/notesMaster'
+            continue
         new_rel = relationship_by_id[old_rel.get('Id')]
         old_attrs, new_attrs = dict(old_rel.attrib), dict(new_rel.attrib)
         if old_rel.get('Id') in replaced_rids:
@@ -247,6 +284,7 @@ def main(repo, build):
         'added_parts': sorted(added), 'added_part_hashes': hash_parts(parts, added),
         'new_media': media,
         'native_shape_label_ownership': label_report,
+        'openxml_master_registry_repair': registry_report,
         'windows_policy_source': source_policy, 'windows_policy_authored': authored_policy,
         'windows_policy': policy, 'model_calls': 0,
     }
