@@ -45,7 +45,7 @@ Reviewer의 최종 재검토는 남은 P1/P2가 없다고 보고했다. 이후 �
 | 원본 삽입과 보존 | 기존 29쪽, 추가 7쪽. [패키징 기록](dp44-v9-preservation.json) |
 | 원본 XML과 notes, 29쪽 픽셀 비교, native 도형과 수치 | PASS. QA 대표값 12개와 정확도 분모 셀 4개 대조. [최종 검사](dp44-v9-final-checks.json) |
 | Module 소유와 실제 endpoint, 직교 경로, 다른 Module 및 Component 제목 관통 | 7장 PASS. [Scene 검사](dp44-v9-scene-checks.json) |
-| Windows용 Calibri, 정수 pt와 ko-KR | 로컬 패키지 검사 PASS. Windows workflow 결과는 후속 기록 |
+| Windows용 Calibri, 정수 pt와 ko-KR | 로컬 및 Windows workflow 검사 PASS |
 | 저장소 링크, 용어, 변경 공백, 그림 XML | active Markdown 936개 링크 PASS, 용어 PASS, `git diff --check` PASS, SVG/draw.io 14개 XML 유효 |
 
 QA01 UI와 별도 첫 음성, QA03의 외부 시간과 재생 시간 제거 경계, 고정 정답 fixture인 QA02/07, 개념 Module 단위 QA04, cloud 요금과 로컬 RAM 배치 조건을 유지한다. 조건부 A 권고와 미평가 A1을 측정된 승자나 보완 효과로 바꾸지 않았다.
@@ -68,4 +68,8 @@ ln -s "$runtime_root/node/node_modules" "$build_dir/node_modules"
 
 ## 게시와 Windows 검증
 
-이 파일 경로를 지정한 `presentation-windows-check`의 `workflow_dispatch`를 실행한다. push 자동 실행의 기본 파일은 과거 v2이므로 그것을 v9 검증으로 세지 않는다. 실제 v9 결과와 실행 링크는 검증 완료 뒤 이 절에 기록한다.
+산출물 커밋 `30a5cd1667b1ecb81db1eaa2d17de3b33a84aa8f`를 `main`에 푸시했다. 이 v9 파일 경로를 지정한 [Windows workflow_dispatch](https://github.com/cbyche/via-sw-architecture/actions/runs/39633871031)는 **success**다. push 자동 실행의 기본 파일은 과거 v2이므로 그것을 v9 검증으로 세지 않는다.
+
+같은 산출물 커밋의 [architecture-ci](https://github.com/cbyche/via-sw-architecture/actions/runs/39633852973)도 **success**다. 검토 기록을 추가하는 후속 커밋은 PPTX와 편집 원본을 변경하지 않는다.
+
+[Windows Open XML 결과](dp44-v9-windows-openxml.json)의 SHA-256이 위 최종 v9와 일치한다. Windows 10.0.20348에서 Microsoft Open XML SDK 3.3.0, Office2021 형식으로 열었고 36쪽, schema error 0개다. [환경 기록](dp44-v9-windows-environment.json)에는 Calibri 설치와 PowerPoint 미설치가 기록되어 있다. 따라서 **Windows 패키지와 schema 검증은 완료했지만 native PowerPoint의 실제 렌더는 확인하지 않았다.**
