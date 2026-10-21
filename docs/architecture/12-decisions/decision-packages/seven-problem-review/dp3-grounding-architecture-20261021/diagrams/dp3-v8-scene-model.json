@@ -1,0 +1,4316 @@
+[
+  {
+    "name": "dp3-v8-ab-responsibilities",
+    "page": 10,
+    "items": [
+      {
+        "kind": "band",
+        "text": "A  원본 공동 해석",
+        "x": 40,
+        "y": 184,
+        "w": 900,
+        "h": 48,
+        "size": 27
+      },
+      {
+        "kind": "band",
+        "text": "B-R1  후보 생산과 모델 교대 로딩",
+        "x": 980,
+        "y": 184,
+        "w": 900,
+        "h": 48,
+        "size": 27
+      },
+      {
+        "kind": "rule",
+        "points": [
+          [
+            960,
+            184
+          ],
+          [
+            960,
+            1035
+          ]
+        ],
+        "color": "#B7B9B9",
+        "width": 1
+      },
+      {
+        "kind": "comp",
+        "id": "arc",
+        "text": "Request Controller",
+        "x": 60,
+        "y": 255,
+        "w": 420,
+        "h": 120,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "aguard",
+        "text": "요청 검증 및 채택기",
+        "x": 80,
+        "y": 301,
+        "w": 380,
+        "h": 52,
+        "size": 25,
+        "parent": "arc",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "actx",
+        "text": "Context Manager",
+        "x": 640,
+        "y": 255,
+        "w": 280,
+        "h": 145,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "aread",
+        "text": "근거 조회기",
+        "x": 658,
+        "y": 301,
+        "w": 244,
+        "h": 43,
+        "size": 24,
+        "parent": "actx",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "araw",
+        "text": "원본 참조 / 읽은 판본",
+        "x": 658,
+        "y": 354,
+        "w": 244,
+        "h": 35,
+        "size": 19,
+        "parent": "actx",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "ari",
+        "text": "Request Interpreter",
+        "x": 60,
+        "y": 535,
+        "w": 420,
+        "h": 157,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "ainterpret",
+        "text": "원본 해석기",
+        "x": 80,
+        "y": 582,
+        "w": 205,
+        "h": 48,
+        "size": 25,
+        "parent": "ari",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "store",
+        "id": "asession",
+        "text": "해석 상태\n(RAM)",
+        "x": 310,
+        "y": 580,
+        "w": 150,
+        "h": 90,
+        "size": 22,
+        "parent": "ari",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "aread-allow",
+        "from": "aguard",
+        "to": "aread",
+        "points": [
+          [
+            460,
+            313
+          ],
+          [
+            658,
+            313
+          ]
+        ],
+        "text": "1 조회 허가\n새 범위 재허가",
+        "label": [
+          488,
+          265,
+          145,
+          45
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "aread-return",
+        "from": "aread",
+        "to": "aguard",
+        "points": [
+          [
+            658,
+            337
+          ],
+          [
+            600,
+            337
+          ],
+          [
+            600,
+            388
+          ],
+          [
+            460,
+            388
+          ],
+          [
+            460,
+            353
+          ]
+        ],
+        "text": "2 원본 또는\n조회 불가",
+        "label": [
+          490,
+          401,
+          145,
+          47
+        ],
+        "dashed": true,
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "aread-cache",
+        "from": "aread",
+        "to": "araw",
+        "points": [
+          [
+            780,
+            344
+          ],
+          [
+            780,
+            354
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "ainterpret-start",
+        "from": "aguard",
+        "to": "ainterpret",
+        "points": [
+          [
+            130,
+            353
+          ],
+          [
+            130,
+            430
+          ],
+          [
+            40,
+            430
+          ],
+          [
+            40,
+            604
+          ],
+          [
+            80,
+            604
+          ]
+        ],
+        "text": "3 해석 / 보완 후 재개",
+        "label": [
+          67,
+          452,
+          250,
+          31
+        ],
+        "size": 21
+      },
+      {
+        "kind": "edge",
+        "id": "ainterpret-need",
+        "from": "ainterpret",
+        "to": "aguard",
+        "points": [
+          [
+            250,
+            630
+          ],
+          [
+            250,
+            710
+          ],
+          [
+            510,
+            710
+          ],
+          [
+            510,
+            345
+          ],
+          [
+            460,
+            345
+          ]
+        ],
+        "text": "6 의미 제안\n또는 원본 부족",
+        "label": [
+          520,
+          500,
+          200,
+          55
+        ],
+        "dashed": true,
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "astate-write",
+        "from": "ainterpret",
+        "to": "asession",
+        "points": [
+          [
+            285,
+            613
+          ],
+          [
+            310,
+            613
+          ]
+        ]
+      },
+      {
+        "kind": "comp",
+        "id": "brc",
+        "text": "Request Controller",
+        "x": 1000,
+        "y": 255,
+        "w": 420,
+        "h": 120,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "bguard",
+        "text": "요청 검증 및 채택기",
+        "x": 1020,
+        "y": 301,
+        "w": 380,
+        "h": 52,
+        "size": 25,
+        "parent": "brc",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "bctx",
+        "text": "Context Manager",
+        "x": 1580,
+        "y": 255,
+        "w": 280,
+        "h": 145,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "bread",
+        "text": "근거 조회기",
+        "x": 1598,
+        "y": 301,
+        "w": 244,
+        "h": 43,
+        "size": 24,
+        "parent": "bctx",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "braw",
+        "text": "원본 참조 / 읽은 판본",
+        "x": 1598,
+        "y": 354,
+        "w": 244,
+        "h": 35,
+        "size": 19,
+        "parent": "bctx",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "bri",
+        "text": "Request Interpreter",
+        "x": 1000,
+        "y": 535,
+        "w": 420,
+        "h": 157,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "binterpret",
+        "text": "후보 결합기",
+        "x": 1020,
+        "y": 582,
+        "w": 205,
+        "h": 48,
+        "size": 25,
+        "parent": "bri",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "bsession",
+        "text": "해석 상태\n(RAM)",
+        "x": 1250,
+        "y": 580,
+        "w": 150,
+        "h": 90,
+        "size": 22,
+        "parent": "bri",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "bread-allow",
+        "from": "bguard",
+        "to": "bread",
+        "points": [
+          [
+            1400,
+            313
+          ],
+          [
+            1598,
+            313
+          ]
+        ],
+        "text": "1 조회 허가\n새 범위 재허가",
+        "label": [
+          1428,
+          265,
+          145,
+          45
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "bread-return",
+        "from": "bread",
+        "to": "bguard",
+        "points": [
+          [
+            1598,
+            337
+          ],
+          [
+            1540,
+            337
+          ],
+          [
+            1540,
+            388
+          ],
+          [
+            1400,
+            388
+          ],
+          [
+            1400,
+            353
+          ]
+        ],
+        "text": "2 원본 또는\n조회 불가",
+        "label": [
+          1430,
+          401,
+          145,
+          47
+        ],
+        "dashed": true,
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "bread-cache",
+        "from": "bread",
+        "to": "braw",
+        "points": [
+          [
+            1720,
+            344
+          ],
+          [
+            1720,
+            354
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "binterpret-start",
+        "from": "bguard",
+        "to": "binterpret",
+        "points": [
+          [
+            1070,
+            353
+          ],
+          [
+            1070,
+            430
+          ],
+          [
+            980,
+            430
+          ],
+          [
+            980,
+            604
+          ],
+          [
+            1020,
+            604
+          ]
+        ],
+        "text": "5 후보 전달 / 해석 재개",
+        "label": [
+          1007,
+          452,
+          250,
+          31
+        ],
+        "size": 21
+      },
+      {
+        "kind": "edge",
+        "id": "binterpret-need",
+        "from": "binterpret",
+        "to": "bguard",
+        "points": [
+          [
+            1190,
+            630
+          ],
+          [
+            1190,
+            700
+          ],
+          [
+            990,
+            700
+          ],
+          [
+            990,
+            480
+          ],
+          [
+            1140,
+            480
+          ],
+          [
+            1140,
+            353
+          ]
+        ],
+        "text": "8 의미 제안 또는\n후보 확장 요청",
+        "label": [
+          1150,
+          400,
+          260,
+          45
+        ],
+        "dashed": true,
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "bstate-write",
+        "from": "binterpret",
+        "to": "bsession",
+        "points": [
+          [
+            1225,
+            613
+          ],
+          [
+            1250,
+            613
+          ]
+        ]
+      },
+      {
+        "kind": "comp",
+        "id": "ama",
+        "text": "Model Access",
+        "x": 60,
+        "y": 812,
+        "w": 420,
+        "h": 120,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "acloud",
+        "text": "클라우드 호출기",
+        "x": 80,
+        "y": 859,
+        "w": 380,
+        "h": 49,
+        "size": 25,
+        "parent": "ama",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "allm",
+        "text": "Cloud 의미 LLM",
+        "x": 640,
+        "y": 812,
+        "w": 280,
+        "h": 120,
+        "size": 27,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "a-infer",
+        "from": "ainterpret",
+        "to": "acloud",
+        "points": [
+          [
+            130,
+            630
+          ],
+          [
+            130,
+            750
+          ],
+          [
+            40,
+            750
+          ],
+          [
+            40,
+            884
+          ],
+          [
+            80,
+            884
+          ]
+        ],
+        "text": "4 전사 + 당시 원본",
+        "label": [
+          72,
+          715,
+          250,
+          28
+        ],
+        "size": 23,
+        "color": "#4676CB"
+      },
+      {
+        "kind": "edge",
+        "id": "a-model-return",
+        "from": "acloud",
+        "to": "ainterpret",
+        "points": [
+          [
+            460,
+            893
+          ],
+          [
+            520,
+            893
+          ],
+          [
+            520,
+            780
+          ],
+          [
+            240,
+            780
+          ],
+          [
+            240,
+            630
+          ]
+        ],
+        "text": "5 해석 / 추가 원본 필요",
+        "label": [
+          240,
+          750,
+          300,
+          27
+        ],
+        "dashed": true,
+        "size": 21,
+        "color": "#4676CB"
+      },
+      {
+        "kind": "edge",
+        "id": "a-cloud",
+        "from": "acloud",
+        "to": "allm",
+        "points": [
+          [
+            460,
+            876
+          ],
+          [
+            640,
+            876
+          ]
+        ],
+        "text": "추론 요청",
+        "label": [
+          490,
+          837,
+          135,
+          30
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "a-cloud-return",
+        "from": "allm",
+        "to": "acloud",
+        "points": [
+          [
+            640,
+            905
+          ],
+          [
+            460,
+            905
+          ]
+        ],
+        "text": "결과",
+        "label": [
+          495,
+          917,
+          110,
+          28
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "text",
+        "text": "검정: 공통 / 파랑: A 고유 / 초록: B 고유\n제목 상자: Component / 둥근 상자: Module / 원통: 상태\n회색 점선: process / 실선: 요청 / 점선: 반환",
+        "x": 65,
+        "y": 965,
+        "w": 850,
+        "h": 76,
+        "size": 20
+      },
+      {
+        "kind": "comp",
+        "id": "bp",
+        "text": "Screen Target Producer",
+        "x": 1580,
+        "y": 535,
+        "w": 280,
+        "h": 157,
+        "size": 23,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "mod",
+        "id": "bassemble",
+        "text": "후보 구성기",
+        "x": 1598,
+        "y": 582,
+        "w": 244,
+        "h": 43,
+        "size": 24,
+        "parent": "bp",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "bcandidates",
+        "text": "후보 기록과 판본 (RAM)",
+        "x": 1598,
+        "y": 639,
+        "w": 244,
+        "h": 41,
+        "size": 20,
+        "parent": "bp",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-produce-allow",
+        "from": "bguard",
+        "to": "bassemble",
+        "points": [
+          [
+            1370,
+            353
+          ],
+          [
+            1370,
+            462
+          ],
+          [
+            1900,
+            462
+          ],
+          [
+            1900,
+            586
+          ],
+          [
+            1842,
+            586
+          ]
+        ],
+        "text": "3 최초 생산 / 확장 허가 + 원본",
+        "label": [
+          1520,
+          464,
+          350,
+          28
+        ],
+        "size": 21,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-produce-return",
+        "from": "bassemble",
+        "to": "bguard",
+        "points": [
+          [
+            1598,
+            600
+          ],
+          [
+            1503,
+            600
+          ],
+          [
+            1503,
+            495
+          ],
+          [
+            1400,
+            495
+          ],
+          [
+            1400,
+            353
+          ]
+        ],
+        "text": "4 후보 / 추가 원본 필요",
+        "label": [
+          1460,
+          509,
+          390,
+          24
+        ],
+        "dashed": true,
+        "size": 20,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-candidate-save",
+        "from": "bassemble",
+        "to": "bcandidates",
+        "points": [
+          [
+            1720,
+            625
+          ],
+          [
+            1720,
+            639
+          ]
+        ],
+        "color": "#32824A"
+      },
+      {
+        "kind": "comp",
+        "id": "bma",
+        "text": "Model Access (host 배치)",
+        "x": 1000,
+        "y": 810,
+        "w": 420,
+        "h": 135,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "bcloud",
+        "text": "클라우드 호출기",
+        "x": 1018,
+        "y": 861,
+        "w": 195,
+        "h": 52,
+        "size": 23,
+        "parent": "bma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "bcontrol",
+        "text": "로컬 실행 제어기",
+        "x": 1237,
+        "y": 861,
+        "w": 165,
+        "h": 52,
+        "size": 21,
+        "parent": "bma",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-infer",
+        "from": "binterpret",
+        "to": "bcloud",
+        "points": [
+          [
+            1020,
+            615
+          ],
+          [
+            970,
+            615
+          ],
+          [
+            970,
+            890
+          ],
+          [
+            1018,
+            890
+          ]
+        ],
+        "text": "6 전사 + 후보 + 원본 crop",
+        "label": [
+          1000,
+          715,
+          310,
+          30
+        ],
+        "size": 21,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-model-return",
+        "from": "bcloud",
+        "to": "binterpret",
+        "points": [
+          [
+            1018,
+            903
+          ],
+          [
+            985,
+            903
+          ],
+          [
+            985,
+            650
+          ],
+          [
+            1205,
+            650
+          ],
+          [
+            1205,
+            630
+          ]
+        ],
+        "text": "7 해석 / 후보 부족",
+        "label": [
+          1000,
+          752,
+          310,
+          30
+        ],
+        "dashed": true,
+        "size": 20,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-visual-job",
+        "from": "bassemble",
+        "to": "bcontrol",
+        "points": [
+          [
+            1598,
+            614
+          ],
+          [
+            1480,
+            614
+          ],
+          [
+            1480,
+            735
+          ],
+          [
+            1435,
+            735
+          ],
+          [
+            1435,
+            870
+          ],
+          [
+            1402,
+            870
+          ]
+        ],
+        "text": "시각 필요 시 UI / 정밀 경계 필요 시 SAM",
+        "label": [
+          1435,
+          700,
+          435,
+          29
+        ],
+        "size": 21,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-visual-result",
+        "from": "bcontrol",
+        "to": "bassemble",
+        "points": [
+          [
+            1402,
+            900
+          ],
+          [
+            1450,
+            900
+          ],
+          [
+            1450,
+            780
+          ],
+          [
+            1880,
+            780
+          ],
+          [
+            1880,
+            603
+          ],
+          [
+            1842,
+            603
+          ]
+        ],
+        "text": "검출 / 경계 / 추적 결과",
+        "label": [
+          1530,
+          751,
+          330,
+          28
+        ],
+        "dashed": true,
+        "size": 21,
+        "color": "#32824A"
+      },
+      {
+        "kind": "ext",
+        "id": "bllm",
+        "text": "Cloud 의미 LLM",
+        "x": 1000,
+        "y": 985,
+        "w": 240,
+        "h": 55,
+        "size": 23,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "b-cloud",
+        "from": "bcloud",
+        "to": "bllm",
+        "points": [
+          [
+            1060,
+            913
+          ],
+          [
+            1060,
+            985
+          ]
+        ],
+        "text": "요청",
+        "label": [
+          1000,
+          950,
+          80,
+          27
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "b-cloud-return",
+        "from": "bllm",
+        "to": "bcloud",
+        "points": [
+          [
+            1180,
+            985
+          ],
+          [
+            1180,
+            913
+          ]
+        ],
+        "text": "결과",
+        "label": [
+          1140,
+          950,
+          90,
+          27
+        ],
+        "dashed": true,
+        "size": 20
+      },
+      {
+        "kind": "proc",
+        "id": "bw",
+        "text": "R1 Vision Worker process",
+        "x": 1500,
+        "y": 807,
+        "w": 370,
+        "h": 237,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "bwma",
+        "text": "Model Access (worker 배치)",
+        "x": 1515,
+        "y": 850,
+        "w": 340,
+        "h": 179,
+        "size": 21,
+        "parent": "bw",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "mod",
+        "id": "bipc",
+        "text": "IPC 수신기",
+        "x": 1530,
+        "y": 890,
+        "w": 145,
+        "h": 40,
+        "size": 22,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "mod",
+        "id": "bexec",
+        "text": "CPU 시각 실행기",
+        "x": 1690,
+        "y": 890,
+        "w": 150,
+        "h": 40,
+        "size": 21,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "bmodel",
+        "text": "현재 모델\n(RAM)",
+        "x": 1530,
+        "y": 965,
+        "w": 145,
+        "h": 52,
+        "size": 20,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "bepisode",
+        "text": "추적 상태\n(RAM)",
+        "x": 1690,
+        "y": 965,
+        "w": 150,
+        "h": 52,
+        "size": 20,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-ipc-job",
+        "from": "bcontrol",
+        "to": "bipc",
+        "points": [
+          [
+            1270,
+            913
+          ],
+          [
+            1270,
+            972
+          ],
+          [
+            1485,
+            972
+          ],
+          [
+            1485,
+            900
+          ],
+          [
+            1530,
+            900
+          ]
+        ],
+        "text": "IPC 요청",
+        "label": [
+          1295,
+          942,
+          160,
+          27
+        ],
+        "size": 19,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-ipc-result",
+        "from": "bipc",
+        "to": "bcontrol",
+        "points": [
+          [
+            1530,
+            918
+          ],
+          [
+            1467,
+            918
+          ],
+          [
+            1467,
+            1005
+          ],
+          [
+            1390,
+            1005
+          ],
+          [
+            1390,
+            913
+          ]
+        ],
+        "text": "완료 / 오류",
+        "label": [
+          1265,
+          1010,
+          215,
+          27
+        ],
+        "dashed": true,
+        "size": 19,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-local-exec",
+        "from": "bipc",
+        "to": "bexec",
+        "points": [
+          [
+            1675,
+            900
+          ],
+          [
+            1690,
+            900
+          ]
+        ],
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-local-result",
+        "from": "bexec",
+        "to": "bipc",
+        "points": [
+          [
+            1690,
+            920
+          ],
+          [
+            1675,
+            920
+          ]
+        ],
+        "dashed": true,
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-model-use",
+        "from": "bexec",
+        "to": "bmodel",
+        "points": [
+          [
+            1725,
+            930
+          ],
+          [
+            1725,
+            948
+          ],
+          [
+            1600,
+            948
+          ],
+          [
+            1600,
+            965
+          ]
+        ],
+        "color": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-episode-use",
+        "from": "bexec",
+        "to": "bepisode",
+        "points": [
+          [
+            1800,
+            930
+          ],
+          [
+            1800,
+            965
+          ]
+        ],
+        "color": "#32824A"
+      }
+    ],
+    "nodes": {
+      "arc": {
+        "kind": "comp",
+        "id": "arc",
+        "text": "Request Controller",
+        "x": 60,
+        "y": 255,
+        "w": 420,
+        "h": 120,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "aguard": {
+        "kind": "mod",
+        "id": "aguard",
+        "text": "요청 검증 및 채택기",
+        "x": 80,
+        "y": 301,
+        "w": 380,
+        "h": 52,
+        "size": 25,
+        "parent": "arc",
+        "stroke": "#111111"
+      },
+      "actx": {
+        "kind": "comp",
+        "id": "actx",
+        "text": "Context Manager",
+        "x": 640,
+        "y": 255,
+        "w": 280,
+        "h": 145,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "aread": {
+        "kind": "mod",
+        "id": "aread",
+        "text": "근거 조회기",
+        "x": 658,
+        "y": 301,
+        "w": 244,
+        "h": 43,
+        "size": 24,
+        "parent": "actx",
+        "stroke": "#111111"
+      },
+      "araw": {
+        "kind": "store",
+        "id": "araw",
+        "text": "원본 참조 / 읽은 판본",
+        "x": 658,
+        "y": 354,
+        "w": 244,
+        "h": 35,
+        "size": 19,
+        "parent": "actx",
+        "stroke": "#111111"
+      },
+      "ari": {
+        "kind": "comp",
+        "id": "ari",
+        "text": "Request Interpreter",
+        "x": 60,
+        "y": 535,
+        "w": 420,
+        "h": 157,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "ainterpret": {
+        "kind": "mod",
+        "id": "ainterpret",
+        "text": "원본 해석기",
+        "x": 80,
+        "y": 582,
+        "w": 205,
+        "h": 48,
+        "size": 25,
+        "parent": "ari",
+        "stroke": "#4676CB"
+      },
+      "asession": {
+        "kind": "store",
+        "id": "asession",
+        "text": "해석 상태\n(RAM)",
+        "x": 310,
+        "y": 580,
+        "w": 150,
+        "h": 90,
+        "size": 22,
+        "parent": "ari",
+        "stroke": "#111111"
+      },
+      "brc": {
+        "kind": "comp",
+        "id": "brc",
+        "text": "Request Controller",
+        "x": 1000,
+        "y": 255,
+        "w": 420,
+        "h": 120,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bguard": {
+        "kind": "mod",
+        "id": "bguard",
+        "text": "요청 검증 및 채택기",
+        "x": 1020,
+        "y": 301,
+        "w": 380,
+        "h": 52,
+        "size": 25,
+        "parent": "brc",
+        "stroke": "#111111"
+      },
+      "bctx": {
+        "kind": "comp",
+        "id": "bctx",
+        "text": "Context Manager",
+        "x": 1580,
+        "y": 255,
+        "w": 280,
+        "h": 145,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bread": {
+        "kind": "mod",
+        "id": "bread",
+        "text": "근거 조회기",
+        "x": 1598,
+        "y": 301,
+        "w": 244,
+        "h": 43,
+        "size": 24,
+        "parent": "bctx",
+        "stroke": "#111111"
+      },
+      "braw": {
+        "kind": "store",
+        "id": "braw",
+        "text": "원본 참조 / 읽은 판본",
+        "x": 1598,
+        "y": 354,
+        "w": 244,
+        "h": 35,
+        "size": 19,
+        "parent": "bctx",
+        "stroke": "#111111"
+      },
+      "bri": {
+        "kind": "comp",
+        "id": "bri",
+        "text": "Request Interpreter",
+        "x": 1000,
+        "y": 535,
+        "w": 420,
+        "h": 157,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "binterpret": {
+        "kind": "mod",
+        "id": "binterpret",
+        "text": "후보 결합기",
+        "x": 1020,
+        "y": 582,
+        "w": 205,
+        "h": 48,
+        "size": 25,
+        "parent": "bri",
+        "stroke": "#32824A"
+      },
+      "bsession": {
+        "kind": "store",
+        "id": "bsession",
+        "text": "해석 상태\n(RAM)",
+        "x": 1250,
+        "y": 580,
+        "w": 150,
+        "h": 90,
+        "size": 22,
+        "parent": "bri",
+        "stroke": "#111111"
+      },
+      "ama": {
+        "kind": "comp",
+        "id": "ama",
+        "text": "Model Access",
+        "x": 60,
+        "y": 812,
+        "w": 420,
+        "h": 120,
+        "size": 25,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "acloud": {
+        "kind": "mod",
+        "id": "acloud",
+        "text": "클라우드 호출기",
+        "x": 80,
+        "y": 859,
+        "w": 380,
+        "h": 49,
+        "size": 25,
+        "parent": "ama",
+        "stroke": "#111111"
+      },
+      "allm": {
+        "kind": "ext",
+        "id": "allm",
+        "text": "Cloud 의미 LLM",
+        "x": 640,
+        "y": 812,
+        "w": 280,
+        "h": 120,
+        "size": 27,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bp": {
+        "kind": "comp",
+        "id": "bp",
+        "text": "Screen Target Producer",
+        "x": 1580,
+        "y": 535,
+        "w": 280,
+        "h": 157,
+        "size": 23,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      "bassemble": {
+        "kind": "mod",
+        "id": "bassemble",
+        "text": "후보 구성기",
+        "x": 1598,
+        "y": 582,
+        "w": 244,
+        "h": 43,
+        "size": 24,
+        "parent": "bp",
+        "stroke": "#32824A"
+      },
+      "bcandidates": {
+        "kind": "store",
+        "id": "bcandidates",
+        "text": "후보 기록과 판본 (RAM)",
+        "x": 1598,
+        "y": 639,
+        "w": 244,
+        "h": 41,
+        "size": 20,
+        "parent": "bp",
+        "stroke": "#32824A"
+      },
+      "bma": {
+        "kind": "comp",
+        "id": "bma",
+        "text": "Model Access (host 배치)",
+        "x": 1000,
+        "y": 810,
+        "w": 420,
+        "h": 135,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bcloud": {
+        "kind": "mod",
+        "id": "bcloud",
+        "text": "클라우드 호출기",
+        "x": 1018,
+        "y": 861,
+        "w": 195,
+        "h": 52,
+        "size": 23,
+        "parent": "bma",
+        "stroke": "#111111"
+      },
+      "bcontrol": {
+        "kind": "mod",
+        "id": "bcontrol",
+        "text": "로컬 실행 제어기",
+        "x": 1237,
+        "y": 861,
+        "w": 165,
+        "h": 52,
+        "size": 21,
+        "parent": "bma",
+        "stroke": "#32824A"
+      },
+      "bllm": {
+        "kind": "ext",
+        "id": "bllm",
+        "text": "Cloud 의미 LLM",
+        "x": 1000,
+        "y": 985,
+        "w": 240,
+        "h": 55,
+        "size": 23,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bw": {
+        "kind": "proc",
+        "id": "bw",
+        "text": "R1 Vision Worker process",
+        "x": 1500,
+        "y": 807,
+        "w": 370,
+        "h": 237,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "bwma": {
+        "kind": "comp",
+        "id": "bwma",
+        "text": "Model Access (worker 배치)",
+        "x": 1515,
+        "y": 850,
+        "w": 340,
+        "h": 179,
+        "size": 21,
+        "parent": "bw",
+        "stroke": "#32824A"
+      },
+      "bipc": {
+        "kind": "mod",
+        "id": "bipc",
+        "text": "IPC 수신기",
+        "x": 1530,
+        "y": 890,
+        "w": 145,
+        "h": 40,
+        "size": 22,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      "bexec": {
+        "kind": "mod",
+        "id": "bexec",
+        "text": "CPU 시각 실행기",
+        "x": 1690,
+        "y": 890,
+        "w": 150,
+        "h": 40,
+        "size": 21,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      "bmodel": {
+        "kind": "store",
+        "id": "bmodel",
+        "text": "현재 모델\n(RAM)",
+        "x": 1530,
+        "y": 965,
+        "w": 145,
+        "h": 52,
+        "size": 20,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      },
+      "bepisode": {
+        "kind": "store",
+        "id": "bepisode",
+        "text": "추적 상태\n(RAM)",
+        "x": 1690,
+        "y": 965,
+        "w": 150,
+        "h": 52,
+        "size": 20,
+        "parent": "bwma",
+        "stroke": "#32824A"
+      }
+    },
+    "notes": "A의 최초 흐름은1조회허가,2원본반환,3해석,4모델요청,5모델결과,6의미제안또는원본부족이다. 원본부족이면6→1→2→3으로반복한다. B는1조회,2원본,3생산허가,4후보,5결합해석,6모델요청,7모델결과,8의미제안또는확장요청이다. 후보확장은8→3→4→5이고 새원본이필요하면8→1→2→3→4→5이다. 생산기자체가원본부족을반환하면4→1→2→3이다. 최초B가후보를만들기위해불필요한의미LLM호출을먼저수행하지않는다. 최종의미는Request Controller가현재입력과권한을검사하여채택한다.\nCPU 시각 실행기는 11~12쪽 UI/SAM 어댑터와 CPU 추론 런타임의 축약 내부 Module 표기이다. 별도 Component나 새 process가 아니다. R1의 현재 모델과 추적 상태는 별개 RAM 상태이며 상세 load/release/close 경로는 12쪽이다.\n",
+    "title": "DP3. 화면 지칭 해석 구조 (1/2)",
+    "subtitle": "공통 입력: 같은 전사와 단어 시각, 당시 화면과 조작 이력 / 화면 근거가 필요한 요청만 진입"
+  },
+  {
+    "name": "dp3-v8-resident-processes",
+    "page": 11,
+    "items": [
+      {
+        "kind": "band",
+        "text": "B-R2  한 worker에 사용한 모델 유지",
+        "x": 60,
+        "y": 200,
+        "w": 870,
+        "h": 48,
+        "size": 27
+      },
+      {
+        "kind": "band",
+        "text": "B-R3  UI와 SAM worker에 각각 유지",
+        "x": 990,
+        "y": 200,
+        "w": 870,
+        "h": 48,
+        "size": 27
+      },
+      {
+        "kind": "proc",
+        "id": "r2host",
+        "text": "VIA Host process",
+        "x": 60,
+        "y": 265,
+        "w": 870,
+        "h": 235,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "r2producer",
+        "text": "Screen Target Producer",
+        "x": 78,
+        "y": 307,
+        "w": 340,
+        "h": 173,
+        "size": 23,
+        "parent": "r2host",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r2assembler",
+        "text": "후보 구성기",
+        "x": 94,
+        "y": 352,
+        "w": 308,
+        "h": 48,
+        "size": 24,
+        "parent": "r2producer",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r2candidates",
+        "text": "후보 기록 (RAM)",
+        "x": 94,
+        "y": 430,
+        "w": 308,
+        "h": 40,
+        "size": 21,
+        "parent": "r2producer",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "r2hostma",
+        "text": "Model Access",
+        "x": 530,
+        "y": 307,
+        "w": 382,
+        "h": 173,
+        "size": 25,
+        "parent": "r2host",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r2control",
+        "text": "로컬 실행 제어기",
+        "x": 546,
+        "y": 352,
+        "w": 350,
+        "h": 48,
+        "size": 24,
+        "parent": "r2hostma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r2jobs",
+        "text": "작업과 실행 세대 (RAM)",
+        "x": 590,
+        "y": 430,
+        "w": 260,
+        "h": 40,
+        "size": 20,
+        "parent": "r2hostma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "r2submit",
+        "from": "r2assembler",
+        "to": "r2control",
+        "points": [
+          [
+            402,
+            365
+          ],
+          [
+            546,
+            365
+          ]
+        ],
+        "text": "1 UI / 4 SAM",
+        "label": [
+          410,
+          332,
+          128,
+          28
+        ],
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "r2observations",
+        "from": "r2control",
+        "to": "r2assembler",
+        "points": [
+          [
+            546,
+            390
+          ],
+          [
+            402,
+            390
+          ]
+        ],
+        "text": "3 UI / 6 SAM",
+        "label": [
+          408,
+          398,
+          136,
+          28
+        ],
+        "dashed": true,
+        "size": 18
+      },
+      {
+        "kind": "edge",
+        "id": "r2writecandidate",
+        "from": "r2assembler",
+        "to": "r2candidates",
+        "points": [
+          [
+            248,
+            400
+          ],
+          [
+            248,
+            430
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "r2writejobs",
+        "from": "r2control",
+        "to": "r2jobs",
+        "points": [
+          [
+            720,
+            400
+          ],
+          [
+            720,
+            430
+          ]
+        ]
+      },
+      {
+        "kind": "proc",
+        "id": "r3host",
+        "text": "VIA Host process",
+        "x": 990,
+        "y": 265,
+        "w": 870,
+        "h": 235,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "r3producer",
+        "text": "Screen Target Producer",
+        "x": 1008,
+        "y": 307,
+        "w": 340,
+        "h": 173,
+        "size": 23,
+        "parent": "r3host",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r3assembler",
+        "text": "후보 구성기",
+        "x": 1024,
+        "y": 352,
+        "w": 308,
+        "h": 48,
+        "size": 24,
+        "parent": "r3producer",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r3candidates",
+        "text": "후보 기록 (RAM)",
+        "x": 1024,
+        "y": 430,
+        "w": 308,
+        "h": 40,
+        "size": 21,
+        "parent": "r3producer",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "r3hostma",
+        "text": "Model Access",
+        "x": 1460,
+        "y": 307,
+        "w": 382,
+        "h": 173,
+        "size": 25,
+        "parent": "r3host",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r3control",
+        "text": "로컬 실행 제어기",
+        "x": 1476,
+        "y": 352,
+        "w": 350,
+        "h": 48,
+        "size": 24,
+        "parent": "r3hostma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r3jobs",
+        "text": "작업과 실행 세대 (RAM)",
+        "x": 1520,
+        "y": 430,
+        "w": 260,
+        "h": 40,
+        "size": 20,
+        "parent": "r3hostma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "r3submit",
+        "from": "r3assembler",
+        "to": "r3control",
+        "points": [
+          [
+            1332,
+            365
+          ],
+          [
+            1476,
+            365
+          ]
+        ],
+        "text": "1 UI / 4 SAM",
+        "label": [
+          1340,
+          332,
+          128,
+          28
+        ],
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "r3observations",
+        "from": "r3control",
+        "to": "r3assembler",
+        "points": [
+          [
+            1476,
+            390
+          ],
+          [
+            1332,
+            390
+          ]
+        ],
+        "text": "3 UI / 6 SAM",
+        "label": [
+          1338,
+          398,
+          136,
+          28
+        ],
+        "dashed": true,
+        "size": 18
+      },
+      {
+        "kind": "edge",
+        "id": "r3writecandidate",
+        "from": "r3assembler",
+        "to": "r3candidates",
+        "points": [
+          [
+            1178,
+            400
+          ],
+          [
+            1178,
+            430
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "r3writejobs",
+        "from": "r3control",
+        "to": "r3jobs",
+        "points": [
+          [
+            1650,
+            400
+          ],
+          [
+            1650,
+            430
+          ]
+        ]
+      },
+      {
+        "kind": "proc",
+        "id": "r2worker",
+        "text": "Vision Worker process",
+        "x": 60,
+        "y": 620,
+        "w": 870,
+        "h": 398,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "r2workerma",
+        "text": "Model Access",
+        "x": 78,
+        "y": 661,
+        "w": 834,
+        "h": 338,
+        "size": 25,
+        "parent": "r2worker",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r2ipc",
+        "text": "IPC 수신기",
+        "x": 110,
+        "y": 706,
+        "w": 220,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r2queue",
+        "text": "실행 대기열 (RAM)",
+        "x": 420,
+        "y": 701,
+        "w": 260,
+        "h": 55,
+        "size": 21,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r2ui",
+        "text": "UI 어댑터",
+        "x": 170,
+        "y": 802,
+        "w": 250,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r2sam",
+        "text": "SAM 어댑터",
+        "x": 620,
+        "y": 802,
+        "w": 250,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "r2runtime",
+        "text": "CPU 추론 런타임",
+        "x": 395,
+        "y": 884,
+        "w": 250,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r2models",
+        "text": "UI + SAM 모델 세션 (RAM)",
+        "x": 110,
+        "y": 950,
+        "w": 380,
+        "h": 39,
+        "size": 20,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "r2episode",
+        "text": "영상 작업 상태 (RAM)",
+        "x": 600,
+        "y": 950,
+        "w": 270,
+        "h": 39,
+        "size": 20,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "r2ipcqueue",
+        "from": "r2ipc",
+        "to": "r2queue",
+        "points": [
+          [
+            330,
+            728
+          ],
+          [
+            420,
+            728
+          ]
+        ],
+        "text": "접수",
+        "label": [
+          338,
+          698,
+          74,
+          25
+        ],
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "r2queueui",
+        "from": "r2queue",
+        "to": "r2ui",
+        "points": [
+          [
+            480,
+            756
+          ],
+          [
+            480,
+            778
+          ],
+          [
+            295,
+            778
+          ],
+          [
+            295,
+            802
+          ]
+        ],
+        "text": "UI 차례",
+        "label": [
+          325,
+          754,
+          132,
+          24
+        ],
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "r2queuesam",
+        "from": "r2queue",
+        "to": "r2sam",
+        "points": [
+          [
+            620,
+            756
+          ],
+          [
+            620,
+            778
+          ],
+          [
+            745,
+            778
+          ],
+          [
+            745,
+            802
+          ]
+        ],
+        "text": "SAM 차례",
+        "label": [
+          637,
+          754,
+          125,
+          24
+        ],
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "r2uiruntime",
+        "from": "r2ui",
+        "to": "r2runtime",
+        "points": [
+          [
+            295,
+            847
+          ],
+          [
+            295,
+            863
+          ],
+          [
+            450,
+            863
+          ],
+          [
+            450,
+            884
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "r2samruntime",
+        "from": "r2sam",
+        "to": "r2runtime",
+        "points": [
+          [
+            745,
+            847
+          ],
+          [
+            745,
+            863
+          ],
+          [
+            590,
+            863
+          ],
+          [
+            590,
+            884
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "r2runtimeweights",
+        "from": "r2runtime",
+        "to": "r2models",
+        "points": [
+          [
+            430,
+            929
+          ],
+          [
+            430,
+            940
+          ],
+          [
+            300,
+            940
+          ],
+          [
+            300,
+            950
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "r2samstate",
+        "from": "r2sam",
+        "to": "r2episode",
+        "points": [
+          [
+            870,
+            825
+          ],
+          [
+            890,
+            825
+          ],
+          [
+            890,
+            935
+          ],
+          [
+            735,
+            935
+          ],
+          [
+            735,
+            950
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "r2uiinferreturn",
+        "from": "r2runtime",
+        "to": "r2ui",
+        "points": [
+          [
+            420,
+            884
+          ],
+          [
+            420,
+            873
+          ],
+          [
+            200,
+            873
+          ],
+          [
+            200,
+            847
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "r2saminferreturn",
+        "from": "r2runtime",
+        "to": "r2sam",
+        "points": [
+          [
+            620,
+            884
+          ],
+          [
+            620,
+            873
+          ],
+          [
+            840,
+            873
+          ],
+          [
+            840,
+            847
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "r2uicompletion",
+        "from": "r2ui",
+        "to": "r2ipc",
+        "points": [
+          [
+            170,
+            825
+          ],
+          [
+            142,
+            825
+          ],
+          [
+            142,
+            775
+          ],
+          [
+            125,
+            775
+          ],
+          [
+            125,
+            751
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "r2samcompletion",
+        "from": "r2sam",
+        "to": "r2ipc",
+        "points": [
+          [
+            870,
+            835
+          ],
+          [
+            898,
+            835
+          ],
+          [
+            898,
+            786
+          ],
+          [
+            315,
+            786
+          ],
+          [
+            315,
+            751
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "r2request",
+        "from": "r2control",
+        "to": "r2ipc",
+        "points": [
+          [
+            560,
+            400
+          ],
+          [
+            560,
+            540
+          ],
+          [
+            68,
+            540
+          ],
+          [
+            68,
+            718
+          ],
+          [
+            110,
+            718
+          ]
+        ],
+        "text": "2 UI 실행 → 반환 후 5 필요한 SAM 실행",
+        "label": [
+          80,
+          510,
+          460,
+          28
+        ],
+        "size": 21
+      },
+      {
+        "kind": "edge",
+        "id": "r2response",
+        "from": "r2ipc",
+        "to": "r2control",
+        "points": [
+          [
+            110,
+            742
+          ],
+          [
+            48,
+            742
+          ],
+          [
+            48,
+            580
+          ],
+          [
+            875,
+            580
+          ],
+          [
+            875,
+            400
+          ]
+        ],
+        "text": "UI 결과 / SAM 결과를 host로 반환",
+        "label": [
+          350,
+          584,
+          490,
+          28
+        ],
+        "dashed": true,
+        "size": 21
+      },
+      {
+        "kind": "proc",
+        "id": "uiworker",
+        "text": "UI Worker process",
+        "x": 990,
+        "y": 620,
+        "w": 420,
+        "h": 398,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "uima",
+        "text": "Model Access",
+        "x": 1008,
+        "y": 661,
+        "w": 384,
+        "h": 338,
+        "size": 24,
+        "parent": "uiworker",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "uiipc",
+        "text": "IPC 수신기",
+        "x": 1024,
+        "y": 706,
+        "w": 165,
+        "h": 45,
+        "size": 21,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "uiqueue",
+        "text": "대기열 (RAM)",
+        "x": 1229,
+        "y": 701,
+        "w": 145,
+        "h": 55,
+        "size": 19,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "uiadapter",
+        "text": "UI 어댑터",
+        "x": 1090,
+        "y": 802,
+        "w": 230,
+        "h": 45,
+        "size": 23,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "uiruntime",
+        "text": "CPU 추론 런타임",
+        "x": 1090,
+        "y": 884,
+        "w": 230,
+        "h": 45,
+        "size": 22,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "uimodels",
+        "text": "UI 세션 RAM",
+        "x": 1024,
+        "y": 950,
+        "w": 165,
+        "h": 39,
+        "size": 18,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "uistate",
+        "text": "UI 상태 RAM",
+        "x": 1229,
+        "y": 950,
+        "w": 145,
+        "h": 39,
+        "size": 18,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "uienqueue",
+        "from": "uiipc",
+        "to": "uiqueue",
+        "points": [
+          [
+            1189,
+            728
+          ],
+          [
+            1229,
+            728
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "uidequeue",
+        "from": "uiqueue",
+        "to": "uiadapter",
+        "points": [
+          [
+            1300,
+            756
+          ],
+          [
+            1300,
+            778
+          ],
+          [
+            1205,
+            778
+          ],
+          [
+            1205,
+            802
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "uirun",
+        "from": "uiadapter",
+        "to": "uiruntime",
+        "points": [
+          [
+            1205,
+            847
+          ],
+          [
+            1205,
+            884
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "uiweights",
+        "from": "uiruntime",
+        "to": "uimodels",
+        "points": [
+          [
+            1130,
+            929
+          ],
+          [
+            1130,
+            950
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "uistateflow",
+        "from": "uiadapter",
+        "to": "uistate",
+        "points": [
+          [
+            1320,
+            825
+          ],
+          [
+            1380,
+            825
+          ],
+          [
+            1380,
+            940
+          ],
+          [
+            1300,
+            940
+          ],
+          [
+            1300,
+            950
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "uiinferreturn",
+        "from": "uiruntime",
+        "to": "uiadapter",
+        "points": [
+          [
+            1285,
+            884
+          ],
+          [
+            1285,
+            847
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "uicompletion",
+        "from": "uiadapter",
+        "to": "uiipc",
+        "points": [
+          [
+            1090,
+            825
+          ],
+          [
+            1015,
+            825
+          ],
+          [
+            1015,
+            729
+          ],
+          [
+            1024,
+            729
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "proc",
+        "id": "samworker",
+        "text": "SAM Worker process",
+        "x": 1440,
+        "y": 620,
+        "w": 420,
+        "h": 398,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "samma",
+        "text": "Model Access",
+        "x": 1458,
+        "y": 661,
+        "w": 384,
+        "h": 338,
+        "size": 24,
+        "parent": "samworker",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "samipc",
+        "text": "IPC 수신기",
+        "x": 1474,
+        "y": 706,
+        "w": 165,
+        "h": 45,
+        "size": 21,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "samqueue",
+        "text": "대기열 (RAM)",
+        "x": 1679,
+        "y": 701,
+        "w": 145,
+        "h": 55,
+        "size": 19,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "samadapter",
+        "text": "SAM 어댑터",
+        "x": 1540,
+        "y": 802,
+        "w": 230,
+        "h": 45,
+        "size": 23,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "samruntime",
+        "text": "CPU 추론 런타임",
+        "x": 1540,
+        "y": 884,
+        "w": 230,
+        "h": 45,
+        "size": 22,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "sammodels",
+        "text": "SAM 세션 RAM",
+        "x": 1474,
+        "y": 950,
+        "w": 165,
+        "h": 39,
+        "size": 18,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "samstate",
+        "text": "영상 상태 RAM",
+        "x": 1679,
+        "y": 950,
+        "w": 145,
+        "h": 39,
+        "size": 18,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "samenqueue",
+        "from": "samipc",
+        "to": "samqueue",
+        "points": [
+          [
+            1639,
+            728
+          ],
+          [
+            1679,
+            728
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "samdequeue",
+        "from": "samqueue",
+        "to": "samadapter",
+        "points": [
+          [
+            1750,
+            756
+          ],
+          [
+            1750,
+            778
+          ],
+          [
+            1655,
+            778
+          ],
+          [
+            1655,
+            802
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "samrun",
+        "from": "samadapter",
+        "to": "samruntime",
+        "points": [
+          [
+            1655,
+            847
+          ],
+          [
+            1655,
+            884
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "samweights",
+        "from": "samruntime",
+        "to": "sammodels",
+        "points": [
+          [
+            1580,
+            929
+          ],
+          [
+            1580,
+            950
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "samstateflow",
+        "from": "samadapter",
+        "to": "samstate",
+        "points": [
+          [
+            1770,
+            825
+          ],
+          [
+            1830,
+            825
+          ],
+          [
+            1830,
+            940
+          ],
+          [
+            1750,
+            940
+          ],
+          [
+            1750,
+            950
+          ]
+        ]
+      },
+      {
+        "kind": "edge",
+        "id": "saminferreturn",
+        "from": "samruntime",
+        "to": "samadapter",
+        "points": [
+          [
+            1735,
+            884
+          ],
+          [
+            1735,
+            847
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "samcompletion",
+        "from": "samadapter",
+        "to": "samipc",
+        "points": [
+          [
+            1540,
+            825
+          ],
+          [
+            1465,
+            825
+          ],
+          [
+            1465,
+            729
+          ],
+          [
+            1474,
+            729
+          ]
+        ],
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "r3uirequest",
+        "from": "r3control",
+        "to": "uiipc",
+        "points": [
+          [
+            1490,
+            400
+          ],
+          [
+            1490,
+            530
+          ],
+          [
+            998,
+            530
+          ],
+          [
+            998,
+            718
+          ],
+          [
+            1024,
+            718
+          ]
+        ],
+        "text": "2 UI 실행",
+        "label": [
+          1010,
+          500,
+          190,
+          28
+        ],
+        "size": 21
+      },
+      {
+        "kind": "edge",
+        "id": "r3uiresponse",
+        "from": "uiipc",
+        "to": "r3control",
+        "points": [
+          [
+            1024,
+            742
+          ],
+          [
+            978,
+            742
+          ],
+          [
+            978,
+            570
+          ],
+          [
+            1805,
+            570
+          ],
+          [
+            1805,
+            400
+          ]
+        ],
+        "text": "UI 결과 host 반환",
+        "label": [
+          1200,
+          574,
+          250,
+          28
+        ],
+        "dashed": true,
+        "size": 21
+      },
+      {
+        "kind": "edge",
+        "id": "r3samrequest",
+        "from": "r3control",
+        "to": "samipc",
+        "points": [
+          [
+            1826,
+            376
+          ],
+          [
+            1846,
+            376
+          ],
+          [
+            1846,
+            610
+          ],
+          [
+            1448,
+            610
+          ],
+          [
+            1448,
+            718
+          ],
+          [
+            1474,
+            718
+          ]
+        ],
+        "text": "5 UI 결과로 seed 확정 후 필요한 SAM 실행",
+        "label": [
+          1465,
+          580,
+          370,
+          28
+        ],
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "r3samresponse",
+        "from": "samipc",
+        "to": "r3control",
+        "points": [
+          [
+            1474,
+            742
+          ],
+          [
+            1428,
+            742
+          ],
+          [
+            1428,
+            550
+          ],
+          [
+            1790,
+            550
+          ],
+          [
+            1790,
+            400
+          ]
+        ],
+        "text": "SAM 결과",
+        "label": [
+          1598,
+          518,
+          163,
+          28
+        ],
+        "dashed": true,
+        "size": 21
+      },
+      {
+        "kind": "text",
+        "text": "제목칸 상자: Component    둥근 상자: Module    원통: 저장소    회색 점선: process    실선: 요청    점선: 반환",
+        "x": 60,
+        "y": 1024,
+        "w": 1800,
+        "h": 26,
+        "size": 20,
+        "color": "#50555B"
+      }
+    ],
+    "nodes": {
+      "r2host": {
+        "kind": "proc",
+        "id": "r2host",
+        "text": "VIA Host process",
+        "x": 60,
+        "y": 265,
+        "w": 870,
+        "h": 235,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "r2producer": {
+        "kind": "comp",
+        "id": "r2producer",
+        "text": "Screen Target Producer",
+        "x": 78,
+        "y": 307,
+        "w": 340,
+        "h": 173,
+        "size": 23,
+        "parent": "r2host",
+        "stroke": "#111111"
+      },
+      "r2assembler": {
+        "kind": "mod",
+        "id": "r2assembler",
+        "text": "후보 구성기",
+        "x": 94,
+        "y": 352,
+        "w": 308,
+        "h": 48,
+        "size": 24,
+        "parent": "r2producer",
+        "stroke": "#111111"
+      },
+      "r2candidates": {
+        "kind": "store",
+        "id": "r2candidates",
+        "text": "후보 기록 (RAM)",
+        "x": 94,
+        "y": 430,
+        "w": 308,
+        "h": 40,
+        "size": 21,
+        "parent": "r2producer",
+        "stroke": "#111111"
+      },
+      "r2hostma": {
+        "kind": "comp",
+        "id": "r2hostma",
+        "text": "Model Access",
+        "x": 530,
+        "y": 307,
+        "w": 382,
+        "h": 173,
+        "size": 25,
+        "parent": "r2host",
+        "stroke": "#111111"
+      },
+      "r2control": {
+        "kind": "mod",
+        "id": "r2control",
+        "text": "로컬 실행 제어기",
+        "x": 546,
+        "y": 352,
+        "w": 350,
+        "h": 48,
+        "size": 24,
+        "parent": "r2hostma",
+        "stroke": "#111111"
+      },
+      "r2jobs": {
+        "kind": "store",
+        "id": "r2jobs",
+        "text": "작업과 실행 세대 (RAM)",
+        "x": 590,
+        "y": 430,
+        "w": 260,
+        "h": 40,
+        "size": 20,
+        "parent": "r2hostma",
+        "stroke": "#111111"
+      },
+      "r3host": {
+        "kind": "proc",
+        "id": "r3host",
+        "text": "VIA Host process",
+        "x": 990,
+        "y": 265,
+        "w": 870,
+        "h": 235,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "r3producer": {
+        "kind": "comp",
+        "id": "r3producer",
+        "text": "Screen Target Producer",
+        "x": 1008,
+        "y": 307,
+        "w": 340,
+        "h": 173,
+        "size": 23,
+        "parent": "r3host",
+        "stroke": "#111111"
+      },
+      "r3assembler": {
+        "kind": "mod",
+        "id": "r3assembler",
+        "text": "후보 구성기",
+        "x": 1024,
+        "y": 352,
+        "w": 308,
+        "h": 48,
+        "size": 24,
+        "parent": "r3producer",
+        "stroke": "#111111"
+      },
+      "r3candidates": {
+        "kind": "store",
+        "id": "r3candidates",
+        "text": "후보 기록 (RAM)",
+        "x": 1024,
+        "y": 430,
+        "w": 308,
+        "h": 40,
+        "size": 21,
+        "parent": "r3producer",
+        "stroke": "#111111"
+      },
+      "r3hostma": {
+        "kind": "comp",
+        "id": "r3hostma",
+        "text": "Model Access",
+        "x": 1460,
+        "y": 307,
+        "w": 382,
+        "h": 173,
+        "size": 25,
+        "parent": "r3host",
+        "stroke": "#111111"
+      },
+      "r3control": {
+        "kind": "mod",
+        "id": "r3control",
+        "text": "로컬 실행 제어기",
+        "x": 1476,
+        "y": 352,
+        "w": 350,
+        "h": 48,
+        "size": 24,
+        "parent": "r3hostma",
+        "stroke": "#111111"
+      },
+      "r3jobs": {
+        "kind": "store",
+        "id": "r3jobs",
+        "text": "작업과 실행 세대 (RAM)",
+        "x": 1520,
+        "y": 430,
+        "w": 260,
+        "h": 40,
+        "size": 20,
+        "parent": "r3hostma",
+        "stroke": "#111111"
+      },
+      "r2worker": {
+        "kind": "proc",
+        "id": "r2worker",
+        "text": "Vision Worker process",
+        "x": 60,
+        "y": 620,
+        "w": 870,
+        "h": 398,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "r2workerma": {
+        "kind": "comp",
+        "id": "r2workerma",
+        "text": "Model Access",
+        "x": 78,
+        "y": 661,
+        "w": 834,
+        "h": 338,
+        "size": 25,
+        "parent": "r2worker",
+        "stroke": "#111111"
+      },
+      "r2ipc": {
+        "kind": "mod",
+        "id": "r2ipc",
+        "text": "IPC 수신기",
+        "x": 110,
+        "y": 706,
+        "w": 220,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "r2queue": {
+        "kind": "store",
+        "id": "r2queue",
+        "text": "실행 대기열 (RAM)",
+        "x": 420,
+        "y": 701,
+        "w": 260,
+        "h": 55,
+        "size": 21,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "r2ui": {
+        "kind": "mod",
+        "id": "r2ui",
+        "text": "UI 어댑터",
+        "x": 170,
+        "y": 802,
+        "w": 250,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "r2sam": {
+        "kind": "mod",
+        "id": "r2sam",
+        "text": "SAM 어댑터",
+        "x": 620,
+        "y": 802,
+        "w": 250,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "r2runtime": {
+        "kind": "mod",
+        "id": "r2runtime",
+        "text": "CPU 추론 런타임",
+        "x": 395,
+        "y": 884,
+        "w": 250,
+        "h": 45,
+        "size": 23,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "r2models": {
+        "kind": "store",
+        "id": "r2models",
+        "text": "UI + SAM 모델 세션 (RAM)",
+        "x": 110,
+        "y": 950,
+        "w": 380,
+        "h": 39,
+        "size": 20,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "r2episode": {
+        "kind": "store",
+        "id": "r2episode",
+        "text": "영상 작업 상태 (RAM)",
+        "x": 600,
+        "y": 950,
+        "w": 270,
+        "h": 39,
+        "size": 20,
+        "parent": "r2workerma",
+        "stroke": "#111111"
+      },
+      "uiworker": {
+        "kind": "proc",
+        "id": "uiworker",
+        "text": "UI Worker process",
+        "x": 990,
+        "y": 620,
+        "w": 420,
+        "h": 398,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "uima": {
+        "kind": "comp",
+        "id": "uima",
+        "text": "Model Access",
+        "x": 1008,
+        "y": 661,
+        "w": 384,
+        "h": 338,
+        "size": 24,
+        "parent": "uiworker",
+        "stroke": "#111111"
+      },
+      "uiipc": {
+        "kind": "mod",
+        "id": "uiipc",
+        "text": "IPC 수신기",
+        "x": 1024,
+        "y": 706,
+        "w": 165,
+        "h": 45,
+        "size": 21,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      "uiqueue": {
+        "kind": "store",
+        "id": "uiqueue",
+        "text": "대기열 (RAM)",
+        "x": 1229,
+        "y": 701,
+        "w": 145,
+        "h": 55,
+        "size": 19,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      "uiadapter": {
+        "kind": "mod",
+        "id": "uiadapter",
+        "text": "UI 어댑터",
+        "x": 1090,
+        "y": 802,
+        "w": 230,
+        "h": 45,
+        "size": 23,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      "uiruntime": {
+        "kind": "mod",
+        "id": "uiruntime",
+        "text": "CPU 추론 런타임",
+        "x": 1090,
+        "y": 884,
+        "w": 230,
+        "h": 45,
+        "size": 22,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      "uimodels": {
+        "kind": "store",
+        "id": "uimodels",
+        "text": "UI 세션 RAM",
+        "x": 1024,
+        "y": 950,
+        "w": 165,
+        "h": 39,
+        "size": 18,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      "uistate": {
+        "kind": "store",
+        "id": "uistate",
+        "text": "UI 상태 RAM",
+        "x": 1229,
+        "y": 950,
+        "w": 145,
+        "h": 39,
+        "size": 18,
+        "parent": "uima",
+        "stroke": "#111111"
+      },
+      "samworker": {
+        "kind": "proc",
+        "id": "samworker",
+        "text": "SAM Worker process",
+        "x": 1440,
+        "y": 620,
+        "w": 420,
+        "h": 398,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "samma": {
+        "kind": "comp",
+        "id": "samma",
+        "text": "Model Access",
+        "x": 1458,
+        "y": 661,
+        "w": 384,
+        "h": 338,
+        "size": 24,
+        "parent": "samworker",
+        "stroke": "#111111"
+      },
+      "samipc": {
+        "kind": "mod",
+        "id": "samipc",
+        "text": "IPC 수신기",
+        "x": 1474,
+        "y": 706,
+        "w": 165,
+        "h": 45,
+        "size": 21,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      "samqueue": {
+        "kind": "store",
+        "id": "samqueue",
+        "text": "대기열 (RAM)",
+        "x": 1679,
+        "y": 701,
+        "w": 145,
+        "h": 55,
+        "size": 19,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      "samadapter": {
+        "kind": "mod",
+        "id": "samadapter",
+        "text": "SAM 어댑터",
+        "x": 1540,
+        "y": 802,
+        "w": 230,
+        "h": 45,
+        "size": 23,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      "samruntime": {
+        "kind": "mod",
+        "id": "samruntime",
+        "text": "CPU 추론 런타임",
+        "x": 1540,
+        "y": 884,
+        "w": 230,
+        "h": 45,
+        "size": 22,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      "sammodels": {
+        "kind": "store",
+        "id": "sammodels",
+        "text": "SAM 세션 RAM",
+        "x": 1474,
+        "y": 950,
+        "w": 165,
+        "h": 39,
+        "size": 18,
+        "parent": "samma",
+        "stroke": "#111111"
+      },
+      "samstate": {
+        "kind": "store",
+        "id": "samstate",
+        "text": "영상 상태 RAM",
+        "x": 1679,
+        "y": 950,
+        "w": 145,
+        "h": 39,
+        "size": 18,
+        "parent": "samma",
+        "stroke": "#111111"
+      }
+    },
+    "notes": "화면 생산의 요청과 반환은 1 생산기 UI 요청, 2 worker UI 실행, 3 UI 결과 생산기 반환, 4 정밀 경계가 필요할 때 생산기 SAM 요청, 5 worker SAM 실행, 6 SAM 결과 생산기 반환 순서다. 후보 구성기가 UI 결과에서 seed를 결정한 뒤에만 SAM 작업을 제출한다. native 후보가 충분하거나 UI bbox가 충분하면 해당 시각 추론은 생략한다. 단계 번호는 이 페이지의 host-worker 흐름이며 p10의 요청 의미 해석 번호와 별개다.\n각 대안의 로컬 실행 제어기는 모든 시각 worker에 걸쳐 총 CPU 4 thread와 heavy stage 1개를 허가한다. 두 worker를 자동 병렬 실행하는 구조가 아니다. IPC 수신기는 Module이고 대기열은 별도의 RAM 저장이다. 모든 호출과 결과선은 실제 Module에 연결된다. UI/SAM 모델 세션은 최초 필요 시 로딩한 이후 유지하며, 영상 작업 상태의 종료는 모델 수명과 별도다. runtime와 adapter 내부 전후처리는 p12에서 확대한다.\nR2 crash는 같은 주소 공간의 UI/SAM 모델 세션과 영상 tensor에 영향을 준다. R3 SAM crash는 UI worker 주소 공간을 직접 제거하지 않는다. host 후보 기록은 두 안 모두 남는다. 실행 세대 확인으로 이전 worker 결과를 거절하고 권한 있는 원본과 seed에서 필요한 tensor를 재생산한다.\n",
+    "title": "DP3. 화면 지칭 해석 구조 (2/2)",
+    "subtitle": "같은 후보 생산과 의미 결합 / 시각 CPU 총 4 thread / 한 번에 한 단계 / Model Access는 같은 Component의 분산 배치"
+  },
+  {
+    "name": "dp3-v8-runtime-lifetimes",
+    "page": 12,
+    "items": [
+      {
+        "kind": "proc",
+        "id": "lifehost",
+        "text": "VIA Host process",
+        "x": 60,
+        "y": 215,
+        "w": 440,
+        "h": 380,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "lifema",
+        "text": "Model Access",
+        "x": 78,
+        "y": 258,
+        "w": 404,
+        "h": 316,
+        "size": 25,
+        "parent": "lifehost",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "lifecontrol",
+        "text": "로컬 실행 제어기",
+        "x": 100,
+        "y": 311,
+        "w": 360,
+        "h": 60,
+        "size": 25,
+        "parent": "lifema",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "lifejobs",
+        "text": "작업과 실행 세대 (RAM)",
+        "x": 100,
+        "y": 465,
+        "w": 360,
+        "h": 70,
+        "size": 23,
+        "parent": "lifema",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "lifejobwrite",
+        "from": "lifecontrol",
+        "to": "lifejobs",
+        "points": [
+          [
+            120,
+            371
+          ],
+          [
+            120,
+            465
+          ]
+        ],
+        "text": "작업 / 취소 / 버전 확인",
+        "label": [
+          140,
+          402,
+          310,
+          28
+        ],
+        "size": 22
+      },
+      {
+        "kind": "proc",
+        "id": "lifeworker",
+        "text": "Vision Worker process (R1 / R2)",
+        "x": 735,
+        "y": 215,
+        "w": 1125,
+        "h": 380,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      {
+        "kind": "comp",
+        "id": "lifeworkerma",
+        "text": "Model Access",
+        "x": 753,
+        "y": 258,
+        "w": 1089,
+        "h": 316,
+        "size": 25,
+        "parent": "lifeworker",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "lifeipc",
+        "text": "IPC 수신기",
+        "x": 775,
+        "y": 311,
+        "w": 190,
+        "h": 60,
+        "size": 24,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "lifeadapter",
+        "text": "UI / SAM 어댑터",
+        "x": 1060,
+        "y": 311,
+        "w": 240,
+        "h": 60,
+        "size": 24,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "liferuntime",
+        "text": "CPU 추론 런타임",
+        "x": 1395,
+        "y": 311,
+        "w": 240,
+        "h": 60,
+        "size": 24,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "lifefiles",
+        "text": "모델 파일\n(local disk)",
+        "x": 1685,
+        "y": 302,
+        "w": 135,
+        "h": 83,
+        "size": 21,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "lifeepisode",
+        "text": "영상 작업 상태 (RAM)",
+        "x": 1060,
+        "y": 466,
+        "w": 240,
+        "h": 70,
+        "size": 22,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "lifemodels",
+        "text": "모델 세션 (RAM)",
+        "x": 1395,
+        "y": 466,
+        "w": 240,
+        "h": 70,
+        "size": 23,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "liferequest",
+        "from": "lifecontrol",
+        "to": "lifeipc",
+        "points": [
+          [
+            460,
+            330
+          ],
+          [
+            775,
+            330
+          ]
+        ],
+        "text": "1 작업 / 수명 명령",
+        "label": [
+          510,
+          295,
+          222,
+          30
+        ],
+        "size": 21
+      },
+      {
+        "kind": "edge",
+        "id": "liferesult",
+        "from": "lifeipc",
+        "to": "lifecontrol",
+        "points": [
+          [
+            775,
+            355
+          ],
+          [
+            460,
+            355
+          ]
+        ],
+        "text": "완료 / 오류 / 실행 세대",
+        "label": [
+          500,
+          370,
+          248,
+          51
+        ],
+        "dashed": true,
+        "size": 21
+      },
+      {
+        "kind": "text",
+        "text": "named pipe: 명령과 결과\n공유 buffer: frame 참조",
+        "x": 508,
+        "y": 222,
+        "w": 220,
+        "h": 58,
+        "size": 19,
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "text": "제목칸 상자: Component\n둥근 상자: Module\n원통: 저장소\n회색 점선: process\n실선: 요청 / 점선: 반환",
+        "x": 508,
+        "y": 437,
+        "w": 220,
+        "h": 135,
+        "size": 19,
+        "align": "center",
+        "color": "#50555B"
+      },
+      {
+        "kind": "edge",
+        "id": "lifedispatch",
+        "from": "lifeipc",
+        "to": "lifeadapter",
+        "points": [
+          [
+            965,
+            340
+          ],
+          [
+            1060,
+            340
+          ]
+        ],
+        "text": "2 분배",
+        "label": [
+          972,
+          300,
+          83,
+          28
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "lifeinfer",
+        "from": "lifeadapter",
+        "to": "liferuntime",
+        "points": [
+          [
+            1300,
+            340
+          ],
+          [
+            1395,
+            340
+          ]
+        ],
+        "text": "3 호출",
+        "label": [
+          1307,
+          300,
+          83,
+          28
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "lifeload",
+        "from": "lifefiles",
+        "to": "liferuntime",
+        "points": [
+          [
+            1685,
+            343
+          ],
+          [
+            1635,
+            343
+          ]
+        ],
+        "text": "load",
+        "label": [
+          1638,
+          309,
+          43,
+          24
+        ],
+        "size": 18
+      },
+      {
+        "kind": "edge",
+        "id": "lifemodelsession",
+        "from": "liferuntime",
+        "to": "lifemodels",
+        "points": [
+          [
+            1615,
+            371
+          ],
+          [
+            1615,
+            466
+          ]
+        ],
+        "text": "EnsureModel: 적재\nReleaseModel: 회수",
+        "label": [
+          1398,
+          391,
+          201,
+          58
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "lifeepisodestore",
+        "from": "lifeadapter",
+        "to": "lifeepisode",
+        "points": [
+          [
+            1280,
+            371
+          ],
+          [
+            1280,
+            466
+          ]
+        ],
+        "text": "RunStage: 사용과 갱신\nCloseEpisode: 종료",
+        "label": [
+          1063,
+          391,
+          201,
+          58
+        ],
+        "size": 20
+      },
+      {
+        "kind": "edge",
+        "id": "lifeinferreturn",
+        "from": "liferuntime",
+        "to": "lifeadapter",
+        "points": [
+          [
+            1395,
+            355
+          ],
+          [
+            1300,
+            355
+          ]
+        ],
+        "text": "결과",
+        "label": [
+          1312,
+          376,
+          76,
+          26
+        ],
+        "dashed": true,
+        "size": 19
+      },
+      {
+        "kind": "edge",
+        "id": "lifecompletion",
+        "from": "lifeadapter",
+        "to": "lifeipc",
+        "points": [
+          [
+            1060,
+            355
+          ],
+          [
+            965,
+            355
+          ]
+        ],
+        "text": "4 결과",
+        "label": [
+          974,
+          376,
+          77,
+          26
+        ],
+        "dashed": true,
+        "size": 19
+      },
+      {
+        "kind": "text",
+        "text": "ReleaseModel은 모델 세션만 회수하고 CloseEpisode는 영상 상태만 종료한다. 사용 중 참조가 없을 때 수행한다.",
+        "x": 60,
+        "y": 605,
+        "w": 1800,
+        "h": 29,
+        "size": 23,
+        "bold": true
+      },
+      {
+        "kind": "table",
+        "rows": [
+          [
+            "수명 / 동시 RAM (MB)",
+            "A",
+            "B-R1",
+            "B-R2",
+            "B-R3"
+          ],
+          [
+            "시각 모델 세션",
+            "없음",
+            "단계 후 회수와 교체",
+            "사용 후 유지",
+            "worker별 유지"
+          ],
+          [
+            "영상 상태 / 후보 기록",
+            "확정 이력",
+            "모델 회수와 별도 보존",
+            "같은 보존 정책",
+            "같은 보존 정책"
+          ],
+          [
+            "추가 시각 runtime + 모델 객체",
+            "0",
+            "340 + 170",
+            "340 + 590",
+            "620 + 590"
+          ],
+          [
+            "공통 / 추론과 영상 상태 / 입력 buffer",
+            "560 / 0 / 32",
+            "560 / 860 / 24",
+            "560 / 860 / 24",
+            "560 / 860 / 32"
+          ],
+          [
+            "QA06 동시 peak 합계",
+            "592",
+            "1,954",
+            "2,374",
+            "2,662"
+          ]
+        ],
+        "x": 60,
+        "y": 651,
+        "widths": [
+          610,
+          270,
+          310,
+          310,
+          300
+        ],
+        "heights": [
+          49,
+          57,
+          57,
+          57,
+          57,
+          60
+        ],
+        "size": 24
+      },
+      {
+        "kind": "text",
+        "text": "가정 RAM, 실측 아님. R1→R2: UI 모델 객체 420 MB 유지. R3: runtime private 280 MB + IPC 8 MB 추가.",
+        "x": 60,
+        "y": 1004,
+        "w": 1800,
+        "h": 31,
+        "size": 22,
+        "color": "#50555B"
+      }
+    ],
+    "nodes": {
+      "lifehost": {
+        "kind": "proc",
+        "id": "lifehost",
+        "text": "VIA Host process",
+        "x": 60,
+        "y": 215,
+        "w": 440,
+        "h": 380,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "lifema": {
+        "kind": "comp",
+        "id": "lifema",
+        "text": "Model Access",
+        "x": 78,
+        "y": 258,
+        "w": 404,
+        "h": 316,
+        "size": 25,
+        "parent": "lifehost",
+        "stroke": "#111111"
+      },
+      "lifecontrol": {
+        "kind": "mod",
+        "id": "lifecontrol",
+        "text": "로컬 실행 제어기",
+        "x": 100,
+        "y": 311,
+        "w": 360,
+        "h": 60,
+        "size": 25,
+        "parent": "lifema",
+        "stroke": "#111111"
+      },
+      "lifejobs": {
+        "kind": "store",
+        "id": "lifejobs",
+        "text": "작업과 실행 세대 (RAM)",
+        "x": 100,
+        "y": 465,
+        "w": 360,
+        "h": 70,
+        "size": 23,
+        "parent": "lifema",
+        "stroke": "#111111"
+      },
+      "lifeworker": {
+        "kind": "proc",
+        "id": "lifeworker",
+        "text": "Vision Worker process (R1 / R2)",
+        "x": 735,
+        "y": 215,
+        "w": 1125,
+        "h": 380,
+        "size": 24,
+        "parent": null,
+        "stroke": "#72777D"
+      },
+      "lifeworkerma": {
+        "kind": "comp",
+        "id": "lifeworkerma",
+        "text": "Model Access",
+        "x": 753,
+        "y": 258,
+        "w": 1089,
+        "h": 316,
+        "size": 25,
+        "parent": "lifeworker",
+        "stroke": "#111111"
+      },
+      "lifeipc": {
+        "kind": "mod",
+        "id": "lifeipc",
+        "text": "IPC 수신기",
+        "x": 775,
+        "y": 311,
+        "w": 190,
+        "h": 60,
+        "size": 24,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      "lifeadapter": {
+        "kind": "mod",
+        "id": "lifeadapter",
+        "text": "UI / SAM 어댑터",
+        "x": 1060,
+        "y": 311,
+        "w": 240,
+        "h": 60,
+        "size": 24,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      "liferuntime": {
+        "kind": "mod",
+        "id": "liferuntime",
+        "text": "CPU 추론 런타임",
+        "x": 1395,
+        "y": 311,
+        "w": 240,
+        "h": 60,
+        "size": 24,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      "lifefiles": {
+        "kind": "store",
+        "id": "lifefiles",
+        "text": "모델 파일\n(local disk)",
+        "x": 1685,
+        "y": 302,
+        "w": 135,
+        "h": 83,
+        "size": 21,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      "lifeepisode": {
+        "kind": "store",
+        "id": "lifeepisode",
+        "text": "영상 작업 상태 (RAM)",
+        "x": 1060,
+        "y": 466,
+        "w": 240,
+        "h": 70,
+        "size": 22,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      },
+      "lifemodels": {
+        "kind": "store",
+        "id": "lifemodels",
+        "text": "모델 세션 (RAM)",
+        "x": 1395,
+        "y": 466,
+        "w": 240,
+        "h": 70,
+        "size": 23,
+        "parent": "lifeworkerma",
+        "stroke": "#111111"
+      }
+    },
+    "notes": "실행 제어기는 worker의 기동, CPU 실행 허가, 작업과 실행 세대, 취소 및 결과 유효성 확인을 책임진다. Model Access의 동일 논리 Component를 host와 worker에 나누어 배치한다. IPC 수신기에서 UI/SAM 어댑터로 명령을 분배하며 adapter가 CPU runtime을 호출한다. EnsureModel은 이미 설치된 disk 파일을 runtime으로 읽어 모델 객체와 weights를 구성한다. disk 파일은 RAM 합계에 넣지 않는다.\nRunStage, EnsureModel, ReleaseModel, CloseEpisode는 named pipe의 별도 명령이다. IPC와 adapter를 거쳐 ReleaseModel은 runtime의 모델 세션 회수로, CloseEpisode는 adapter가 소유한 영상 tensor 종료로 이어진다. 각 path는 그림에 실제로 연결되어 있다. 추론 결과는 runtime에서 adapter로 돌아온 뒤 전후처리와 판본을 갖춰 IPC에 반환한다. runtime을 호출하지 않는 CloseEpisode도 adapter에서 완료 또는 오류를 IPC로 반환하는 같은 경로를 갖는다. ReleaseModel이 사용 중이거나 tensor가 참조하는 model을 강제 삭제한다는 의미가 아니며 참조 확인 후 회수하고 실제 RAM을 따로 확인한다. 공통 원본과 host 후보 기록은 둘 중 어느 명령으로도 삭제하지 않는다.\nCPU runtime은 bundled Python + PyTorch CPU 실행기다. R1은 runtime을 유지하면서 필요한 모델 session을 교체한다. R2는 최초 필요 시 load한 모델 session을 유지한다. R3는 p11의 두 process에 같은 실행 구조가 각각 배치된다. 모델 상주만으로 영상 상태 보존이나 정확도 차이를 만들지 않는다.\nRAM 값은 v7의 합성 가정을 그대로 유지한다. 공통 560 MB, UI 객체 420 MB, SAM 객체 170 MB, shared runtime 60 MB와 process private 280 MB, 추론 workspace 680 MB와 영상 상태 180 MB, 입력 buffer A32/R1R2 24/R3 32 MB. SAM peak이며 UI workspace를 동시에 더하지 않는다. UI와 SAM의 실제 추론을 수행해 측정한 값이 아니다.\n",
+    "title": "DP3. CPU 실행과 상태 수명",
+    "subtitle": "모델 회수와 영상 상태 종료는 별도 명령 / R1과 R2의 코드 배치는 같고 세션 유지 정책이 다름"
+  }
+]

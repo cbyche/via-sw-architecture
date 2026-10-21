@@ -68,3 +68,22 @@
 ## 발표 SW 구조 그림 v7 재작성
 
 [발표 구조 계약](presentation-architecture-contract.md)으로 소유권·실행·상태 수명을 먼저 고정하고, DP1·DP2·DP4의 도형 문법에 맞춰 발표 10~12쪽을 재작성했다. 독립 검토자는 v6의 UI/SAM fanout, 후보/episode 소유권 혼합, 최종 채택 주체 누락, model session 실행 주체 표현을 지적했다. 수정 렌더를 검토하며 발견한 RAM 귀속·라벨 넘침·IPC 출발점까지 수정하고 재확인했다. 최종 범위와 한계는 [v7 검토 기록](../../../../../presentations_files/dp1-dp4-reference-style-20261019/dp3-v7-review.md)에 있다. QA 수치는 기존 합성 원장을 유지한다.
+
+
+## 2026-10-22 v7 재검토 정정과 v8 수정
+
+사용자가 가이드 준수 여부를 다시 확인하도록 요청한 뒤 v7의 10~12쪽을 그림 자체로 재검토했다. 앞 절의 v7 검토 완료 기록은 당시 검토의 결론이며, 아래의 후속 지적을 놓쳤다. Windows Open XML, 서체와 패키지 검사가 통과했다는 사실로 실행 경로의 완전성을 보증할 수 없다.
+
+| 발견 | 수정 요구와 확인 대상 |
+| --- | --- |
+| 11쪽 명령선이 worker IPC Endpoint가 아닌 process 경계에서 끝남 | host의 로컬 실행 제어기와 worker의 IPC 수신기를 실제로 연결하고, 완료와 오류의 반환선을 별도로 표시 |
+| 10쪽의 후보 Expand와 새 원본 범위 재허가가 각주로만 설명됨 | A의 원본 보완, B의 후보 확장 및 생산기의 원본 부족을 Request Controller로 되돌리고 Context Manager 조회와 결과 공급, 후보 재생산 및 결합 재시작까지 실제 루프로 표시 |
+| 10쪽 R1 worker 내부가 설명 카드이며 11쪽 일부 내부 상자에 동작 문장이 있음 | worker의 소유 Component, 내부 Module, runtime과 session 및 episode 상태를 펼치고 동작은 화살표로 이동 |
+| receipt, rev, generation 등 기술 용어에 대한 쉬운 이름이 없고 가운뎃점이 남음 | 현재 그림에서 쉬운 한국어 이름을 사용하고 기술 계약과의 대응을 본문에 기록 |
+| 본문의 'Controller 경유'와 실제 직접 조회선이 다름 | [발표 구조 계약](presentation-architecture-contract.md) §3의 직접 Read/Crop 선에 대한 예외 설명을 제거하고 본문과 그림 모두 같은 허가 및 반환 경로로 통일 |
+
+이번 v8은 위 누락을 고치는 표현과 계약 정합성 수정이다. 새로운 기본안, 모델, speculative execution, 상주에 따른 추가 정확도나 병렬 이익을 만들지 않는다. A/B의 입력과 기능, QA01~07의 합성 수치 및 120평가 입력과 60준비 활동, 나머지 26쪽과 이전 DP3 appendix는 보존 대상이다. 작은 후보 기록의 host 소유, worker의 모델 session 및 영상 tensor 소유, R1/R2/R3의 같은 episode 보존 조건도 유지한다.
+
+최종 도식과 본문을 대조하며 Request Controller 내부 이름을 `요청 검증 및 채택기`로 통일했다. 기존의 조회 허가와 최종 채택 책임을 명시한 이름이며 별도 소유자를 추가하지 않는다. p11과 p12의 결과는 runtime → adapter → IPC → host로 돌아간다. adapter 후처리 완료와 runtime 추론 반환을 구분하고, `CloseEpisode`도 adapter에서 상태를 종료한 뒤 IPC로 완료 또는 오류를 반환하도록 맞췄다.
+
+현재 그림은 [설계 문서의 v8 그림 차례](README.md#현재-발표의-sw-구조-그림)에서 읽는다. 이전 v7 SVG, draw.io와 PNG는 README 뒤쪽에 이전 판본으로 직접 표시한다. 최종 렌더, 독립 설계 검토, 파일 보존과 Windows 검사의 실제 수행 결과 및 한계는 [v8 발표 검토 기록](../../../../../presentations_files/dp1-dp4-reference-style-20261019/dp3-v8-review.md)에 구분하여 기록한다. 이 수정 자체가 모델 성능 측정이나 제품 구현 검증을 뜻하지 않는다.

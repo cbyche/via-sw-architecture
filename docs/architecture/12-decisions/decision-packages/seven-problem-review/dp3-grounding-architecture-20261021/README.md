@@ -12,33 +12,43 @@
 
 ## 현재 발표의 SW 구조 그림
 
-2026-10-21 재작성. [Component·상태·실행 계약](presentation-architecture-contract.md)을 먼저 정리하고, 저장소 [그림 가이드](../../diagram-design-guide.md)와 DP1·DP2·DP4의 Component/내부 Module/원통 상태 표현을 적용했다. A/B의 기능이나 QA 수치를 변경하지 않고, 원본 조회·후보 생산·모델 실행·최종 채택의 소유자와 실제 process 배치를 펼쳤다.
+2026-10-22 v8. [Component, 상태와 실행 계약](presentation-architecture-contract.md)에 따라 발표 10~12쪽의 호출, 반환과 재허가 경로를 다시 그렸다. [그림 가이드](../../diagram-design-guide.md)의 이름은 상자, 동작은 화살표 규칙을 적용한다. 이전 v7의 process 경계에서 끝나는 호출선, 설명문에만 있던 확장 경로와 R1 worker 내부의 설명 카드를 수정한다. A/B의 기능, QA 수치와 합성 평가 조건은 유지한다.
 
-### A와 B-R1: 해석과 후보 생산의 책임
+| 발표 쪽 | 현재 그림 | 그림에서 따라갈 경로 |
+| --- | --- | --- |
+| 10 | [A와 B-R1](#a와-b-r1-원본-보완과-후보-확장) | 원본 보완 요청, Controller의 허가와 실제 읽기, 후보 확장과 재결합, 최종 채택 |
+| 11 | [B-R2와 B-R3](#b-r2와-b-r3-process와-호출-경계) | host의 로컬 실행 제어기에서 worker의 IPC 수신기로 가는 호출과 결과 반환, UI 결과 이후 조건부 SAM 실행 |
+| 12 | [CPU 실행과 상태 수명](#cpu-실행과-상태-수명) | 프로그램 기동, IPC, runtime의 모델 적재와 실행, 모델 해제와 episode 종료 |
 
-![A와 B-R1의 책임·상태·호출 구조](diagrams/dp3-v7-ab-responsibilities.svg)
+### A와 B-R1: 원본 보완과 후보 확장
 
-[편집 가능한 draw.io](diagrams/dp3-v7-ab-responsibilities.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v7-ab-responsibilities.png)
+![A와 B-R1의 원본 보완, 재허가와 후보 확장 경로](diagrams/dp3-v8-ab-responsibilities.svg)
 
-Context Manager의 원통은 원본의 소유권을 옮긴 저장소가 아니라 허가된 원본 참조·cache다. Read/Produce는 기허가 범위에서 수행하고 새 범위는 Request Controller의 허가를 거친다. 후보 부족 시 생산기로 확장 요청을 보내며 최종 의미의 채택 주체는 양쪽 모두 Request Controller다.
+[편집 가능한 draw.io](diagrams/dp3-v8-ab-responsibilities.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v8-ab-responsibilities.png)
 
-### B-R2와 B-R3: process·runtime·상태 배치
+A의 해석기는 부족한 원본을 Request Controller에 요청한다. Request Controller가 현재 입력과 접근 범위를 확인하고 Context Manager의 조회를 허가한다. 조회 결과도 Request Controller를 거쳐 해석기로 돌아간다. Context Manager가 가진 원본 참조는 Interaction Manager의 원본 소유권을 옮기지 않는다.
 
-![B-R2와 B-R3의 실행 배치](diagrams/dp3-v7-resident-processes.svg)
+B의 결합기는 후보 확장을 Request Controller에 요청한다. Request Controller는 필요한 원본을 같은 조회 경로로 확보한 뒤 Screen Target Producer에 허가된 생산 범위를 전달한다. 생산기에 원본이 더 필요하면 같은 Controller로 돌아온다. 새 후보 판본은 Controller를 거쳐 결합기로 돌아가며, 양안의 최종 의미 채택은 Request Controller 내부의 요청 검증 및 채택기가 수행한다. 각주가 아니라 실제 왕복 연결선으로 경로를 표시한다.
 
-[편집 가능한 draw.io](diagrams/dp3-v7-resident-processes.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v7-resident-processes.png)
+### B-R2와 B-R3: process와 호출 경계
 
-Model Access는 하나의 논리 Component이며 host와 worker에 나뉘어 배치된다. UI 결과가 host로 돌아온 다음 필요한 SAM 작업을 발행한다. 두 process로 나뉘는 R3도 같은 총 CPU 예산과 순차 heavy stage 조건이다. 작은 후보 기록은 host, model session과 영상 tensor는 해당 worker에 있다.
+![B-R2와 B-R3의 host, IPC와 worker 실행 경계](diagrams/dp3-v8-resident-processes.svg)
 
-### 실제 CPU 실행과 상태 수명
+[편집 가능한 draw.io](diagrams/dp3-v8-resident-processes.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v8-resident-processes.png)
 
-![CPU worker와 IPC·모델·episode 수명](diagrams/dp3-v7-runtime-lifetimes.svg)
+Model Access는 하나의 논리 Component이며 host와 worker에 나뉘어 배치된다. IPC 호출선은 host의 로컬 실행 제어기에서 출발하여 worker의 IPC 수신기에 도착하고, 완료와 오류는 별도 반환선으로 돌아온다. process 테두리를 호출의 종착점으로 쓰지 않는다.
 
-[편집 가능한 draw.io](diagrams/dp3-v7-runtime-lifetimes.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v7-runtime-lifetimes.png)
+UI 결과가 host로 돌아온 다음 정밀 경계나 시간 대응에 필요한 SAM 작업을 발행한다. R3도 같은 총 CPU 예산으로 무거운 시각 단계 하나씩 실행한다. 작은 후보 기록은 Screen Target Producer가 host에서 소유하고, 모델 session과 영상 tensor는 해당 worker에 남는다.
 
-모델은 disk의 파일에서 worker runtime의 RAM session으로 로딩된다. ReleaseModel과 CloseEpisode는 서로 다른 명령이다. 모델 상주 여부와 episode 보존, 후보 기록 보존을 분리한다. 표의 RAM 값은 기존 합성 원장이며 실측으로 바꾸지 않았다.
+### CPU 실행과 상태 수명
 
-세 그림은 [동일 scene 모델](diagrams/dp3-v7-scene-model.json)과 [생성기](../../../../../../scripts/presentations/build_dp3_cpu_v7.mjs)에서 native PowerPoint 도형·SVG·draw.io로 함께 생성했다. [발표 v7과 검토 기록](../../../../../presentations_files/dp1-dp4-reference-style-20261019/dp3-v7-review.md). 아래 기존 cloud 생산기 본문과 그림은 앞선 설계 근거로 보존한다.
+![CPU worker의 IPC, 모델 session과 episode tensor 수명](diagrams/dp3-v8-runtime-lifetimes.svg)
+
+[편집 가능한 draw.io](diagrams/dp3-v8-runtime-lifetimes.drawio) / [PPTX 렌더 PNG](diagrams/dp3-v8-runtime-lifetimes.png)
+
+worker는 실행 프로그램이며 모델 파일 자체가 실행 프로그램인 것은 아니다. worker의 runtime이 디스크 모델 파일을 RAM의 session으로 적재하고 adapter가 이를 사용한다. 추론 결과는 runtime → adapter로 돌아오고, adapter의 후처리가 끝난 완료 또는 오류가 IPC를 통해 host로 반환된다. `ReleaseModel`은 모델 session, `CloseEpisode`는 영상 처리 상태를 대상으로 하는 서로 다른 명령이다. `CloseEpisode`는 추론 없이 adapter에서 상태를 종료한 뒤 같은 IPC 경로로 완료를 반환할 수 있다. R1/R2/R3의 episode 보존 조건은 같으며 모델 상주만으로 새로운 정확도나 episode 재사용 이익을 부여하지 않는다. 표의 RAM 값은 기존 합성 원장이다.
+
+세 그림은 [공통 scene 모델](diagrams/dp3-v8-scene-model.json)과 [생성기](../../../../../../scripts/presentations/build_dp3_cpu_v8.mjs)에서 native PowerPoint 도형, SVG와 draw.io로 생성한다. [현재 PowerPoint v8](../../../../../presentations_files/dp1-dp4-reference-style-20261019/VIA-DP1-DP5-reference-style-29slides-v8-dp3-guide-fixed-windows.pptx), [v8 검토 기록](../../../../../presentations_files/dp1-dp4-reference-style-20261019/dp3-v8-review.md)을 함께 확인한다. 아래 cloud 생산기 본문과 `comparison` 그림은 앞선 설계 근거이며 현재 local CPU 배치는 위 세 그림을 따른다.
 
 ## 1. 결론과 적용 범위
 
@@ -334,3 +344,20 @@ A에 같은 parser/track 정보를 참고자료로 붙이는 A 보완안은 만�
 QA의 상세 정의는 [QA01](../../qa-candidate-package/qa01-first-response-latency.md), [QA02](../../qa-candidate-package/qa02-referent-accuracy.md), [QA03](../../qa-candidate-package/qa03-via-processing-time.md), [QA04](../../qa-candidate-package/qa04-change-scope.md), [QA05](../../qa-candidate-package/qa05-model-cost.md), [QA06](../../qa-candidate-package/qa06-local-memory.md), 새 QA07은 [INTENT의 사용자 정의](../../../../../../INTENT.md#41-qa02와-새-qa07의-관계)를 따른다. 기존 결과·참조 Architecture·ADR을 변경하지 않는다.
 
 독립 검토의 범위, 발견과 수정은 [검토 기록](review.md)에 남겼다.
+
+
+## 이전 발표 그림 v7 보존
+
+2026-10-21의 v7은 현재 그림이 아니다. 이후 검토에서 호출선과 실제 IPC 수신 Module의 연결, 원본 재허가와 후보 확장 루프의 가시성, R1 worker의 실제 내부 구성 표현이 부족하다고 판정했다. 해당 검토의 정정과 v8 반영 범위는 [검토 기록](review.md)에 있다. 가정 수치를 실측으로 재분류하지 않으며, v7의 도식 누락을 별도 실행 구조로 해석하지 않는다.
+
+![이전 v7 A와 B-R1 책임 그림](diagrams/dp3-v7-ab-responsibilities.svg)
+
+[v7 draw.io](diagrams/dp3-v7-ab-responsibilities.drawio) / [v7 PNG](diagrams/dp3-v7-ab-responsibilities.png)
+
+![이전 v7 B-R2와 B-R3 배치 그림](diagrams/dp3-v7-resident-processes.svg)
+
+[v7 draw.io](diagrams/dp3-v7-resident-processes.drawio) / [v7 PNG](diagrams/dp3-v7-resident-processes.png)
+
+![이전 v7 runtime 수명 그림](diagrams/dp3-v7-runtime-lifetimes.svg)
+
+[v7 draw.io](diagrams/dp3-v7-runtime-lifetimes.drawio) / [v7 PNG](diagrams/dp3-v7-runtime-lifetimes.png) / [v7 검토 기록](../../../../../presentations_files/dp1-dp4-reference-style-20261019/dp3-v7-review.md)
