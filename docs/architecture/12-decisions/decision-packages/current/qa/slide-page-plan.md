@@ -1,6 +1,6 @@
 # QA별 한 장 설명 페이지 원고
 
-> **현재 편집 기준:** QA01/QA03은 개정 계약과 연결하며 목표/점수 합의 전이다. QA09 독립 페이지는 제거했다. 실제 PPTX는 이번 작업에서 수정하지 않는다.
+> **현재 편집 기준:** QA01/QA03은 개정 계약과 연결하며 목표/점수가 합의됐다. QA09 독립 페이지는 제거했다. 실제 PPTX는 이번 작업에서 수정하지 않는다.
 
 
 > **현재 DP 비교 적용: DP-RELATED-v2 (2026-10-15).** 사용자 지시대로 [DP별 관련 사건 / 목표 / 변경 과제](history/thought-experiment/population.md)만 A/B에 동일하게 적용한다. 아래 COMMON-28 전체 건수는 공통 입력 카탈로그와 제품 전체 회귀의 기준이다. 발표용 값은 [v2 예상값과 한 줄 이유](history/qa-dp-thought-experiment.md)를 사용한다. QA01/03은 관련 원값의 산술평균이며 오답에 시간 벌점을 넣지 않는다. QA05는 기존 $2.55가 정의된 전체 28개 묶음 비용 단위를 유지한다.
@@ -23,7 +23,7 @@
 <a id="qa01"></a>
 ## QA01 개정 원고 준비
 
-[현재 정의](qa01-first-response-latency.md)와 [측정 계약](timing-measurement-contract.md)을 따른다. 목표와 점수 합의 후 발표 원고를 작성한다.
+[현재 정의](qa01-first-response-latency.md)와 [측정 계약](timing-measurement-contract.md)을 따른다. 합의된 목표와 점수를 따르며 발표 원고는 별도 작업이다.
 
 <a id="qa02"></a>
 
@@ -76,7 +76,7 @@ a = 100 × 전체 대상 집합이 일치한 판정 수 / 220
 <a id="qa03"></a>
 ## QA03 개정 원고 준비
 
-[현재 정의](qa03-via-processing-time.md)와 [측정 계약](timing-measurement-contract.md)을 따른다. 목표와 점수 합의 후 발표 원고를 작성한다.
+[현재 정의](qa03-via-processing-time.md)와 [측정 계약](timing-measurement-contract.md)을 따른다. 합의된 목표와 점수를 따르며 발표 원고는 별도 작업이다.
 
 <a id="qa04"></a>
 

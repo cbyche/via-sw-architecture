@@ -1,14 +1,14 @@
 # 공통 QA 정의, 목표와 점수의 현재 편집 기준
 
-2026-10-23 QA01/QA03 정의와 측정방법 합의 / QA09 독립 지표 제거 / 담당 세션 평가 갱신 요청 승인
+2026-10-23 QA01/QA03 정의, 목표와 점수 합의 / QA01 일반/대기 상황 분리 / QA09 독립 지표 제거 / 담당 세션 평가 갱신 요청 승인
 
 DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점수표를 이 폴더에서 관리한다. 이전 `qa-candidate-package`의 내용은 보존하고 이관한 문서를 앞으로의 편집 기준으로 삼는다. 현재 동일 조건의 계산은 [공통 QA v4](../evaluation/common-qa-v4/README.md), 이전 수치는 [v3 보존본](../evaluation/common-qa-v3/README.md), 입력과 관측 모집단은 [시나리오 안내](../scenarios/README.md)에서 확인한다. 정의 문서에 남은 2026-10-15의 DP별 예상표와 검토 상태는 해당 세대의 이력이다.
 
 | 현재 정의 문서 | 대표 지표 | 유지한 목표, 상태 | 도출 자료 |
 | --- | --- | --- | --- |
-| [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | 첫 실질적 음성의 실제 시작까지 평균 경과시간. 차례 대기 포함 및 별도 진단 | 정의와 측정방법 합의. 새 목표/점수는 아래 제안 참조, 채택 전 | [측정 계약과 전달 상태](timing-measurement-contract.md) |
+| [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | NORMAL의 첫 실질적 음성 시작까지 평균. WAIT는 해당 DP에 별도 표시 | **평균 2초 이하, 0~6점 합의** | [4초 대비 50% 단축 근거](research-notes/qa01-voice-target-rationale.md) |
 | [QA02 지칭 대상 식별 정확도](qa02-referent-accuracy.md) | 표현/revision별 최초 채택 대상 집합의 완전 일치율 | 93% 이상 목표 제안, 기존 0~6점 유지 | [정확도 조사](research-notes/qa02-accuracy-research.md) |
-| [QA03 VIA 처리시간](qa03-via-processing-time.md) | 목표의 상태/연동/최종 응답 준비 완료까지 VIA 귀속 경로 시간의 평균 | 정의와 측정방법 합의. 새 목표/점수는 아래 제안 참조, 채택 전 | [측정 계약과 전달 상태](timing-measurement-contract.md) |
+| [QA03 VIA 처리시간](qa03-via-processing-time.md) | 전체 목표의 필수 상태/연동/최종 응답 준비까지 VIA 경로 평균 | **평균 5초 이하, 0~6점 합의** | [Windows 지침과 처리 예산](research-notes/qa03-completion-target-rationale.md) |
 | [QA04 변경 범위](qa04-change-scope.md) | 변경 과제당 평균 실제 운영 Rust 모듈 수 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
@@ -17,15 +17,15 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 
 선택 우선순위는 기존 **QA01 → QA02 → QA03 → QA04 → QA05 → QA06**을 유지한다. 새 QA07/QA08을 임의로 끼워 넣거나 QA02/QA06을 대체하지 않는다. QA08의 호스트 RAM은 QA06 전체 RAM에도 포함되므로 두 값이나 같은 메모리 절감 효과를 합산하지 않는다. 가중 총점으로 합산하지 않으며 원값, 분모, 단위, 실패와 근거 종류를 함께 남긴다.
 
-## 시간 지표의 개정 상태
+## 시간 지표의 확정 기준
 
-현재 목록은 QA01~QA08이다. QA09는 독립 요구사항과 목표/점수에서 제거했다. 사용자 발화/이전 응답의 차례 대기와 채택 후 재생 가능 구간의 추가 지연은 QA01의 보조 진단으로 기록한다.
+현재 총 QA는 **QA01~QA08, 8개**다. QA09는 독립 목록에서 제거했다.
 
-QA01은 음성 시작까지이며 대표값에 차례 대기를 포함한다. QA03은 전체 목표의 처리 완료를 평가한다. 두 정의와 측정방법은 2026-10-23 사용자 합의가 완료되었다. 화면/음성 중 빠른 첫 응답을 선택하지 않는다. 기존 1초/5초와 점수는 새 경계에 자동 적용하지 않는다.
+QA01은 사전 지정 NORMAL에 평균 2초와 별점을 적용한다. 4초 참조 대비 50% 단축이 목표의 도출 근거다. 사용자 발화/앞 응답 대기가 있는 WAIT는 해당 DP의 총 실제 지연, 대기와 대기 종료 후 추가 지연을 별도로 제시한다. 내부 큐/모델 지연은 일반 상황에서도 포함한다.
 
-2026-10-23 수치 제안: [QA01 평균 2초 이하, 1초 이하 6점](research-notes/qa01-voice-target-proposal-20261023.md), [QA03 평균 5초 이하, 1초 이하 6점](research-notes/qa03-completion-target-proposal-20261023.md). 두 제안은 문헌 근거와 제품 판단을 구별하며 아직 사용자 채택 전이다. 담당 세션의 원값 갱신은 계속하되 새 제안 점수는 아직 적용하지 않는다.
+QA03은 전체 필수 처리와 최종 응답 준비의 VIA 경로 평균 5초를 목표로 한다. 양쪽 우수선은 1초이며 QA01은 0.2초, QA03은 0.8초씩 균등 분할한 점수를 적용한다. 정의 문서가 점수표 정본이다.
 
-[공통 측정 계약과 담당 세션 전달 상태](timing-measurement-contract.md)에 필요한 사건/목표/trace와 갱신 범위를 기록했다. 사용자가 담당 세션의 공통 평가 전체 갱신을 요청했으며 목표/점수가 미정이어도 원값 갱신을 진행한다.
+[공통 측정 계약과 전달 상태](timing-measurement-contract.md)에 사례 분류, 원장과 갱신 범위를 기록한다. 담당 세션의 새 판본 평가에는 확정 목표와 점수를 적용하며 과거 혼합 평균이나 화면 응답 수치를 그대로 재사용하지 않는다.
 
 ## 정의, 적용 계약과 증거의 역할
 

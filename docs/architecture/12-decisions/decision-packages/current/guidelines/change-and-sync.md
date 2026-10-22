@@ -1,6 +1,6 @@
 # 변경 영향과 동기화
 
-> **2026-10-23 시간 계약 합의:** QA01-VOICE-v1과 QA03-COMPLETION-v1은 [합의 및 전달 계약](../qa/timing-measurement-contract.md)을 따른다. QA09는 독립 목록에서 제거했다. 사용자가 담당 세션의 새 판본 평가 갱신을 요청했다. 기존 v3/v4와 PPTX는 보존하며 새 계약, 원장, 계산기와 JSON/Excel/HTML 및 해설을 함께 갱신한다. 새 목표/점수가 미정이어도 원값 갱신은 진행하고 예전 점수를 자동 적용하지 않는다. 실제 전달 상태는 계약을 따른다.
+> **2026-10-23 최신 시간 계약:** QA01-VOICE-v2, QA03-COMPLETION-v1과 [측정/전달 계약 v2](../qa/timing-measurement-contract.md)를 따른다. QA01 NORMAL 평균 2초와 WAIT 별도 표시, QA03 평균 5초 및 0~6점이 합의됐다. 계약, 원장, 계산기, JSON/Excel/HTML과 해설을 새 판본으로 갱신하고 기존 결과와 PPTX는 보존한다.
 
 ## 자료별 변경 순서
 

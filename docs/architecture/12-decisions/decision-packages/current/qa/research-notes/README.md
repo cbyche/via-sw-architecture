@@ -13,9 +13,9 @@
 
 | QA | 조사 상세 부록 | 현재 명세 | 발표에 사용할 핵심 자료 |
 | --- | --- | --- | --- |
-| 01 | [음성 목표와 점수 제안](qa01-voice-target-proposal-20261023.md), [이전 화면 조사](qa01-latency-research.md) | [QA01](../qa01-first-response-latency.md) | 평균 2초 목표와 1초 우수선 제안. 음성 연구, 차례 대기 포함과 적용 한계 |
+| 01 | [음성 목표와 점수 근거](qa01-voice-target-rationale.md), [이전 화면 조사](qa01-latency-research.md) | [QA01](../qa01-first-response-latency.md) | 일반 상황 평균 2초, 4초 대비 50% 단축. 차례 대기는 별도 표시 |
 | 02 | [대상 지정 정확도 조사](qa02-accuracy-research.md) | [QA02](../qa02-referent-accuracy.md) | ReALM의 집합 완전 일치율 93%와 VIA 과제의 공통점 및 차이 |
-| 03 | [완료 목표와 점수 제안](qa03-completion-target-proposal-20261023.md), [이전 조사](qa03-duration-research.md) | [QA03](../qa03-via-processing-time.md) | 새 완료 경계에서도 5초를 처리 예산으로 유지하는 제안과 간접 근거의 한계 |
+| 03 | [완료 목표와 점수 근거](qa03-completion-target-rationale.md), [이전 조사](qa03-duration-research.md) | [QA03](../qa03-via-processing-time.md) | Windows 지침에 따른 5초 처리 예산과 1초 우수선 |
 | 04 | [변경 범위 조사](qa04-change-research.md) | [QA04](../qa04-change-scope.md) | ARGO 145건 집계와 40% 개선 요구 및 Rust 모듈 집계 단위 |
 | 05 | [모델 비용 조사](qa05-cost-research.md) | [QA05](../qa05-model-cost.md) | gpt-realtime 공개 단가와 공통 28개 묶음의 상세 견적 |
 | 06 | [RAM 사용량 조사](qa06-memory-research.md) | [QA06](../qa06-local-memory.md) | 사용자 지정 512 MB 요구사항과 기존 조사 이력 및 Windows 계측 한계 |

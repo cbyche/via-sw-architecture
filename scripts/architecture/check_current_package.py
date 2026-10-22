@@ -106,13 +106,14 @@ def main():
         assert len(candidates) == 1, f"QA{number:02d} needs exactly one editable definition"
         if number in (1, 3):
             body = candidates[0].read_text()
-            version = "QA01-VOICE-v1" if number == 1 else "QA03-COMPLETION-v1"
-            assert version in body and "TARGET_PENDING_REVIEW" in body
-            assert "SCORE_BANDS_PENDING" in body and "timing-measurement-contract.md" in body
-            assert not re.search(r"^\|\s*[0-6]\s*\|", body, re.M), (
-                "Pending timing targets must not inherit prior score bands"
-            )
-            continue
+            version = "QA01-VOICE-v2" if number == 1 else "QA03-COMPLETION-v1"
+            score_version = "QA01-VOICE-score-v1" if number == 1 else "QA03-COMPLETION-score-v1"
+            assert version in body and score_version in body
+            assert "USER_AGREED_2026-10-23" in body
+            assert "TARGET_PENDING_REVIEW" not in body and "SCORE_BANDS_PENDING" not in body
+            assert "timing-measurement-contract.md" in body
+            if number == 1:
+                assert all(term in body for term in ("NORMAL", "WAIT_USER", "WAIT_PREVIOUS", "WAIT_BOTH", "N_NORMAL"))
         bands += check_scores(candidates[0])
     meaning = (qa / "qa07-request-meaning-accuracy.md").read_text()
     assert any(
@@ -124,18 +125,11 @@ def main():
     assert not list(qa.glob("qa09-*.md")), "QA09 is no longer a standalone active QA"
     timing = (qa / "timing-measurement-contract.md").read_text()
     assert "01a15dfe-8b3c-7fe3-87ab-750cd0e2db99" in timing
+    assert "VIA-TIMING-CONTRACT-v2" in timing
     assert "USER_AGREED_2026-10-23" in timing
     assert re.search(r"\*\*(?:READY_TO_SEND|SENT) /", timing), "Approved handoff status required"
     for path in qa.glob("qa08-*.md"):
         bands += check_scores(path)
-    # Review proposals have their own bands; pending definitions must not adopt them.
-    for name in (
-        "qa01-voice-target-proposal-20261023.md",
-        "qa03-completion-target-proposal-20261023.md",
-    ):
-        proposal = qa / "research-notes" / name
-        assert "PROPOSAL_ONLY" in proposal.read_text()
-        bands += check_scores(proposal)
     common28 = within_root(required["common28_dataset"])
     counts = validate_common28(json.loads(common28.read_text()))
     deck = within_root(required["presentation"])
