@@ -4,10 +4,13 @@
 
 | corpus와 역할 | 사례와 관측 단위 | 문서와 원장 |
 | --- | --- | --- |
-| 현재 `COMMON-QA-CORPUS-3.0-STRATIFIED` | 26개 사례군, Text, Voice/Screen, Delivery의 세 profile, 9구성 | [v3 구성과 시나리오](../evaluation/common-qa-v3/02-configurations-and-scenarios.md), [계약](../evaluation/common-qa-v3/01-common-contract.md), [통합 JSON](../evaluation/common-qa-v3/artifacts/normalized-data.json), [HTML 탐색기](../evaluation/common-qa-v3/artifacts/outputs/01a15dfe/guide.html) |
+| 현재 `COMMON-QA-MODEL-4.0` | 같은 24입력, 24목표, 33지칭, 6변경 과제, 7구성, 하나의 환경 | [v4 사례](../evaluation/common-qa-v4/02-configurations-and-scenarios.md), [명세](../evaluation/common-qa-v4/specification.json), [평가자 정답](../evaluation/common-qa-v4/oracles.json), [계약](../evaluation/common-qa-v4/01-common-contract.md) |
+| 보존 `COMMON-QA-CORPUS-3.0-STRATIFIED` | 26개 사례군, Text, Voice/Screen, Delivery의 세 profile, 9구성 | [v3 구성과 시나리오](../evaluation/common-qa-v3/02-configurations-and-scenarios.md), [계약](../evaluation/common-qa-v3/01-common-contract.md), [통합 JSON](../evaluation/common-qa-v3/artifacts/normalized-data.json), [HTML 탐색기](../evaluation/common-qa-v3/artifacts/outputs/01a15dfe/guide.html) |
 | 보존된 `COMMON-28-v1` | 대표 에피소드 28개와 지정 반복, 기능 회귀 F01~F18, 변경 C01~C06 | [명세](common-28-v1/common-scenarios.md), [JSON](common-28-v1/common-scenarios.json), [통합 경위](common-28-v1/common-evaluation-population-plan.md) |
 
-## 현재 v3의 분모
+v4는 같은 입력을 모든 구성에 적용하는 분석 모델이며 QA02/QA07의 실제 최초 채택 출력은 없다. 준비 활동을 정확도 분모에 더하지 않는다. 24개 사례는 실제 WAV/화면이 갖춰진 실행 fixture나 독립 통계 반복이 아니다. v3의 원값·분모·고정 정답 조건을 v4 결과로 옮기지 않는다.
+
+## 보존 v3의 분모
 
 | profile | 사례군 | 평가 입력/구성 | 지칭 표현/구성 | 목표/구성 | 별도 준비 활동 |
 | --- | ---: | ---: | ---: | ---: | ---: |

@@ -4,6 +4,8 @@
 
 ## 바로 열기
 
+**네 DP의 숫자를 함께 보려면 [공통 QA v4](evaluation/common-qa-v4/README.md)의 Excel `전체비교` 또는 HTML을 연다.** 같은 24개 입력과 공통 환경에서 한 DP씩 바꾼 분석 모델이다. v3는 보존했으며 실제 관측 없는 QA02/QA07은 미산출이다.
+
 | 작업 | 현재 기준 |
 | --- | --- |
 | DP2 의미 해석 실행 | [설계와 최신 보정](dp02/README.md) |
@@ -12,7 +14,7 @@
 | DP44 음성 실행과 전달 | [설계와 입력, 정정 및 재개](dp44/README.md) |
 | QA 정의, 목표, 점수와 출처 수정 | [QA 작업 기준](qa/README.md) |
 | 사례와 적용 모집단 확인 | [시나리오 안내](scenarios/README.md) |
-| 공통 QA v3 수치, Excel과 HTML | [평가 자료](evaluation/README.md) |
+| 공통 QA v4 수치, Excel과 HTML 및 v3 보존본 | [평가 자료](evaluation/README.md) |
 | PPTX와 36쪽 미리보기 | [현재 발표 v10](presentation/README.md) |
 | PPTX 제작 | [PPTX-GUIDE.md](presentation/PPTX-GUIDE.md) |
 | 설계 그림 작성 | [그림 지침](guidelines/diagram-guide.md) |
@@ -26,10 +28,13 @@
 | 네 DP 설계 | 사용자 확인 파일과 v8/v9/v10의 상세 계약 및 그림 보정 | 현재 설계 설명. 최종 대안의 사용자 채택과 구별한다. |
 | QA01~06 | QA 후보 패키지의 정의, 목표와 0~6점 기준 | 이후 같은 폴더에서 수정 가능하다. 이번 이관에서는 값을 유지했다. |
 | 새 QA07 | [요청 의미 해석 정확도 상세안](qa/qa07-request-meaning-accuracy.md), `QA07-REQ-v1` | 90% 목표와 0~6점, 측정 방법과 근거를 제안했다. 채택과 우선순위는 미합의. 이전 부하 추가 지연과 다른 정의다. |
-| 공통 평가 | COMMON-QA-SYN-3.0 / REVIEW-2 | 3개 profile, 9구성, 26개 사례군의 합성 평가. 서로 다른 profile의 수치를 합산하지 않는다. |
+| 현재 공통 계산 | [COMMON-QA-MODEL-4.0](evaluation/common-qa-v4/README.md) | 같은 24입력과 환경, 7구성. 시간·비용·RAM 조건부 계산, QA04 설계 추정, QA02/07 관측 없음. 실측 아님. |
+| 보존 공통 평가 | COMMON-QA-SYN-3.0 / REVIEW-2 | 3개 profile, 9구성, 26개 사례군의 합성 평가. 서로 다른 profile의 수치를 합산하지 않는다. |
 | 발표 | 36쪽 reference-style v10 | 확인된 PPTX와 미리보기를 그대로 보존했다. 최신 공통 QA v3 전체를 반영한 발표본은 아니다. |
 
 **남아 있는 내용 동기화:** 발표 v10의 기존 PoC, 합성 예시와 미평가 표시는 유지했다. 공통 QA v3를 발표에 어떤 범위로 반영할지는 별도 내용 개정으로 처리한다. QA 목표나 점수가 바뀌어도 기존 원시 결과와 발표 숫자를 자동으로 새 정의의 결과로 바꾸지 않는다. DP44의 과거 음성 QA01 표현은 당시 비교 조건이며 현재 공통 QA01은 화면 표시, 첫 음성은 별도 진단이다.
+
+v4도 발표 v10에는 미반영이다. v4 전체 비교를 발표할 때는 네 DP의 수치·모집단·근거 표기를 함께 개정해야 한다. 이번 변경은 설계와 그림, 기존 점수표를 바꾸지 않았다.
 
 ## 폴더 책임
 
@@ -45,6 +50,7 @@
 
 ```sh
 .venv/bin/python scripts/architecture/check_current_package.py
+.venv/bin/python scripts/architecture/check_common_qa_v4.py
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
 .venv/bin/python scripts/architecture/check_active_terminology.py
 git diff --check

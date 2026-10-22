@@ -1,9 +1,10 @@
 # 평가 계약, 수치와 근거의 현재 진입점
 
-현재 DP2, DP3, DP5, DP44의 공통 평가 문서와 원장, Excel 및 HTML은 [공통 QA v3](common-qa-v3/README.md)에 모았다. 정의, 목표, 점수의 편집 기준은 [QA](../qa/README.md), corpus 구분은 [시나리오](../scenarios/README.md)다.
+현재 DP2, DP3, DP5, DP44의 같은 입력·환경 비교는 [공통 QA v4](common-qa-v4/README.md)에서 읽는다. [Excel 전체비교](common-qa-v4/artifacts/outputs/01a15dfe-v4/VIA-QA-common-v4.xlsx), [HTML 사례 비교](common-qa-v4/artifacts/outputs/01a15dfe-v4/guide.html), [모든 수치](common-qa-v4/03-results-and-ranges.md)를 제공한다. 정의, 목표, 점수의 편집 기준은 [QA](../qa/README.md), corpus 구분은 [시나리오](../scenarios/README.md)다.
 
 | 근거 | 현재 읽을 자료 | 말할 수 있는 범위 |
 | --- | --- | --- |
+| 현재 공통 분석 모델 | [공통 QA v4](common-qa-v4/README.md), [검토](common-qa-v4/04-review-and-validation.md) | 24개 동일 입력, 7구성. 시간·비용·RAM 계산과 모듈 영향 추정. QA02/07 후보 출력 없음. 실측·제품 성능·선택 아님 |
 | 가상 작성 평가 | [공통 QA v3](common-qa-v3/README.md), [수치와 판단](common-qa-v3/03-results-and-decisions.md) | 작성한 구조, 시간, 자원, 오류 가정 안의 상대 비교. 실제 성능, 제품 적합성, 결합 성능을 입증하지 않음 |
 | 출처와 계산 연결 검증 | [원장 및 산출물](common-qa-v3/artifacts/README.md), [이관 및 검토](common-qa-v3/04-migration-and-review.md) | 원장 산술, 같은 파일 세대, Excel, HTML 표시 검증과 실제 확인 한계 |
 | 이전 실제 모델 캠페인 | [이전 실제 모델 캠페인의 보고서](../../seven-problem-review/17-presentation-results.md)의 **§14 현재 결론**, §13 복구, 재채점, §12 이전 부분 중단 기록 | 원래 설계와 계약, 모집단, proxy 관측 범위의 증거. 현재 가상 평가의 실측 근거로 소급하지 않음 |
