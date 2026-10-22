@@ -1,0 +1,3322 @@
+{
+  "version": "COMMON-QA07-CASE-PROPOSAL-6.0",
+  "definition": "QA07-REQUEST-RESPONSE-v2",
+  "population_contract": "QA07-REQUEST-RESPONSE-POP-v2",
+  "audience": "EVALUATOR_ONLY",
+  "status": "PROPOSED_NOT_FROZEN",
+  "planned_case_families": 24,
+  "frozen_denominator": null,
+  "repeat_count": null,
+  "target": null,
+  "score_bands": null,
+  "cases": [
+    {
+      "case_id": "Q7-U01",
+      "source_case_id": "U01",
+      "proposed_root_input": "U01",
+      "linked_inputs": [
+        "U01"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "TCP와 UDP의 차이를 간단히 설명해줘.",
+      "context": "활성 작업 없음. Voice ON.",
+      "obligations": [
+        {
+          "id": "Q7-U01:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U01:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "explain",
+            "targets": [
+              "TCP",
+              "UDP"
+            ],
+            "conditions": {
+              "length": "brief"
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U01",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U01:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "TCP와 UDP의 차이를 간단히 설명한다.",
+          "request_ref": "Q7-U01:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U01:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U01:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U01:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "TCP와 UDP의 차이를 간단히 설명한다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U01:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U01:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U01:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U01:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "answer",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U01:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U02",
+      "source_case_id": "U02",
+      "proposed_root_input": "U02",
+      "linked_inputs": [
+        "U02"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "방금 네 설명의 결론만 한 문장으로 말해줘.",
+      "context": "직전 표시와 실제 전달 기록: 설명 R1은 TCP/UDP 차이.",
+      "obligations": [
+        {
+          "id": "Q7-U02:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U02:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "summarize",
+            "targets": [
+              "R1"
+            ],
+            "conditions": {
+              "length": "one_sentence"
+            },
+            "request_relation": "follow_up"
+          },
+          "referent_oracle": [
+            [
+              "R1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U02",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U02:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "실제 전달한 R1의 결론을 한 문장으로 요약한다. 다른 응답을 요약하지 않는다.",
+          "request_ref": "Q7-U02:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U02:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U02:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U02:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "실제 전달한 R1의 결론을 한 문장으로 요약한다. 다른 응답을 요약하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U02:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U02:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U02:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U02:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "answer",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U02:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U03",
+      "source_case_id": "U03",
+      "proposed_root_input": "U03",
+      "linked_inputs": [
+        "U03"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "자료 D1의 결론을 설명해줘.",
+      "context": "D1@v1: 공통 허용 원본. 파일 ID가 명시됨. 결론 본문은 이미 제공되며 새 외부 조사/파일 편집 없음.",
+      "obligations": [
+        {
+          "id": "Q7-U03:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U03:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "explain",
+            "targets": [
+              "D1@v1"
+            ],
+            "conditions": {
+              "section": "conclusion"
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "D1@v1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U03",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U03:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "제공된 D1@v1 결론을 설명한다. 원문에 없는 조사 결과를 추가하지 않는다.",
+          "request_ref": "Q7-U03:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U03:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U03:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U03:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "제공된 D1@v1 결론을 설명한다. 원문에 없는 조사 결과를 추가하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U03:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U03:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U03:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U03:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U03:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U04",
+      "source_case_id": "U04",
+      "proposed_root_input": "U04",
+      "linked_inputs": [
+        "U04"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "조사는 계속하고 TCP의 특징을 알려줘.",
+      "context": "Research Task T1은 외부 Agent 결과 대기. VIA 모델 슬롯은 점유하지 않음.",
+      "obligations": [
+        {
+          "id": "Q7-U04:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U04:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "explain",
+            "targets": [
+              "TCP"
+            ],
+            "conditions": {
+              "keep_task": "T1"
+            },
+            "request_relation": "independent"
+          },
+          "referent_oracle": [
+            [
+              "T1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U04",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U04:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "TCP의 특징을 설명하고 조사 T1을 유지한다. 조사가 끝났다고 주장하지 않는다.",
+          "request_ref": "Q7-U04:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U04:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U04:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U04:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "TCP의 특징을 설명하고 조사 T1을 유지한다. 조사가 끝났다고 주장하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U04:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U04:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U04:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U04:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "answer",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U04:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U05",
+      "source_case_id": "U05",
+      "proposed_root_input": "U05",
+      "linked_inputs": [
+        "U05"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "D1 비교는 계속하고 TCP와 UDP 차이도 알려줘.",
+      "context": "D1 비교의 모델 step이 -1초 시작. 현재 대화의 step이며 원래 목표는 계속 유지.",
+      "obligations": [
+        {
+          "id": "Q7-U05:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U05:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "explain",
+            "targets": [
+              "TCP",
+              "UDP"
+            ],
+            "conditions": {
+              "keep_comparison": "D1"
+            },
+            "request_relation": "independent"
+          },
+          "referent_oracle": [
+            [
+              "D1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U05",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U05:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "TCP와 UDP 차이를 설명하고 진행 중인 D1 비교를 유지한다.",
+          "request_ref": "Q7-U05:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U05:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U05:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U05:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "TCP와 UDP 차이를 설명하고 진행 중인 D1 비교를 유지한다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U05:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U05:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U05:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U05:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "answer",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U05:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U06",
+      "source_case_id": "U06",
+      "proposed_root_input": "U06",
+      "linked_inputs": [
+        "U06"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "D1 분석은 유지하고 D2의 결론도 설명해줘.",
+      "context": "D1 모델 step이 -1초 시작. D2는 별도 허용 원본. 결론 본문은 이미 제공되며 새 외부 조사/파일 편집 없음.",
+      "obligations": [
+        {
+          "id": "Q7-U06:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U06:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "explain",
+            "targets": [
+              "D2"
+            ],
+            "conditions": {
+              "section": "conclusion",
+              "keep_analysis": "D1"
+            },
+            "request_relation": "independent"
+          },
+          "referent_oracle": [
+            [
+              "D1"
+            ],
+            [
+              "D2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U06",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U06:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "제공된 D2 결론을 설명하고 D1 분석을 유지한다. 두 자료의 결론을 섞지 않는다.",
+          "request_ref": "Q7-U06:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U06:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U06:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U06:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "제공된 D2 결론을 설명하고 D1 분석을 유지한다. 두 자료의 결론을 섞지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U06:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U06:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U06:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U06:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U06:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U07",
+      "source_case_id": "U07",
+      "proposed_root_input": "U07",
+      "linked_inputs": [
+        "U07"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "진행 중인 일은 유지하고 D2의 핵심도 알려줘.",
+      "context": "현재 대화 step과 다른 대화 step이 -1초부터 공통 두 모델 슬롯을 점유. 결론 본문은 이미 제공되며 새 외부 조사/파일 편집 없음.",
+      "obligations": [
+        {
+          "id": "Q7-U07:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U07:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "explain",
+            "targets": [
+              "D2"
+            ],
+            "conditions": {
+              "keep_existing_tasks": true
+            },
+            "request_relation": "independent"
+          },
+          "referent_oracle": [
+            [
+              "D2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U07",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U07:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "제공된 D2의 핵심을 설명하고 기존 업무를 유지한다.",
+          "request_ref": "Q7-U07:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U07:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U07:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U07:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "제공된 D2의 핵심을 설명하고 기존 업무를 유지한다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U07:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U07:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U07:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U07:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U07:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U08",
+      "source_case_id": "U08",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U08"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "방금 읽는 D1에서 확인한 수치를 기준으로 범위를 비용만으로 바꿔줘.",
+      "context": "기존 목표 T1은 -6초 시작. 최초 해석 2초 후 새 입력 대기. -1초 시작한 읽기 결과가 정정 판단에 필수. v5 범위 명시: T1은 VIA가 작성 중인 설명이며 Agent 업무 수정 아님.",
+      "obligations": [
+        {
+          "id": "Q7-U08:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U08:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "revise",
+            "targets": [
+              "D1"
+            ],
+            "conditions": {
+              "scope": "cost_only",
+              "use_current_read": true
+            },
+            "request_relation": "revise_VIA_explanation_T1"
+          },
+          "referent_oracle": [
+            [
+              "D1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U08",
+          "legacy_oracle_note": "U08의 T1은 v5에 명시된 VIA 설명"
+        },
+        {
+          "id": "Q7-U08:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U08:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U08:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "현재 읽기에서 확인한 D1 수치를 사용해 VIA 설명 범위만 비용으로 정정한다. Agent 업무를 수정하지 않는다.",
+          "request_ref": "Q7-U08:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U08:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U08:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U08:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "현재 읽기에서 확인한 D1 수치를 사용해 VIA 설명 범위만 비용으로 정정한다. Agent 업무를 수정하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U08:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U08:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U08:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U08:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U08:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U09",
+      "source_case_id": "U09",
+      "proposed_root_input": "U09",
+      "linked_inputs": [
+        "U09"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "선택한 두 견적을 비교해줘.",
+      "context": "Native selection에는 Q1@v1와 Q2@v1이 선택된 사실이 노출됨.",
+      "obligations": [
+        {
+          "id": "Q7-U09:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare",
+            "targets": [
+              "Q1@v1",
+              "Q2@v1"
+            ],
+            "conditions": {},
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "Q1@v1",
+              "Q2@v1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U09",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U09:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "선택된 Q1@v1과 Q2@v1 비교 요청을 안내하고 접수와 실제 결과를 구별한다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U09:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "event_ref": "U09:result"
+        },
+        {
+          "id": "Q7-U09:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U09:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "선택된 Q1@v1과 Q2@v1 비교 요청을 안내하고 접수와 실제 결과를 구별한다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U09:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U09:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U09:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U09:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U09:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U09:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.66,
+          "received_s": 9.7,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U09:user",
+        "U09:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U10",
+      "source_case_id": "U10",
+      "proposed_root_input": "U10",
+      "linked_inputs": [
+        "U10"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "내가 원으로 표시한 두 카드를 비교해줘.",
+      "context": "처음 보는 화면. 원 궤적 안 카드 Q1/Q2, 바깥 Q3. 원본 좌표와 궤적 명세 제공.",
+      "obligations": [
+        {
+          "id": "Q7-U10:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare",
+            "targets": [
+              "Q1",
+              "Q2"
+            ],
+            "conditions": {
+              "exclude_outside_circle": true
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "Q1",
+              "Q2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U10",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U10:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "원 안 Q1/Q2만 비교한다. 원 밖 Q3을 포함하지 않는다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U10:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "event_ref": "U10:result"
+        },
+        {
+          "id": "Q7-U10:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U10:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "원 안 Q1/Q2만 비교한다. 원 밖 Q3을 포함하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U10:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U10:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U10:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U10:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U10:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U10:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.88,
+          "received_s": 9.92,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U10:user",
+        "U10:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U11",
+      "source_case_id": "U11",
+      "proposed_root_input": "U11",
+      "linked_inputs": [
+        "U11"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "처음 가리킨 견적과 화면 이동 뒤 가리킨 견적을 비교해줘.",
+      "context": "두 frame의 포인터와 Q1/Q2 이동 기록. UI 후보에 더해 시간 대응 필요. 사전 시각 작업은 없음.",
+      "obligations": [
+        {
+          "id": "Q7-U11:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare",
+            "targets": [
+              "Q1",
+              "Q2"
+            ],
+            "conditions": {
+              "use_two_pointing_times": true
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "Q1"
+            ],
+            [
+              "Q2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U11",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U11:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "서로 다른 두 시점에 가리킨 Q1/Q2를 비교한다. 현재 화면의 다른 항목으로 바꾸지 않는다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U11:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "event_ref": "U11:result"
+        },
+        {
+          "id": "Q7-U11:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U11:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "서로 다른 두 시점에 가리킨 Q1/Q2를 비교한다. 현재 화면의 다른 항목으로 바꾸지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U11:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U11:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U11:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U11:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U11:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U11:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 10.18,
+          "received_s": 10.219999999999999,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U11:user",
+        "U11:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U12",
+      "source_case_id": "U12",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U12"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "같은 화면에서 확정한 두 견적의 납기만 비교해줘.",
+      "context": "-12초부터 두 안이 같은 선행 화면을 처리하고 Q1/Q2를 확정한 조건. 현재 원본과 권한은 동일.",
+      "obligations": [
+        {
+          "id": "Q7-U12:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare",
+            "targets": [
+              "Q1",
+              "Q2"
+            ],
+            "conditions": {
+              "scope": "delivery_date_only"
+            },
+            "request_relation": "follow_up"
+          },
+          "referent_oracle": [
+            [
+              "Q1",
+              "Q2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U12",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U12:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U12:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "이미 확정한 Q1/Q2의 납기만 비교한다. 비교 범위를 임의로 넓히지 않는다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U12:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "event_ref": "U12:result"
+        },
+        {
+          "id": "Q7-U12:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U12:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "이미 확정한 Q1/Q2의 납기만 비교한다. 비교 범위를 임의로 넓히지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U12:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U12:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U12:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U12:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U12:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U12:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.66,
+          "received_s": 9.7,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U12:user",
+        "U12:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U13",
+      "source_case_id": "U13",
+      "proposed_root_input": "U13",
+      "linked_inputs": [
+        "U13"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "자료 D2를 작성한 Agent에게 새 발표를 맡겨줘.",
+      "context": "실행 원장: D2@v1의 작성자 P. 명시적 코드 조회만 필요.",
+      "obligations": [
+        {
+          "id": "Q7-U13:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "delegate_presentation",
+            "targets": [
+              "P"
+            ],
+            "conditions": {
+              "author_of": "D2"
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "D2"
+            ],
+            [
+              "P"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U13",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U13:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "D2 작성 Agent P에게 새 발표를 맡긴다는 요청을 안내한다. 접수만으로 완성됐다고 하지 않는다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U13:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "event_ref": "U13:result"
+        },
+        {
+          "id": "Q7-U13:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U13:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "D2 작성 Agent P에게 새 발표를 맡긴다는 요청을 안내한다. 접수만으로 완성됐다고 하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U13:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U13:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U13:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U13:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U13:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U13:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.34,
+          "received_s": 9.379999999999999,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U13:user",
+        "U13:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U14",
+      "source_case_id": "U14",
+      "proposed_root_input": "U14",
+      "linked_inputs": [
+        "U14"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "아까 구성이 좋다고 했던 자료의 형식으로 이번 조사를 정리해줘.",
+      "context": "-8초 피드백 F1: D2를 표시하며 외부 고객용 구성이 좋다고 말함. D3도 존재. 관계는 현재 요청에서 처음 사용.",
+      "obligations": [
+        {
+          "id": "Q7-U14:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "organize_research",
+            "targets": [
+              "current_research"
+            ],
+            "conditions": {
+              "format_source": "D2",
+              "audience": "external_customer"
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "D2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U14",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U14:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "D2의 선호 형식과 외부 고객용 범위를 이번 조사에 적용한다. D3이나 내부 회의 선호로 대체하지 않는다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U14:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "event_ref": "U14:result"
+        },
+        {
+          "id": "Q7-U14:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U14:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "D2의 선호 형식과 외부 고객용 범위를 이번 조사에 적용한다. D3이나 내부 회의 선호로 대체하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U14:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U14:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U14:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U14:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U14:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U14:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.98,
+          "received_s": 10.02,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U14:user",
+        "U14:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U15",
+      "source_case_id": "U15",
+      "proposed_root_input": "U15",
+      "linked_inputs": [
+        "U15"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "지난번 확정했던 D2 형식을 이번 자료에도 적용해줘.",
+      "context": "D2 형식 선호와 적용 범위는 이미 사용자와 확정해 공통 사실로 저장.",
+      "obligations": [
+        {
+          "id": "Q7-U15:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "apply_format",
+            "targets": [
+              "current_material"
+            ],
+            "conditions": {
+              "format_source": "D2",
+              "reuse_confirmed_fact": true
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "D2"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U15",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U15:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "이미 확정된 D2 형식을 이번 자료에 적용한다. 불필요한 재확인을 필수 조건으로 만들지 않는다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U15:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "event_ref": "U15:result"
+        },
+        {
+          "id": "Q7-U15:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U15:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "이미 확정된 D2 형식을 이번 자료에 적용한다. 불필요한 재확인을 필수 조건으로 만들지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U15:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U15:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U15:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U15:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U15:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U15:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.34,
+          "received_s": 9.379999999999999,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U15:user",
+        "U15:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U16",
+      "source_case_id": "U16",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U16"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "방금 정정한 피드백을 반영해 내부 회의용으로 다시 만들어줘.",
+      "context": "기존 T1은 -6초 시작해 최초 해석 2초 수행. -0.2초 피드백: D2 구성 선호를 내부 회의에는 적용하지 않음. 원본 보완 필요. 기존 Agent 업무의 revision 갱신 접수 확인과 새 결과까지 필요.",
+      "obligations": [
+        {
+          "id": "Q7-U16:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "revise",
+            "targets": [
+              "T1"
+            ],
+            "conditions": {
+              "audience": "internal_meeting",
+              "apply_D2_preference": false,
+              "feedback": "latest_F1"
+            },
+            "request_relation": "revise_T1"
+          },
+          "referent_oracle": [
+            [
+              "F1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U16",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U16:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U16:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "최신 F1과 내부 회의용 조건을 반영한다. 내부 회의에 적용하지 않기로 한 D2 선호를 다시 적용하지 않는다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U16:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "latest_after_correction",
+          "event_ref": "U16:result"
+        },
+        {
+          "id": "Q7-U16:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U16:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "최신 F1과 내부 회의용 조건을 반영한다. 내부 회의에 적용하지 않기로 한 D2 선호를 다시 적용하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U16:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U16:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U16:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U16:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U16:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U16:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.98,
+          "received_s": 10.02,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U16:user",
+        "U16:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U17",
+      "source_case_id": "U17",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U17"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "대기 중인 메일 질문부터 읽어줘.",
+      "context": "Mail Agent의 Q1 질문 텍스트가 -2초 도착, UI 표시됨. 새 입력에 대한 수행 안내는 아직 없음. v5: 지정 Agent 시각은 외부 최초 제공이며 VIA 수신은 네트워크0.04초 뒤, 내용 채택은 추가0.03초 뒤다. 이전 UI 표시는 수신/채택 뒤로 구체화한다.",
+      "obligations": [
+        {
+          "id": "Q7-U17:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "read",
+            "targets": [
+              "Q1"
+            ],
+            "conditions": {
+              "priority": "first"
+            },
+            "request_relation": "new_delivery"
+          },
+          "referent_oracle": [
+            [
+              "Q1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U17",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U17:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U17:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "메일 Q1 질문을 먼저 읽는다. 답을 임의로 만들어 Agent에게 제공하지 않는다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U17:C-question",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "해당 메일/일정 질문의 출처와 현재 유효성을 보존한다. 준비 시점과 전달 시점의 판정을 구별한다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "event_ref": "U17:question"
+        },
+        {
+          "id": "Q7-U17:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U17:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "메일 Q1 질문을 먼저 읽는다. 답을 임의로 만들어 Agent에게 제공하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U17:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U17:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        }
+      ],
+      "events": [
+        {
+          "id": "U17:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U17:question",
+          "kind": "AGENT_QUESTION",
+          "profile": "WAIT_USER",
+          "source_s": -2,
+          "received_s": -1.96,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U17:user",
+        "U17:question"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U18",
+      "source_case_id": "U18",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U18"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "보고서 안내는 철회하고 메일 질문만 읽어줘.",
+      "context": "-2초 메일 질문 Q1 8초와 보고서 안내 R1 10초 도착. 현재 입력은 R1 음성 의무만 철회. 보고서 업무 취소 아님. v5: 지정 Agent 시각은 외부 최초 제공이며 VIA 수신은 네트워크0.04초 뒤, 내용 채택은 추가0.03초 뒤다. 이전 UI 표시는 수신/채택 뒤로 구체화한다.",
+      "obligations": [
+        {
+          "id": "Q7-U18:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "read",
+            "targets": [
+              "Q1"
+            ],
+            "conditions": {
+              "withdraw_audio": "R1",
+              "cancel_report_task": false
+            },
+            "request_relation": "new_delivery"
+          },
+          "referent_oracle": [
+            [
+              "R1"
+            ],
+            [
+              "Q1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U18",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U18:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U18:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "보고서 R1의 음성 안내만 철회하고 메일 Q1을 읽는다. 보고서 Task 자체를 취소하지 않는다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U18:C-question",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "해당 메일/일정 질문의 출처와 현재 유효성을 보존한다. 준비 시점과 전달 시점의 판정을 구별한다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "event_ref": "U18:question"
+        },
+        {
+          "id": "Q7-U18:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U18:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "보고서 R1의 음성 안내만 철회하고 메일 Q1을 읽는다. 보고서 Task 자체를 취소하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U18:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U18:D-withdraw",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "R1 안내의 정상 폐기를 확인하고 이후 재소비/재개에서도 출력하지 않는다. Q1 전달 의무는 남는다.",
+          "request_ref": "Q7-U18:request",
+          "revision": "current",
+          "event_ref": "U18:withdrawn",
+          "allowed_disposition": "NORMAL_DISCARD"
+        }
+      ],
+      "events": [
+        {
+          "id": "U18:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U18:question",
+          "kind": "AGENT_QUESTION",
+          "profile": "WAIT_USER",
+          "source_s": -2,
+          "received_s": -1.96,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U18:withdrawn",
+          "kind": "AGENT_NOTICE",
+          "profile": "WAIT_USER",
+          "source_s": -2,
+          "received_s": -1.96,
+          "segment_id": null,
+          "status": "WITHDRAWN_BEFORE_AUDIO"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U18:user",
+        "U18:question",
+        "U18:withdrawn"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U19",
+      "source_case_id": "U19",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U19"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "메일 질문을 먼저 읽고 중단한 설명으로 돌아가줘.",
+      "context": "v5 선후 수정: R0 36초 생성은 -4초 시작. 첫 유효 출력 뒤 -3초 사용자 발화로 중단. Q1은 -0.5초 제공. 재생한 prefix는 재개에서 제외하고 유효 buffer는 양안 보존. v5: 지정 Agent 시각은 외부 최초 제공이며 VIA 수신은 네트워크0.04초 뒤, 내용 채택은 추가0.03초 뒤다. 이전 UI 표시는 수신/채택 뒤로 구체화한다.",
+      "obligations": [
+        {
+          "id": "Q7-U19:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "read_then_resume",
+            "targets": [
+              "Q1",
+              "R0"
+            ],
+            "conditions": {
+              "order": [
+                "Q1",
+                "R0"
+              ],
+              "reuse_valid_audio": true
+            },
+            "request_relation": "new_delivery"
+          },
+          "referent_oracle": [
+            [
+              "Q1"
+            ],
+            [
+              "R0"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U19",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U19:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U19:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "메일 Q1을 먼저 읽고 중단한 R0의 남은 유효 내용으로 돌아간다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U19:C-question",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "해당 메일/일정 질문의 출처와 현재 유효성을 보존한다. 준비 시점과 전달 시점의 판정을 구별한다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "event_ref": "U19:question"
+        },
+        {
+          "id": "Q7-U19:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U19:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "메일 Q1을 먼저 읽고 중단한 R0의 남은 유효 내용으로 돌아간다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U19:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U19:D-resume",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "실제 중단까지 전달한 prefix와 재개 offset을 대조한다. 유효 잔여를 빠짐없이 한 번만 전달한다.",
+          "request_ref": "Q7-U19:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        }
+      ],
+      "events": [
+        {
+          "id": "U19:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U19:question",
+          "kind": "AGENT_QUESTION",
+          "profile": "WAIT_USER",
+          "source_s": -0.5,
+          "received_s": -0.46,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U19:user",
+        "U19:question"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U20",
+      "source_case_id": "U20",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U20"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "VIA_LOCAL",
+      "text": "완성된 설명을 멈춘 위치부터 이어 읽어줘.",
+      "context": "유효 R0 audio 12초가 공통 초기 상태에 존재. 재생 중단 위치가 기록됨. 새 생성 필요 없음.",
+      "obligations": [
+        {
+          "id": "Q7-U20:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "resume",
+            "targets": [
+              "R0"
+            ],
+            "conditions": {
+              "from_actual_stop": true
+            },
+            "request_relation": "new_delivery"
+          },
+          "referent_oracle": [
+            [
+              "R0"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U20",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U20:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U20:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "R0를 실제 중단 위치부터 이어 읽는다. 이미 전달한 부분을 처음부터 반복하거나 남은 부분을 누락하지 않는다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U20:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U20:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "R0를 실제 중단 위치부터 이어 읽는다. 이미 전달한 부분을 처음부터 반복하거나 남은 부분을 누락하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U20:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U20:D-resume",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "실제 중단까지 전달한 prefix와 재개 offset을 대조한다. 유효 잔여를 빠짐없이 한 번만 전달한다.",
+          "request_ref": "Q7-U20:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        }
+      ],
+      "events": [
+        {
+          "id": "U20:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "resume",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U20:user"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U21",
+      "source_case_id": "U21",
+      "proposed_root_input": "U21",
+      "linked_inputs": [
+        "U21"
+      ],
+      "grouping_reason": "독립 fixture의 시작 요청 묶음",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "선택한 두 견적을 아까 좋다고 한 표 형식으로 비교해줘. 보고서는 계속해.",
+      "context": "새 화면 Q1/Q2, -8초 D2 표 형식 피드백, 별도 보고서 T1 모델 step -1초 시작. 모두 허용 원본.",
+      "obligations": [
+        {
+          "id": "Q7-U21:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare",
+            "targets": [
+              "Q1",
+              "Q2"
+            ],
+            "conditions": {
+              "format_source": "D2",
+              "keep_task": "T1"
+            },
+            "request_relation": "independent"
+          },
+          "referent_oracle": [
+            [
+              "Q1",
+              "Q2"
+            ],
+            [
+              "D2"
+            ],
+            [
+              "T1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U21",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U21:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Q1/Q2를 D2 표 형식으로 비교하고 별도 보고서 T1을 유지한다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U21:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "event_ref": "U21:result"
+        },
+        {
+          "id": "Q7-U21:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U21:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Q1/Q2를 D2 표 형식으로 비교하고 별도 보고서 T1을 유지한다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U21:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U21:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U21:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U21:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U21:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U21:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 12.3,
+          "received_s": 12.34,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U21:user",
+        "U21:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT"
+      ]
+    },
+    {
+      "case_id": "Q7-U22",
+      "source_case_id": "U22",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U22"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "MIXED",
+      "text": "새 화면의 두 카드를 비교하고 일정 질문부터 읽어줘.",
+      "context": "-12초 이전 viewport 처리를 완료한 뒤 현재는 새 viewport. 일정 Q1은 -2초 도착. 동일 모델 상주와 새 후보 생산을 구별. v5: 지정 Agent 시각은 외부 최초 제공이며 VIA 수신은 네트워크0.04초 뒤, 내용 채택은 추가0.03초 뒤다. 이전 UI 표시는 수신/채택 뒤로 구체화한다.",
+      "obligations": [
+        {
+          "id": "Q7-U22:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare_and_read",
+            "targets": [
+              "Q1",
+              "Q2",
+              "calendar_question"
+            ],
+            "conditions": {
+              "read_first": "calendar_question"
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "Q1",
+              "Q2"
+            ],
+            [
+              "calendar_question"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U22",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U22:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U22:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "새 화면 Q1/Q2 비교와 일정 질문 읽기를 각각 연결한다. 일정 질문을 먼저 읽고 결과를 혼동하지 않는다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U22:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "event_ref": "U22:result"
+        },
+        {
+          "id": "Q7-U22:C-question",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "해당 메일/일정 질문의 출처와 현재 유효성을 보존한다. 준비 시점과 전달 시점의 판정을 구별한다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "event_ref": "U22:question"
+        },
+        {
+          "id": "Q7-U22:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U22:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "새 화면 Q1/Q2 비교와 일정 질문 읽기를 각각 연결한다. 일정 질문을 먼저 읽고 결과를 혼동하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U22:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U22:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U22:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U22:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U22:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U22:question",
+          "kind": "AGENT_QUESTION",
+          "profile": "WAIT_USER",
+          "source_s": -2,
+          "received_s": -1.96,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U22:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.96,
+          "received_s": 10.0,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U22:user",
+        "U22:question",
+        "U22:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U23",
+      "source_case_id": "U23",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U23"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "MIXED",
+      "text": "D2에서 확인한 형식으로 새 자료를 만들고 기존 메일 질문을 먼저 읽어줘.",
+      "context": "D2 형식은 미확정 피드백 관계로 -8초 원본 도착. 메일 질문은 -2초 도착. 기존 설명 R0의 유효 buffer는 유지. Voice ON 질문은 -2초에 외부 제공되고 수신·채택 후 자동 선택됨. Text 제출은 재생을 중단하지 않음. 새 입력 안내는 질문 다음 별도 구간. v5: 지정 Agent 시각은 외부 최초 제공이며 VIA 수신은 네트워크0.04초 뒤, 내용 채택은 추가0.03초 뒤다. 이전 UI 표시는 수신/채택 뒤로 구체화한다. 보존 R0 buffer의 잔여 길이는 양안 공통12초로 고정하며 메모리에 포함한다.",
+      "obligations": [
+        {
+          "id": "Q7-U23:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "create_and_read",
+            "targets": [
+              "new_material",
+              "mail_question"
+            ],
+            "conditions": {
+              "format_source": "D2",
+              "read_first": "mail_question"
+            },
+            "request_relation": "new"
+          },
+          "referent_oracle": [
+            [
+              "D2"
+            ],
+            [
+              "mail_question"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U23",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U23:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U23:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "D2 형식의 새 자료 작성과 기존 메일 질문 읽기를 연결한다. 입력 전에 정당하게 시작한 질문을 중복 출력하지 않는다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U23:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "event_ref": "U23:result"
+        },
+        {
+          "id": "Q7-U23:C-question",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "해당 메일/일정 질문의 출처와 현재 유효성을 보존한다. 준비 시점과 전달 시점의 판정을 구별한다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "event_ref": "U23:question"
+        },
+        {
+          "id": "Q7-U23:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U23:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "D2 형식의 새 자료 작성과 기존 메일 질문 읽기를 연결한다. 입력 전에 정당하게 시작한 질문을 중복 출력하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U23:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U23:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U23:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U23:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U23:user",
+          "kind": "USER_INPUT",
+          "profile": "WAIT_PREVIOUS",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U23:question",
+          "kind": "AGENT_QUESTION",
+          "profile": "NORMAL",
+          "source_s": -2,
+          "received_s": -1.96,
+          "segment_id": "question",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U23:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 9.74,
+          "received_s": 9.78,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U23:user",
+        "U23:question",
+        "U23:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    },
+    {
+      "case_id": "Q7-U24",
+      "source_case_id": "U24",
+      "proposed_root_input": null,
+      "linked_inputs": [
+        "U24"
+      ],
+      "grouping_reason": "선행 요청/정정/전달 제어 연결을 복원한 뒤 사례 경계 검토",
+      "independent_fixture": true,
+      "shared_context_only": true,
+      "routing": "DELEGATED",
+      "text": "지금 가리킨 두 항목을 방금 정정한 조건으로 비교해줘.",
+      "context": "신규 두 frame 화면의 Q1/Q2 추적과 원본 보완 필요. -0.2초 피드백 정정. -1초 현재 대화 모델 step 진행. 기존 T1 목표는 -6초 시작해 최초 해석 2초 수행. 기존 Agent 업무의 revision 갱신 접수 확인과 새 결과까지 필요.",
+      "obligations": [
+        {
+          "id": "Q7-U24:I-current",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "최초로 실제 사용한 해석에서 모든 요청, 대상, 제한, 유지와 연결 의미를 충족한다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "expected_meaning": {
+            "action": "compare",
+            "targets": [
+              "Q1",
+              "Q2"
+            ],
+            "conditions": {
+              "feedback": "latest_F1",
+              "use_two_pointing_times": true
+            },
+            "request_relation": "revise_T1"
+          },
+          "referent_oracle": [
+            [
+              "Q1",
+              "Q2"
+            ],
+            [
+              "F1"
+            ]
+          ],
+          "forbidden": "조기 오확정 또는 이후 복구로 최초 오류를 덮어쓰기",
+          "source_input": "U24",
+          "legacy_oracle_note": null
+        },
+        {
+          "id": "Q7-U24:I-origin",
+          "stage": "REQUEST_INTERPRETATION",
+          "requirement": "연결된 원래 요청과 최초 확정 증거를 복원한다. 현재 제어/정정 해석만으로 전체 성공을 인정하지 않는다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "source_input": null,
+          "expected_meaning": null,
+          "prerequisite_status": "SOURCE_REQUEST_AND_ORACLE_PENDING"
+        },
+        {
+          "id": "Q7-U24:C-current",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "두 시점의 Q1/Q2와 최신 F1 조건으로 기존 비교 요청을 정정한다. 이전 판본 결과를 현재 결과로 안내하지 않는다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "allowed": "의미를 보존하는 표현, 요약과 사례에 등록된 정상 폐기",
+          "forbidden": "잘못된 Task/판본/수신자 연결, 근거 없는 완료 주장 또는 채택 후 실패 은폐"
+        },
+        {
+          "id": "Q7-U24:C-result",
+          "stage": "RESPONSE_COMPOSITION",
+          "requirement": "Agent가 실제 제공한 결과/실패 상태와 해당 요청 판본에 맞게 결과 안내를 구성한다. Agent 업무 품질 자체는 별도다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "latest_after_correction",
+          "event_ref": "U24:result"
+        },
+        {
+          "id": "Q7-U24:D-screen",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "필수 상세 응답이 올바른 Request/Task UI에 실제 표시된 내용과 판본을 확인한다. accept/queue 기록만으로 통과하지 않는다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "channels": [
+            "screen"
+          ]
+        },
+        {
+          "id": "Q7-U24:D-audio",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "두 시점의 Q1/Q2와 최신 F1 조건으로 기존 비교 요청을 정정한다. 이전 판본 결과를 현재 결과로 안내하지 않는다. 실제 가청 구간, 순서, 재개 위치와 필수 음성 요약을 확인한다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "channels": [
+            "audio"
+          ]
+        },
+        {
+          "id": "Q7-U24:D-close",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "마지막 필수 사건과 후속 관측창 종료까지 누락, 중복, 구판본 및 금지 재전달이 없음을 확인한다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "observation_end_s": null
+        },
+        {
+          "id": "Q7-U24:D-result",
+          "stage": "ACTUAL_DELIVERY",
+          "requirement": "Agent 결과의 화면 상세와 음성 요약을 실제 전달하고 현재 요청/판본에 연결한다.",
+          "request_ref": "Q7-U24:request",
+          "revision": "current",
+          "channels": [
+            "screen",
+            "audio"
+          ],
+          "event_ref": "U24:result"
+        }
+      ],
+      "events": [
+        {
+          "id": "U24:user",
+          "kind": "USER_INPUT",
+          "profile": "NORMAL",
+          "source_s": 0,
+          "received_s": 0,
+          "segment_id": "intent",
+          "status": "ANALYTICAL_ONSET"
+        },
+        {
+          "id": "U24:result",
+          "kind": "AGENT_RESULT",
+          "profile": "NORMAL",
+          "source_s": 12.600000000000001,
+          "received_s": 12.64,
+          "segment_id": "final",
+          "status": "ANALYTICAL_ONSET"
+        }
+      ],
+      "event_evidence": "ANALYTICAL_REFERENCE_NOT_OBSERVATION",
+      "source_event_rule": "사용자 일정과 외부 업무 길이를 v5대로 유지. 후보별 Agent 결과 수신 시각은 해당 ledger를 참조한다.",
+      "required_final_events": [
+        "U24:user",
+        "U24:result"
+      ],
+      "functional_deadline_s": null,
+      "post_observation_s": null,
+      "clock_tolerance_s": null,
+      "contract_ready": false,
+      "common_invalid_evidence": null,
+      "blockers": [
+        "CASE_GROUPING_REVIEW",
+        "REPEAT_COUNT_PENDING",
+        "FUNCTIONAL_DEADLINE_PENDING",
+        "POST_OBSERVATION_WINDOW_PENDING",
+        "CONTENT_AND_PHYSICAL_TRACES_ABSENT",
+        "ORIGIN_REQUEST_EVIDENCE_PENDING",
+        "RACE_AND_CLOCK_POLICY_PENDING"
+      ]
+    }
+  ],
+  "coverage_gaps": [
+    "모호한 입력의 실제 명확화 질문과 사용자 답 연결이 없음",
+    "Agent 실패/거부/승인 사건을 실행하는 fixture가 없음",
+    "화면 전용과 수신 범위 변경은 Voice ON 원전의 커버리지 밖",
+    "일부 선행 요청 원문과 최초 확정 및 실제 중단 이력이 없음"
+  ]
+}

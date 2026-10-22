@@ -2,13 +2,16 @@
 
 > **QA07 판본 구분:** 현재 [QA07-REQUEST-RESPONSE-v2](../qa/qa07-request-meaning-accuracy.md)는 요청 해석과 응답 구성/실제 전달까지 확장됐다. 아래 기존 판본의 입력 단위 QA07 값/정답은 당시 계약으로 보존하며 새 사례별 전체 충족률로 재명명하지 않는다. 새 분모와 관측 종료 및 목표/점수는 검토 중이다.
 
-> **현재 v5:** 입력별 VIA/Agent 책임, 음성42예정 사건의 NORMAL/WAIT 분류와24목표 완료 의무를 명시했다. [현재 계약](../qa/timing-measurement-contract.md)을 적용하며 이전 v4/v3는 보존한다.
+> **현재 v6:** [QA07 사례 매핑](../evaluation/common-qa-v6/02-qa07-case-mapping.md)과 [의무 manifest](../evaluation/common-qa-v6/qa07-case-manifest.json)를 추가했다. 24입력을 사례 검토안에 연결했으며 새 확정 분모로 쓰지 않는다.
+
+> **보존 v5:** 입력별 VIA/Agent 책임, 음성42예정 사건의 NORMAL/WAIT 분류와24목표 완료 의무를 명시했다. [현재 계약](../qa/timing-measurement-contract.md)을 적용하며 이전 v4/v3는 보존한다.
 
 현재 네 DP의 가상 평가와 과거 목표 도출, 회귀 카탈로그를 이곳에서 구별해 연다. 이름에 모두 공통이 들어가더라도 같은 corpus로 합치지 않는다.
 
 | corpus와 역할 | 사례와 관측 단위 | 문서와 원장 |
 | --- | --- | --- |
-| 현재 `COMMON-QA-MODEL-5.0` | 24입력/24목표/33지칭/6변경 과제, 7구성. 음성42예정: NORMAL36, WAIT6 중5출력·1철회 | [입력과 역할](../evaluation/common-qa-v5/02-configurations-and-scenarios.md), [명세](../evaluation/common-qa-v5/specification.json), [계약](../evaluation/common-qa-v5/01-common-contract.md) |
+| 현재 `COMMON-QA-MODEL-6.0` | v5 원값과 QA07 24묶음 검토안, 7구성의168 작성 슬롯, 실제 실행0 | [사례/의무](../evaluation/common-qa-v6/02-qa07-case-mapping.md), [판정 계약](../evaluation/common-qa-v6/01-qa07-contract.md) |
+| 보존 `COMMON-QA-MODEL-5.0` | 24입력/24목표/33지칭/6변경 과제, 7구성. 음성42예정: NORMAL36, WAIT6 중5출력·1철회 | [입력과 역할](../evaluation/common-qa-v5/02-configurations-and-scenarios.md), [명세](../evaluation/common-qa-v5/specification.json), [계약](../evaluation/common-qa-v5/01-common-contract.md) |
 | 보존 `COMMON-QA-MODEL-4.0` | 같은 24입력, 24목표, 33지칭, 6변경 과제, 7구성, 하나의 환경 | [v4 사례](../evaluation/common-qa-v4/02-configurations-and-scenarios.md), [명세](../evaluation/common-qa-v4/specification.json), [평가자 정답](../evaluation/common-qa-v4/oracles.json), [계약](../evaluation/common-qa-v4/01-common-contract.md) |
 | 보존 `COMMON-QA-CORPUS-3.0-STRATIFIED` | 26개 사례군, Text, Voice/Screen, Delivery의 세 profile, 9구성 | [v3 구성과 시나리오](../evaluation/common-qa-v3/02-configurations-and-scenarios.md), [계약](../evaluation/common-qa-v3/01-common-contract.md), [통합 JSON](../evaluation/common-qa-v3/artifacts/normalized-data.json), [HTML 탐색기](../evaluation/common-qa-v3/artifacts/outputs/01a15dfe/guide.html) |
 | 보존된 `COMMON-28-v1` | 대표 에피소드 28개와 지정 반복, 기능 회귀 F01~F18, 변경 C01~C06 | [명세](common-28-v1/common-scenarios.md), [JSON](common-28-v1/common-scenarios.json), [통합 경위](common-28-v1/common-evaluation-population-plan.md) |
