@@ -1,6 +1,6 @@
 # QA01 첫 응답 지연시간
 
-2026-10-22 / `QA01-VOICE-v1` / **음성 종료점 변경은 사용자 지시 / 세부 측정 계약은 검토안 / 미측정**
+2026-10-23 / `QA01-VOICE-v1` / **정의와 측정 계약 사용자 합의 / 목표와 점수 재검토 / 미측정**
 
 [현재 QA 목록](README.md) / [QA03](qa03-via-processing-time.md) / [공통 측정 계약](timing-measurement-contract.md) / [변경 전 명세](history/timing-before-voice-20261022/qa01-first-response-latency.md)
 

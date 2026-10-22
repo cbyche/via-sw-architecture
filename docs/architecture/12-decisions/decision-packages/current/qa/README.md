@@ -1,14 +1,14 @@
 # 공통 QA 정의, 목표와 점수의 현재 편집 기준
 
-2026-10-22 QA01 음성 종료점 반영 / QA03 완료 경계 권고안 / QA09 독립 지표 제거 / 수치 산출 전달 전
+2026-10-23 QA01/QA03 정의와 측정방법 합의 / QA09 독립 지표 제거 / 담당 세션 평가 갱신 요청 승인
 
 DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점수표를 이 폴더에서 관리한다. 이전 `qa-candidate-package`의 내용은 보존하고 이관한 문서를 앞으로의 편집 기준으로 삼는다. 현재 동일 조건의 계산은 [공통 QA v4](../evaluation/common-qa-v4/README.md), 이전 수치는 [v3 보존본](../evaluation/common-qa-v3/README.md), 입력과 관측 모집단은 [시나리오 안내](../scenarios/README.md)에서 확인한다. 정의 문서에 남은 2026-10-15의 DP별 예상표와 검토 상태는 해당 세대의 이력이다.
 
 | 현재 정의 문서 | 대표 지표 | 유지한 목표, 상태 | 도출 자료 |
 | --- | --- | --- | --- |
-| [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | 첫 실질적 음성의 실제 시작까지 평균 경과시간. 차례 대기 포함 및 별도 진단 | 음성 종료점 사용자 지시 반영. 새 목표/점수 합의 전 | [측정 계약과 전달 준비](timing-measurement-contract.md) |
+| [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | 첫 실질적 음성의 실제 시작까지 평균 경과시간. 차례 대기 포함 및 별도 진단 | 정의와 측정방법 합의. 새 목표/점수 미정 | [측정 계약과 전달 준비](timing-measurement-contract.md) |
 | [QA02 지칭 대상 식별 정확도](qa02-referent-accuracy.md) | 표현/revision별 최초 채택 대상 집합의 완전 일치율 | 93% 이상 목표 제안, 기존 0~6점 유지 | [정확도 조사](research-notes/qa02-accuracy-research.md) |
-| [QA03 VIA 처리시간](qa03-via-processing-time.md) | 목표의 상태/연동/최종 응답 준비 완료까지 VIA 귀속 경로 시간의 평균 | 완료 경계 권고안, 합의 전. 새 목표/점수 검토 중 | [측정 계약과 전달 준비](timing-measurement-contract.md) |
+| [QA03 VIA 처리시간](qa03-via-processing-time.md) | 목표의 상태/연동/최종 응답 준비 완료까지 VIA 귀속 경로 시간의 평균 | 정의와 측정방법 합의. 새 목표/점수 미정 | [측정 계약과 전달 준비](timing-measurement-contract.md) |
 | [QA04 변경 범위](qa04-change-scope.md) | 변경 과제당 평균 실제 운영 Rust 모듈 수 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
@@ -21,9 +21,9 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 
 현재 목록은 QA01~QA08이다. QA09는 독립 요구사항과 목표/점수에서 제거했다. 사용자 발화/이전 응답의 차례 대기와 채택 후 재생 가능 구간의 추가 지연은 QA01의 보조 진단으로 기록한다.
 
-QA01은 음성 시작으로 변경했으며 대표값의 차례 대기 포함과 세부 계약을 설명/합의 중이다. QA03은 첫 응답이 아닌 전체 목표의 처리 완료로 구체화한 권고안이다. 화면/음성 중 빠른 첫 응답을 선택하지 않는다. 기존 1초/5초와 점수는 새 경계에 자동 적용하지 않는다.
+QA01은 음성 시작까지이며 대표값에 차례 대기를 포함한다. QA03은 전체 목표의 처리 완료를 평가한다. 두 정의와 측정방법은 2026-10-23 사용자 합의가 완료되었다. 화면/음성 중 빠른 첫 응답을 선택하지 않는다. 기존 1초/5초와 점수는 새 경계에 자동 적용하지 않는다.
 
-[공통 측정 계약과 담당 세션 전달 준비](timing-measurement-contract.md)에 필요한 사건/목표/trace와 합의 항목을 기록했다. **수치 담당 세션에는 아직 요청하지 않았다.**
+[공통 측정 계약과 담당 세션 전달 상태](timing-measurement-contract.md)에 필요한 사건/목표/trace와 갱신 범위를 기록했다. 사용자가 담당 세션의 공통 평가 전체 갱신을 요청했으며 목표/점수가 미정이어도 원값 갱신을 진행한다.
 
 ## 정의, 적용 계약과 증거의 역할
 

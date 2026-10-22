@@ -124,7 +124,8 @@ def main():
     assert not list(qa.glob("qa09-*.md")), "QA09 is no longer a standalone active QA"
     timing = (qa / "timing-measurement-contract.md").read_text()
     assert "01a15dfe-8b3c-7fe3-87ab-750cd0e2db99" in timing
-    assert "NOT_SENT" in timing and "합의" in timing
+    assert "USER_AGREED_2026-10-23" in timing
+    assert re.search(r"\*\*(?:READY_TO_SEND|SENT) /", timing), "Approved handoff status required"
     for path in qa.glob("qa08-*.md"):
         bands += check_scores(path)
     common28 = within_root(required["common28_dataset"])
