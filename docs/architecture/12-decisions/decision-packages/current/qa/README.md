@@ -1,6 +1,6 @@
 # 공통 QA 정의, 목표와 점수의 현재 편집 기준
 
-2026-10-22 이관 후 QA07 상세화 / QA01~06 유지 / QA07 목표와 점수 제안 추가, 우선순위 변경 없음
+2026-10-22 QA07 상세화 및 새 QA08 추가 / QA01~06 유지 / 우선순위 변경 없음
 
 DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점수표를 이 폴더에서 관리한다. 이전 `qa-candidate-package`의 내용은 보존하고 이관한 문서를 앞으로의 편집 기준으로 삼는다. 현재 동일 조건의 계산은 [공통 QA v4](../evaluation/common-qa-v4/README.md), 이전 수치는 [v3 보존본](../evaluation/common-qa-v3/README.md), 입력과 관측 모집단은 [시나리오 안내](../scenarios/README.md)에서 확인한다. 정의 문서에 남은 2026-10-15의 DP별 예상표와 검토 상태는 해당 세대의 이력이다.
 
@@ -13,14 +13,15 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
 | [QA07 요청 의미 해석 정확도](qa07-request-meaning-accuracy.md) | 입력/revision별 최초 확정 필수 의미의 전체 일치율 | **90% 이상과 0~6점 제안**, 채택과 우선순위 미합의 | [의미 해석 조사](research-notes/qa07-meaning-research.md), [입력과 평가 계획](qa07-evaluation-plan.md) |
+| [QA08 온디바이스(로컬) 모델 추가 메모리 최소화](qa08-on-device-model-memory.md) | 추가 모델 실행 경로의 같은 시점 메모리 합계 중 최고량 | **사용자 지정 1 GB 미만**, 측정 조건과 점수는 제안, 미측정 | [Galaxy Book 시스템 요구 출처](targets-source-qa08-platform.md) |
 
-선택 우선순위는 기존 **QA01 → QA02 → QA03 → QA04 → QA05 → QA06**을 유지한다. 새 QA07을 임의로 끼워 넣거나 QA02를 대체하지 않는다. 가중 총점으로 합산하지 않으며 원값, 분모, 단위, 실패와 근거 종류를 함께 남긴다.
+선택 우선순위는 기존 **QA01 → QA02 → QA03 → QA04 → QA05 → QA06**을 유지한다. 새 QA07/QA08을 임의로 끼워 넣거나 QA02/QA06을 대체하지 않는다. QA08의 호스트 RAM은 QA06 전체 RAM에도 포함되므로 두 값이나 같은 메모리 절감 효과를 합산하지 않는다. 가중 총점으로 합산하지 않으며 원값, 분모, 단위, 실패와 근거 종류를 함께 남긴다.
 
-## 보조 후보와 구판 QA07
+## 보조 후보와 구판 QA07/QA08
 
 | 자료 | 현재 역할 |
 | --- | --- |
-| [QA08 병행 수정 중복](qa08-parallel-change-overlap.md) | 독립 변경 쌍의 평균 겹치는 모듈 수. 기존 예비 후보와 점수 보존 |
+| [구판 QA08 병행 수정 중복](qa08-parallel-change-overlap.md) | 독립 변경 쌍의 평균 겹치는 모듈 수. 이전 세대의 후보와 점수 보존. 새 QA08 메모리와 구별 |
 | [QA09 음성 전달 지연](qa09-audio-delivery-lag.md) | 응답 채택 후 청취 가능한 시간에서 음성 시작까지의 필수 회귀 진단. 기존 목표, 점수 보존 |
 | [구판 QA07 부하 추가 지연](legacy/qa07-load-interference.md) | 다른 세대의 보조 지표. 새 QA07의 정의, 점수, 우선순위로 계승하지 않음 |
 
@@ -39,7 +40,7 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 ## 목표 근거와 발표에 사용할 자료
 
 - [목표 도출 원칙](target-rationale.md), [조사 상세 목록](research-notes/README.md), [검토와 정정 이력](review-and-revision-log.md).
-- [품질 요구사항과 발표용 표](quality-requirements-table.md), [QA 한 장 설명 원고](slide-page-plan.md). QA01~06 및 보조 QA08/09를 편집할 때 정의, 점수 원문과 함께 갱신한다. 이 두 자료의 QA07 행과 페이지는 **구판 부하 추가 지연**으로 표시되어 있으며 새 QA07의 완성된 발표 페이지로 사용하지 않는다.
+- [품질 요구사항과 발표용 표](quality-requirements-table.md), [QA 한 장 설명 원고](slide-page-plan.md). 사용자 요청으로 발표자료는 이번 신설 범위에서 제외한다. 이 자료의 QA07은 **구판 부하 추가 지연**, QA08은 **구판 병행 수정 중복**이며 새 QA07/QA08 발표 페이지로 사용하지 않는다.
 - [COMMON-28 시나리오 원전](../scenarios/common-28-v1/common-scenarios.md), [JSON](../scenarios/common-28-v1/common-scenarios.json)은 목표와 기존 회귀 명세의 출처다.
 - [이전 72개 사고 실험](history/qa-dp-thought-experiment.md), [이전 패키지 개요](history/source-package-overview-20261015.md)는 기존 DP44/47/45/42 세대의 이력이다. 현재 네 DP의 수치와 결론으로 재사용하지 않는다.
 

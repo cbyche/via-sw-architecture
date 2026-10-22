@@ -20,7 +20,7 @@ def interval(raw):
     if chain:
         lo, left, right, hi = chain.groups()
         return Fraction(lo), left == '≤', Fraction(hi), right == '≤'
-    single = re.search(rf'[A-Za-z]+\s*([<≤>=])\s*({NUMBER})', text)
+    single = re.search(rf'[A-Za-z]+\s*([<≤>≥=])\s*({NUMBER})', text)
     assert single, f'Unsupported score expression: {raw}'
     op, bound = single.groups()
     value = Fraction(bound)
@@ -28,7 +28,7 @@ def interval(raw):
         return value, True, value, True
     if op in ('<', '≤'):
         return Fraction(0), True, value, op == '≤'
-    return value, False, None, False
+    return value, op == '≥', None, False
 
 
 def contains(bounds, value):
