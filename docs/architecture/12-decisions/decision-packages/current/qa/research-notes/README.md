@@ -20,11 +20,10 @@
 | 05 | [모델 비용 조사](qa05-cost-research.md) | [QA05](../qa05-model-cost.md) | gpt-realtime 공개 단가와 공통 28개 묶음의 상세 견적 |
 | 06 | [RAM 사용량 조사](qa06-memory-research.md) | [QA06](../qa06-local-memory.md) | 사용자 지정 512 MB 요구사항과 기존 조사 이력 및 Windows 계측 한계 |
 | 새 07 | [요청 의미 해석 조사](qa07-meaning-research.md) | [QA07 요청 의미 해석 정확도](../qa07-request-meaning-accuracy.md) | TreeDST 90.8% 참조와 90% 개발 목표 제안, 전체 의미 판정과 한계 |
-| 구판 07 | 새 외부 수치 조사 없음 | [부하 추가 지연](../legacy/qa07-load-interference.md) | 부하 유무의 평균 차이와 기존 200ms 설계 예산 |
-| 08 | QA04의 Rust 정의와 팀 요구를 함께 참조 | [QA08](../qa08-parallel-change-overlap.md) | 변경 집합 교집합과 실제 Git 충돌의 차이 |
+| 08 | [Galaxy Book 시스템 요구](../targets-source-qa08-platform.md) | [QA08](../qa08-on-device-model-memory.md) | 1 GB 미만의 사용자 지정 상한과 추가 모델 메모리 측정 조건 |
 | 09 | 기존 음성 출력 자료와 관측 계약 유지 | [QA09](../qa09-audio-delivery-lag.md) | 재생 가능한 시간만 누적하는 음성 타임라인 |
 
-구판 QA07과 QA08~09의 목표는 이전 보조 후보의 제안이다. 이들에 QA01~06과 동일한 외부 수치 재검토가 수행됐다고 말하지 않는다. 새 QA07은 2026-10-22 요청 의미 해석의 별도 조사이며 수치 제안과 근거 한계를 해당 상세안에서 관리한다. 발표자료는 이번 작업 범위가 아니다.
+QA07은 의미 해석 연구를 참조한 목표 제안이며 QA08은 사용자 지정 시스템 요구다. QA09의 목표는 음성 전달 경로의 설계 예산 제안이다. 발표자료는 별도 작업 범위다.
 
 ## 발표 제작의 진입점
 

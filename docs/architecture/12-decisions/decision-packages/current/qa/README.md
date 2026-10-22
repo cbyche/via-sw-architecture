@@ -17,13 +17,13 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 
 선택 우선순위는 기존 **QA01 → QA02 → QA03 → QA04 → QA05 → QA06**을 유지한다. 새 QA07/QA08을 임의로 끼워 넣거나 QA02/QA06을 대체하지 않는다. QA08의 호스트 RAM은 QA06 전체 RAM에도 포함되므로 두 값이나 같은 메모리 절감 효과를 합산하지 않는다. 가중 총점으로 합산하지 않으며 원값, 분모, 단위, 실패와 근거 종류를 함께 남긴다.
 
-## 보조 후보와 구판 QA07/QA08
+## 보조 검증
+
+[QA01 음성 종료점 검토](reviews/qa01-voice-endpoint-review-20261022.md)는 음성 중심 평가와 QA09의 진단 통합을 권고한다. 아직 정의 변경은 적용하지 않았다.
 
 | 자료 | 현재 역할 |
 | --- | --- |
-| [구판 QA08 병행 수정 중복](qa08-parallel-change-overlap.md) | 독립 변경 쌍의 평균 겹치는 모듈 수. 이전 세대의 후보와 점수 보존. 새 QA08 메모리와 구별 |
 | [QA09 음성 전달 지연](qa09-audio-delivery-lag.md) | 응답 채택 후 청취 가능한 시간에서 음성 시작까지의 필수 회귀 진단. 기존 목표, 점수 보존 |
-| [구판 QA07 부하 추가 지연](legacy/qa07-load-interference.md) | 다른 세대의 보조 지표. 새 QA07의 정의, 점수, 우선순위로 계승하지 않음 |
 
 현재 공통 QA01은 **화면 표시**다. v3 DP44의 **첫 음성 지연**은 입력 종료부터 장치 출력까지의 별도 진단이다. QA09는 채택 후 청취 가능 시간이라는 다른 시작점과 시간 규칙을 갖는다. 세 값을 같은 지표로 부르거나 평균하지 않는다.
 
@@ -40,7 +40,7 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 ## 목표 근거와 발표에 사용할 자료
 
 - [목표 도출 원칙](target-rationale.md), [조사 상세 목록](research-notes/README.md), [검토와 정정 이력](review-and-revision-log.md).
-- [품질 요구사항과 발표용 표](quality-requirements-table.md), [QA 한 장 설명 원고](slide-page-plan.md). 사용자 요청으로 발표자료는 이번 신설 범위에서 제외한다. 이 자료의 QA07은 **구판 부하 추가 지연**, QA08은 **구판 병행 수정 중복**이며 새 QA07/QA08 발표 페이지로 사용하지 않는다.
+- [품질 요구사항과 발표용 표](quality-requirements-table.md), [QA 한 장 설명 원고](slide-page-plan.md). 사용자 요청으로 발표자료는 이번 신설 범위에서 제외한다. QA07/QA08의 최신 상세 정의는 위 목록에서 확인하며 발표 페이지는 아직 작성하지 않았다.
 - [COMMON-28 시나리오 원전](../scenarios/common-28-v1/common-scenarios.md), [JSON](../scenarios/common-28-v1/common-scenarios.json)은 목표와 기존 회귀 명세의 출처다.
 - [이전 72개 사고 실험](history/qa-dp-thought-experiment.md), [이전 패키지 개요](history/source-package-overview-20261015.md)는 기존 DP44/47/45/42 세대의 이력이다. 현재 네 DP의 수치와 결론으로 재사용하지 않는다.
 

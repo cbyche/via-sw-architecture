@@ -106,15 +106,13 @@ def main():
         assert len(candidates) == 1, f"QA{number:02d} needs exactly one editable definition"
         bands += check_scores(candidates[0])
     meaning = (qa / "qa07-request-meaning-accuracy.md").read_text()
-    assert "부하 추가 지연" in meaning and any(
+    assert any(
         term in meaning for term in ("미정", "미확정", "미합의")
-    ), "New QA07 must distinguish the old metric and retain unagreed adoption/priority"
+    ), "QA07 must retain unagreed adoption/priority"
     assert "QA07-REQ-v1" in meaning and "QA07-REQ-score-v1" in meaning
     assert "제안" in meaning and "미측정" in meaning
     bands += check_scores(qa / "qa07-request-meaning-accuracy.md")
-    legacy = list((qa / "legacy").glob("*load-interference*.md"))
-    assert len(legacy) == 1, "Preserve the distinct older QA07 definition"
-    for path in [legacy[0], *qa.glob("qa08-*.md"), *qa.glob("qa09-*.md")]:
+    for path in [*qa.glob("qa08-*.md"), *qa.glob("qa09-*.md")]:
         bands += check_scores(path)
     common28 = within_root(required["common28_dataset"])
     counts = validate_common28(json.loads(common28.read_text()))

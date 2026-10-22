@@ -1,8 +1,8 @@
 # QA01~06 목표 수치 도출 논리
 
-> **2026-10-22 새 QA08:** [온디바이스 모델 추가 메모리](qa08-on-device-model-memory.md)의 1 GB 미만 목표는 [Galaxy Book 기본 탑재 제약](targets-source-qa08-platform.md)으로 사용자가 지정했다. 중간 점수와 세부 측정 조건은 제안이다. 아래 QA08은 구판 병행 수정 중복을 뜻한다.
+> **2026-10-22 새 QA08:** [온디바이스 모델 추가 메모리](qa08-on-device-model-memory.md)의 1 GB 미만 목표는 [Galaxy Book 기본 탑재 제약](targets-source-qa08-platform.md)으로 사용자가 지정했다. 중간 점수와 세부 측정 조건은 제안이다.
 
-> **2026-10-22 새 QA07:** 요청 의미 해석 정확도의 [상세 목표와 측정 제안](qa07-request-meaning-accuracy.md), [출처 조사](research-notes/qa07-meaning-research.md)를 추가했다. 90% 목표와 0~6점은 검토용 제안이며 우선순위는 미정이다. 아래 QA01~06과 이전 보조 후보의 도출 이력은 유지한다. 아래의 QA07~09 표현에서 QA07은 구판 부하 추가 지연을 뜻한다.
+> **2026-10-22 새 QA07:** 요청 의미 해석 정확도의 [상세 목표와 측정 제안](qa07-request-meaning-accuracy.md), [출처 조사](research-notes/qa07-meaning-research.md)를 추가했다. 90% 목표와 0~6점은 검토용 제안이며 우선순위는 미정이다. 아래는 QA01~06의 도출 이력이다.
 
 > **현재 QA 자료의 이관본 (2026-10-22):** 출처, 원값, 목표 도출과 기존 검토 내용을 유지한다. 문서 안의 이전 DP, 모집단, 검토 상태는 해당 작성 세대에 한정한다. [현재 QA 기준과 적용 범위](README.md).
 
@@ -15,7 +15,7 @@
 
 **목표는 구현에 필요한 시간을 나눠 정하는 값이 아니라 사용자나 제품이 요구하는 수준이다.** 이 문서는 확인한 외부 사실과 VIA에 적용하는 제품 판단을 연결한다. 실제 stakeholder 합의나 VIA 실측 결과가 없는 부분을 이미 합의했거나 달성한 것으로 표현하지 않는다.
 
-읽는 순서는 이 문서 → [발표용 표](quality-requirements-table.md#presentation-table) → 각 QA 상세안이다. [이관 전 패키지 대응표](history/source-package-overview-20261015.md#4-qadp-대응과-예상-우열)에서 당시 QA와 DP의 대응 및 예상 손익을 함께 확인한다. QA07~09는 별도 보조 후보로 유지하며 이번 목표 근거 재작성은 핵심 여섯 QA를 대상으로 한다.
+읽는 순서는 이 문서 → [발표용 표](quality-requirements-table.md#presentation-table) → 각 QA 상세안이다. [이관 전 패키지 대응표](history/source-package-overview-20261015.md#4-qadp-대응과-예상-우열)에서 당시 QA와 DP의 대응 및 예상 손익을 함께 확인한다. QA07/QA08의 목표는 상단 링크에서 확인하며 아래 도출 이력은 QA01~06을 대상으로 한다.
 
 ## 1. 제안하는 숫자와 요구의 연결
 

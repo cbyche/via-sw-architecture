@@ -1,17 +1,17 @@
 # QA 후보 07. 부하 추가 지연
 
-> **이전 QA07의 별도 의미:** 이 문서는 부하 추가 지연의 구판 정의, 목표, 점수를 보존한다. 현재 [QA07 요청 의미 해석 정확도](../qa07-request-meaning-accuracy.md)에 계승하지 않는다. 본문의 현재, 최신 표현은 원래 작성 세대 안의 상태다.
+> **이전 QA07의 별도 의미:** 이 문서는 부하 추가 지연의 구판 정의, 목표, 점수를 보존한다. 현재 [QA07 요청 의미 해석 정확도](../../qa07-request-meaning-accuracy.md)에 계승하지 않는다. 본문의 현재, 최신 표현은 원래 작성 세대 안의 상태다.
 
 
-> **현재 DP 비교 적용: DP-RELATED-v2 (2026-10-15).** 사용자 지시대로 [DP별 관련 사건 / 목표 / 변경 과제](../history/thought-experiment/population.md)만 A/B에 동일하게 적용한다. 아래 COMMON-28 전체 건수는 공통 입력 카탈로그와 제품 전체 회귀의 기준이다. 발표용 값은 [v2 예상값과 한 줄 이유](../history/qa-dp-thought-experiment.md)를 사용한다. QA01/03은 관련 원값의 산술평균이며 오답에 시간 벌점을 넣지 않는다. QA05는 기존 $2.55가 정의된 전체 28개 묶음 비용 단위를 유지한다.
+> **현재 DP 비교 적용: DP-RELATED-v2 (2026-10-15).** 사용자 지시대로 [DP별 관련 사건 / 목표 / 변경 과제](../thought-experiment/population.md)만 A/B에 동일하게 적용한다. 아래 COMMON-28 전체 건수는 공통 입력 카탈로그와 제품 전체 회귀의 기준이다. 발표용 값은 [v2 예상값과 한 줄 이유](../qa-dp-thought-experiment.md)를 사용한다. QA01/03은 관련 원값의 산술평균이며 오답에 시간 벌점을 넣지 않는다. QA05는 기존 $2.55가 정의된 전체 28개 묶음 비용 단위를 유지한다.
 
-> **전체 회귀 입력 카탈로그:** [COMMON-28-v1](../../scenarios/common-28-v1/common-scenarios.md)의 28개 대표 시나리오를 동일 조건에서 5회 실행한다. 관측 ID와 건수 및 제외 조건을 공통 목록에서 관리한다. 현재 문서상 입력 구성은 완료됐으며 실제 자료 제작과 구현 및 측정은 별도다.
+> **전체 회귀 입력 카탈로그:** [COMMON-28-v1](../../../scenarios/common-28-v1/common-scenarios.md)의 28개 대표 시나리오를 동일 조건에서 5회 실행한다. 관측 ID와 건수 및 제외 조건을 공통 목록에서 관리한다. 현재 문서상 입력 구성은 완료됐으며 실제 자료 제작과 구현 및 측정은 별도다.
 
-> 발표 준비: [QA07 한 장 설명 페이지](../slide-page-plan.md#qa07) / 기존 추가 후보의 목표 근거와 상태를 유지한다.
+> 발표 준비: [QA07 한 장 설명 페이지](../../slide-page-plan.md#qa07) / 기존 추가 후보의 목표 근거와 상태를 유지한다.
 
 > 2026-10-14 / 작성자 검토안 / **예비 후보: 핵심 승격 보류** / 미구현, 미측정
 >
-> 이 번호는 이번 후보 묶음의 식별자이며 기존 ASR-QA ID를 바꾸지 않는다. [중심 계획](../../../03-03-qa-dp-evaluation-plan.md)과 [추가 후보 판정](../additional-candidates.md)을 함께 읽는다. 목표와 점수는 평가 전 제안이다.
+> 이 번호는 이번 후보 묶음의 식별자이며 기존 ASR-QA ID를 바꾸지 않는다. [중심 계획](../../../../03-03-qa-dp-evaluation-plan.md)과 [추가 후보 판정](../../additional-candidates.md)을 함께 읽는다. 목표와 점수는 평가 전 제안이다.
 
 ## 1. 제안과 판정
 
@@ -42,7 +42,7 @@ QA07        = Σ D(i) / 등록한 관련 부하 cell 수
 전체 회귀 cell 수 = 4; DP47 = 1, DP45 = 1, DP44/42 = 4
 ```
 
-각 조건의 첫 응답 시작 / 종료점은 [QA1](../qa01-first-response-latency.md)의 정의를 그대로 쓴다. 끝점은 첫 내용 단위가 Request/Task UI에 실제 표시된 때이며 오답도 실제 시간을 사용한다. 음성 차례 대기, 모델의 첫 토큰, queue 삽입을 끝점으로 바꾸지 않는다. 유한한 평균 산식은 양 조건의 필수 foreground 응답이 모두 관측됐을 때 적용한다.
+각 조건의 첫 응답 시작 / 종료점은 [QA1](../../qa01-first-response-latency.md)의 정의를 그대로 쓴다. 끝점은 첫 내용 단위가 Request/Task UI에 실제 표시된 때이며 오답도 실제 시간을 사용한다. 음성 차례 대기, 모델의 첫 토큰, queue 삽입을 끝점으로 바꾸지 않는다. 유한한 평균 산식은 양 조건의 필수 foreground 응답이 모두 관측됐을 때 적용한다.
 
 각 cell의 반복 평균을 뺀 뒤 증가분만 집계하고 등록한 관련 cell을 같은 비중으로 평균낸다. 네 cell 전체를 사용하는 것은 제품 회귀와 DP44/42다. 음수 차이는 원값에 남기지만 다른 cell의 악화를 상쇄하지 않는다. 이 0 하한은 잡음에도 작은 양의 값을 만들 수 있으므로 예비 실행에서 반복 분산을 확인한다. 개별 반복의 양수 차이를 먼저 잘라 평균내는 계산도 사용하지 않는다.
 
@@ -57,7 +57,7 @@ X의 절대 응답은 더 빠르지만 Y의 부하 간섭은 더 작다. 두 값
 
 ## 3. 비교 모집단
 
-[COMMON-28-v1](../../scenarios/common-28-v1/common-scenarios.md)의 네 시나리오에 이미 무관한 BG Task의 진행과 결과를 넣었다. 현재 요청의 발화 종료 -100ms에 진행, +100ms에 결과를 source에서 제공한다.
+[COMMON-28-v1](../../../scenarios/common-28-v1/common-scenarios.md)의 네 시나리오에 이미 무관한 BG Task의 진행과 결과를 넣었다. 현재 요청의 발화 종료 -100ms에 진행, +100ms에 결과를 source에서 제공한다.
 
 | 공통 S | 현재 요청 | 부하 없음 조건의 변경 |
 | --- | --- | --- |
@@ -87,7 +87,7 @@ DP-44는 같은 Task 소유, 저장 경계 아래 중앙 continuation과 stage �
 | [Google SRE — Handling Overload](https://sre.google/sre-book/handling-overload/) | 요청 수만으로 자원 부하를 설명하기 어렵고 자원 제한과 요청 중요도를 고려해야 함 | 사건 수뿐 아니라 payload, CPU, 저장, model 조건을 고정할 이유. 200ms의 출처는 아님 |
 | [Tokio — cooperative task yielding](https://tokio.rs/blog/2020-04-preemption) | 실행 중인 async 작업이 다른 작업의 실행 기회와 지연에 영향을 줄 수 있음 | 실행 조직과 scheduler 조건을 확인할 이유. 중앙 dispatcher가 반드시 느리다는 근거는 아님 |
 | [Tokio — spawn_blocking](https://docs.rs/tokio/latest/tokio/task/fn.spawn_blocking.html) | blocking/긴 계산을 별도 작업 경로에서 처리하는 지원이 있음 | 강한 A에도 적절한 worker를 허용해야 할 근거 |
-| [현재 QA 계획](../../../03-03-qa-dp-evaluation-plan.md) | 첫 응답과 전체 처리시간은 분리하며 교차 사건을 다뤄야 함 | 절대 지연과 추가 지연을 구별할 내부 요구 |
+| [현재 QA 계획](../../../../03-03-qa-dp-evaluation-plan.md) | 첫 응답과 전체 처리시간은 분리하며 교차 사건을 다뤄야 함 | 절대 지연과 추가 지연을 구별할 내부 요구 |
 
 출처 확인일은 2026-10-14다. CPU 부하를 제거한 mock만 실행했다면 실제 PC의 부하 간섭을 검증했다고 주장하지 않는다.
 
