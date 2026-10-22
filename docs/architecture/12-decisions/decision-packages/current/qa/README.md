@@ -1,6 +1,6 @@
 # 공통 QA 정의, 목표와 점수의 현재 편집 기준
 
-2026-10-22 이관 / QA 의미, 목표, 점수, 우선순위 변경 없음
+2026-10-22 이관 후 QA07 상세화 / QA01~06 유지 / QA07 목표와 점수 제안 추가, 우선순위 변경 없음
 
 DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점수표를 이 폴더에서 관리한다. 이전 `qa-candidate-package`의 내용은 보존하고 이관한 문서를 앞으로의 편집 기준으로 삼는다. 현재 수치는 [공통 QA v3](../evaluation/common-qa-v3/README.md), 입력과 관측 모집단은 [시나리오 안내](../scenarios/README.md)에서 확인한다. 정의 문서에 남은 2026-10-15의 DP별 예상표와 검토 상태는 해당 세대의 이력이다.
 
@@ -12,7 +12,7 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 | [QA04 변경 범위](qa04-change-scope.md) | 변경 과제당 평균 실제 운영 Rust 모듈 수 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
-| [QA07 요청 의미 해석 정확도](qa07-request-meaning-accuracy.md) | 입력/revision별 최초 확정 필수 의미의 전체 일치율 | 정의만 유지. 목표, 점수, 우선순위 미합의 | [INTENT.md](../../../../../../INTENT.md) §4.1~4.2 |
+| [QA07 요청 의미 해석 정확도](qa07-request-meaning-accuracy.md) | 입력/revision별 최초 확정 필수 의미의 전체 일치율 | **90% 이상과 0~6점 제안**, 채택과 우선순위 미합의 | [의미 해석 조사](research-notes/qa07-meaning-research.md), [입력과 평가 계획](qa07-evaluation-plan.md) |
 
 선택 우선순위는 기존 **QA01 → QA02 → QA03 → QA04 → QA05 → QA06**을 유지한다. 새 QA07을 임의로 끼워 넣거나 QA02를 대체하지 않는다. 가중 총점으로 합산하지 않으며 원값, 분모, 단위, 실패와 근거 종류를 함께 남긴다.
 
@@ -43,6 +43,6 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 
 ## 편집과 검증
 
-새 QA 편집은 이 폴더에서 수행하고 정의, 목표, 점수의 변경 이유와 버전을 기록한다. 이관 전 원본과 과거 동결 corpus는 수정하지 않는다. 숫자나 점수 변경은 이번 정리 범위가 아니다.
+새 QA 편집은 이 폴더에서 수행하고 정의, 목표, 점수의 변경 이유와 버전을 기록한다. 이관 전 원본과 과거 동결 corpus는 수정하지 않는다. 이관 작업에서는 숫자를 유지했으며 후속 사용자 요청에 따라 QA07의 90% 목표, 점수와 세부 평가 절차를 `QA07-REQ-v1` 제안으로 추가했다. 실제 측정과 기존 결과의 재채점은 수행하지 않았다.
 
 [이관 원장](../qa-migration.json)은 원래 경로, 현재 경로와 원본 SHA256을 기록한다. 원래 문서에 적힌 `check_qa_candidate_package.py` 및 `qa_candidate_population.py`의 명령은 **기존 패키지와 원전 생성 규칙의 검증/재생성 명령**이다. 현재 파일을 갱신하는 명령으로 실행하지 않는다. 현재 패키지의 이관, 링크, 점수 일관성 검사는 `python3 scripts/architecture/check_current_package.py`로 수행하며 제품, 모델, 장치 측정은 아니다. 시나리오나 출력의 후속 편집은 [평가 보존과 편집 규칙](../evaluation/common-qa-v3/migration-and-editing.md)을 따른다.

@@ -108,7 +108,10 @@ def main():
     meaning = (qa / "qa07-request-meaning-accuracy.md").read_text()
     assert "부하 추가 지연" in meaning and any(
         term in meaning for term in ("미정", "미확정", "미합의")
-    ), "New QA07 must distinguish the old metric and retain undecided targets"
+    ), "New QA07 must distinguish the old metric and retain unagreed adoption/priority"
+    assert "QA07-REQ-v1" in meaning and "QA07-REQ-score-v1" in meaning
+    assert "제안" in meaning and "미측정" in meaning
+    bands += check_scores(qa / "qa07-request-meaning-accuracy.md")
     legacy = list((qa / "legacy").glob("*load-interference*.md"))
     assert len(legacy) == 1, "Preserve the distinct older QA07 definition"
     for path in [legacy[0], *qa.glob("qa08-*.md"), *qa.glob("qa09-*.md")]:

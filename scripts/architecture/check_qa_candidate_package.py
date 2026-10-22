@@ -39,6 +39,7 @@ def contains(bounds, value):
 
 def check_scores(path):
     body = path.read_text()
+    increasing = path.name.startswith('qa02-') or path.name == 'qa07-request-meaning-accuracy.md'
     assert 'SCORE_BANDS_PENDING' not in body, path.name
     rows = {}
     for line in body.splitlines():
@@ -65,12 +66,11 @@ def check_scores(path):
     probes.add(ordered[-1] * 2 + 1)
     scores = []
     for value in sorted(probes):
-        if path.name.startswith('qa02-') and value > 100:
+        if increasing and value > 100:
             continue  # A percentage above 100 is invalid input, not an eighth band.
         matches = [score for score, bounds in rows.items() if contains(bounds, value)]
         assert len(matches) == 1, f'{path.name}: {value} has scores {matches}'
         scores.append(matches[0])
-    increasing = path.name.startswith('qa02-')
     assert all(a <= b if increasing else a >= b for a, b in zip(scores, scores[1:])), path.name
     return len(scores)
 
