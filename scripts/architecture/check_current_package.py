@@ -128,6 +128,14 @@ def main():
     assert re.search(r"\*\*(?:READY_TO_SEND|SENT) /", timing), "Approved handoff status required"
     for path in qa.glob("qa08-*.md"):
         bands += check_scores(path)
+    # Review proposals have their own bands; pending definitions must not adopt them.
+    for name in (
+        "qa01-voice-target-proposal-20261023.md",
+        "qa03-completion-target-proposal-20261023.md",
+    ):
+        proposal = qa / "research-notes" / name
+        assert "PROPOSAL_ONLY" in proposal.read_text()
+        bands += check_scores(proposal)
     common28 = within_root(required["common28_dataset"])
     counts = validate_common28(json.loads(common28.read_text()))
     deck = within_root(required["presentation"])

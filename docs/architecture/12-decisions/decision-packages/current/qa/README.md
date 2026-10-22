@@ -6,9 +6,9 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 
 | 현재 정의 문서 | 대표 지표 | 유지한 목표, 상태 | 도출 자료 |
 | --- | --- | --- | --- |
-| [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | 첫 실질적 음성의 실제 시작까지 평균 경과시간. 차례 대기 포함 및 별도 진단 | 정의와 측정방법 합의. 새 목표/점수 미정 | [측정 계약과 전달 준비](timing-measurement-contract.md) |
+| [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | 첫 실질적 음성의 실제 시작까지 평균 경과시간. 차례 대기 포함 및 별도 진단 | 정의와 측정방법 합의. 새 목표/점수는 아래 제안 참조, 채택 전 | [측정 계약과 전달 상태](timing-measurement-contract.md) |
 | [QA02 지칭 대상 식별 정확도](qa02-referent-accuracy.md) | 표현/revision별 최초 채택 대상 집합의 완전 일치율 | 93% 이상 목표 제안, 기존 0~6점 유지 | [정확도 조사](research-notes/qa02-accuracy-research.md) |
-| [QA03 VIA 처리시간](qa03-via-processing-time.md) | 목표의 상태/연동/최종 응답 준비 완료까지 VIA 귀속 경로 시간의 평균 | 정의와 측정방법 합의. 새 목표/점수 미정 | [측정 계약과 전달 준비](timing-measurement-contract.md) |
+| [QA03 VIA 처리시간](qa03-via-processing-time.md) | 목표의 상태/연동/최종 응답 준비 완료까지 VIA 귀속 경로 시간의 평균 | 정의와 측정방법 합의. 새 목표/점수는 아래 제안 참조, 채택 전 | [측정 계약과 전달 상태](timing-measurement-contract.md) |
 | [QA04 변경 범위](qa04-change-scope.md) | 변경 과제당 평균 실제 운영 Rust 모듈 수 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
@@ -22,6 +22,8 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 현재 목록은 QA01~QA08이다. QA09는 독립 요구사항과 목표/점수에서 제거했다. 사용자 발화/이전 응답의 차례 대기와 채택 후 재생 가능 구간의 추가 지연은 QA01의 보조 진단으로 기록한다.
 
 QA01은 음성 시작까지이며 대표값에 차례 대기를 포함한다. QA03은 전체 목표의 처리 완료를 평가한다. 두 정의와 측정방법은 2026-10-23 사용자 합의가 완료되었다. 화면/음성 중 빠른 첫 응답을 선택하지 않는다. 기존 1초/5초와 점수는 새 경계에 자동 적용하지 않는다.
+
+2026-10-23 수치 제안: [QA01 평균 2초 이하, 1초 이하 6점](research-notes/qa01-voice-target-proposal-20261023.md), [QA03 평균 5초 이하, 1초 이하 6점](research-notes/qa03-completion-target-proposal-20261023.md). 두 제안은 문헌 근거와 제품 판단을 구별하며 아직 사용자 채택 전이다. 담당 세션의 원값 갱신은 계속하되 새 제안 점수는 아직 적용하지 않는다.
 
 [공통 측정 계약과 담당 세션 전달 상태](timing-measurement-contract.md)에 필요한 사건/목표/trace와 갱신 범위를 기록했다. 사용자가 담당 세션의 공통 평가 전체 갱신을 요청했으며 목표/점수가 미정이어도 원값 갱신을 진행한다.
 

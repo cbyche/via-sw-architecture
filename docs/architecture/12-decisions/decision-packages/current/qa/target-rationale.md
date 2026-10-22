@@ -1,6 +1,6 @@
 # QA01~06 목표 수치 도출 논리
 
-> **2026-10-22 시간 QA 개정:** 아래 1초/5초의 근거와 점수는 이전 경계의 이력이다. [QA01](qa01-first-response-latency.md)과 [QA03](qa03-via-processing-time.md)의 새 목표/점수는 합의 전이며 [측정 계약](timing-measurement-contract.md)을 우선한다.
+> **2026-10-23 시간 QA 목표 제안:** 아래 1초/5초의 근거와 점수는 이전 경계의 이력이다. 새 정의에는 [QA01 평균 2초와 점수 제안](research-notes/qa01-voice-target-proposal-20261023.md), [QA03 평균 5초 유지와 점수 제안](research-notes/qa03-completion-target-proposal-20261023.md)을 작성했다. 수치/점수는 사용자 채택 전이며 [측정 계약](timing-measurement-contract.md)의 원값 갱신과 구별한다.
 
 > **2026-10-22 새 QA08:** [온디바이스 모델 추가 메모리](qa08-on-device-model-memory.md)의 1 GB 미만 목표는 [Galaxy Book 기본 탑재 제약](targets-source-qa08-platform.md)으로 사용자가 지정했다. 중간 점수와 세부 측정 조건은 제안이다.
 
