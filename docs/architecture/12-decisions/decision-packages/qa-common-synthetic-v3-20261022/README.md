@@ -1,5 +1,7 @@
 # DP2, DP3, DP5, DP44의 공통 QA 층별 평가
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../current/evaluation/common-qa-v3/README.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 2026-10-22 / `COMMON-QA-SYN-3.0` / **SYNTHETIC_AUTHORED_NOT_MEASURED**
 
 **같은 QA 의미를 유지하면서 Text 이력, Voice/Screen, 음성 전달의 세 평가 층을 함께 관리한다.** [v2](../qa-common-synthetic-v2-20261021/README.md)의 7개 구성에 [DP44 전달 비교](../seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md)의 D-A와 D-B를 추가한 판본이다. 총 26개 사례군과 9개 구성을 다루며, 공통 QA01 화면 표시를 포함한 QA01~07의 대표값은 63개다. DP44의 첫 음성 2개 값은 별도 진단 열에 둔다.

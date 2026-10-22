@@ -1,0 +1,189 @@
+{
+  "dataset_id": "COMMON-QA-SYN-3.0",
+  "review_revision": "COMMON-QA-SYN-3.0-REVIEW-2",
+  "evidence_kind": "SYNTHETIC_AUTHORED_NOT_MEASURED",
+  "status": "PASS_WITH_RECORDED_LIMITS",
+  "checkpoint": "PRE_COMMIT_VALIDATION; actual publication identity is in Git history",
+  "baseline_commit": "30a5cd1667b1ecb81db1eaa2d17de3b33a84aa8f",
+  "original_v3_numeric_reference_commit": "8b2f555f8b89eaa5a6a7085ca6323cd44a1adbd7",
+  "checks": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/architecture/check_active_terminology.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: active terminology and canonical target Component names are consistent"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/architecture/test_active_markdown_links.py"
+      ],
+      "exit_code": 0,
+      "output": "......\n----------------------------------------------------------------------\nRan 6 tests in 0.149s\n\nOK"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/architecture/check_active_markdown_links.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: checked local links in 936 active Markdown files"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/architecture/check_qa_catalog.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: core-ASR QA registry has 23 active IDs, 4 confirmed ASRs, 5 migrations, and 4 legacy retired definitions"
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/architecture/check_qa_candidate_package.py"
+      ],
+      "exit_code": 0,
+      "output": "PASS: common population, generated catalogs, cost arithmetic and both QA tables.\nPASS: 9 self-contained page projections match requirement and score tables.\nPASS: 9 QA specs, 9 score tables, 237 score probes, 384 local file links.\nQA06: user-defined 512 MB target; Windows measurement method remains unverified.\nScope: documented population, projection arithmetic, score intervals/glyphs/monotonicity, local file existence and examples.\nNot checked: external URLs, heading anchors, empirical targets, DP superiority or PoC results."
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        ".venv/bin/python",
+        "scripts/presentations/check_common_qa_delivery_v3.py",
+        "--report",
+        "docs/presentations_files/qa-common-synthetic-v3-20261022/cross-artifact-validation.json"
+      ],
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"dataset_id\": \"COMMON-QA-SYN-3.0\",\n  \"review_revision\": \"COMMON-QA-SYN-3.0-REVIEW-2\",\n  \"evidence_kind\": \"SYNTHETIC_AUTHORED_NOT_MEASURED\",\n  \"source_sha256\": \"7518598b478c428ef7dd3b5bdd16e2037569abc61d943a1675bd1304a5832e35\",\n  \"xlsx_sha256\": \"fac48507b076c86190349d572fff3d66c984de6c00c97d7c8ce2417de1023da5\",\n  \"html_sha256\": \"8029219fa465b8776a1dd3c516cfec8732b944a322a1d69ed827fd7a7d550249\",\n  \"checks\": [\n    \"published parent Git objects, working files and frozen snapshots are byte-identical\",\n    \"manifest hashes and generator identity\",\n    \"all 1200 causal goal projections\",\n    \"63 QA and 2 separate voice values reaggregated from serialized ledgers\",\n    \"49 v2 and all 65 initial v3 values unchanged\",\n    \"field-aware set/sequence semantics, case and JSON scalar distinctions\",\n    \"1360 display/adoption boundary joins and 70 partial displays\",\n    \"9 configuration ranges, denominators, case costs, RAM witnesses and 512 MB status\",\n    \"all 10 XLSX sheets scanned for cached errors\",\n    \"65 XLSX QA and 50 cost formula caches match JSON; 4 DELIVERY cost blanks preserved\",\n    \"1360 exported semantic strings and EXACT formulas; ordered sequences preserved\",\n    \"embedded HTML summary, ranges, response boundaries, stage dependencies and source rows match JSON\"\n  ],\n  \"xlsx_formula_count\": 8122,\n  \"xlsx_error_count\": 0,\n  \"limitations\": [\n    \"No native Excel application or browser rendering verification.\",\n    \"Synthetic consistency only; no model or product performance measurement.\"\n  ]\n}"
+    },
+    {
+      "command": [
+        "/Users/changbae/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "scripts/presentations/check_common_qa_delivery_v3_html.mjs"
+      ],
+      "exit_code": 0,
+      "output": "{\"configs\":9,\"offline_dom\":\"PASS\",\"live_browser\":\"NOT_COMPLETED\"}"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "command": [
+        "preserved-parent-and-validation-history-readback"
+      ],
+      "exit_code": 0,
+      "output": "v2 and DP44 source paths unchanged; 7 historical reports byte-identical to first published v3"
+    },
+    {
+      "command": [
+        "scoped-markdown-link-readback"
+      ],
+      "exit_code": 0,
+      "output": "11 Markdown files and 82 local file links exist; anchors/external URLs not checked"
+    }
+  ],
+  "preserved_paths": [
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v2-20261021",
+    "docs/presentations_files/qa-common-synthetic-v2-20261021",
+    "docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022",
+    "docs/presentations_files/dp44-synthetic-backdata-20261022",
+    "scripts/presentations/build_common_qa_stratified.py",
+    "scripts/presentations/render_common_qa_stratified.mjs"
+  ],
+  "preserved_paths_diff": "EMPTY",
+  "historical_reports_preserved": 7,
+  "independent_review": "Field semantics, 1360 response boundaries, 9 configuration ranges, 65 preserved values and exported contents independently rechecked; document tables cross-checked separately from their author; no unresolved P1/P2 within reviewed scope",
+  "artifact_sha256": {
+    "README.md": "7ef3b04b75cb6bba6306b98e35cf81ea6f1e4a588a90a7b59f7e368d176a47c9",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/01-common-contract.md": "f249aad8e075db8ef297069277663ffd50d4d5c95d8595d6667963abcd098dfb",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/02-configurations-and-scenarios.md": "940fa6a9dc9a5e2b2bcf8d69ceea9b77da3ebc8820298ee600915ffe654e491a",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/03-results-and-decisions.md": "210ea40fac12a879b070c5da390c285eb3b56e626bf208cd2f5039319f121958",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/04-migration-and-review.md": "cd90c347a7d441ad5a1c6ecd52cbc76b4c6e06487af404a0d114cbc4081997c3",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/05-numeric-ranges-and-interpretation.md": "497787fe3e7bd8da26abe9d76a4d1ddddba4392d63ff67bf35b3c67768f30f86",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/README.md": "22f99c62f47e14bcb01d7c6a64a6945e084fc2509de1fa57e3f3cc41b495e919",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/reviews/01-independent-document-artifact-review.md": "3f58118e18508197a56017ad6ea4f47d1767ddc808c7f7c41e1d8db2a933b7dc",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/reviews/02-independent-code-data-review.md": "1e47b3f44e84aec5c8c28bcf01ea9bebc7e35bb64870b3e7a41387690359cf5e",
+    "docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/reviews/03-consistency-and-range-review.md": "ba66f5af43c96753ee07667424117c79c38d9e234e2cc3894c0c93333ff50933",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/README.md": "07b250522e671201b153064b3e0e6d17f20a85acfddcf94fdaf1d90f7444f846",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/artifact-validation.json": "0f2b85af09d22d22e47ba99785190c345dbf2fbe793395b570158b0ec0f1d8f1",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/comparison.csv": "206f32d2bcdb618686443f8c2dc7c16ed721e0ebdfb8a5d16e7795f90e034e3a",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/cross-artifact-validation.json": "3f027580471de7d0f9ce55b36fd885d9dc6e61e34dc204438a9ba6ee1d3a4ebe",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/data-readback-validation.json": "21a04c60ad818e77458b028087065021cced7011bd3a56c23862dd28c40bfee7",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/html-validation.json": "349b44ffff37c2d7541c406588409ff5fa1193bdfb595d7783eeea3028f28d66",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/manifest.json": "367290d8a81c99ca901714688c436a792bf05d0fd2d8717fef8c932e3e6ef310",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/normalized-data.json": "7518598b478c428ef7dd3b5bdd16e2037569abc61d943a1675bd1304a5832e35",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/outputs/01a15dfe/VIA-QA-stratified-v3.xlsx": "fac48507b076c86190349d572fff3d66c984de6c00c97d7c8ce2417de1023da5",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/outputs/01a15dfe/guide.html": "8029219fa465b8776a1dd3c516cfec8732b944a322a1d69ed827fd7a7d550249",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/parents/delivery.json": "95e85719a807c9bce2185662da7fe8bc39106b334b633ad9ddfbb4210f7672ee",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/parents/text.json": "e7058f7e9ea4710a549ccf754ecd62f4d5659002a4b98642ecb8835699b57a18",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/parents/v2_manifest.json": "84d6f9be71996bd08c5511296953e19ef04bda46a207d942967725623ce1ac6e",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/parents/v2_summary.json": "9557bfd3331eae2a4e7da677764a4795e1fd51b4a897ecf622e4d48220699900",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/parents/voice.json": "fb12a76dec39d7a6215ddd18c24284660a71eaa9d53645af9b7770615251c2f2",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/workbook-formula-scan.ndjson": "acc0111e19cf44d2753fc9ecd164bf1b27fbd65597463a25cf48bd1c65e90146",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/workbook-summary-inspection.ndjson": "e560ddb2ee168631e01f8051c05c921e19dfaa66d377515ed8a8a879fdd534f0",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/계산기준-1.png": "01c0bf1d1e623aa520b4041a4923cee3b24bcdd90e97068197b100e72e98e84e",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/메모리상태-1.png": "e36f864b40ef1b7a912d6224562ddb41c01c90e0ed8fe701db473aa2e49e4baa",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/메모리상태-2.png": "fb778c923b4c70bb523e09ae8a9912e9c44114475be7906aaa5c15115670f9ab",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/목표시간-1.png": "dca9504aa3190b58e95855f4545d108f699f3496be4aca67637d3c23845cf2da",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/범위검토-1.png": "b3bc74363f5f19e156b3c6361eda470ba28b1439c9ec212011b53406a7cb1a73",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/범위검토-2.png": "766412294e762f21eaedcb8d9c8c96325e28822fb50123fb673576dddfe1f38e",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/범위검토-3.png": "0fecec77d8522f5ba0a7956e4325aa3fca08c85ce87f94a4173a74f3daec36c7",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/범위검토-4.png": "de24d14d5061d7e568a3326d2f77155468edb58fd5f12148952b58a1678666a8",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/변경과제-1.png": "2e2919caa42e39f9f9f3374d667b0483d3a0ee054929d6345d787706816ca9de",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/비교요약-1.png": "3e2fb1893dda3bdddc69b07d2799478ccb7dff483cdcd4775d23c8f0c27de39b",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/비교요약-2.png": "030dc61dc9ef8a80459302870591028bf9bfa19bf867d5e8030473584110ae96",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/비교요약-3.png": "d456adcd41022bc960e12909173a9ff9567a12a7bac98835e12e34252c917700",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/비교요약-4.png": "751cb08c4e83fad3622cbbd4c3138ad8060f1960f95f5a75f6e362148de83a8e",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/비용계산-1.png": "3415c78cad11cf0fc7301f15b62c9af55a04c8dc65ef9c54770f09250d44af94",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/의미판정-1.png": "404c282895c1d8a158340071f6814dc4210dd4127ab5db21b51e10508c22a8e3",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/의미판정-2.png": "356841a609e49ced75c5e8fbc284abc0abbef9735ad47be3eb9999a6da6586bf",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/지칭판정-1.png": "a7bce2bc5b9befd64283c8821812ed4e789064246c12bb239a4eac9b010ba6ae",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/첫응답-1.png": "afec6c9e9b7eab9010a60ebcf05c986581eb9de25163381873d1694eb89924c4",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/첫응답-2.png": "537098a61c64d9f8f76abcbbc815435fa9bb18ad7c16c1cf57dc819dbe7ef322",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/첫응답-3.png": "657ff8478b71625ce3e1fb31332cb991694418f641b3221c0bef964fb635aac3",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/첫응답-4.png": "6f1716ae7a852ee417660e3eb22661275f8298a7f7823385c3733480eba31a13",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/previews/첫응답-5.png": "8363e2c0dd58e71d8d19ebfca14b355d2a051efcf5e53a8c83875af20b2280b5",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/range-review.json": "a13bd063b83fb2862a7e1bf752439d6d2f9f30192809b47ffe7022041f281e57",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/summary.json": "6b9fba174420074c7d01edc48d3ad47726b02dd24539e1ff3932b749fcbf01d5",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/README.md": "3fc3a5304c90ade6204c4fa50dd05d83e47499ef3f36f94b582e2dacbd42d244",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/artifact-validation.json": "3974e6817f8a609d0768abb2ebbbaeedc4c43acaa86895e701b37e86af267f3d",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/cross-artifact-validation.json": "3585c72fd93e1c97f20b6081e31a960b06f63d29e62e8c6878118cbc4f8d8570",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/data-readback-validation.json": "8c0c663c0ea07ee8a213cccd6a7b1630fdae43fe455f49d46b2ed0b35dcd7484",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/html-validation.json": "477b5e5e0e55c4892ccbd949a9cc76dc28e0b503b7819b6d7364d43755dc3d3b",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/publication-validation.json": "d546be87d29857dc48a008c7bc692a82282553e02ef73f1d5c1bdaf02c494733",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/validation.json": "8e26a1f0e4eca3b66d2c51462b58aca1dda3a17c32bfcc601f67c78bc785b4b8",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation-history/8b2f555/workbook-validation.json": "4521343476989a5da2657a36ef01fd2fa0ff4170178091b18107d30f4b4483e5",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/validation.json": "91e868c235f7e0c371f4b803968579d837896de12eed6a2b4866e570243e1089",
+    "docs/presentations_files/qa-common-synthetic-v3-20261022/workbook-validation.json": "9ab4645ec7a406c3a9fbf04049144d626c911e6dc79a28278fd131c4b1ef6dee",
+    "scripts/presentations/build_common_qa_delivery_v3.py": "07f17038e16079c95bf5b4338ac616c61b2bb54924b9b36da3ae05b1aabcd31f",
+    "scripts/presentations/check_common_qa_delivery_v3.py": "80fd37fafb9dd494b1cd7e4d94eebc4f74a85ecff32740b9bc231f25986211bc",
+    "scripts/presentations/check_common_qa_delivery_v3_html.mjs": "af582c97e70288a00db2e9d04663895353c9aa0d5f9d6e430c9bc9f51f887ac8",
+    "scripts/presentations/render_common_qa_delivery_v3.mjs": "0b3a99f0bca8e8d73d2092bdd1892760ef30b9875098c5137bee83b34237b021"
+  },
+  "scope": "Only common QA v3 document/artifact directories, four v3 scripts and root README are publication candidates. Concurrent DP44 presentation work excluded.",
+  "limits": [
+    "Browser visual verification blocked by file URL policy; offline minimal DOM checks only.",
+    "Native Windows Excel not run; generated-engine rendering and XML caches checked.",
+    "All data are synthetic authored; model calls and product runs are zero.",
+    "VOICE/DELIVERY exceed 512 MB in the authored profile; relative recommendations do not establish product qualification.",
+    "Excel EXACT compares pre-normalized JSON; arbitrary edits are not re-canonicalized by formulas.",
+    "Range snapshots do not recalculate after workbook tariff edits.",
+    "Active repository links are file-existence checks, not anchor or external URL validation."
+  ]
+}

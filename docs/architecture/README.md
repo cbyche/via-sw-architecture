@@ -1,5 +1,7 @@
 # VIA Architecture Baseline
 
+> **2026-10-22 네 DP의 현재 작업 위치:** DP2, DP3, DP5, DP44의 설계와 QA 정의, 목표, 점수, 시나리오, 평가 및 PPTX와 제작 지침은 [통합 작업 패키지](12-decisions/decision-packages/current/README.md)에서 관리한다. 해당 범위의 후속 편집은 이 패키지에서 한다. 아래 날짜별 설명과 다른 범위의 자료는 출처 및 당시 상태로 읽는다. 발표 v10과 공통 QA v3의 내용 미반영 항목은 새 패키지에 표시했다.
+
 > **Status: active and authoritative**
 
 > **현재 12번 작업 (2026-10-03):** `target-architecture/`는 검토 완료 [Reference Architecture](./12-decisions/target-architecture/README.md)이며 최종 목표 구조가 아니다.

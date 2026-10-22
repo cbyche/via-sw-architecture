@@ -1,0 +1,4690 @@
+[
+  {
+    "name": "dp44-v9-01-background",
+    "page": 24,
+    "items": [
+      {
+        "kind": "band",
+        "text": "겹친 사건이 같은 대화로 들어온다",
+        "x": 60,
+        "y": 209,
+        "w": 650,
+        "h": 48,
+        "size": 27
+      },
+      {
+        "kind": "ext",
+        "id": "user",
+        "text": "사용자",
+        "x": 65,
+        "y": 323,
+        "w": 250,
+        "h": 100,
+        "size": 28,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "mail",
+        "text": "Downstream Agent\n메일",
+        "x": 65,
+        "y": 493,
+        "w": 250,
+        "h": 100,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "report",
+        "text": "Downstream Agent\n보고서",
+        "x": 65,
+        "y": 663,
+        "w": 250,
+        "h": 100,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "registry",
+        "text": "Response Registry",
+        "x": 805,
+        "y": 355,
+        "w": 510,
+        "h": 365,
+        "size": 28,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "admit",
+        "text": "Revision Admission",
+        "x": 845,
+        "y": 430,
+        "w": 430,
+        "h": 65,
+        "size": 26.666667,
+        "parent": "registry",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "pending",
+        "text": "응답 원문과 판본\nTask 연결 / 내구 기록",
+        "x": 845,
+        "y": 550,
+        "w": 430,
+        "h": 115,
+        "size": 25.333333,
+        "parent": "registry",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "dp2",
+        "text": "Request Interpretation\nService (DP2)",
+        "x": 805,
+        "y": 210,
+        "w": 510,
+        "h": 95,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "voice",
+        "text": "S2S Runtime\n음성 생성",
+        "x": 1525,
+        "y": 386,
+        "w": 320,
+        "h": 95,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "device",
+        "text": "Audio Playout\n실제 장치 출력",
+        "x": 1525,
+        "y": 620,
+        "w": 320,
+        "h": 95,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "user-dp2",
+        "from": "user",
+        "to": "dp2",
+        "points": [
+          [
+            315,
+            350
+          ],
+          [
+            650,
+            350
+          ],
+          [
+            650,
+            257
+          ],
+          [
+            805,
+            257
+          ]
+        ],
+        "text": "1 “6월 기준으로 고쳐줘.\n메일 질문부터 읽어줘.”",
+        "label": [
+          345,
+          259,
+          430,
+          82
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "dp2-reg",
+        "from": "dp2",
+        "to": "admit",
+        "points": [
+          [
+            1060,
+            305
+          ],
+          [
+            1060,
+            325
+          ],
+          [
+            780,
+            325
+          ],
+          [
+            780,
+            445
+          ],
+          [
+            845,
+            445
+          ]
+        ],
+        "text": "2 정정 범위와 순서 채택",
+        "label": [
+          1075,
+          315,
+          395,
+          38
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "q1",
+        "from": "mail",
+        "to": "admit",
+        "points": [
+          [
+            315,
+            540
+          ],
+          [
+            720,
+            540
+          ],
+          [
+            720,
+            450
+          ],
+          [
+            845,
+            450
+          ]
+        ],
+        "text": "Q1: “수신자는 김 대리인가요?”",
+        "label": [
+          340,
+          484,
+          430,
+          50
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "r1",
+        "from": "report",
+        "to": "admit",
+        "points": [
+          [
+            315,
+            710
+          ],
+          [
+            740,
+            710
+          ],
+          [
+            740,
+            480
+          ],
+          [
+            845,
+            480
+          ]
+        ],
+        "text": "R1-v1: 보고서 결과 텍스트",
+        "label": [
+          340,
+          650,
+          430,
+          50
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "register",
+        "from": "admit",
+        "to": "pending",
+        "points": [
+          [
+            1060,
+            495
+          ],
+          [
+            1060,
+            550
+          ]
+        ],
+        "text": "3 현재 판본 저장",
+        "label": [
+          1080,
+          503,
+          270,
+          35
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "prepare",
+        "from": "pending",
+        "to": "voice",
+        "points": [
+          [
+            1275,
+            585
+          ],
+          [
+            1420,
+            585
+          ],
+          [
+            1420,
+            430
+          ],
+          [
+            1525,
+            430
+          ]
+        ],
+        "text": "음성 준비 시점?",
+        "label": [
+          1332,
+          490,
+          225,
+          60
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "play",
+        "from": "voice",
+        "to": "device",
+        "points": [
+          [
+            1685,
+            481
+          ],
+          [
+            1685,
+            620
+          ]
+        ],
+        "text": "생성과 재생의\n수명 분리?",
+        "label": [
+          1525,
+          520,
+          320,
+          65
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "text",
+        "text": "배경: R0를 말하는 중에 Q1과 R1이 도착한다. 사용자는 R0를 끊고 보고서 정정과 읽기 순서를 요청한다.",
+        "x": 60,
+        "y": 795,
+        "w": 1800,
+        "h": 50,
+        "size": 26.666667,
+        "bold": true
+      },
+      {
+        "kind": "table",
+        "rows": [
+          [
+            "공통으로 지키는 것",
+            "선택에 따라 달라지는 것"
+          ],
+          [
+            "질문과 결과의 업무 내용은 Downstream Agent가 작성\n화면 표시, 로컬 발화 감지와 DP2 의미 채택은 동일",
+            "A: 응답별 생성 실행과 보관을 재생과 분리\nB: 현재 발화 실행이 생성과 버퍼를 함께 관리"
+          ],
+          [
+            "구판 재생 차단, 유효 음성 재사용, 실제 출력 이력",
+            "A의 준비 적중 이익 ↔ 미전달 음성의 생성 비용"
+          ]
+        ],
+        "x": 60,
+        "y": 865,
+        "widths": [
+          900,
+          900
+        ],
+        "heights": [
+          42,
+          80,
+          52
+        ],
+        "size": 24
+      }
+    ],
+    "nodes": {
+      "user": {
+        "kind": "ext",
+        "id": "user",
+        "text": "사용자",
+        "x": 65,
+        "y": 323,
+        "w": 250,
+        "h": 100,
+        "size": 28,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "mail": {
+        "kind": "ext",
+        "id": "mail",
+        "text": "Downstream Agent\n메일",
+        "x": 65,
+        "y": 493,
+        "w": 250,
+        "h": 100,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "report": {
+        "kind": "ext",
+        "id": "report",
+        "text": "Downstream Agent\n보고서",
+        "x": 65,
+        "y": 663,
+        "w": 250,
+        "h": 100,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "registry": {
+        "kind": "comp",
+        "id": "registry",
+        "text": "Response Registry",
+        "x": 805,
+        "y": 355,
+        "w": 510,
+        "h": 365,
+        "size": 28,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "admit": {
+        "kind": "mod",
+        "id": "admit",
+        "text": "Revision Admission",
+        "x": 845,
+        "y": 430,
+        "w": 430,
+        "h": 65,
+        "size": 26.666667,
+        "parent": "registry",
+        "stroke": "#111111"
+      },
+      "pending": {
+        "kind": "store",
+        "id": "pending",
+        "text": "응답 원문과 판본\nTask 연결 / 내구 기록",
+        "x": 845,
+        "y": 550,
+        "w": 430,
+        "h": 115,
+        "size": 25.333333,
+        "parent": "registry",
+        "stroke": "#111111"
+      },
+      "dp2": {
+        "kind": "ext",
+        "id": "dp2",
+        "text": "Request Interpretation\nService (DP2)",
+        "x": 805,
+        "y": 210,
+        "w": 510,
+        "h": 95,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "voice": {
+        "kind": "ext",
+        "id": "voice",
+        "text": "S2S Runtime\n음성 생성",
+        "x": 1525,
+        "y": 386,
+        "w": 320,
+        "h": 95,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "device": {
+        "kind": "ext",
+        "id": "device",
+        "text": "Audio Playout\n실제 장치 출력",
+        "x": 1525,
+        "y": 620,
+        "w": 320,
+        "h": 95,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      }
+    },
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nThis is a broad design scene including R0 playback. S03-05 numerical timeline on page 28 does not include R0 playback. S05 is the authored interruption/resumption case. Downstream response text is already complete; no response-authoring LLM is added.\n",
+    "title": "DP44. 음성 준비와 재생 실행 방안 (배경)",
+    "subtitle": "이미 완성된 질문과 결과가 겹칠 때, 언제 음성을 준비하고 누가 재생을 제어할 것인가?"
+  },
+  {
+    "name": "dp44-v9-02-comparison",
+    "page": 25,
+    "items": [
+      {
+        "kind": "band",
+        "text": "A. 응답별 준비 실행 + 별도 재생 제어",
+        "x": 60,
+        "y": 197,
+        "w": 800,
+        "h": 42,
+        "size": 27
+      },
+      {
+        "kind": "comp",
+        "id": "areg",
+        "text": "Response Registry",
+        "x": 60,
+        "y": 264,
+        "w": 800,
+        "h": 120,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "aadmit",
+        "text": "Revision Admission",
+        "x": 80,
+        "y": 312,
+        "w": 300,
+        "h": 52,
+        "size": 24,
+        "parent": "areg",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "atext",
+        "text": "응답 원문 / 판본\n내구 기록",
+        "x": 520,
+        "y": 305,
+        "w": 320,
+        "h": 65,
+        "size": 22.666667,
+        "parent": "areg",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "awrite",
+        "from": "aadmit",
+        "to": "atext",
+        "points": [
+          [
+            380,
+            337
+          ],
+          [
+            520,
+            337
+          ]
+        ],
+        "text": "1 등록",
+        "label": [
+          382,
+          305,
+          135,
+          29
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "comp",
+        "id": "aadapter",
+        "text": "S2S Runtime Adapter",
+        "x": 60,
+        "y": 700,
+        "w": 360,
+        "h": 130,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "aclient",
+        "text": "Output Session Client",
+        "x": 80,
+        "y": 751,
+        "w": 320,
+        "h": 56,
+        "size": 22.666667,
+        "parent": "aadapter",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "amodel",
+        "text": "원격 S2S Runtime",
+        "x": 60,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "amodelreq",
+        "from": "aclient",
+        "to": "amodel",
+        "points": [
+          [
+            165,
+            807
+          ],
+          [
+            165,
+            931
+          ]
+        ],
+        "text": "text →",
+        "label": [
+          67,
+          843,
+          95,
+          35
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "amodelret",
+        "from": "amodel",
+        "to": "aclient",
+        "points": [
+          [
+            325,
+            931
+          ],
+          [
+            325,
+            807
+          ]
+        ],
+        "text": "← audio",
+        "label": [
+          330,
+          843,
+          90,
+          35
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "ext",
+        "id": "aout",
+        "text": "Audio Playout\n공통 VIA 출력 경계",
+        "x": 500,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "band",
+        "text": "B. 현재 발화가 생성과 버퍼 소유",
+        "x": 1030,
+        "y": 197,
+        "w": 800,
+        "h": 42,
+        "size": 27
+      },
+      {
+        "kind": "comp",
+        "id": "breg",
+        "text": "Response Registry",
+        "x": 1030,
+        "y": 264,
+        "w": 800,
+        "h": 120,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "badmit",
+        "text": "Revision Admission",
+        "x": 1050,
+        "y": 312,
+        "w": 300,
+        "h": 52,
+        "size": 24,
+        "parent": "breg",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "btext",
+        "text": "응답 원문 / 판본\n내구 기록",
+        "x": 1490,
+        "y": 305,
+        "w": 320,
+        "h": 65,
+        "size": 22.666667,
+        "parent": "breg",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "bwrite",
+        "from": "badmit",
+        "to": "btext",
+        "points": [
+          [
+            1350,
+            337
+          ],
+          [
+            1490,
+            337
+          ]
+        ],
+        "text": "1 등록",
+        "label": [
+          1352,
+          305,
+          135,
+          29
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "comp",
+        "id": "badapter",
+        "text": "S2S Runtime Adapter",
+        "x": 1030,
+        "y": 700,
+        "w": 360,
+        "h": 130,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "bclient",
+        "text": "Output Session Client",
+        "x": 1050,
+        "y": 751,
+        "w": 320,
+        "h": 56,
+        "size": 22.666667,
+        "parent": "badapter",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "bmodel",
+        "text": "원격 S2S Runtime",
+        "x": 1030,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "bmodelreq",
+        "from": "bclient",
+        "to": "bmodel",
+        "points": [
+          [
+            1135,
+            807
+          ],
+          [
+            1135,
+            931
+          ]
+        ],
+        "text": "text →",
+        "label": [
+          1037,
+          843,
+          95,
+          35
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "bmodelret",
+        "from": "bmodel",
+        "to": "bclient",
+        "points": [
+          [
+            1295,
+            931
+          ],
+          [
+            1295,
+            807
+          ]
+        ],
+        "text": "← audio",
+        "label": [
+          1300,
+          843,
+          90,
+          35
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "ext",
+        "id": "bout",
+        "text": "Audio Playout\n공통 VIA 출력 경계",
+        "x": 1470,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "aprep",
+        "text": "Speech Preparation Coordinator",
+        "x": 60,
+        "y": 461,
+        "w": 360,
+        "h": 145,
+        "size": 22.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "agen",
+        "text": "Preparation Jobs",
+        "x": 80,
+        "y": 518,
+        "w": 320,
+        "h": 60,
+        "size": 24,
+        "parent": "aprep",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "comp",
+        "id": "aplay",
+        "text": "Speech Playback Coordinator",
+        "x": 500,
+        "y": 461,
+        "w": 360,
+        "h": 145,
+        "size": 22.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "aselect",
+        "text": "Playback Selection",
+        "x": 520,
+        "y": 518,
+        "w": 320,
+        "h": 60,
+        "size": 24,
+        "parent": "aplay",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "comp",
+        "id": "astore",
+        "text": "Prepared Audio Store",
+        "x": 500,
+        "y": 700,
+        "w": 360,
+        "h": 165,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "aaccess",
+        "text": "Range\nAccess",
+        "x": 520,
+        "y": 756,
+        "w": 140,
+        "h": 70,
+        "size": 22.666667,
+        "parent": "astore",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "store",
+        "id": "abuffer",
+        "text": "준비 음성\nRAM",
+        "x": 685,
+        "y": 749,
+        "w": 150,
+        "h": 90,
+        "size": 22.666667,
+        "parent": "astore",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "edge",
+        "id": "a-admit-gen",
+        "from": "aadmit",
+        "to": "agen",
+        "points": [
+          [
+            180,
+            364
+          ],
+          [
+            180,
+            425
+          ],
+          [
+            40,
+            425
+          ],
+          [
+            40,
+            548
+          ],
+          [
+            80,
+            548
+          ]
+        ],
+        "text": "2 유효 응답마다",
+        "label": [
+          75,
+          407,
+          250,
+          36
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-admit-select",
+        "from": "aadmit",
+        "to": "aselect",
+        "points": [
+          [
+            380,
+            337
+          ],
+          [
+            450,
+            337
+          ],
+          [
+            450,
+            420
+          ],
+          [
+            885,
+            420
+          ],
+          [
+            885,
+            533
+          ],
+          [
+            840,
+            533
+          ]
+        ],
+        "text": "3 발화 허가 후 선택",
+        "label": [
+          480,
+          407,
+          340,
+          35
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-call",
+        "from": "agen",
+        "to": "aclient",
+        "points": [
+          [
+            150,
+            578
+          ],
+          [
+            150,
+            640
+          ],
+          [
+            40,
+            640
+          ],
+          [
+            40,
+            770
+          ],
+          [
+            80,
+            770
+          ]
+        ],
+        "text": "4 생성 요청",
+        "label": [
+          65,
+          634,
+          155,
+          35
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-return",
+        "from": "aclient",
+        "to": "agen",
+        "points": [
+          [
+            400,
+            790
+          ],
+          [
+            440,
+            790
+          ],
+          [
+            440,
+            590
+          ],
+          [
+            330,
+            590
+          ],
+          [
+            330,
+            578
+          ]
+        ],
+        "text": "5 chunk 반환",
+        "label": [
+          300,
+          612,
+          180,
+          34
+        ],
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-save",
+        "from": "agen",
+        "to": "aaccess",
+        "points": [
+          [
+            400,
+            548
+          ],
+          [
+            460,
+            548
+          ],
+          [
+            460,
+            790
+          ],
+          [
+            520,
+            790
+          ]
+        ],
+        "text": "6 저장",
+        "label": [
+          420,
+          726,
+          100,
+          32
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-storewrite",
+        "from": "aaccess",
+        "to": "abuffer",
+        "points": [
+          [
+            660,
+            776
+          ],
+          [
+            685,
+            776
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-storeread",
+        "from": "abuffer",
+        "to": "aaccess",
+        "points": [
+          [
+            685,
+            806
+          ],
+          [
+            660,
+            806
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-read",
+        "from": "aselect",
+        "to": "aaccess",
+        "points": [
+          [
+            570,
+            578
+          ],
+          [
+            570,
+            650
+          ],
+          [
+            480,
+            650
+          ],
+          [
+            480,
+            775
+          ],
+          [
+            520,
+            775
+          ]
+        ],
+        "text": "7 판본 확인\n구간 요청",
+        "label": [
+          495,
+          624,
+          185,
+          60
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-read-return",
+        "from": "aaccess",
+        "to": "aselect",
+        "points": [
+          [
+            630,
+            826
+          ],
+          [
+            630,
+            880
+          ],
+          [
+            890,
+            880
+          ],
+          [
+            890,
+            565
+          ],
+          [
+            840,
+            565
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-enqueue",
+        "from": "aselect",
+        "to": "aout",
+        "points": [
+          [
+            840,
+            548
+          ],
+          [
+            910,
+            548
+          ],
+          [
+            910,
+            901
+          ],
+          [
+            710,
+            901
+          ],
+          [
+            710,
+            931
+          ]
+        ],
+        "text": "8 유효 audio 재생",
+        "label": [
+          655,
+          875,
+          250,
+          33
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "comp",
+        "id": "bturn",
+        "text": "Speech Turn Controller",
+        "x": 1030,
+        "y": 461,
+        "w": 800,
+        "h": 180,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "mod",
+        "id": "bexec",
+        "text": "Turn Execution",
+        "x": 1050,
+        "y": 518,
+        "w": 300,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "bturn",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "bbuffer",
+        "text": "Turn Audio Buffer\n유효 구간 / RAM",
+        "x": 1490,
+        "y": 510,
+        "w": 310,
+        "h": 95,
+        "size": 24,
+        "parent": "bturn",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "edge",
+        "id": "b-admit-turn",
+        "from": "badmit",
+        "to": "bexec",
+        "points": [
+          [
+            1180,
+            364
+          ],
+          [
+            1180,
+            420
+          ],
+          [
+            1010,
+            420
+          ],
+          [
+            1010,
+            548
+          ],
+          [
+            1050,
+            548
+          ]
+        ],
+        "text": "2 발화 허가 후 선택",
+        "label": [
+          1040,
+          407,
+          280,
+          36
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-call",
+        "from": "bexec",
+        "to": "bclient",
+        "points": [
+          [
+            1120,
+            578
+          ],
+          [
+            1120,
+            675
+          ],
+          [
+            1010,
+            675
+          ],
+          [
+            1010,
+            770
+          ],
+          [
+            1050,
+            770
+          ]
+        ],
+        "text": "3 선택된 항목 생성",
+        "label": [
+          1033,
+          652,
+          260,
+          35
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-return",
+        "from": "bclient",
+        "to": "bexec",
+        "points": [
+          [
+            1370,
+            790
+          ],
+          [
+            1410,
+            790
+          ],
+          [
+            1410,
+            660
+          ],
+          [
+            1300,
+            660
+          ],
+          [
+            1300,
+            578
+          ]
+        ],
+        "text": "4 chunk 반환",
+        "label": [
+          1170,
+          610,
+          180,
+          30
+        ],
+        "color": "#32824A",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "b-write",
+        "from": "bexec",
+        "to": "bbuffer",
+        "points": [
+          [
+            1350,
+            538
+          ],
+          [
+            1490,
+            538
+          ]
+        ],
+        "text": "5 보관",
+        "label": [
+          1360,
+          494,
+          120,
+          32
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-read",
+        "from": "bbuffer",
+        "to": "bexec",
+        "points": [
+          [
+            1490,
+            568
+          ],
+          [
+            1350,
+            568
+          ]
+        ],
+        "text": "6 재사용",
+        "label": [
+          1357,
+          589,
+          125,
+          32
+        ],
+        "color": "#32824A",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "b-enqueue",
+        "from": "bexec",
+        "to": "bout",
+        "points": [
+          [
+            1350,
+            553
+          ],
+          [
+            1425,
+            553
+          ],
+          [
+            1425,
+            890
+          ],
+          [
+            1680,
+            890
+          ],
+          [
+            1680,
+            931
+          ]
+        ],
+        "text": "7 유효 audio 재생",
+        "label": [
+          1520,
+          852,
+          280,
+          35
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "text",
+        "text": "미선택 항목은 텍스트로 대기한다.\n복귀하면 유효 audio를 먼저 쓰고,\n미생성 후반만 추가 생성한다.",
+        "x": 1490,
+        "y": 690,
+        "w": 340,
+        "h": 135,
+        "size": 25.333333
+      },
+      {
+        "kind": "text",
+        "text": "검정 공통 / 파랑 A / 초록 B (A/B 배타적). 실선: 요청과 전달 / 점선: 결과와 복원. 입력과 실제 이력은 26쪽.",
+        "x": 60,
+        "y": 1012,
+        "w": 1780,
+        "h": 30,
+        "size": 21.333333
+      }
+    ],
+    "nodes": {
+      "areg": {
+        "kind": "comp",
+        "id": "areg",
+        "text": "Response Registry",
+        "x": 60,
+        "y": 264,
+        "w": 800,
+        "h": 120,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "aadmit": {
+        "kind": "mod",
+        "id": "aadmit",
+        "text": "Revision Admission",
+        "x": 80,
+        "y": 312,
+        "w": 300,
+        "h": 52,
+        "size": 24,
+        "parent": "areg",
+        "stroke": "#111111"
+      },
+      "atext": {
+        "kind": "store",
+        "id": "atext",
+        "text": "응답 원문 / 판본\n내구 기록",
+        "x": 520,
+        "y": 305,
+        "w": 320,
+        "h": 65,
+        "size": 22.666667,
+        "parent": "areg",
+        "stroke": "#111111"
+      },
+      "aadapter": {
+        "kind": "comp",
+        "id": "aadapter",
+        "text": "S2S Runtime Adapter",
+        "x": 60,
+        "y": 700,
+        "w": 360,
+        "h": 130,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "aclient": {
+        "kind": "mod",
+        "id": "aclient",
+        "text": "Output Session Client",
+        "x": 80,
+        "y": 751,
+        "w": 320,
+        "h": 56,
+        "size": 22.666667,
+        "parent": "aadapter",
+        "stroke": "#111111"
+      },
+      "amodel": {
+        "kind": "ext",
+        "id": "amodel",
+        "text": "원격 S2S Runtime",
+        "x": 60,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "aout": {
+        "kind": "ext",
+        "id": "aout",
+        "text": "Audio Playout\n공통 VIA 출력 경계",
+        "x": 500,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "breg": {
+        "kind": "comp",
+        "id": "breg",
+        "text": "Response Registry",
+        "x": 1030,
+        "y": 264,
+        "w": 800,
+        "h": 120,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "badmit": {
+        "kind": "mod",
+        "id": "badmit",
+        "text": "Revision Admission",
+        "x": 1050,
+        "y": 312,
+        "w": 300,
+        "h": 52,
+        "size": 24,
+        "parent": "breg",
+        "stroke": "#111111"
+      },
+      "btext": {
+        "kind": "store",
+        "id": "btext",
+        "text": "응답 원문 / 판본\n내구 기록",
+        "x": 1490,
+        "y": 305,
+        "w": 320,
+        "h": 65,
+        "size": 22.666667,
+        "parent": "breg",
+        "stroke": "#111111"
+      },
+      "badapter": {
+        "kind": "comp",
+        "id": "badapter",
+        "text": "S2S Runtime Adapter",
+        "x": 1030,
+        "y": 700,
+        "w": 360,
+        "h": 130,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bclient": {
+        "kind": "mod",
+        "id": "bclient",
+        "text": "Output Session Client",
+        "x": 1050,
+        "y": 751,
+        "w": 320,
+        "h": 56,
+        "size": 22.666667,
+        "parent": "badapter",
+        "stroke": "#111111"
+      },
+      "bmodel": {
+        "kind": "ext",
+        "id": "bmodel",
+        "text": "원격 S2S Runtime",
+        "x": 1030,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "bout": {
+        "kind": "ext",
+        "id": "bout",
+        "text": "Audio Playout\n공통 VIA 출력 경계",
+        "x": 1470,
+        "y": 931,
+        "w": 360,
+        "h": 70,
+        "size": 24,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "aprep": {
+        "kind": "comp",
+        "id": "aprep",
+        "text": "Speech Preparation Coordinator",
+        "x": 60,
+        "y": 461,
+        "w": 360,
+        "h": 145,
+        "size": 22.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "agen": {
+        "kind": "mod",
+        "id": "agen",
+        "text": "Preparation Jobs",
+        "x": 80,
+        "y": 518,
+        "w": 320,
+        "h": 60,
+        "size": 24,
+        "parent": "aprep",
+        "stroke": "#4676CB"
+      },
+      "aplay": {
+        "kind": "comp",
+        "id": "aplay",
+        "text": "Speech Playback Coordinator",
+        "x": 500,
+        "y": 461,
+        "w": 360,
+        "h": 145,
+        "size": 22.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "aselect": {
+        "kind": "mod",
+        "id": "aselect",
+        "text": "Playback Selection",
+        "x": 520,
+        "y": 518,
+        "w": 320,
+        "h": 60,
+        "size": 24,
+        "parent": "aplay",
+        "stroke": "#4676CB"
+      },
+      "astore": {
+        "kind": "comp",
+        "id": "astore",
+        "text": "Prepared Audio Store",
+        "x": 500,
+        "y": 700,
+        "w": 360,
+        "h": 165,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "aaccess": {
+        "kind": "mod",
+        "id": "aaccess",
+        "text": "Range\nAccess",
+        "x": 520,
+        "y": 756,
+        "w": 140,
+        "h": 70,
+        "size": 22.666667,
+        "parent": "astore",
+        "stroke": "#4676CB"
+      },
+      "abuffer": {
+        "kind": "store",
+        "id": "abuffer",
+        "text": "준비 음성\nRAM",
+        "x": 685,
+        "y": 749,
+        "w": 150,
+        "h": 90,
+        "size": 22.666667,
+        "parent": "astore",
+        "stroke": "#4676CB"
+      },
+      "bturn": {
+        "kind": "comp",
+        "id": "bturn",
+        "text": "Speech Turn Controller",
+        "x": 1030,
+        "y": 461,
+        "w": 800,
+        "h": 180,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      "bexec": {
+        "kind": "mod",
+        "id": "bexec",
+        "text": "Turn Execution",
+        "x": 1050,
+        "y": 518,
+        "w": 300,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "bturn",
+        "stroke": "#32824A"
+      },
+      "bbuffer": {
+        "kind": "store",
+        "id": "bbuffer",
+        "text": "Turn Audio Buffer\n유효 구간 / RAM",
+        "x": 1490,
+        "y": 510,
+        "w": 310,
+        "h": 95,
+        "size": 24,
+        "parent": "bturn",
+        "stroke": "#32824A"
+      }
+    },
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nFlow A 1 register, 2 launch response preparation, 3 select at eligibility, 4 text request, 5 audio return, 6 store, 7 read current revision, 8 enqueue. Flow B 1 register, 2 select, 3 request selected generation, 4 audio return, 5 buffer, 6 reuse, 7 enqueue. The two S2S symbols depict the same model configuration in exclusive alternatives, not simultaneous replicas. Device output receipts and input/echo path are expanded on page 26.\n",
+    "title": "DP44. 음성 준비와 재생 실행 방안 (설계 방안 비교)",
+    "subtitle": "생성의 소유 단위가 다르다: 응답별 준비 실행 A / 현재 발화 실행 B"
+  },
+  {
+    "name": "dp44-v9-03-input-history",
+    "page": 26,
+    "items": [
+      {
+        "kind": "comp",
+        "id": "input",
+        "text": "Voice Input Controller",
+        "x": 60,
+        "y": 220,
+        "w": 480,
+        "h": 200,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "finalizer",
+        "text": "Input Finalizer",
+        "x": 90,
+        "y": 355,
+        "w": 420,
+        "h": 50,
+        "size": 25.333333,
+        "parent": "input",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "capture",
+        "text": "Audio Capture",
+        "x": 90,
+        "y": 280,
+        "w": 200,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "input",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "vad",
+        "text": "Local VAD",
+        "x": 320,
+        "y": 280,
+        "w": 190,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "input",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "adapter",
+        "text": "S2S Runtime Adapter",
+        "x": 700,
+        "y": 220,
+        "w": 480,
+        "h": 130,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "inputclient",
+        "text": "Input Session Client",
+        "x": 730,
+        "y": 270,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "adapter",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "model",
+        "text": "원격 S2S Runtime\n입력 인식 세션",
+        "x": 1370,
+        "y": 240,
+        "w": 440,
+        "h": 85,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "ac",
+        "text": "Speech Playback Coordinator",
+        "x": 60,
+        "y": 440,
+        "w": 480,
+        "h": 135,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "as",
+        "text": "Playback Selection",
+        "x": 90,
+        "y": 495,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "ac",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "comp",
+        "id": "bc",
+        "text": "Speech Turn Controller",
+        "x": 60,
+        "y": 650,
+        "w": 480,
+        "h": 135,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "mod",
+        "id": "bs",
+        "text": "Turn Execution",
+        "x": 90,
+        "y": 705,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "bc",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "comp",
+        "id": "play",
+        "text": "Audio Playout",
+        "x": 700,
+        "y": 440,
+        "w": 480,
+        "h": 345,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "writer",
+        "text": "Device Writer",
+        "x": 730,
+        "y": 495,
+        "w": 210,
+        "h": 65,
+        "size": 25.333333,
+        "parent": "play",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "queue",
+        "text": "장치 큐\nRAM",
+        "x": 1000,
+        "y": 495,
+        "w": 150,
+        "h": 85,
+        "size": 24,
+        "parent": "play",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "receipt",
+        "text": "Output Receipt",
+        "x": 730,
+        "y": 675,
+        "w": 210,
+        "h": 60,
+        "size": 24,
+        "parent": "play",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "dp2",
+        "text": "Request Interpretation\nService (DP2)",
+        "x": 1370,
+        "y": 440,
+        "w": 440,
+        "h": 85,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "history",
+        "text": "Delivery History",
+        "x": 1370,
+        "y": 650,
+        "w": 440,
+        "h": 330,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "record",
+        "text": "Presentation Recorder",
+        "x": 1400,
+        "y": 705,
+        "w": 380,
+        "h": 55,
+        "size": 24,
+        "parent": "history",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "store",
+        "id": "facts",
+        "text": "표시 / 출력 구간\n내구 기록",
+        "x": 1400,
+        "y": 820,
+        "w": 180,
+        "h": 100,
+        "size": 22.666667,
+        "parent": "history",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "snapshot",
+        "text": "Input\nSnapshot",
+        "x": 1620,
+        "y": 825,
+        "w": 160,
+        "h": 70,
+        "size": 24,
+        "parent": "history",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "ui",
+        "text": "UI Renderer",
+        "x": 60,
+        "y": 865,
+        "w": 480,
+        "h": 145,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "publish",
+        "text": "Text Publisher",
+        "x": 90,
+        "y": 920,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "ui",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "reg",
+        "text": "Response Registry",
+        "x": 700,
+        "y": 865,
+        "w": 480,
+        "h": 145,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "apply",
+        "text": "Revision Admission",
+        "x": 730,
+        "y": 920,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "reg",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "samples",
+        "from": "capture",
+        "to": "vad",
+        "points": [
+          [
+            290,
+            310
+          ],
+          [
+            320,
+            310
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "inputstream",
+        "from": "capture",
+        "to": "inputclient",
+        "points": [
+          [
+            90,
+            300
+          ],
+          [
+            40,
+            300
+          ],
+          [
+            40,
+            202
+          ],
+          [
+            680,
+            202
+          ],
+          [
+            680,
+            300
+          ],
+          [
+            730,
+            300
+          ]
+        ],
+        "text": "1 입력 audio는 계속 전달",
+        "label": [
+          320,
+          175,
+          415,
+          32
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "vad-a",
+        "from": "vad",
+        "to": "as",
+        "points": [
+          [
+            510,
+            290
+          ],
+          [
+            560,
+            290
+          ],
+          [
+            560,
+            610
+          ],
+          [
+            40,
+            610
+          ],
+          [
+            40,
+            520
+          ],
+          [
+            90,
+            520
+          ]
+        ],
+        "text": "2 발화 시작 A",
+        "label": [
+          60,
+          590,
+          280,
+          34
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "vad-b",
+        "from": "vad",
+        "to": "bs",
+        "points": [
+          [
+            510,
+            310
+          ],
+          [
+            580,
+            310
+          ],
+          [
+            580,
+            735
+          ],
+          [
+            510,
+            735
+          ]
+        ],
+        "text": "2 발화\n시작 B",
+        "label": [
+          425,
+          590,
+          135,
+          55
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "stop-a",
+        "from": "as",
+        "to": "writer",
+        "points": [
+          [
+            510,
+            521
+          ],
+          [
+            730,
+            521
+          ]
+        ],
+        "text": "3 즉시 중단",
+        "label": [
+          529,
+          478,
+          190,
+          34
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "stop-b",
+        "from": "bs",
+        "to": "writer",
+        "points": [
+          [
+            510,
+            735
+          ],
+          [
+            650,
+            735
+          ],
+          [
+            650,
+            548
+          ],
+          [
+            730,
+            548
+          ]
+        ],
+        "text": "3 동일 중단",
+        "label": [
+          550,
+          797,
+          180,
+          32
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "enqueue",
+        "from": "writer",
+        "to": "queue",
+        "points": [
+          [
+            940,
+            515
+          ],
+          [
+            1000,
+            515
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "position",
+        "from": "queue",
+        "to": "writer",
+        "points": [
+          [
+            1000,
+            548
+          ],
+          [
+            940,
+            548
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "receiptrange",
+        "from": "writer",
+        "to": "receipt",
+        "points": [
+          [
+            835,
+            560
+          ],
+          [
+            835,
+            675
+          ]
+        ],
+        "text": "4 실제 출력 위치",
+        "label": [
+          720,
+          600,
+          280,
+          40
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "halt-ack-a",
+        "from": "receipt",
+        "to": "as",
+        "points": [
+          [
+            730,
+            690
+          ],
+          [
+            620,
+            690
+          ],
+          [
+            620,
+            540
+          ],
+          [
+            510,
+            540
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "halt-ack-b",
+        "from": "receipt",
+        "to": "bs",
+        "points": [
+          [
+            730,
+            720
+          ],
+          [
+            690,
+            720
+          ],
+          [
+            690,
+            778
+          ],
+          [
+            300,
+            778
+          ],
+          [
+            300,
+            760
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#32824A",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "recordaudio",
+        "from": "receipt",
+        "to": "record",
+        "points": [
+          [
+            940,
+            705
+          ],
+          [
+            1400,
+            705
+          ]
+        ],
+        "text": "5 재생 시도별 실제 구간",
+        "label": [
+          965,
+          663,
+          380,
+          36
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "sendinput",
+        "from": "inputclient",
+        "to": "model",
+        "points": [
+          [
+            1150,
+            285
+          ],
+          [
+            1370,
+            285
+          ]
+        ],
+        "text": "입력 audio",
+        "label": [
+          1170,
+          245,
+          180,
+          32
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "inputack",
+        "from": "model",
+        "to": "inputclient",
+        "points": [
+          [
+            1370,
+            313
+          ],
+          [
+            1150,
+            313
+          ]
+        ],
+        "text": "인식 결과 / 상태",
+        "label": [
+          1163,
+          329,
+          200,
+          32
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "transcript",
+        "from": "inputclient",
+        "to": "finalizer",
+        "points": [
+          [
+            730,
+            315
+          ],
+          [
+            650,
+            315
+          ],
+          [
+            650,
+            365
+          ],
+          [
+            510,
+            365
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "speech-end",
+        "from": "vad",
+        "to": "finalizer",
+        "points": [
+          [
+            415,
+            340
+          ],
+          [
+            415,
+            355
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "meaninginput",
+        "from": "finalizer",
+        "to": "dp2",
+        "points": [
+          [
+            510,
+            387
+          ],
+          [
+            600,
+            387
+          ],
+          [
+            600,
+            420
+          ],
+          [
+            1320,
+            420
+          ],
+          [
+            1320,
+            480
+          ],
+          [
+            1370,
+            480
+          ]
+        ],
+        "text": "6 입력 판본 확정",
+        "label": [
+          830,
+          368,
+          350,
+          36
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "query",
+        "from": "dp2",
+        "to": "snapshot",
+        "points": [
+          [
+            1810,
+            460
+          ],
+          [
+            1870,
+            460
+          ],
+          [
+            1870,
+            842
+          ],
+          [
+            1780,
+            842
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "snapshotreturn",
+        "from": "snapshot",
+        "to": "dp2",
+        "points": [
+          [
+            1780,
+            873
+          ],
+          [
+            1840,
+            873
+          ],
+          [
+            1840,
+            492
+          ],
+          [
+            1810,
+            492
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "text",
+        "text": "7 제시 이력 조회 / 반환",
+        "x": 1450,
+        "y": 599,
+        "w": 360,
+        "h": 35,
+        "size": 22.666667
+      },
+      {
+        "kind": "edge",
+        "id": "factswrite",
+        "from": "record",
+        "to": "facts",
+        "points": [
+          [
+            1490,
+            760
+          ],
+          [
+            1490,
+            820
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "factsread",
+        "from": "facts",
+        "to": "snapshot",
+        "points": [
+          [
+            1580,
+            866
+          ],
+          [
+            1620,
+            866
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "adopt",
+        "from": "dp2",
+        "to": "apply",
+        "points": [
+          [
+            1590,
+            525
+          ],
+          [
+            1590,
+            595
+          ],
+          [
+            1260,
+            595
+          ],
+          [
+            1260,
+            940
+          ],
+          [
+            1150,
+            940
+          ]
+        ],
+        "text": "8 정정 / 읽기 순서",
+        "label": [
+          1230,
+          535,
+          340,
+          36
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "display",
+        "from": "apply",
+        "to": "publish",
+        "points": [
+          [
+            730,
+            942
+          ],
+          [
+            510,
+            942
+          ]
+        ],
+        "text": "9 즉시 표시",
+        "label": [
+          535,
+          899,
+          180,
+          32
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "uireceipt",
+        "from": "publish",
+        "to": "record",
+        "points": [
+          [
+            300,
+            975
+          ],
+          [
+            300,
+            1025
+          ],
+          [
+            1320,
+            1025
+          ],
+          [
+            1320,
+            735
+          ],
+          [
+            1400,
+            735
+          ]
+        ],
+        "text": "10 표시 확인",
+        "label": [
+          590,
+          990,
+          225,
+          32
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "text",
+        "text": "검정 공통 / 파랑 A / 초록 B (A/B 배타적). 실선: 요청과 전달 / 점선: 결과와 복원",
+        "x": 60,
+        "y": 1034,
+        "w": 1650,
+        "h": 25,
+        "size": 20
+      }
+    ],
+    "nodes": {
+      "input": {
+        "kind": "comp",
+        "id": "input",
+        "text": "Voice Input Controller",
+        "x": 60,
+        "y": 220,
+        "w": 480,
+        "h": 200,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "finalizer": {
+        "kind": "mod",
+        "id": "finalizer",
+        "text": "Input Finalizer",
+        "x": 90,
+        "y": 355,
+        "w": 420,
+        "h": 50,
+        "size": 25.333333,
+        "parent": "input",
+        "stroke": "#111111"
+      },
+      "capture": {
+        "kind": "mod",
+        "id": "capture",
+        "text": "Audio Capture",
+        "x": 90,
+        "y": 280,
+        "w": 200,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "input",
+        "stroke": "#111111"
+      },
+      "vad": {
+        "kind": "mod",
+        "id": "vad",
+        "text": "Local VAD",
+        "x": 320,
+        "y": 280,
+        "w": 190,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "input",
+        "stroke": "#111111"
+      },
+      "adapter": {
+        "kind": "comp",
+        "id": "adapter",
+        "text": "S2S Runtime Adapter",
+        "x": 700,
+        "y": 220,
+        "w": 480,
+        "h": 130,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "inputclient": {
+        "kind": "mod",
+        "id": "inputclient",
+        "text": "Input Session Client",
+        "x": 730,
+        "y": 270,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "adapter",
+        "stroke": "#111111"
+      },
+      "model": {
+        "kind": "ext",
+        "id": "model",
+        "text": "원격 S2S Runtime\n입력 인식 세션",
+        "x": 1370,
+        "y": 240,
+        "w": 440,
+        "h": 85,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "ac": {
+        "kind": "comp",
+        "id": "ac",
+        "text": "Speech Playback Coordinator",
+        "x": 60,
+        "y": 440,
+        "w": 480,
+        "h": 135,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "as": {
+        "kind": "mod",
+        "id": "as",
+        "text": "Playback Selection",
+        "x": 90,
+        "y": 495,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "ac",
+        "stroke": "#4676CB"
+      },
+      "bc": {
+        "kind": "comp",
+        "id": "bc",
+        "text": "Speech Turn Controller",
+        "x": 60,
+        "y": 650,
+        "w": 480,
+        "h": 135,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      "bs": {
+        "kind": "mod",
+        "id": "bs",
+        "text": "Turn Execution",
+        "x": 90,
+        "y": 705,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "bc",
+        "stroke": "#32824A"
+      },
+      "play": {
+        "kind": "comp",
+        "id": "play",
+        "text": "Audio Playout",
+        "x": 700,
+        "y": 440,
+        "w": 480,
+        "h": 345,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "writer": {
+        "kind": "mod",
+        "id": "writer",
+        "text": "Device Writer",
+        "x": 730,
+        "y": 495,
+        "w": 210,
+        "h": 65,
+        "size": 25.333333,
+        "parent": "play",
+        "stroke": "#111111"
+      },
+      "queue": {
+        "kind": "store",
+        "id": "queue",
+        "text": "장치 큐\nRAM",
+        "x": 1000,
+        "y": 495,
+        "w": 150,
+        "h": 85,
+        "size": 24,
+        "parent": "play",
+        "stroke": "#111111"
+      },
+      "receipt": {
+        "kind": "mod",
+        "id": "receipt",
+        "text": "Output Receipt",
+        "x": 730,
+        "y": 675,
+        "w": 210,
+        "h": 60,
+        "size": 24,
+        "parent": "play",
+        "stroke": "#111111"
+      },
+      "dp2": {
+        "kind": "ext",
+        "id": "dp2",
+        "text": "Request Interpretation\nService (DP2)",
+        "x": 1370,
+        "y": 440,
+        "w": 440,
+        "h": 85,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "history": {
+        "kind": "comp",
+        "id": "history",
+        "text": "Delivery History",
+        "x": 1370,
+        "y": 650,
+        "w": 440,
+        "h": 330,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "record": {
+        "kind": "mod",
+        "id": "record",
+        "text": "Presentation Recorder",
+        "x": 1400,
+        "y": 705,
+        "w": 380,
+        "h": 55,
+        "size": 24,
+        "parent": "history",
+        "stroke": "#111111"
+      },
+      "facts": {
+        "kind": "store",
+        "id": "facts",
+        "text": "표시 / 출력 구간\n내구 기록",
+        "x": 1400,
+        "y": 820,
+        "w": 180,
+        "h": 100,
+        "size": 22.666667,
+        "parent": "history",
+        "stroke": "#111111"
+      },
+      "snapshot": {
+        "kind": "mod",
+        "id": "snapshot",
+        "text": "Input\nSnapshot",
+        "x": 1620,
+        "y": 825,
+        "w": 160,
+        "h": 70,
+        "size": 24,
+        "parent": "history",
+        "stroke": "#111111"
+      },
+      "ui": {
+        "kind": "comp",
+        "id": "ui",
+        "text": "UI Renderer",
+        "x": 60,
+        "y": 865,
+        "w": 480,
+        "h": 145,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "publish": {
+        "kind": "mod",
+        "id": "publish",
+        "text": "Text Publisher",
+        "x": 90,
+        "y": 920,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "ui",
+        "stroke": "#111111"
+      },
+      "reg": {
+        "kind": "comp",
+        "id": "reg",
+        "text": "Response Registry",
+        "x": 700,
+        "y": 865,
+        "w": 480,
+        "h": 145,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "apply": {
+        "kind": "mod",
+        "id": "apply",
+        "text": "Revision Admission",
+        "x": 730,
+        "y": 920,
+        "w": 420,
+        "h": 55,
+        "size": 25.333333,
+        "parent": "reg",
+        "stroke": "#111111"
+      }
+    },
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nVAD confirms local speech onset; A/B controllers issue the same halt command. Actual device receipt, not generation callbacks, feeds Delivery History. No model tool calling is granted to S2S. Capture includes common echo cancellation using device output reference; omitted internal AEC wire is not an alternative. Queries include facts before and during the utterance with timestamps, not only onset snapshot. Two controller boxes are exclusive alternatives; only the selected one runs. Diagram intentionally does not route S2S generation completion into presentation history.\n",
+    "title": "DP44. 발화 감지, 중단과 실제 전달 이력",
+    "subtitle": "A/B 모두 로컬에서 즉시 재생을 끊고, 실제 제시 기록을 DP2의 입력 근거로 제공한다"
+  },
+  {
+    "name": "dp44-v9-04-lifetimes",
+    "page": 27,
+    "items": [
+      {
+        "kind": "band",
+        "text": "A. 생성 실행과 재생 실행의 수명이 독립",
+        "x": 60,
+        "y": 200,
+        "w": 800,
+        "h": 42,
+        "size": 27
+      },
+      {
+        "kind": "band",
+        "text": "B. 현재 발화에 생성 실행이 귀속",
+        "x": 1030,
+        "y": 200,
+        "w": 800,
+        "h": 42,
+        "size": 27
+      },
+      {
+        "kind": "comp",
+        "id": "revision",
+        "text": "Response Registry",
+        "x": 500,
+        "y": 435,
+        "w": 360,
+        "h": 105,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "revisionadmit",
+        "text": "Revision Admission",
+        "x": 520,
+        "y": 480,
+        "w": 320,
+        "h": 45,
+        "size": 22.666667,
+        "parent": "revision",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "comp",
+        "id": "prep",
+        "text": "Speech Preparation Coordinator",
+        "x": 60,
+        "y": 280,
+        "w": 800,
+        "h": 140,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "jobs",
+        "text": "Generation Lifecycle",
+        "x": 80,
+        "y": 335,
+        "w": 300,
+        "h": 60,
+        "size": 24,
+        "parent": "prep",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "store",
+        "id": "state",
+        "text": "응답별 job / 판본\nRAM",
+        "x": 520,
+        "y": 328,
+        "w": 300,
+        "h": 80,
+        "size": 24,
+        "parent": "prep",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "comp",
+        "id": "store",
+        "text": "Prepared Audio Store",
+        "x": 60,
+        "y": 555,
+        "w": 360,
+        "h": 180,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "access",
+        "text": "Range\nAccess",
+        "x": 80,
+        "y": 610,
+        "w": 140,
+        "h": 65,
+        "size": 22.666667,
+        "parent": "store",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "store",
+        "id": "buffer",
+        "text": "유효 audio\nRAM",
+        "x": 240,
+        "y": 600,
+        "w": 150,
+        "h": 95,
+        "size": 22.666667,
+        "parent": "store",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "comp",
+        "id": "play",
+        "text": "Speech Playback Coordinator",
+        "x": 500,
+        "y": 555,
+        "w": 360,
+        "h": 140,
+        "size": 22.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "select",
+        "text": "Playback Selection",
+        "x": 520,
+        "y": 610,
+        "w": 320,
+        "h": 60,
+        "size": 24,
+        "parent": "play",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "comp",
+        "id": "turn",
+        "text": "Speech Turn Controller",
+        "x": 1030,
+        "y": 280,
+        "w": 800,
+        "h": 415,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "mod",
+        "id": "exec",
+        "text": "Turn Execution",
+        "x": 1050,
+        "y": 335,
+        "w": 310,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "turn",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "turnbuffer",
+        "text": "Turn Audio Buffer\n구간 / 판본 / RAM",
+        "x": 1490,
+        "y": 325,
+        "w": 300,
+        "h": 100,
+        "size": 24,
+        "parent": "turn",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "store",
+        "id": "pending",
+        "text": "미선택 텍스트 참조\nRAM",
+        "x": 1490,
+        "y": 550,
+        "w": 300,
+        "h": 100,
+        "size": 24,
+        "parent": "turn",
+        "stroke": "#32824A"
+      },
+      {
+        "kind": "comp",
+        "id": "adapter",
+        "text": "S2S Runtime Adapter",
+        "x": 600,
+        "y": 855,
+        "w": 520,
+        "h": 155,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "mod",
+        "id": "client",
+        "text": "Output Session Client",
+        "x": 625,
+        "y": 910,
+        "w": 470,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "adapter",
+        "stroke": "#111111"
+      },
+      {
+        "kind": "ext",
+        "id": "model",
+        "text": "원격 S2S Runtime",
+        "x": 1290,
+        "y": 900,
+        "w": 350,
+        "h": 85,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      {
+        "kind": "edge",
+        "id": "revision-a",
+        "from": "revisionadmit",
+        "to": "jobs",
+        "points": [
+          [
+            520,
+            500
+          ],
+          [
+            480,
+            500
+          ],
+          [
+            480,
+            365
+          ],
+          [
+            380,
+            365
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "revision-b",
+        "from": "revisionadmit",
+        "to": "exec",
+        "points": [
+          [
+            840,
+            500
+          ],
+          [
+            955,
+            500
+          ],
+          [
+            955,
+            350
+          ],
+          [
+            1050,
+            350
+          ]
+        ],
+        "text": "채택 판본 /\n읽기 순서",
+        "label": [
+          885,
+          465,
+          130,
+          70
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "order-a",
+        "from": "revisionadmit",
+        "to": "select",
+        "points": [
+          [
+            680,
+            525
+          ],
+          [
+            680,
+            540
+          ],
+          [
+            900,
+            540
+          ],
+          [
+            900,
+            640
+          ],
+          [
+            840,
+            640
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "ajob-state",
+        "from": "jobs",
+        "to": "state",
+        "points": [
+          [
+            380,
+            355
+          ],
+          [
+            520,
+            355
+          ]
+        ],
+        "text": "1 판본 반영",
+        "label": [
+          385,
+          325,
+          130,
+          29
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "ajob-state-return",
+        "from": "state",
+        "to": "jobs",
+        "points": [
+          [
+            520,
+            382
+          ],
+          [
+            380,
+            382
+          ]
+        ],
+        "text": "상태 반환",
+        "label": [
+          390,
+          402,
+          125,
+          30
+        ],
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-commit",
+        "from": "jobs",
+        "to": "access",
+        "points": [
+          [
+            150,
+            395
+          ],
+          [
+            150,
+            530
+          ],
+          [
+            40,
+            530
+          ],
+          [
+            40,
+            635
+          ],
+          [
+            80,
+            635
+          ]
+        ],
+        "text": "2 판본 확인\n유효 chunk만 보관",
+        "label": [
+          60,
+          458,
+          365,
+          70
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-reject",
+        "from": "access",
+        "to": "jobs",
+        "points": [
+          [
+            80,
+            660
+          ],
+          [
+            25,
+            660
+          ],
+          [
+            25,
+            410
+          ],
+          [
+            100,
+            410
+          ],
+          [
+            100,
+            395
+          ]
+        ],
+        "text": "구판 / 철회 tail: 거절 반환",
+        "label": [
+          60,
+          435,
+          400,
+          32
+        ],
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-buffer-write",
+        "from": "access",
+        "to": "buffer",
+        "points": [
+          [
+            220,
+            630
+          ],
+          [
+            240,
+            630
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-buffer-return",
+        "from": "buffer",
+        "to": "access",
+        "points": [
+          [
+            240,
+            660
+          ],
+          [
+            220,
+            660
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-resume-read",
+        "from": "select",
+        "to": "access",
+        "points": [
+          [
+            570,
+            670
+          ],
+          [
+            570,
+            760
+          ],
+          [
+            180,
+            760
+          ],
+          [
+            180,
+            675
+          ]
+        ],
+        "text": "5 복귀 시 유효 구간 요청",
+        "label": [
+          240,
+          729,
+          350,
+          32
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-resume-return",
+        "from": "access",
+        "to": "select",
+        "points": [
+          [
+            200,
+            675
+          ],
+          [
+            200,
+            782
+          ],
+          [
+            470,
+            782
+          ],
+          [
+            470,
+            640
+          ],
+          [
+            520,
+            640
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "a-api",
+        "from": "jobs",
+        "to": "client",
+        "points": [
+          [
+            80,
+            367
+          ],
+          [
+            40,
+            367
+          ],
+          [
+            40,
+            1025
+          ],
+          [
+            560,
+            1025
+          ],
+          [
+            560,
+            930
+          ],
+          [
+            625,
+            930
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "a-api-return",
+        "from": "client",
+        "to": "jobs",
+        "points": [
+          [
+            625,
+            955
+          ],
+          [
+            580,
+            955
+          ],
+          [
+            580,
+            800
+          ],
+          [
+            450,
+            800
+          ],
+          [
+            450,
+            367
+          ],
+          [
+            380,
+            367
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#4676CB",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "text",
+        "text": "3 구판 job 취소 / 4 늦은 chunk 반환\n유효 R0 job은 재생 중단 중에도 유지",
+        "x": 60,
+        "y": 808,
+        "w": 530,
+        "h": 60,
+        "size": 22.666667,
+        "color": "#4676CB"
+      },
+      {
+        "kind": "edge",
+        "id": "b-reject",
+        "from": "exec",
+        "to": "exec",
+        "points": [
+          [
+            1050,
+            375
+          ],
+          [
+            1015,
+            375
+          ],
+          [
+            1015,
+            465
+          ],
+          [
+            1150,
+            465
+          ],
+          [
+            1150,
+            395
+          ]
+        ],
+        "text": "",
+        "label": null,
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "text",
+        "text": "4 구판 chunk는 거절 후 종료",
+        "x": 1040,
+        "y": 480,
+        "w": 380,
+        "h": 32,
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-write",
+        "from": "exec",
+        "to": "turnbuffer",
+        "points": [
+          [
+            1360,
+            353
+          ],
+          [
+            1490,
+            353
+          ]
+        ],
+        "text": "1 구간 보관",
+        "label": [
+          1360,
+          322,
+          130,
+          30
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-reuse",
+        "from": "turnbuffer",
+        "to": "exec",
+        "points": [
+          [
+            1490,
+            387
+          ],
+          [
+            1360,
+            387
+          ]
+        ],
+        "text": "5 유효분 재사용",
+        "label": [
+          1348,
+          434,
+          165,
+          55
+        ],
+        "color": "#32824A",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "b-text-read",
+        "from": "pending",
+        "to": "exec",
+        "points": [
+          [
+            1490,
+            600
+          ],
+          [
+            1415,
+            600
+          ],
+          [
+            1415,
+            395
+          ],
+          [
+            1320,
+            395
+          ]
+        ],
+        "text": "미선택은\n생성하지 않음",
+        "label": [
+          1120,
+          530,
+          290,
+          70
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-api",
+        "from": "exec",
+        "to": "client",
+        "points": [
+          [
+            1050,
+            365
+          ],
+          [
+            990,
+            365
+          ],
+          [
+            990,
+            810
+          ],
+          [
+            590,
+            810
+          ],
+          [
+            590,
+            940
+          ],
+          [
+            625,
+            940
+          ]
+        ],
+        "text": "2 발화 전환 때 취소\n6 미생성 후반 요청",
+        "label": [
+          865,
+          707,
+          310,
+          75
+        ],
+        "color": "#32824A",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "b-api-return",
+        "from": "client",
+        "to": "exec",
+        "points": [
+          [
+            1095,
+            947
+          ],
+          [
+            1210,
+            947
+          ],
+          [
+            1210,
+            785
+          ],
+          [
+            1400,
+            785
+          ],
+          [
+            1400,
+            395
+          ],
+          [
+            1270,
+            395
+          ]
+        ],
+        "text": "3 늦은 반환\n4 판본 확인",
+        "label": [
+          1330,
+          707,
+          255,
+          70
+        ],
+        "color": "#32824A",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "edge",
+        "id": "api-model",
+        "from": "client",
+        "to": "model",
+        "points": [
+          [
+            1095,
+            924
+          ],
+          [
+            1290,
+            924
+          ]
+        ],
+        "text": "요청 / 취소",
+        "label": [
+          1110,
+          873,
+          175,
+          32
+        ],
+        "color": "#111111",
+        "size": 21.333333
+      },
+      {
+        "kind": "edge",
+        "id": "model-api",
+        "from": "model",
+        "to": "client",
+        "points": [
+          [
+            1290,
+            960
+          ],
+          [
+            1095,
+            960
+          ]
+        ],
+        "text": "audio / 상태",
+        "label": [
+          1110,
+          980,
+          175,
+          30
+        ],
+        "color": "#111111",
+        "size": 21.333333,
+        "dashed": true
+      },
+      {
+        "kind": "text",
+        "text": "검정 공통 / 파랑 A / 초록 B (A/B 배타적). 실선: 요청과 전달 / 점선: 결과와 복원",
+        "x": 60,
+        "y": 1034,
+        "w": 1650,
+        "h": 25,
+        "size": 20
+      }
+    ],
+    "nodes": {
+      "revision": {
+        "kind": "comp",
+        "id": "revision",
+        "text": "Response Registry",
+        "x": 500,
+        "y": 435,
+        "w": 360,
+        "h": 105,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "revisionadmit": {
+        "kind": "mod",
+        "id": "revisionadmit",
+        "text": "Revision Admission",
+        "x": 520,
+        "y": 480,
+        "w": 320,
+        "h": 45,
+        "size": 22.666667,
+        "parent": "revision",
+        "stroke": "#111111"
+      },
+      "prep": {
+        "kind": "comp",
+        "id": "prep",
+        "text": "Speech Preparation Coordinator",
+        "x": 60,
+        "y": 280,
+        "w": 800,
+        "h": 140,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "jobs": {
+        "kind": "mod",
+        "id": "jobs",
+        "text": "Generation Lifecycle",
+        "x": 80,
+        "y": 335,
+        "w": 300,
+        "h": 60,
+        "size": 24,
+        "parent": "prep",
+        "stroke": "#4676CB"
+      },
+      "state": {
+        "kind": "store",
+        "id": "state",
+        "text": "응답별 job / 판본\nRAM",
+        "x": 520,
+        "y": 328,
+        "w": 300,
+        "h": 80,
+        "size": 24,
+        "parent": "prep",
+        "stroke": "#4676CB"
+      },
+      "store": {
+        "kind": "comp",
+        "id": "store",
+        "text": "Prepared Audio Store",
+        "x": 60,
+        "y": 555,
+        "w": 360,
+        "h": 180,
+        "size": 25.333333,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "access": {
+        "kind": "mod",
+        "id": "access",
+        "text": "Range\nAccess",
+        "x": 80,
+        "y": 610,
+        "w": 140,
+        "h": 65,
+        "size": 22.666667,
+        "parent": "store",
+        "stroke": "#4676CB"
+      },
+      "buffer": {
+        "kind": "store",
+        "id": "buffer",
+        "text": "유효 audio\nRAM",
+        "x": 240,
+        "y": 600,
+        "w": 150,
+        "h": 95,
+        "size": 22.666667,
+        "parent": "store",
+        "stroke": "#4676CB"
+      },
+      "play": {
+        "kind": "comp",
+        "id": "play",
+        "text": "Speech Playback Coordinator",
+        "x": 500,
+        "y": 555,
+        "w": 360,
+        "h": 140,
+        "size": 22.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "select": {
+        "kind": "mod",
+        "id": "select",
+        "text": "Playback Selection",
+        "x": 520,
+        "y": 610,
+        "w": 320,
+        "h": 60,
+        "size": 24,
+        "parent": "play",
+        "stroke": "#4676CB"
+      },
+      "turn": {
+        "kind": "comp",
+        "id": "turn",
+        "text": "Speech Turn Controller",
+        "x": 1030,
+        "y": 280,
+        "w": 800,
+        "h": 415,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#32824A"
+      },
+      "exec": {
+        "kind": "mod",
+        "id": "exec",
+        "text": "Turn Execution",
+        "x": 1050,
+        "y": 335,
+        "w": 310,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "turn",
+        "stroke": "#32824A"
+      },
+      "turnbuffer": {
+        "kind": "store",
+        "id": "turnbuffer",
+        "text": "Turn Audio Buffer\n구간 / 판본 / RAM",
+        "x": 1490,
+        "y": 325,
+        "w": 300,
+        "h": 100,
+        "size": 24,
+        "parent": "turn",
+        "stroke": "#32824A"
+      },
+      "pending": {
+        "kind": "store",
+        "id": "pending",
+        "text": "미선택 텍스트 참조\nRAM",
+        "x": 1490,
+        "y": 550,
+        "w": 300,
+        "h": 100,
+        "size": 24,
+        "parent": "turn",
+        "stroke": "#32824A"
+      },
+      "adapter": {
+        "kind": "comp",
+        "id": "adapter",
+        "text": "S2S Runtime Adapter",
+        "x": 600,
+        "y": 855,
+        "w": 520,
+        "h": 155,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      },
+      "client": {
+        "kind": "mod",
+        "id": "client",
+        "text": "Output Session Client",
+        "x": 625,
+        "y": 910,
+        "w": 470,
+        "h": 60,
+        "size": 25.333333,
+        "parent": "adapter",
+        "stroke": "#111111"
+      },
+      "model": {
+        "kind": "ext",
+        "id": "model",
+        "text": "원격 S2S Runtime",
+        "x": 1290,
+        "y": 900,
+        "w": 350,
+        "h": 85,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#111111"
+      }
+    },
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nResponse Registry is the same instance repeated from page 26. Revision Admission explicitly sends the adopted revision to Generation Lifecycle and Turn Execution and the read order to Playback Selection. A revision key is (responseId, revision, range, generationId). Chunk admission rechecks revision and revocation tombstone. A superseded/revoked revision rejects late chunks. Cancellation for a speech switch does not revoke valid content: valid tail can remain buffered until generation terminal, as in S05. Cancel is best-effort and all tail usage remains billed. Playback Selection revalidates the current key before enqueue; Audio Playout rejects a stale epoch across the check/enqueue race. B Turn Execution rejects late invalid chunks before buffer admission and performs the same validation and keeps already generated valid audio on interruption. Under the basic B design current generation is retained through meaning adoption, cancelled on actual switch to Q1, and ungenerated suffix is generated at return, with additional input context. Short unconfirmed VAD may pause playback without cancelling. Diagram covers generation control; local halt/actual receipts on page 26.\n",
+    "title": "DP44. 정정 반영, 생성 취소와 재개",
+    "subtitle": "같은 구판 차단을 수행하되, A는 응답별 job을 관리하고 B는 현재 turn의 생성 범위를 관리한다"
+  },
+  {
+    "name": "dp44-v9-05-scenario",
+    "page": 28,
+    "items": [
+      {
+        "kind": "table",
+        "rows": [
+          [
+            "공통 사건 / 초",
+            "입력과 처리"
+          ],
+          [
+            "-4.400 ~ 0.000",
+            "“보고서는 6월 기준으로 다시 해줘. 메일 질문부터 들려줘.”"
+          ],
+          [
+            "Q1 -1.400 / R1-v1 -1.000",
+            "메일 질문과 구판 결과 텍스트 도착. DP2 의미 확정 0.867"
+          ],
+          [
+            "0.907 / 0.947",
+            "정정과 읽기 순서 반영 / “6월 기준 재요청, 메일 질문부터” 화면 표시"
+          ],
+          [
+            "3.427 / 3.467",
+            "새 보고서 R1-v2 도착 / 새 결과 화면 표시. 양안 동일"
+          ]
+        ],
+        "x": 60,
+        "y": 207,
+        "widths": [
+          390,
+          1410
+        ],
+        "heights": [
+          44,
+          57,
+          57,
+          57,
+          57
+        ],
+        "size": 24
+      },
+      {
+        "kind": "band",
+        "text": "같은 장면 시각: 생성 시작~종료와 실제 첫 음성 / 전체 생성 전에도 재생 가능",
+        "x": 60,
+        "y": 500,
+        "w": 1800,
+        "h": 42,
+        "size": 27
+      },
+      {
+        "kind": "table",
+        "rows": [
+          [
+            "음성 항목",
+            "A 생성 구간 / 실제 첫 음성",
+            "B 생성 구간 / 실제 첫 음성"
+          ],
+          [
+            "Q1 “수신자는 김 대리인가요?”",
+            "-1.400 ~ -0.351 / 0.947",
+            "0.907 ~ 1.956 / 1.348"
+          ],
+          [
+            "R1-v1 구판 보고서",
+            "-1.000 시작, 1.007 생성 중단\n6.587초 분량 폐기, 재생 없음",
+            "아직 미선택이므로 생성 없음"
+          ],
+          [
+            "R1-v2 새 보고서",
+            "3.427 ~ 5.784 / 3.876",
+            "4.142 ~ 6.499 / 4.591"
+          ],
+          [
+            "Q1 / 새 보고서 실제 재생 끝",
+            "3.741 / 11.870",
+            "4.142 / 12.585"
+          ],
+          [
+            "이 사례의 전체 VIA 모델 비용",
+            "$0.043073",
+            "$0.029720"
+          ]
+        ],
+        "x": 60,
+        "y": 563,
+        "widths": [
+          570,
+          615,
+          615
+        ],
+        "heights": [
+          44,
+          62,
+          82,
+          62,
+          55,
+          55
+        ],
+        "size": 24
+      },
+      {
+        "kind": "text",
+        "text": "첫 화면 차이 0초 / 첫 음성 차이 0.401초 / A의 구판 폐기 비용 $0.013353",
+        "x": 60,
+        "y": 944,
+        "w": 1800,
+        "h": 38,
+        "size": 26.666667,
+        "bold": true
+      },
+      {
+        "kind": "text",
+        "text": "가정 기반 합성 수치 / 실측 아님",
+        "x": 1350,
+        "y": 1009,
+        "w": 510,
+        "h": 28,
+        "size": 21.333333,
+        "align": "right",
+        "color": "#50555B"
+      }
+    ],
+    "nodes": {},
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nS03-05 exact times in synthetic-data.json: interpretation .866666667; adoption .906666667; first UI .946666667; A Q1 start -1.4, full -.3505, onset .946666667, playback end3.740666667; B .906666667,full1.956166667,onset1.347666667,end4.141666667. Old A generation stopped1.006666667 after .1s tail, actual6.586666668s not requested7.994s. New report source3.426666667, first UI3.466666667. A full5.784166667, onset3.875666667, end11.869666667; B full6.499166667,onset4.590666667,end12.584666667. These are wall-clock scene timestamps, not QA03. QA03 original report A3.924166667/B4.245166667, Q1 read goal A.946666667/B1.956166667. S03 has no R0 playback; interruption is S05. S03 costs include common .000664+.002+.00078+.0044; Q1 .005714; v2 .016162; A waste .013353333.\n",
+    "title": "DP44. 동일 시나리오의 처리와 비용",
+    "subtitle": "S03-05: Q1은 보존하고 R1-v1은 무효화한다. 정정 뒤 메일 질문을 먼저 읽는다"
+  },
+  {
+    "name": "dp44-v9-06-qa",
+    "page": 29,
+    "items": [
+      {
+        "kind": "table",
+        "rows": [
+          [
+            "QA / 관측 경계",
+            "A",
+            "B",
+            "손익과 근거 상태"
+          ],
+          [
+            "QA01 첫 구체적 화면 표시",
+            "0.923초",
+            "0.923초",
+            "동점. UI는 음성과 독립"
+          ],
+          [
+            "QA02 지칭 대상 집합 정확도",
+            "120/120",
+            "120/120",
+            "고정 정답 조건. 모델 정확도 증거 아님"
+          ],
+          [
+            "QA03 VIA 처리시간",
+            "1.965초",
+            "2.710초",
+            "A 0.745초 감소. 원래 목표 90개의 인과 경로"
+          ],
+          [
+            "QA04 예상 변경 모듈 수",
+            "2.333개",
+            "2.000개",
+            "B 유리 가정. 실제 Rust diff 아님"
+          ],
+          [
+            "QA05 전체 VIA 모델 비용",
+            "$2.479873",
+            "$2.224660",
+            "B $0.255213 절감. A가 11.47% 높음"
+          ],
+          [
+            "QA06 최대 동시 로컬 RAM",
+            "561.659 MB",
+            "561.507 MB",
+            "0.152 MB 차이. 큰 선택 근거 아님"
+          ],
+          [
+            "QA07 요청 의미 해석 정확도",
+            "80/80",
+            "80/80",
+            "고정 정답 조건. 별도 우선순위 미합의"
+          ],
+          [
+            "첫 실제 음성 / 별도 종료점",
+            "1.069초",
+            "1.276초",
+            "A 0.207초 감소. QA01 화면값 대체 안 함"
+          ]
+        ],
+        "x": 60,
+        "y": 213,
+        "widths": [
+          560,
+          275,
+          275,
+          690
+        ],
+        "heights": [
+          50,
+          64,
+          69,
+          69,
+          69,
+          69,
+          69,
+          69,
+          74
+        ],
+        "size": 24
+      },
+      {
+        "kind": "text",
+        "text": "A의 폐기 준비 비용 $0.263333 − B의 추가 재개 문맥 비용 $0.008120 = 순차이 $0.255213",
+        "x": 60,
+        "y": 876,
+        "w": 1800,
+        "h": 40,
+        "size": 25.333333,
+        "bold": true
+      },
+      {
+        "kind": "text",
+        "text": "QA03은 외부 업무, 사용자 대기와 순수 재생 duration을 제외한 인과 계산이다. 실제 경과시간 단축과 다르다.\n8유형 × 10작성변형은 독립 실험이나 실사용 빈도 분포가 아니다. 수신 Agent 내부 비용과 원격 RAM은 제외한다.",
+        "x": 60,
+        "y": 931,
+        "w": 1780,
+        "h": 66,
+        "size": 22.666667
+      },
+      {
+        "kind": "text",
+        "text": "가정 기반 합성 수치 / 실측 아님",
+        "x": 1350,
+        "y": 1009,
+        "w": 510,
+        "h": 28,
+        "size": 21.333333,
+        "align": "right",
+        "color": "#50555B"
+      }
+    ],
+    "nodes": {},
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nCanonical UI endpoint retained. QA04 concept modules could tie2/2 under a common invalidation interface. QA05 includes setup80 activities and evaluated80 inputs, all used/discarded generation, cancellation tail and suffix resume context. Self-hosted unbilled deployment removes this USD differential. Local RAM excludes remote weights/KV. QA03 is a causally projected DAG, not elapsed-minus-overlap arithmetic; S08 may have50ms physical voice gain but larger projected QA03 gain. No cross-DP sum or new score bands.\n",
+    "title": "DP44. QA01~07 비교",
+    "subtitle": "같은 80개 평가 입력을 사용한다. 준비 80활동, 지칭 표현 120개와 원래 목표 90개를 구별한다"
+  },
+  {
+    "name": "dp44-v9-07-choice",
+    "page": 30,
+    "items": [
+      {
+        "kind": "table",
+        "rows": [
+          [
+            "선택 판단",
+            "A. 응답별 준비 실행",
+            "B. 현재 발화 실행"
+          ],
+          [
+            "얻는 이익",
+            "QA03 평균 0.745초 감소\n별도 첫 음성 평균 0.207초 감소",
+            "미선택 구판의 생성 비용 회피\n예상 변경 범위가 작음"
+          ],
+          [
+            "감수하는 비용",
+            "전체 VIA 모델 비용 11.47% 증가\n준비 job, 구간과 판본의 관리 부담",
+            "발화 선택 뒤 생성 대기\n긴 응답 재개 시 후반 문맥 재입력"
+          ],
+          [
+            "유리한 사용 조건",
+            "유효한 질문과 결과가 자주 대기\n정정 뒤에도 준비 내용이 유지",
+            "전달 전 철회와 대체가 잦음\n선행 준비할 시간 여유가 적음"
+          ],
+          [
+            "조건부 판단",
+            "A 권고: QA01 UI, QA02 동점 다음 QA03\nQA07을 임의 우선순위에 넣지 않음",
+            "B 보존: 비용 제약 또는 준비 적중 저하\n무과금 모델이면 QA05 차이 재검토"
+          ]
+        ],
+        "x": 60,
+        "y": 214,
+        "widths": [
+          360,
+          720,
+          720
+        ],
+        "heights": [
+          48,
+          92,
+          92,
+          92,
+          96
+        ],
+        "size": 25.333333
+      },
+      {
+        "kind": "rule",
+        "points": [
+          [
+            420,
+            214
+          ],
+          [
+            1140,
+            214
+          ],
+          [
+            1140,
+            634
+          ],
+          [
+            420,
+            634
+          ],
+          [
+            420,
+            214
+          ]
+        ],
+        "color": "#4676CB",
+        "width": 4
+      },
+      {
+        "kind": "text",
+        "text": "✓",
+        "x": 1080,
+        "y": 223,
+        "w": 55,
+        "h": 46,
+        "size": 38.666667,
+        "color": "#C00000",
+        "bold": true,
+        "align": "center"
+      },
+      {
+        "kind": "band",
+        "text": "보완 후보 A1: 다음 응답 하나만 준비 / 미적용, 미평가",
+        "x": 60,
+        "y": 673,
+        "w": 1800,
+        "h": 45,
+        "size": 27
+      },
+      {
+        "kind": "comp",
+        "id": "limit",
+        "text": "Speech Preparation Coordinator",
+        "x": 60,
+        "y": 750,
+        "w": 900,
+        "h": 175,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "admission",
+        "text": "Next Response Admission",
+        "x": 90,
+        "y": 810,
+        "w": 380,
+        "h": 65,
+        "size": 25.333333,
+        "parent": "limit",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "mod",
+        "id": "jobs",
+        "text": "Preparation Jobs",
+        "x": 570,
+        "y": 810,
+        "w": 350,
+        "h": 65,
+        "size": 25.333333,
+        "parent": "limit",
+        "stroke": "#4676CB"
+      },
+      {
+        "kind": "edge",
+        "id": "onejob",
+        "from": "admission",
+        "to": "jobs",
+        "points": [
+          [
+            470,
+            842
+          ],
+          [
+            570,
+            842
+          ]
+        ],
+        "text": "최대 1개",
+        "label": [
+          470,
+          810,
+          100,
+          30
+        ],
+        "color": "#4676CB",
+        "size": 21.333333
+      },
+      {
+        "kind": "text",
+        "text": "버려질 준비를 줄이는 대신, 순서가 바뀌면 준비되지 않은 항목을 기다린다.\n기본 A의 값에 A1의 효과를 섞지 않는다. 같은 80개 입력으로 별도 평가한다.",
+        "x": 1010,
+        "y": 770,
+        "w": 820,
+        "h": 120,
+        "size": 25.333333
+      },
+      {
+        "kind": "text",
+        "text": "반대 사례: S01/S06 동점 / S03/S04 폐기 / S05 유효분 재사용과 후반 재개 / S08 준비 여유 50ms",
+        "x": 60,
+        "y": 953,
+        "w": 1800,
+        "h": 40,
+        "size": 22.666667
+      },
+      {
+        "kind": "text",
+        "text": "가정 기반 합성 수치 / 실측 아님",
+        "x": 1350,
+        "y": 1009,
+        "w": 510,
+        "h": 28,
+        "size": 21.333333,
+        "align": "right",
+        "color": "#50555B"
+      }
+    ],
+    "nodes": {
+      "limit": {
+        "kind": "comp",
+        "id": "limit",
+        "text": "Speech Preparation Coordinator",
+        "x": 60,
+        "y": 750,
+        "w": 900,
+        "h": 175,
+        "size": 26.666667,
+        "parent": null,
+        "stroke": "#4676CB"
+      },
+      "admission": {
+        "kind": "mod",
+        "id": "admission",
+        "text": "Next Response Admission",
+        "x": 90,
+        "y": 810,
+        "w": 380,
+        "h": 65,
+        "size": 25.333333,
+        "parent": "limit",
+        "stroke": "#4676CB"
+      },
+      "jobs": {
+        "kind": "mod",
+        "id": "jobs",
+        "text": "Preparation Jobs",
+        "x": 570,
+        "y": 810,
+        "w": 350,
+        "h": 65,
+        "size": 25.333333,
+        "parent": "limit",
+        "stroke": "#4676CB"
+      }
+    },
+    "notes": "DP44-DELIVERY-SYN-1.0. SYNTHETIC_AUTHORED_NOT_MEASURED. Source: docs/architecture/12-decisions/decision-packages/seven-problem-review/dp44-local-voice-execution-20261021/synthetic-comparison-20261022/README.md; docs/presentations_files/dp44-synthetic-backdata-20261022/synthetic-data.json. Component names are comparison-local logical responsibilities, not renamings of the v8 reference. Request Interpretation Service (DP2) is the fixed interpretation/adoption boundary. Response Registry does not own business Task completion. Delivery History records presentation evidence, never user understanding or approval. Model integration hexagons labelled VIA are references to detailed common Components on page 26, not extra remote services. No separate OS process or replicated model is implied.\n\nAuthor recommendation only, not adopted ADR or measured superiority. QA01 UI tie then QA02 fixed tie permits QA03 consideration in existing priority order; separate voice endpoint is additional value. QA04 hypothetical and RAM difference small. A1 changes preparation admission only; the underlying response-owned generation/storage authority remains A. No A1 before/after numeric claim is supplied. Revisit when useful preparation rate, generation onset cost, cancellation usage, or runtime pause/resume changes.\n",
+    "title": "DP44. 선택과 보완",
+    "subtitle": "화면 첫 응답은 동점이다. 현 합성 조건에서는 QA03의 이익을 우선하여 A를 권고한다"
+  }
+]

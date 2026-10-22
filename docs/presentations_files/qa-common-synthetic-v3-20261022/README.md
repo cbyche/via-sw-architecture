@@ -1,5 +1,7 @@
 # DP2, DP3, DP5, DP44 공통 QA 층별 산출물
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../../architecture/12-decisions/decision-packages/current/evaluation/common-qa-v3/artifacts/README.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 `COMMON-QA-SYN-3.0` / `COMMON-QA-SYN-3.0-REVIEW-2` / **SYNTHETIC_AUTHORED_NOT_MEASURED**
 
 [통합 문서](../../architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/README.md)는 같은 QA 의미를 Text 이력, Voice/Screen과 DELIVERY의 세 profile로 비교한다. 9구성의 공통 QA01~07 대표값 63개와 DP44 첫 음성 진단 2개를 분리한다. 다른 층의 값이나 개별 DP 이익을 합산해 결합 제품 성능으로 제시하지 않는다.

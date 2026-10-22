@@ -1,5 +1,7 @@
 # DP3: 원본 직접 해석과 대상·동작 기록을 통한 지칭 해석
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../../current/dp03/README.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 > **네 안의 수치 비교:** [동일 시나리오와 합성 QA 평가](synthetic-comparison/README.md)에 120평가 입력·60준비 활동의 가정 원장과 QA01~07, 대표 장면의 처리시간 분해 및 선택 결론을 추가했다. CPU 가정과 현재 QA 우선순위에서는 A를 선택하며, 실제 측정·제품 채택은 아니다.
 
 > **현재 비교는 [A / B-R1 / B-R2 / B-R3의 네 대안](cpu-runtime-architecture.md#11-a와-b-r1b-r2b-r3의-네-대안-비교)이다.** 사용자가 GPU 없는 실행을 유지하면서 이번 검토의 512 MB 상한을 유보했다. [CPU runtime 설계](cpu-runtime-architecture.md)는 공개 FP32 모델과 실제 CPU API 경로, 공유/전용 worker와 모델·episode 수명을 구분한다. [local 생산기](local-producer.md)는 기본 grounding 계약, [이전 소형 CPU 가상 예산](cpu-small-synthetic-budget.md)은 역사적 합성 가정이며 현재 성능값이 아니다. 아래 cloud 생산기 본문과 `comparison` 그림도 앞선 설계 근거로 보존한다.

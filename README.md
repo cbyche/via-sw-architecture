@@ -1,5 +1,7 @@
 # VIA Software Architecture
 
+> **2026-10-22 네 DP의 현재 작업 위치:** DP2, DP3, DP5, DP44의 설계와 QA 정의, 목표, 점수, 시나리오, 평가 및 PPTX와 제작 지침은 [통합 작업 패키지](docs/architecture/12-decisions/decision-packages/current/README.md)에서 관리한다. 해당 범위의 후속 편집은 이 패키지에서 한다. 아래 날짜별 설명과 다른 범위의 자료는 출처 및 당시 상태로 읽는다. 발표 v10과 공통 QA v3의 내용 미반영 항목은 새 패키지에 표시했다.
+
 > **필수 읽기와 준수:** 이 저장소의 과제 의도와 판단 기준은 [INTENT.md](INTENT.md)에 있다. 설계, QA와 DP 검토, 구현과 평가, 문서와 발표 작업을 시작하기 전에 반드시 읽고 따른다. LLM과 automation은 [AGENTS.md](AGENTS.md)의 작업 규칙도 함께 따른다. 아래 날짜별 기록의 과거 지침과 현재 원칙을 구별한다.
 
 > **2026-10-22 DP44를 포함한 공통 QA v3:** [공통 평가 v3와 사례 원장](docs/architecture/12-decisions/decision-packages/qa-common-synthetic-v3-20261022/README.md)에 Text 이력, Voice/Screen과 별도 Voice Delivery의 3층, 9구성, 26사례군을 통합했다. 기존 v2의 49개 값을 보존하고 DP44의 공통 QA 14개와 별도 첫 음성 지연 2개를 추가했다. 공통 QA01은 화면 표시이며 음성과 평균하거나 대체하지 않는다. DP44의 정확도는 고정 정답 제어 조건이고 수신 Agent 비용은 미모델링이다. 문서, JSON, Excel과 HTML 및 검토 범위는 같은 자료에서 연결하며 모두 가상 작성 평가다.

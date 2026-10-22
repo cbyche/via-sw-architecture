@@ -1,5 +1,7 @@
 # VIA DP 발표자료: 41, 44, 45, 42
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../architecture/12-decisions/decision-packages/current/presentation/PPTX-GUIDE.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 ## 현재 유지본: 전체 통합 발표 — 2026-10-11
 
 [전체 통합 PPTX, 32장](./VIA-architecture-presentation.pptx) 하나에서 발표를 유지한다. 사용자 경험은 19~20장이고 네 DP의 배경/비교/QA 상세는 21~32장이다. 앞으로 수정은 [부분 편집 안내](./full-presentation/README.md)를 따른다. 아래 DP v5와 이전 판본의 생성·갱신 절차는 최초 통합 이력이다.

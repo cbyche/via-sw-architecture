@@ -1,0 +1,5040 @@
+[
+  {
+    "name": "dp3-v7-ab-responsibilities",
+    "items": [
+      {
+        "kind": "text",
+        "t": "DP3. 화면 지칭 해석 구조 (1/2)",
+        "x": 60,
+        "y": 29,
+        "w": 1140,
+        "h": 68,
+        "size": 44,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1210,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "과제 소개",
+        "x": 1224,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1344,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "요구사항 분석",
+        "x": 1358,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1478,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#35A8CD",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "설계",
+        "x": 1492,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1612,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "구현 및 검증",
+        "x": 1626,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1746,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "결론",
+        "x": 1760,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            58,
+            108
+          ],
+          [
+            1860,
+            108
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#A7A7A7",
+        "width": 3
+      },
+      {
+        "kind": "text",
+        "t": "공통 입력: Interaction Manager의 화면·동작 이력 + local ASR의 전사·단어 시각 / 화면 근거가 필요한 요청만 진입",
+        "x": 60,
+        "y": 129,
+        "w": 1800,
+        "h": 47,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "text",
+        "t": "10",
+        "x": 1835,
+        "y": 1049,
+        "w": 38,
+        "h": 20,
+        "size": 17,
+        "bold": false,
+        "color": "#50555B",
+        "align": "right"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 24,
+        "y": 188,
+        "w": 172,
+        "h": 54,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "방안",
+        "x": 24,
+        "y": 188,
+        "w": 172,
+        "h": 54,
+        "size": 27,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 196,
+        "y": 188,
+        "w": 850,
+        "h": 54,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "A  원본 공동 해석",
+        "x": 204,
+        "y": 188,
+        "w": 834,
+        "h": 54,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1046,
+        "y": 188,
+        "w": 850,
+        "h": 54,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "B-R1  후보 생산 + 단일 worker 교대 로딩",
+        "x": 1054,
+        "y": 188,
+        "w": 834,
+        "h": 54,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            24,
+            242
+          ],
+          [
+            1896,
+            242
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#B7B9B9",
+        "width": 1.2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            196,
+            188
+          ],
+          [
+            196,
+            1018
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#B7B9B9",
+        "width": 1.2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1046,
+            188
+          ],
+          [
+            1046,
+            1018
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#B7B9B9",
+        "width": 1.2
+      },
+      {
+        "kind": "text",
+        "t": "구조",
+        "x": 42,
+        "y": 270,
+        "w": 135,
+        "h": 40,
+        "size": 29,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "노란 경계\nComponent\n\n내부 둥근 상자\nModule\n\n원통\n소유 상태\n\n파란 점선\nOS Process\n\n육각형\n외부 모델\n\n실선 요청\n점선 반환",
+        "x": 36,
+        "y": 350,
+        "w": 145,
+        "h": 555,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 220,
+        "y": 268,
+        "w": 430,
+        "h": 100,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Request Controller",
+        "x": 227,
+        "y": 270,
+        "w": 416,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            220,
+            305
+          ],
+          [
+            650,
+            305
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 239,
+        "y": 314,
+        "w": 392,
+        "h": 42,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Request Revision Guard",
+        "x": 245,
+        "y": 316,
+        "w": 380,
+        "h": 38,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "최종 의미 채택",
+        "x": 240,
+        "y": 377,
+        "w": 390,
+        "h": 27,
+        "size": 21,
+        "bold": false,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 790,
+        "y": 268,
+        "w": 220,
+        "h": 392,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Context Manager",
+        "x": 797,
+        "y": 270,
+        "w": 206,
+        "h": 33,
+        "size": 23,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            790,
+            305
+          ],
+          [
+            1010,
+            305
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "store",
+        "t": "허가된 원본 참조\nframe / pointer\nselection / native\n읽기 cache (RAM)",
+        "x": 804,
+        "y": 320,
+        "w": 192,
+        "h": 171,
+        "size": 21
+      },
+      {
+        "kind": "store",
+        "t": "채택 binding 복사\n읽기 receipt",
+        "x": 804,
+        "y": 523,
+        "w": 192,
+        "h": 93,
+        "size": 21
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 220,
+        "y": 440,
+        "w": 430,
+        "h": 220,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Request Interpreter",
+        "x": 227,
+        "y": 442,
+        "w": 416,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            220,
+            477
+          ],
+          [
+            650,
+            477
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 240,
+        "y": 489,
+        "w": 390,
+        "h": 48,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Joint Grounding Interpreter",
+        "x": 246,
+        "y": 491,
+        "w": 378,
+        "h": 44,
+        "size": 24,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "해석 세션 (RAM)\n원본 참조 / 후보 해석 / 이전 binding",
+        "x": 240,
+        "y": 563,
+        "w": 390,
+        "h": 77,
+        "size": 21
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            280,
+            368
+          ],
+          [
+            280,
+            440
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 223,
+        "y": 406,
+        "w": 153,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "1  해석 요청",
+        "x": 223,
+        "y": 406,
+        "w": 153,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            610,
+            440
+          ],
+          [
+            610,
+            368
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 465,
+        "y": 406,
+        "w": 160,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "6  proposal",
+        "x": 465,
+        "y": 406,
+        "w": 160,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            650,
+            320
+          ],
+          [
+            790,
+            320
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 659,
+        "y": 281,
+        "w": 123,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "조회 허가",
+        "x": 659,
+        "y": 281,
+        "w": 123,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            650,
+            505
+          ],
+          [
+            790,
+            505
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 655,
+        "y": 471,
+        "w": 130,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "2 Read / Crop",
+        "x": 655,
+        "y": 471,
+        "w": 130,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            790,
+            604
+          ],
+          [
+            650,
+            604
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 655,
+        "y": 568,
+        "w": 130,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "3  원본 + 판본",
+        "x": 655,
+        "y": 568,
+        "w": 130,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 220,
+        "y": 737,
+        "w": 430,
+        "h": 100,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access",
+        "x": 227,
+        "y": 739,
+        "w": 416,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            220,
+            774
+          ],
+          [
+            650,
+            774
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 240,
+        "y": 783,
+        "w": 390,
+        "h": 42,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Cloud Model Client",
+        "x": 246,
+        "y": 785,
+        "w": 378,
+        "h": 38,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "hexagon",
+        "x": 790,
+        "y": 737,
+        "w": 220,
+        "h": 100,
+        "fill": "#F1F6FC",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Cloud 의미 LLM",
+        "x": 810,
+        "y": 740,
+        "w": 180,
+        "h": 94,
+        "size": 24,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            280,
+            660
+          ],
+          [
+            280,
+            737
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 223,
+        "y": 685,
+        "w": 176,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "4  원본 + 전사",
+        "x": 223,
+        "y": 685,
+        "w": 176,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            610,
+            737
+          ],
+          [
+            610,
+            660
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 427,
+        "y": 685,
+        "w": 205,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "5  해석 / 추가 읽기",
+        "x": 427,
+        "y": 685,
+        "w": 205,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            650,
+            775
+          ],
+          [
+            790,
+            775
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 666,
+        "y": 740,
+        "w": 111,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Infer",
+        "x": 666,
+        "y": 740,
+        "w": 111,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            790,
+            812
+          ],
+          [
+            650,
+            812
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 666,
+        "y": 817,
+        "w": 111,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "결과",
+        "x": 666,
+        "y": 817,
+        "w": 111,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "원본 범위와 지칭 관계를 같은 해석 세션에서 판단\n부족한 crop·과거 관측은 2–5 경로로 재조회",
+        "x": 230,
+        "y": 886,
+        "w": 770,
+        "h": 78,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1070,
+        "y": 268,
+        "w": 360,
+        "h": 100,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Request Controller",
+        "x": 1077,
+        "y": 270,
+        "w": 346,
+        "h": 33,
+        "size": 24,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1070,
+            305
+          ],
+          [
+            1430,
+            305
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1087,
+        "y": 314,
+        "w": 326,
+        "h": 42,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Request Revision Guard",
+        "x": 1093,
+        "y": 316,
+        "w": 314,
+        "h": 38,
+        "size": 22,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "최종 의미 채택",
+        "x": 1080,
+        "y": 377,
+        "w": 340,
+        "h": 27,
+        "size": 21,
+        "bold": false,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1530,
+        "y": 268,
+        "w": 330,
+        "h": 100,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Context Manager",
+        "x": 1537,
+        "y": 270,
+        "w": 316,
+        "h": 33,
+        "size": 24,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1530,
+            305
+          ],
+          [
+            1860,
+            305
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "store",
+        "t": "허가된 원본 참조·cache (RAM)",
+        "x": 1548,
+        "y": 313,
+        "w": 294,
+        "h": 43,
+        "size": 20
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1070,
+        "y": 440,
+        "w": 360,
+        "h": 220,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Request Interpreter",
+        "x": 1077,
+        "y": 442,
+        "w": 346,
+        "h": 33,
+        "size": 24,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1070,
+            477
+          ],
+          [
+            1430,
+            477
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1086,
+        "y": 488,
+        "w": 328,
+        "h": 48,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Multimodal Binding Resolver",
+        "x": 1092,
+        "y": 490,
+        "w": 316,
+        "h": 44,
+        "size": 22,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "해석 세션 (RAM)\n전사·시각 / candidate revision",
+        "x": 1086,
+        "y": 563,
+        "w": 328,
+        "h": 77,
+        "size": 21
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1530,
+        "y": 440,
+        "w": 330,
+        "h": 220,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Screen Target Producer",
+        "x": 1537,
+        "y": 442,
+        "w": 316,
+        "h": 33,
+        "size": 23,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1530,
+            477
+          ],
+          [
+            1860,
+            477
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1546,
+        "y": 489,
+        "w": 298,
+        "h": 48,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Candidate Assembler",
+        "x": 1552,
+        "y": 491,
+        "w": 286,
+        "h": 44,
+        "size": 22,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "대상·동작 기록 (RAM)\nbbox / mask·track 참조\n출처·판본·불확실성",
+        "x": 1546,
+        "y": 551,
+        "w": 298,
+        "h": 91,
+        "size": 20
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1120,
+            368
+          ],
+          [
+            1120,
+            440
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1071,
+        "y": 406,
+        "w": 150,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "1  해석 요청",
+        "x": 1071,
+        "y": 406,
+        "w": 150,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1398,
+            440
+          ],
+          [
+            1398,
+            368
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1248,
+        "y": 406,
+        "w": 170,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "7  proposal",
+        "x": 1248,
+        "y": 406,
+        "w": 170,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1430,
+            300
+          ],
+          [
+            1530,
+            300
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1434,
+        "y": 263,
+        "w": 92,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "조회 허가",
+        "x": 1434,
+        "y": 263,
+        "w": 92,
+        "h": 29,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1430,
+            340
+          ],
+          [
+            1480,
+            340
+          ],
+          [
+            1480,
+            440
+          ],
+          [
+            1530,
+            440
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1434,
+        "y": 375,
+        "w": 92,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "생산 허가",
+        "x": 1434,
+        "y": 375,
+        "w": 92,
+        "h": 29,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1430,
+            503
+          ],
+          [
+            1530,
+            503
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1434,
+        "y": 467,
+        "w": 92,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "2 Produce",
+        "x": 1434,
+        "y": 467,
+        "w": 92,
+        "h": 29,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1530,
+            607
+          ],
+          [
+            1430,
+            607
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1434,
+        "y": 570,
+        "w": 92,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "5 후보 rev",
+        "x": 1434,
+        "y": 570,
+        "w": 92,
+        "h": 29,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1600,
+            440
+          ],
+          [
+            1600,
+            368
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1540,
+        "y": 404,
+        "w": 130,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Read / Crop",
+        "x": 1540,
+        "y": 404,
+        "w": 130,
+        "h": 29,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1815,
+            368
+          ],
+          [
+            1815,
+            440
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1720,
+        "y": 404,
+        "w": 130,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "원본 반환",
+        "x": 1720,
+        "y": 404,
+        "w": 130,
+        "h": 29,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1070,
+        "y": 737,
+        "w": 790,
+        "h": 100,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access  (VIA host 배치)",
+        "x": 1077,
+        "y": 739,
+        "w": 776,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1070,
+            774
+          ],
+          [
+            1860,
+            774
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1087,
+        "y": 782,
+        "w": 326,
+        "h": 43,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Cloud Model Client",
+        "x": 1093,
+        "y": 784,
+        "w": 314,
+        "h": 39,
+        "size": 22,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1527,
+        "y": 782,
+        "w": 316,
+        "h": 43,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Local Model Execution Controller",
+        "x": 1533,
+        "y": 784,
+        "w": 304,
+        "h": 39,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1130,
+            660
+          ],
+          [
+            1130,
+            737
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1075,
+        "y": 685,
+        "w": 238,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "6 후보 + crop + 전사",
+        "x": 1075,
+        "y": 685,
+        "w": 238,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1385,
+            737
+          ],
+          [
+            1385,
+            660
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1590,
+            660
+          ],
+          [
+            1590,
+            737
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1490,
+        "y": 685,
+        "w": 254,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "3 RunUI / 필요 시 SAM",
+        "x": 1490,
+        "y": 685,
+        "w": 254,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1815,
+            737
+          ],
+          [
+            1815,
+            660
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1765,
+        "y": 685,
+        "w": 90,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "4 결과",
+        "x": 1765,
+        "y": 685,
+        "w": 90,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "hexagon",
+        "x": 1090,
+        "y": 910,
+        "w": 320,
+        "h": 79,
+        "fill": "#F1F6FC",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Cloud 의미 LLM",
+        "x": 1110,
+        "y": 913,
+        "w": 280,
+        "h": 73,
+        "size": 24,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1515,
+        "y": 892,
+        "w": 350,
+        "h": 108,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "R1 Vision Worker process",
+        "x": 1527,
+        "y": 895,
+        "w": 326,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "text",
+        "t": "Model Access의 worker 배치\nUI / SAM adapter + CPU runtime\n현재 model session + episode",
+        "x": 1531,
+        "y": 927,
+        "w": 318,
+        "h": 65,
+        "size": 19,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1160,
+            837
+          ],
+          [
+            1160,
+            910
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1092,
+        "y": 861,
+        "w": 101,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Infer",
+        "x": 1092,
+        "y": 861,
+        "w": 101,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1360,
+            910
+          ],
+          [
+            1360,
+            837
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1307,
+        "y": 861,
+        "w": 90,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "결과",
+        "x": 1307,
+        "y": 861,
+        "w": 90,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1590,
+            837
+          ],
+          [
+            1590,
+            892
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1523,
+        "y": 856,
+        "w": 130,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "IPC 명령",
+        "x": 1523,
+        "y": 856,
+        "w": 130,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1815,
+            892
+          ],
+          [
+            1815,
+            837
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1764,
+        "y": 856,
+        "w": 90,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "완료",
+        "x": 1764,
+        "y": 856,
+        "w": 90,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "Read·Produce는 기허가 범위. B의 부족한 후보는 2로 Expand 재요청. 새 범위는 Request Controller가 허가. native 선택이면 worker 생략, bbox로 충분하면 SAM 생략.",
+        "x": 210,
+        "y": 1020,
+        "w": 1630,
+        "h": 27,
+        "size": 20,
+        "bold": false,
+        "color": "#50555B",
+        "align": "left"
+      }
+    ]
+  },
+  {
+    "name": "dp3-v7-resident-processes",
+    "items": [
+      {
+        "kind": "text",
+        "t": "DP3. 화면 지칭 해석 구조 (2/2)",
+        "x": 60,
+        "y": 29,
+        "w": 1140,
+        "h": 68,
+        "size": 44,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1210,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "과제 소개",
+        "x": 1224,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1344,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "요구사항 분석",
+        "x": 1358,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1478,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#35A8CD",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "설계",
+        "x": 1492,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1612,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "구현 및 검증",
+        "x": 1626,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1746,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "결론",
+        "x": 1760,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            58,
+            108
+          ],
+          [
+            1860,
+            108
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#A7A7A7",
+        "width": 3
+      },
+      {
+        "kind": "text",
+        "t": "B의 후보·결합 LLM은 동일 / 시각 CPU 총 4 thread·heavy stage 순차 / UI seed가 필요한 SAM은 UI 결과 반환 후 실행",
+        "x": 60,
+        "y": 129,
+        "w": 1800,
+        "h": 47,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "text",
+        "t": "11",
+        "x": 1835,
+        "y": 1049,
+        "w": 38,
+        "h": 20,
+        "size": 17,
+        "bold": false,
+        "color": "#50555B",
+        "align": "right"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 24,
+        "y": 188,
+        "w": 172,
+        "h": 54,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "방안",
+        "x": 24,
+        "y": 188,
+        "w": 172,
+        "h": 54,
+        "size": 27,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 196,
+        "y": 188,
+        "w": 850,
+        "h": 54,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "B-R2  한 process에 사용한 모델 유지",
+        "x": 204,
+        "y": 188,
+        "w": 834,
+        "h": 54,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1046,
+        "y": 188,
+        "w": 850,
+        "h": 54,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "B-R3  UI / SAM process 별도 유지",
+        "x": 1054,
+        "y": 188,
+        "w": 834,
+        "h": 54,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            24,
+            242
+          ],
+          [
+            1896,
+            242
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#B7B9B9",
+        "width": 1.2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            196,
+            188
+          ],
+          [
+            196,
+            1018
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#B7B9B9",
+        "width": 1.2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1046,
+            188
+          ],
+          [
+            1046,
+            1018
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#B7B9B9",
+        "width": 1.2
+      },
+      {
+        "kind": "text",
+        "t": "구조",
+        "x": 42,
+        "y": 270,
+        "w": 135,
+        "h": 40,
+        "size": 29,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "노란 경계\nComponent\n\n내부 둥근 상자\nModule\n\n원통\n소유 상태\n\n파란 점선\nOS Process\n\n육각형\n외부 모델\n\n실선 요청\n점선 반환",
+        "x": 36,
+        "y": 350,
+        "w": 145,
+        "h": 555,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 220,
+        "y": 267,
+        "w": 790,
+        "h": 252,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "VIA Host process",
+        "x": 232,
+        "y": 270,
+        "w": 766,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 238,
+        "y": 309,
+        "w": 310,
+        "h": 191,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Screen Target Producer",
+        "x": 245,
+        "y": 311,
+        "w": 296,
+        "h": 33,
+        "size": 22,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            238,
+            346
+          ],
+          [
+            548,
+            346
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 254,
+        "y": 354,
+        "w": 278,
+        "h": 40,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Candidate Assembler",
+        "x": 260,
+        "y": 356,
+        "w": 266,
+        "h": 36,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "대상·동작 기록 (RAM)\n후보 rev / 출처 / mask 참조",
+        "x": 254,
+        "y": 412,
+        "w": 278,
+        "h": 71,
+        "size": 20
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 669,
+        "y": 309,
+        "w": 323,
+        "h": 191,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access",
+        "x": 676,
+        "y": 311,
+        "w": 309,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            669,
+            346
+          ],
+          [
+            992,
+            346
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 685,
+        "y": 354,
+        "w": 291,
+        "h": 67,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Local Model\nExecution Controller",
+        "x": 691,
+        "y": 356,
+        "w": 279,
+        "h": 63,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "CPU 허가 / queue·generation\n모델 수명 / 재시작 책임",
+        "x": 686,
+        "y": 438,
+        "w": 289,
+        "h": 48,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            548,
+            375
+          ],
+          [
+            669,
+            375
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 553,
+        "y": 338,
+        "w": 111,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "생산 요청",
+        "x": 553,
+        "y": 338,
+        "w": 111,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            669,
+            455
+          ],
+          [
+            548,
+            455
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 553,
+        "y": 465,
+        "w": 111,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "후보 재료",
+        "x": 553,
+        "y": 465,
+        "w": 111,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1070,
+        "y": 267,
+        "w": 790,
+        "h": 252,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "VIA Host process",
+        "x": 1082,
+        "y": 270,
+        "w": 766,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1088,
+        "y": 309,
+        "w": 310,
+        "h": 191,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Screen Target Producer",
+        "x": 1095,
+        "y": 311,
+        "w": 296,
+        "h": 33,
+        "size": 22,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1088,
+            346
+          ],
+          [
+            1398,
+            346
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1104,
+        "y": 354,
+        "w": 278,
+        "h": 40,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Candidate Assembler",
+        "x": 1110,
+        "y": 356,
+        "w": 266,
+        "h": 36,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "대상·동작 기록 (RAM)\n후보 rev / 출처 / mask 참조",
+        "x": 1104,
+        "y": 412,
+        "w": 278,
+        "h": 71,
+        "size": 20
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1519,
+        "y": 309,
+        "w": 323,
+        "h": 191,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access",
+        "x": 1526,
+        "y": 311,
+        "w": 309,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1519,
+            346
+          ],
+          [
+            1842,
+            346
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1535,
+        "y": 354,
+        "w": 291,
+        "h": 67,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Local Model\nExecution Controller",
+        "x": 1541,
+        "y": 356,
+        "w": 279,
+        "h": 63,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "CPU 허가 / queue·generation\n모델 수명 / 재시작 책임",
+        "x": 1536,
+        "y": 438,
+        "w": 289,
+        "h": 48,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1398,
+            375
+          ],
+          [
+            1519,
+            375
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1403,
+        "y": 338,
+        "w": 111,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "생산 요청",
+        "x": 1403,
+        "y": 338,
+        "w": 111,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1519,
+            455
+          ],
+          [
+            1398,
+            455
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1403,
+        "y": 465,
+        "w": 111,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "후보 재료",
+        "x": 1403,
+        "y": 465,
+        "w": 111,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 220,
+        "y": 639,
+        "w": 790,
+        "h": 350,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "Vision Worker process  (단일 주소 공간)",
+        "x": 232,
+        "y": 642,
+        "w": 766,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 238,
+        "y": 680,
+        "w": 754,
+        "h": 289,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access  (worker 배치)",
+        "x": 245,
+        "y": 682,
+        "w": 740,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            238,
+            717
+          ],
+          [
+            992,
+            717
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 254,
+        "y": 727,
+        "w": 722,
+        "h": 44,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "IPC Endpoint / Job Queue  (한 stage씩)",
+        "x": 260,
+        "y": 729,
+        "w": 710,
+        "h": 40,
+        "size": 24,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 254,
+        "y": 801,
+        "w": 338,
+        "h": 45,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "UI Adapter",
+        "x": 260,
+        "y": 803,
+        "w": 326,
+        "h": 41,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 638,
+        "y": 801,
+        "w": 338,
+        "h": 45,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "SAM Adapter",
+        "x": 644,
+        "y": 803,
+        "w": 326,
+        "h": 41,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "UI model session\n검출 + OCR weights",
+        "x": 254,
+        "y": 867,
+        "w": 238,
+        "h": 65,
+        "size": 20
+      },
+      {
+        "kind": "store",
+        "t": "SAM model session\nTiny weights",
+        "x": 508,
+        "y": 867,
+        "w": 225,
+        "h": 65,
+        "size": 20
+      },
+      {
+        "kind": "store",
+        "t": "SAM episode\nframe features / tensor",
+        "x": 749,
+        "y": 867,
+        "w": 227,
+        "h": 65,
+        "size": 19
+      },
+      {
+        "kind": "text",
+        "t": "공유 Python / PyTorch CPU runtime",
+        "x": 255,
+        "y": 937,
+        "w": 720,
+        "h": 27,
+        "size": 22,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            710,
+            519
+          ],
+          [
+            710,
+            639
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 430,
+        "y": 556,
+        "w": 330,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "1 RunUI / 3 RunSegment·Track",
+        "x": 430,
+        "y": 556,
+        "w": 330,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            940,
+            639
+          ],
+          [
+            940,
+            519
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 763,
+        "y": 594,
+        "w": 240,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "2 UI 결과 / 4 mask·track",
+        "x": 763,
+        "y": 594,
+        "w": 240,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            400,
+            771
+          ],
+          [
+            400,
+            801
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            807,
+            771
+          ],
+          [
+            807,
+            801
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1070,
+        "y": 639,
+        "w": 370,
+        "h": 350,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "UI Worker process",
+        "x": 1082,
+        "y": 642,
+        "w": 346,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1085,
+        "y": 680,
+        "w": 340,
+        "h": 289,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access (worker 배치)",
+        "x": 1092,
+        "y": 682,
+        "w": 326,
+        "h": 33,
+        "size": 21,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1085,
+            717
+          ],
+          [
+            1425,
+            717
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1098,
+        "y": 727,
+        "w": 314,
+        "h": 44,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "IPC Endpoint / Job Queue",
+        "x": 1104,
+        "y": 729,
+        "w": 302,
+        "h": 40,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1098,
+        "y": 801,
+        "w": 314,
+        "h": 45,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "UI Adapter",
+        "x": 1104,
+        "y": 803,
+        "w": 302,
+        "h": 41,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "UI Model Session\n검출 / OCR",
+        "x": 1098,
+        "y": 867,
+        "w": 167,
+        "h": 65,
+        "size": 18
+      },
+      {
+        "kind": "store",
+        "t": "UI job\nworkspace",
+        "x": 1277,
+        "y": 867,
+        "w": 135,
+        "h": 65,
+        "size": 17
+      },
+      {
+        "kind": "text",
+        "t": "전용 Python / PyTorch runtime",
+        "x": 1094,
+        "y": 938,
+        "w": 322,
+        "h": 25,
+        "size": 20,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1255,
+            771
+          ],
+          [
+            1255,
+            801
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1490,
+        "y": 639,
+        "w": 370,
+        "h": 350,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "SAM Worker process",
+        "x": 1502,
+        "y": 642,
+        "w": 346,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1505,
+        "y": 680,
+        "w": 340,
+        "h": 289,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access (worker 배치)",
+        "x": 1512,
+        "y": 682,
+        "w": 326,
+        "h": 33,
+        "size": 21,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1505,
+            717
+          ],
+          [
+            1845,
+            717
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1518,
+        "y": 727,
+        "w": 314,
+        "h": 44,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "IPC Endpoint / Job Queue",
+        "x": 1524,
+        "y": 729,
+        "w": 302,
+        "h": 40,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1518,
+        "y": 801,
+        "w": 314,
+        "h": 45,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "SAM Adapter",
+        "x": 1524,
+        "y": 803,
+        "w": 302,
+        "h": 41,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "SAM Model\nSession / Tiny",
+        "x": 1518,
+        "y": 867,
+        "w": 167,
+        "h": 65,
+        "size": 18
+      },
+      {
+        "kind": "store",
+        "t": "SAM episode\n+ workspace",
+        "x": 1697,
+        "y": 867,
+        "w": 135,
+        "h": 65,
+        "size": 17
+      },
+      {
+        "kind": "text",
+        "t": "전용 Python / PyTorch runtime",
+        "x": 1514,
+        "y": 938,
+        "w": 322,
+        "h": 25,
+        "size": 20,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1675,
+            771
+          ],
+          [
+            1675,
+            801
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1550,
+            519
+          ],
+          [
+            1550,
+            550
+          ],
+          [
+            1165,
+            550
+          ],
+          [
+            1165,
+            639
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1090,
+        "y": 566,
+        "w": 144,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "1 RunUI",
+        "x": 1090,
+        "y": 566,
+        "w": 144,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1380,
+            639
+          ],
+          [
+            1380,
+            585
+          ],
+          [
+            1620,
+            585
+          ],
+          [
+            1620,
+            519
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1290,
+        "y": 602,
+        "w": 180,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "2 UI seed 반환",
+        "x": 1290,
+        "y": 602,
+        "w": 180,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1730,
+            519
+          ],
+          [
+            1730,
+            639
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1597,
+        "y": 553,
+        "w": 176,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "3 필요 시 SAM",
+        "x": 1597,
+        "y": 553,
+        "w": 176,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1835,
+            639
+          ],
+          [
+            1835,
+            519
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1745,
+        "y": 600,
+        "w": 142,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "4 mask·track",
+        "x": 1745,
+        "y": 600,
+        "w": 142,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "Model Access는 동일 Component의 분산 배치. process 경계의 호출선은 각 worker의 IPC Endpoint에 연결.",
+        "x": 210,
+        "y": 991,
+        "w": 1630,
+        "h": 27,
+        "size": 20,
+        "bold": false,
+        "color": "#50555B",
+        "align": "left"
+      },
+      {
+        "kind": "text",
+        "t": "R2: worker crash 시 두 session 함께 재시작. R3: SAM crash에도 UI session 유지. host 후보 기록은 두 안 모두 유지하며 낡은 generation 결과는 거절.",
+        "x": 210,
+        "y": 1020,
+        "w": 1630,
+        "h": 27,
+        "size": 20,
+        "bold": false,
+        "color": "#50555B",
+        "align": "left"
+      }
+    ]
+  },
+  {
+    "name": "dp3-v7-runtime-lifetimes",
+    "items": [
+      {
+        "kind": "text",
+        "t": "DP3. CPU 실행과 상태 수명",
+        "x": 60,
+        "y": 29,
+        "w": 1140,
+        "h": 68,
+        "size": 44,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1210,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "과제 소개",
+        "x": 1224,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1344,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "요구사항 분석",
+        "x": 1358,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1478,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#35A8CD",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "설계",
+        "x": 1492,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1612,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "구현 및 검증",
+        "x": 1626,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "chevron",
+        "x": 1746,
+        "y": 33,
+        "w": 143,
+        "h": 44,
+        "fill": "#98999B",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "결론",
+        "x": 1760,
+        "y": 33,
+        "w": 111,
+        "h": 44,
+        "size": 19,
+        "bold": true,
+        "color": "#FFFFFF",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            58,
+            108
+          ],
+          [
+            1860,
+            108
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#A7A7A7",
+        "width": 3
+      },
+      {
+        "kind": "text",
+        "t": "R1과 R2는 같은 코드·process 배치 / 모델 session의 유지 정책만 변경 / R3는 worker 주소 공간과 runtime을 분리",
+        "x": 60,
+        "y": 129,
+        "w": 1800,
+        "h": 47,
+        "size": 28,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "text",
+        "t": "12",
+        "x": 1835,
+        "y": 1049,
+        "w": 38,
+        "h": 20,
+        "size": 17,
+        "bold": false,
+        "color": "#50555B",
+        "align": "right"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 205,
+        "w": 520,
+        "h": 356,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "VIA Host process",
+        "x": 72,
+        "y": 208,
+        "w": 496,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 78,
+        "y": 247,
+        "w": 484,
+        "h": 293,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access (host 배치)",
+        "x": 85,
+        "y": 249,
+        "w": 470,
+        "h": 33,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            78,
+            284
+          ],
+          [
+            562,
+            284
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 94,
+        "y": 294,
+        "w": 452,
+        "h": 49,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Local Model Execution Controller",
+        "x": 100,
+        "y": 296,
+        "w": 440,
+        "h": 45,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "Job / Lease State (RAM)\njob·generation / shared-buffer handle",
+        "x": 94,
+        "y": 381,
+        "w": 452,
+        "h": 101,
+        "size": 22
+      },
+      {
+        "kind": "text",
+        "t": "기동·CPU 허가·load·release·cancel",
+        "x": 96,
+        "y": 496,
+        "w": 448,
+        "h": 29,
+        "size": 22,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 875,
+        "y": 205,
+        "w": 945,
+        "h": 356,
+        "fill": "none",
+        "stroke": "#4676CB",
+        "dash": true
+      },
+      {
+        "kind": "text",
+        "t": "Vision Worker process  (R1 / R2)",
+        "x": 887,
+        "y": 208,
+        "w": 921,
+        "h": 29,
+        "size": 24,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "left"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 894,
+        "y": 247,
+        "w": 907,
+        "h": 293,
+        "fill": "#FFF6DD",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Model Access (worker 배치)",
+        "x": 901,
+        "y": 249,
+        "w": 893,
+        "h": 33,
+        "size": 26,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            894,
+            284
+          ],
+          [
+            1801,
+            284
+          ]
+        ],
+        "dash": false,
+        "arrow": false,
+        "color": "#111111",
+        "width": 1.5
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 911,
+        "y": 294,
+        "w": 873,
+        "h": 43,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "IPC Endpoint / Job Queue",
+        "x": 917,
+        "y": 296,
+        "w": 861,
+        "h": 39,
+        "size": 24,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 911,
+        "y": 365,
+        "w": 374,
+        "h": 48,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "UI Adapter / SAM Adapter",
+        "x": 917,
+        "y": 367,
+        "w": 362,
+        "h": 44,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "roundRect",
+        "x": 1398,
+        "y": 365,
+        "w": 386,
+        "h": 48,
+        "fill": "#FFFFFF",
+        "stroke": "#111111",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "Python / PyTorch CPU Runtime",
+        "x": 1404,
+        "y": 367,
+        "w": 374,
+        "h": 44,
+        "size": 23,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "Model Session (RAM)\nweights / model objects",
+        "x": 1398,
+        "y": 440,
+        "w": 386,
+        "h": 78,
+        "size": 22
+      },
+      {
+        "kind": "store",
+        "t": "SAM Episode (RAM)\nframe features / track tensors",
+        "x": 911,
+        "y": 440,
+        "w": 374,
+        "h": 78,
+        "size": 22
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1150,
+            337
+          ],
+          [
+            1150,
+            365
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1285,
+            388
+          ],
+          [
+            1398,
+            388
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1291,
+        "y": 351,
+        "w": 100,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "추론 호출",
+        "x": 1291,
+        "y": 351,
+        "w": 100,
+        "h": 29,
+        "size": 20,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1590,
+            413
+          ],
+          [
+            1590,
+            440
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "text",
+        "t": "load / 사용 / release",
+        "x": 1607,
+        "y": 413,
+        "w": 175,
+        "h": 25,
+        "size": 18,
+        "bold": false,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1050,
+            413
+          ],
+          [
+            1050,
+            440
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1230,
+            440
+          ],
+          [
+            1230,
+            413
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "text",
+        "t": "읽기·갱신",
+        "x": 1090,
+        "y": 414,
+        "w": 130,
+        "h": 24,
+        "size": 18,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            562,
+            317
+          ],
+          [
+            911,
+            317
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 586,
+        "y": 275,
+        "w": 283,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "1 EnsureModel / RunStage",
+        "x": 586,
+        "y": 275,
+        "w": 283,
+        "h": 29,
+        "size": 22,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            911,
+            328
+          ],
+          [
+            858,
+            328
+          ],
+          [
+            858,
+            393
+          ],
+          [
+            562,
+            393
+          ]
+        ],
+        "dash": true,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 586,
+        "y": 351,
+        "w": 260,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "2 revision·generation 결과",
+        "x": 586,
+        "y": 351,
+        "w": 260,
+        "h": 29,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "named pipe\n명령·완료·읽기 ACK\n\nframe 본문은 공유 buffer\nhandle로 참조",
+        "x": 592,
+        "y": 421,
+        "w": 263,
+        "h": 128,
+        "size": 21,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "store",
+        "t": "Model Files + Manifest (local disk)",
+        "x": 1398,
+        "y": 570,
+        "w": 386,
+        "h": 37,
+        "size": 18
+      },
+      {
+        "kind": "line",
+        "pts": [
+          [
+            1530,
+            570
+          ],
+          [
+            1530,
+            518
+          ]
+        ],
+        "dash": false,
+        "arrow": true,
+        "color": "#111111",
+        "width": 2
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1550,
+        "y": 542,
+        "w": 250,
+        "h": 29,
+        "fill": "#FFFFFF",
+        "stroke": "#FFFFFF",
+        "dash": false
+      },
+      {
+        "kind": "text",
+        "t": "EnsureModel: local load",
+        "x": 1550,
+        "y": 542,
+        "w": 250,
+        "h": 29,
+        "size": 18,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 619,
+        "w": 610,
+        "h": 53,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "수명 / 동시 RAM · MB",
+        "x": 68,
+        "y": 621,
+        "w": 594,
+        "h": 49,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 670,
+        "y": 619,
+        "w": 270,
+        "h": 53,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "A",
+        "x": 678,
+        "y": 621,
+        "w": 254,
+        "h": 49,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 940,
+        "y": 619,
+        "w": 310,
+        "h": 53,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "B-R1",
+        "x": 948,
+        "y": 621,
+        "w": 294,
+        "h": 49,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1250,
+        "y": 619,
+        "w": 310,
+        "h": 53,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "B-R2",
+        "x": 1258,
+        "y": 621,
+        "w": 294,
+        "h": 49,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1560,
+        "y": 619,
+        "w": 300,
+        "h": 53,
+        "fill": "#C9E1B3",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "B-R3",
+        "x": 1568,
+        "y": 621,
+        "w": 284,
+        "h": 49,
+        "size": 25,
+        "bold": true,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 672,
+        "w": 610,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "시각 model session",
+        "x": 68,
+        "y": 674,
+        "w": 594,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 670,
+        "y": 672,
+        "w": 270,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "없음",
+        "x": 678,
+        "y": 674,
+        "w": 254,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 940,
+        "y": 672,
+        "w": 310,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "stage 후 회수·교대",
+        "x": 948,
+        "y": 674,
+        "w": 294,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1250,
+        "y": 672,
+        "w": 310,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "사용 후 유지",
+        "x": 1258,
+        "y": 674,
+        "w": 294,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1560,
+        "y": 672,
+        "w": 300,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "worker별 유지",
+        "x": 1568,
+        "y": 674,
+        "w": 284,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 735,
+        "w": 610,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "episode / 후보 기록",
+        "x": 68,
+        "y": 737,
+        "w": 594,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 670,
+        "y": 735,
+        "w": 270,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "확정 이력",
+        "x": 678,
+        "y": 737,
+        "w": 254,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 940,
+        "y": 735,
+        "w": 310,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "모델 회수와 별도 보존",
+        "x": 948,
+        "y": 737,
+        "w": 294,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1250,
+        "y": 735,
+        "w": 310,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "같은 보존 정책",
+        "x": 1258,
+        "y": 737,
+        "w": 294,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1560,
+        "y": 735,
+        "w": 300,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "같은 보존 정책",
+        "x": 1568,
+        "y": 737,
+        "w": 284,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 798,
+        "w": 610,
+        "h": 59,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "추가 시각 runtime + model 객체",
+        "x": 68,
+        "y": 800,
+        "w": 594,
+        "h": 55,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 670,
+        "y": 798,
+        "w": 270,
+        "h": 59,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "0",
+        "x": 678,
+        "y": 800,
+        "w": 254,
+        "h": 55,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 940,
+        "y": 798,
+        "w": 310,
+        "h": 59,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "340 + 170",
+        "x": 948,
+        "y": 800,
+        "w": 294,
+        "h": 55,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1250,
+        "y": 798,
+        "w": 310,
+        "h": 59,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "340 + 590",
+        "x": 1258,
+        "y": 800,
+        "w": 294,
+        "h": 55,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1560,
+        "y": 798,
+        "w": 300,
+        "h": 59,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "620 + 590",
+        "x": 1568,
+        "y": 800,
+        "w": 284,
+        "h": 55,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 857,
+        "w": 610,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "공통 / workspace·episode / 입력 buffer",
+        "x": 68,
+        "y": 859,
+        "w": 594,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 670,
+        "y": 857,
+        "w": 270,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "560 / 0 / 32",
+        "x": 678,
+        "y": 859,
+        "w": 254,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 940,
+        "y": 857,
+        "w": 310,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "560 / 860 / 24",
+        "x": 948,
+        "y": 859,
+        "w": 294,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1250,
+        "y": 857,
+        "w": 310,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "560 / 860 / 24",
+        "x": 1258,
+        "y": 859,
+        "w": 294,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1560,
+        "y": 857,
+        "w": 300,
+        "h": 63,
+        "fill": "#FFFFFF",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "560 / 860 / 32",
+        "x": 1568,
+        "y": 859,
+        "w": 284,
+        "h": 59,
+        "size": 25,
+        "bold": false,
+        "color": "#111111",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 60,
+        "y": 920,
+        "w": 610,
+        "h": 64,
+        "fill": "#F1F6FC",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "QA06 동시 peak 합계",
+        "x": 68,
+        "y": 922,
+        "w": 594,
+        "h": 60,
+        "size": 25,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 670,
+        "y": 920,
+        "w": 270,
+        "h": 64,
+        "fill": "#F1F6FC",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "592",
+        "x": 678,
+        "y": 922,
+        "w": 254,
+        "h": 60,
+        "size": 25,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 940,
+        "y": 920,
+        "w": 310,
+        "h": 64,
+        "fill": "#F1F6FC",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "1,954",
+        "x": 948,
+        "y": 922,
+        "w": 294,
+        "h": 60,
+        "size": 25,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1250,
+        "y": 920,
+        "w": 310,
+        "h": 64,
+        "fill": "#F1F6FC",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "2,374",
+        "x": 1258,
+        "y": 922,
+        "w": 294,
+        "h": 60,
+        "size": 25,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "shape",
+        "geom": "rect",
+        "x": 1560,
+        "y": 920,
+        "w": 300,
+        "h": 64,
+        "fill": "#F1F6FC",
+        "stroke": "#B7B9B9"
+      },
+      {
+        "kind": "text",
+        "t": "2,662",
+        "x": 1568,
+        "y": 922,
+        "w": 284,
+        "h": 60,
+        "size": 25,
+        "bold": true,
+        "color": "#4676CB",
+        "align": "center"
+      },
+      {
+        "kind": "text",
+        "t": "R1: ReleaseModel → EnsureModel → RunStage  /  CloseEpisode는 별도 명령  /  cold 시작은 모든 B에 로딩 발생",
+        "x": 65,
+        "y": 1000,
+        "w": 1780,
+        "h": 30,
+        "size": 23,
+        "bold": true,
+        "color": "#111111",
+        "align": "left"
+      },
+      {
+        "kind": "text",
+        "t": "가정 RAM, 실측 아님. 입력 buffer는 A의 cloud 입력 / B의 IPC. R1→R2: UI 객체 420 MB 유지. R3: runtime private 280 MB + IPC 8 MB 추가.",
+        "x": 65,
+        "y": 1040,
+        "w": 1750,
+        "h": 24,
+        "size": 19,
+        "bold": false,
+        "color": "#50555B",
+        "align": "left"
+      }
+    ]
+  }
+]

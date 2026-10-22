@@ -1,5 +1,7 @@
 # VIA 통합 발표자료와 버전별 편집
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../../architecture/12-decisions/decision-packages/current/presentation/README.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 현재 발표와 후속 수정의 기준은 [VIA-architecture-presentation_v17.pptx](../VIA-architecture-presentation_v17.pptx)다. **본문 40장과 QA Appendix 9장으로 총 49장**이다. [전체 미리보기](./overview-v17.jpg), [manifest-v17.json](./manifest-v17.json), [검수 기록](./review-v17-2026-10-15.md)을 제공한다.
 
 - **필요성 2~3장:** [과제 소개 v10](../VIA-project-introduction_v10.pptx)의 2장을 먼저 넣고, [v9](../VIA-project-introduction_v9.pptx)의 2장을 다음에 넣었다. 기존 필요성 5안은 4~8장에 그대로 남겼다.

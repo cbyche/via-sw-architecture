@@ -4,7 +4,10 @@
 
 ## Current checks
 
+DP2, DP3, DP5와 DP44의 현재 편집 자료는 [통합 패키지](../../docs/architecture/12-decisions/decision-packages/current/README.md)에 있다. `check_current_package.py`는 진입점과 상대 링크, QA 점수 구간, COMMON-28, PPTX 구조, 그림 쌍 및 고정 산출물의 byte 보존을 검사한다. 현재 설계와 그림의 수정은 허용하며 과거 산출물과 구별한다. 기존 캠페인 생성기는 원래 동결 입력을 계속 사용한다.
+
 ```bash
+.venv/bin/python scripts/architecture/check_current_package.py
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
 .venv/bin/python scripts/architecture/test_active_markdown_links.py
 .venv/bin/python scripts/architecture/check_active_terminology.py

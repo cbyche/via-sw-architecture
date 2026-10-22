@@ -1,0 +1,511 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="dp3-runtime-residency" name="CPU 실행과 모델 상주 구조">
+    <mxGraphModel dx="2820" dy="2130" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2820" pageHeight="2130" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="common" value="공통 실행 계약 — 아래 R1/R2/R3 중 하나로 CPU 추론 Worker를 배치" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#f8fafc;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="2740" height="450" as="geometry" />
+        </mxCell>
+        <mxCell id="core" value="VIA Core Process" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;dashed=1;dashPattern=9 7;" vertex="1" parent="1">
+          <mxGeometry x="70" y="195" width="1360" height="345" as="geometry" />
+        </mxCell>
+        <mxCell id="raw" value="원본 근거 저장소" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="110" y="295" width="330" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="producer" value="화면 대상 생산기" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="580" y="305" width="330" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="control" value="모델 실행 제어기" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="305" width="330" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="workers" value="CPU 추론 Worker" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=hexagon;perimeter=hexagonPerimeter2;size=20;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="305" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="core_repeat" value="VIA Core (동일 Process)" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;dashed=1;dashPattern=9 7;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="195" width="420" height="345" as="geometry" />
+        </mxCell>
+        <mxCell id="binder" value="지칭 결합기" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1940" y="305" width="300" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cloud" value="클라우드 의미 LLM" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;shape=hexagon;perimeter=hexagonPerimeter2;size=20;fixedSize=1;" vertex="1" parent="1">
+          <mxGeometry x="2430" y="305" width="280" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="p1" value="R1  공유 Worker · 한 모델 세션 교체" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#f7fcf9;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="900" height="1390" as="geometry" />
+        </mxCell>
+        <mxCell id="p2" value="R2  공유 Worker · 모델 세션 동시 상주" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#f7fcf9;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;" vertex="1" parent="1">
+          <mxGeometry x="960" y="640" width="900" height="1390" as="geometry" />
+        </mxCell>
+        <mxCell id="p3" value="R3  모델군별 전용 Worker 상주" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#f7fcf9;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="640" width="900" height="1390" as="geometry" />
+        </mxCell>
+        <mxCell id="w1" value="CPU Worker Process" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#ffffff;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;dashed=1;dashPattern=9 7;" vertex="1" parent="1">
+          <mxGeometry x="80" y="810" width="820" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="adapter1" value="검출·OCR·SAM2 Adapter" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="130" y="920" width="720" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rt1" value="PyTorch CPU Runtime" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1080" width="720" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="state1" value="Episode 상태" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="525" y="1280" width="325" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="disk1" value="모델 파일 저장소" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="175" y="1780" width="630" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="w2" value="CPU Worker Process" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#ffffff;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;dashed=1;dashPattern=9 7;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="810" width="820" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="adapter2" value="검출·OCR·SAM2 Adapter" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="920" width="720" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rt2" value="PyTorch CPU Runtime" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="1080" width="720" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="state2" value="Episode 상태" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="1445" y="1280" width="325" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="disk2" value="모델 파일 저장소" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="1095" y="1780" width="630" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="session1" value="모델 세션 슬롯" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1280" width="325" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="session2a" value="검출·OCR 세션" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="1280" width="325" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="session2b" value="SAM2 세션" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="1480" width="325" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="w3_ui" value="UI Worker Process" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#ffffff;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;dashed=1;dashPattern=9 7;" vertex="1" parent="1">
+          <mxGeometry x="1920" y="810" width="400" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_ui" value="검출·OCR Adapter" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="920" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rt3_ui" value="PyTorch CPU Runtime" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="1080" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sess3_ui" value="검출·OCR 세션" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="1270" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="state3_ui" value="Episode 상태" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="1490" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="w3_sam" value="SAM Worker Process" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#ffffff;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=1;arcSize=2;verticalAlign=top;align=left;spacingTop=12;spacingLeft=18;dashed=1;dashPattern=9 7;" vertex="1" parent="1">
+          <mxGeometry x="2340" y="810" width="400" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="a3_sam" value="SAM2 Adapter" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="920" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rt3_sam" value="PyTorch CPU Runtime" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="1080" width="350" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="sess3_sam" value="SAM2 세션" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="1270" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="state3_sam" value="Episode 상태" style="whiteSpace=wrap;html=0;strokeColor=#13724c;fillColor=#e7f5ed;strokeWidth=2;fontColor=#13724c;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="1490" width="350" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="disk3" value="모델 파일 저장소" style="whiteSpace=wrap;html=0;strokeColor=#243247;fillColor=#ffffff;strokeWidth=2;fontColor=#243247;fontFamily=Arial;fontSize=24;fontStyle=1;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=18;" vertex="1" parent="1">
+          <mxGeometry x="2015" y="1780" width="630" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="raw_read" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.3;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="producer" target="raw">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="580" y="325" as="sourcePoint" />
+            <mxPoint x="440" y="325" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="raw_return" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=1;exitY=0.7;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="raw" target="producer">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="440" y="365" as="sourcePoint" />
+            <mxPoint x="580" y="365" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="produce_job" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="producer" target="control">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="910" y="345" as="sourcePoint" />
+            <mxPoint x="1050" y="345" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="call_worker" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="control" target="workers">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1380" y="325" as="sourcePoint" />
+            <mxPoint x="1550" y="325" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="return_worker" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0;exitY=0.75;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="workers" target="control">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1550" y="365" as="sourcePoint" />
+            <mxPoint x="1380" y="365" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="control_result" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="control" target="producer">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1215" y="385" as="sourcePoint" />
+            <mxPoint x="745" y="385" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1215" y="485" />
+              <mxPoint x="745" y="485" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="producer_binder" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="producer" target="binder">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="745" y="305" as="sourcePoint" />
+            <mxPoint x="2090" y="305" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="745" y="245" />
+              <mxPoint x="2090" y="245" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="binder_cloud" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="binder" target="cloud">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2240" y="325" as="sourcePoint" />
+            <mxPoint x="2430" y="325" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cloud_return" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#243247;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0;exitY=0.75;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="cloud" target="binder">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2430" y="365" as="sourcePoint" />
+            <mxPoint x="2240" y="365" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ipc1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;entryX=0.333333;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="adapter1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="370" y="755" as="sourcePoint" />
+            <mxPoint x="370" y="920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ipcback1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.694444;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="adapter1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="630" y="920" as="sourcePoint" />
+            <mxPoint x="630" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="call1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.333333;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.333333;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="adapter1" target="rt1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="370" y="1000" as="sourcePoint" />
+            <mxPoint x="370" y="1080" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="return1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.694444;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.694444;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt1" target="adapter1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="630" y="1080" as="sourcePoint" />
+            <mxPoint x="630" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="stateedge1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.777778;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.507692;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt1" target="state1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="690" y="1160" as="sourcePoint" />
+            <mxPoint x="690" y="1280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ipc2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;entryX=0.333333;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="adapter2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1290" y="755" as="sourcePoint" />
+            <mxPoint x="1290" y="920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ipcback2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.694444;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="adapter2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1550" y="920" as="sourcePoint" />
+            <mxPoint x="1550" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="call2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.333333;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.333333;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="adapter2" target="rt2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1290" y="1000" as="sourcePoint" />
+            <mxPoint x="1290" y="1080" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="return2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.694444;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.694444;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt2" target="adapter2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1550" y="1080" as="sourcePoint" />
+            <mxPoint x="1550" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="stateedge2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.777778;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.507692;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt2" target="state2">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1610" y="1160" as="sourcePoint" />
+            <mxPoint x="1610" y="1280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sessionload1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.190476;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.507692;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="disk1" target="session1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="295" y="1780" as="sourcePoint" />
+            <mxPoint x="295" y="1385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="runtime_session1" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.229167;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.507692;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt1" target="session1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="295" y="1160" as="sourcePoint" />
+            <mxPoint x="295" y="1280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="sessionload2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.190476;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.507692;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="disk2" target="session2b">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1215" y="1780" as="sourcePoint" />
+            <mxPoint x="1215" y="1585" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="session_ui_load2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.47619;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="disk2" target="session2a">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1095" y="1830" as="sourcePoint" />
+            <mxPoint x="1050" y="1330" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1000" y="1830" />
+              <mxPoint x="1000" y="1330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="runtime_session2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.229167;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.507692;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt2" target="session2a">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1215" y="1160" as="sourcePoint" />
+            <mxPoint x="1215" y="1280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="runtime_sam2" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.47619;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt2" target="session2b">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1050" y="1120" as="sourcePoint" />
+            <mxPoint x="1050" y="1530" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1030" y="1120" />
+              <mxPoint x="1030" y="1530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ip3_ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;entryX=0.871429;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="a3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2250" y="755" as="sourcePoint" />
+            <mxPoint x="2250" y="920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ipr3_ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.985714;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="a3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2290" y="920" as="sourcePoint" />
+            <mxPoint x="2290" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="call3_ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.285714;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.285714;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="a3_ui" target="rt3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2045" y="1000" as="sourcePoint" />
+            <mxPoint x="2045" y="1080" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ret3_ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.714286;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.714286;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt3_ui" target="a3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2195" y="1080" as="sourcePoint" />
+            <mxPoint x="2195" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rtsess3_ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt3_ui" target="sess3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2120" y="1160" as="sourcePoint" />
+            <mxPoint x="2120" y="1270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="st3_ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sess3_ui" target="state3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2120" y="1370" as="sourcePoint" />
+            <mxPoint x="2120" y="1490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ip3_sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;entryX=0.871429;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="a3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2670" y="755" as="sourcePoint" />
+            <mxPoint x="2670" y="920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ipr3_sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.985714;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="a3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2710" y="920" as="sourcePoint" />
+            <mxPoint x="2710" y="755" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="call3_sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.285714;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.285714;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="a3_sam" target="rt3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2465" y="1000" as="sourcePoint" />
+            <mxPoint x="2465" y="1080" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ret3_sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;dashed=1;dashPattern=9 6;exitX=0.714286;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.714286;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt3_sam" target="a3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2615" y="1080" as="sourcePoint" />
+            <mxPoint x="2615" y="1000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rtsess3_sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="rt3_sam" target="sess3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2540" y="1160" as="sourcePoint" />
+            <mxPoint x="2540" y="1270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="st3_sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sess3_sam" target="state3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2540" y="1370" as="sourcePoint" />
+            <mxPoint x="2540" y="1490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load3ui" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="disk3" target="sess3_ui">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2015" y="1830" as="sourcePoint" />
+            <mxPoint x="1945" y="1320" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1900" y="1830" />
+              <mxPoint x="1900" y="1320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="load3sam" style="edgeStyle=none;rounded=0;html=0;strokeWidth=2.5;strokeColor=#13724c;endArrow=block;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="disk3" target="sess3_sam">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2645" y="1830" as="sourcePoint" />
+            <mxPoint x="2715" y="1320" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="2770" y="1830" />
+              <mxPoint x="2770" y="1320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="title" value="B의 CPU 모델 실행: 모델 수명과 process 경계를 분리해서 선택" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=36;fontColor=#243247;fontStyle=1;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="2720" height="55.88" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="검정: 공통 계약  |  초록: 비교하는 로컬 실행 구조  |  실선: 요청·호출  |  점선 화살표: 결과·복원  |  점선 경계: 실제 process" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=22;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="77" width="2720" height="37.260000000000005" as="geometry" />
+        </mxCell>
+        <mxCell id="raw_scope" value="RAM 원본·판본·시각" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="110" y="407" width="330" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="control_scope" value="작업큐·CPU 실행 허용·취소·재시작" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="985" y="407" width="460" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="worker_scope" value="논리적 연결점&#10;실제 process 배치는 아래 비교" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="407" width="420" height="55.88" as="geometry" />
+        </mxCell>
+        <mxCell id="binder_scope" value="VIA 로컬" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1940" y="267" width="300" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="raw_read_l" value="1 원본 조회" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="440" y="262" width="140" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="produce_job_l" value="2 생산 작업" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="910" y="272" width="140" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="call_worker_l" value="3 IPC 요청" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1385" y="262" width="160" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="return_worker_l" value="4 결과·판본" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1385" y="382" width="160" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="control_result_l" value="5 후보·경계·추적 결과 반환" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="780" y="453" width="400" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="producer_binder_l" value="6 후보·동작 관계·원본 crop + 동일 전사·timestamp" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="209" width="800" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="binder_cloud_l" value="7 최종 해석" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2245" y="262" width="180" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="cloud_return_l" value="대상·요청 의미 제안" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2240" y="403" width="190" height="31.94" as="geometry" />
+        </mxCell>
+        <mxCell id="common_note" value="화면 근거가 필요할 때만 시작. Core는 worker 장애와 오래된 판본을 처리하고 원본을 보존한다. IPC는 파일/공유 메모리 참조와 작은 메시지를 전달한다." style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="90" y="545" width="2650" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="route1" value="같은 3 IPC 요청 / 4 결과 반환 계약" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="70" y="699" width="840" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="route2" value="같은 3 IPC 요청 / 4 결과 반환 계약" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="990" y="699" width="840" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="route3" value="같은 3 IPC 요청 / 4 결과 반환 계약" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1910" y="699" width="840" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="ipcl1" value="3 요청" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="220" y="761" width="140" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="ipcbackl1" value="4 결과" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="645" y="761" width="140" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="rtscope1" value="공유 thread pool · 기본 실행 허용 1건" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1185" width="720" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="stateedge_l1" value="요청별 생성·해제" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="505" y="1231" width="345" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="disknote1" value="디스크 가중치 + 모델 구성 파일" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="175" y="1897" width="630" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="ipcl2" value="3 요청" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="761" width="140" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="ipcbackl2" value="4 결과" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1565" y="761" width="140" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="rtscope2" value="공유 thread pool · 기본 실행 허용 1건" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="1185" width="720" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="stateedge_l2" value="요청별 생성·해제" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1425" y="1231" width="345" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="disknote2" value="디스크 가중치 + 모델 구성 파일" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1095" y="1897" width="630" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="sl1" value="모델 전환 시&#10;읽기·로드 / 해제" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=21;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="70" y="1529" width="220" height="63.86" as="geometry" />
+        </mxCell>
+        <mxCell id="slot1" value="검출 또는 OCR 또는 SAM2" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=21;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="125" y="1409" width="350" height="35.93" as="geometry" />
+        </mxCell>
+        <mxCell id="state1_l" value="RAM: embedding·mask·추적 상태&#10;모델 해제 후에도 호환성 확인 후 보존" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=18;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1412" width="380" height="55.88" as="geometry" />
+        </mxCell>
+        <mxCell id="r1_note" value="Runtime는 유지한다. 가중치·실행 메모리를 해제해도&#10;allocator가 OS에 RAM을 즉시 반환한다고 보장하지 않는다." style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="85" y="1956" width="810" height="58.540000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="load2_l" value="최초 필요 시 로드&#10;모델 가중치 유지" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1375" y="1565" width="390" height="61.2" as="geometry" />
+        </mxCell>
+        <mxCell id="state2_l" value="R1과 같은 Episode 보존 정책&#10;Episode 종료·무효화 시 재계산" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1425" y="1411" width="390" height="58.540000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="r2_note" value="가중치는 함께 상주하되 CPU 작업은 기본 직렬 실행.&#10;상주 ≠ 병렬. 실행 허용 정책은 별도 선택이다." style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1005" y="1956" width="810" height="58.540000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="ip3l_ui" value="개별 IPC 큐" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="766" width="260" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="pool3_ui" value="개별 thread pool" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="1185" width="350" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="state3l_ui" value="요청별 생성·해제" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1945" y="1416" width="350" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="ip3l_sam" value="개별 IPC 큐" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="766" width="260" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="pool3_sam" value="개별 thread pool" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="1185" width="350" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="state3l_sam" value="요청별 생성·해제" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#13724c;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2365" y="1416" width="350" height="33.27" as="geometry" />
+        </mxCell>
+        <mxCell id="disknote3" value="각 Worker 시작 시 자기 모델 로드" style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="2015" y="1897" width="630" height="34.6" as="geometry" />
+        </mxCell>
+        <mxCell id="r3_note" value="Core가 전체 CPU 실행량을 제한. 장애·재시작 경계 2개.&#10;private RAM 증가; 공유 library 페이지 전체를 중복 합산하지 않는다." style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=19;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="1925" y="1956" width="810" height="58.540000000000006" as="geometry" />
+        </mxCell>
+        <mxCell id="footer1" value="R1/R2는 같은 Component·IPC·Episode 보존 정책에서 가중치 수명만 비교한다. R3는 process·큐·runtime·장애 경계가 달라진다. 모델 가중치 ≠ Episode 상태." style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=22;fontColor=#243247;fontStyle=1;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="2048" width="2720" height="37.260000000000005" as="geometry" />
+        </mxCell>
+        <mxCell id="footer2" value="세 안은 대안이며 동시에 배치하지 않는다. 위의 논리 Worker 연결을 아래에서 각각 펼쳤다. 모든 추론은 CPU; 모델 크기·성능의 측정 결과를 나타내지 않는다." style="text;html=0;strokeColor=none;fillColor=none;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=Arial;fontSize=20;fontColor=#243247;fontStyle=0;spacing=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="2090" width="2720" height="34.6" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

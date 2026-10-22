@@ -1,0 +1,51 @@
+# DP2, DP3, DP5, DP44 현재 작업 패키지
+
+2026-10-22. 사용자가 확인한 설계, 발표 v10, 공통 QA v3와 QA 목표 및 점수의 원전을 한곳에 모은 **현재 편집 기준**이다. 앞으로 이 폴더에서 네 DP와 관련 QA를 수정한다. 이전 위치는 출처와 과거 평가의 재현을 위해 보존한다. 이관으로 설계 대안, QA 정의와 목표, 점수, 평가 수치 또는 사용자 채택 상태를 바꾸지 않았다.
+
+## 바로 열기
+
+| 작업 | 현재 기준 |
+| --- | --- |
+| DP2 의미 해석 실행 | [설계와 최신 보정](dp02/README.md) |
+| DP3 화면과 음성 지칭 | [설계와 CPU 실행 대안](dp03/README.md) |
+| DP5 위임용 메모리 | [설계와 관계 생산 및 조회](dp05/README.md) |
+| DP44 음성 실행과 전달 | [설계와 입력, 정정 및 재개](dp44/README.md) |
+| QA 정의, 목표, 점수와 출처 수정 | [QA 작업 기준](qa/README.md) |
+| 사례와 적용 모집단 확인 | [시나리오 안내](scenarios/README.md) |
+| 공통 QA v3 수치, Excel과 HTML | [평가 자료](evaluation/README.md) |
+| PPTX와 36쪽 미리보기 | [현재 발표 v10](presentation/README.md) |
+| PPTX 제작 | [PPTX-GUIDE.md](presentation/PPTX-GUIDE.md) |
+| 설계 그림 작성 | [그림 지침](guidelines/diagram-guide.md) |
+| 작업 규칙과 변경 영향 | [AGENTS.md](AGENTS.md), [동기화 규칙](guidelines/change-and-sync.md) |
+| 원본과 새 경로 및 보존 검증 | [이관 기록](history/migration.md), [판본 원장](package-manifest.json) |
+
+## 지금의 판본과 반영 상태
+
+| 자료 | 가져온 판본 | 의미와 현재 한계 |
+| --- | --- | --- |
+| 네 DP 설계 | 사용자 확인 파일과 v8/v9/v10의 상세 계약 및 그림 보정 | 현재 설계 설명. 최종 대안의 사용자 채택과 구별한다. |
+| QA01~06 | QA 후보 패키지의 정의, 목표와 0~6점 기준 | 이후 같은 폴더에서 수정 가능하다. 이번 이관에서는 값을 유지했다. |
+| 새 QA07 | 요청 의미 해석 정확도 | 목표, 점수와 우선순위는 미정이다. 이전 QA07 부하 추가 지연과 다른 정의다. |
+| 공통 평가 | COMMON-QA-SYN-3.0 / REVIEW-2 | 3개 profile, 9구성, 26개 사례군의 합성 평가. 서로 다른 profile의 수치를 합산하지 않는다. |
+| 발표 | 36쪽 reference-style v10 | 확인된 PPTX와 미리보기를 그대로 보존했다. 최신 공통 QA v3 전체를 반영한 발표본은 아니다. |
+
+**남아 있는 내용 동기화:** 발표 v10의 기존 PoC, 합성 예시와 미평가 표시는 유지했다. 공통 QA v3를 발표에 어떤 범위로 반영할지는 별도 내용 개정으로 처리한다. QA 목표나 점수가 바뀌어도 기존 원시 결과와 발표 숫자를 자동으로 새 정의의 결과로 바꾸지 않는다. DP44의 과거 음성 QA01 표현은 당시 비교 조건이며 현재 공통 QA01은 화면 표시, 첫 음성은 별도 진단이다.
+
+## 폴더 책임
+
+설계는 `dp02/`, `dp03/`, `dp05/`, `dp44/`에, 후속 공통 그림 보정은 `design-review/`에 있다. QA의 정의와 목표 및 점수는 `qa/`, 사례와 모집단은 `scenarios/`, 판본이 고정된 평가는 `evaluation/`, 발표와 제작 안내는 `presentation/`에서 관리한다. `history/`와 각 하위 이력은 현재 설계나 수치의 대체 정본이 아니다.
+
+상위 [INTENT.md](../../../../../INTENT.md)와 [저장소 AGENTS.md](../../../../../AGENTS.md)는 저장소 전체에 적용하는 정본으로 유지한다. 이 패키지의 [AGENTS.md](AGENTS.md)는 두 문서를 읽은 뒤 이 범위에서 작업할 순서를 정한다. Reference Architecture, accepted ADR, 다른 DP와 실측 원시는 기존 위치와 상태를 유지한다.
+
+## 완료 전 확인
+
+저장소 루트에서 다음 검사를 수행한다. 모두 정적 문서 및 보존 검사이며 모델 실행이나 새 성능 측정이 아니다.
+
+```sh
+.venv/bin/python scripts/architecture/check_current_package.py
+.venv/bin/python scripts/architecture/check_active_markdown_links.py
+.venv/bin/python scripts/architecture/check_active_terminology.py
+git diff --check
+```
+
+발표 내용을 바꿀 때는 [제작 지침](presentation/PPTX-GUIDE.md)에 따라 새 PPTX를 검증하고 렌더를 확인한다. 원본과 같은 해시를 가진 이번 이관은 기존 검증의 대상을 그대로 보존한 것이며 새 Windows 실행 결과를 주장하지 않는다.

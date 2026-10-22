@@ -1,5 +1,7 @@
 # VIA 발표자료
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../architecture/12-decisions/decision-packages/current/presentation/README.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 > **2026-10-14 기능 요구사항 갱신:** [현재 원문](./functional-requirements-and-constraints.md)은 대화 지속성 제공, 음성-화면 지칭 연결, 과거 이력 맥락 제공, 대화-업무 관계 연결의 네 항목이다. 각각 DP-44, DP-47, DP-45, DP-42에 연결한다. 원문에 새 FR별 투명 배경 PNG 네 장을 첨부했다. 기존 발표 파일과 이전 FR 그림은 새 정의를 아직 반영하지 않았다.
 
 현재 통합 발표자료는 **[VIA-architecture-presentation_v13.pptx, 37장](./VIA-architecture-presentation_v13.pptx)**. v11의 필요성 1장을 그림 구성 5안으로 교체해 **2~6장에 모두 수록**. 최신 QA 내용과 나머지 슬라이드는 보존. [현재 순서와 부분 편집 안내](./full-presentation/README.md), [v13 슬라이드 목록](./full-presentation/manifest-v13.json) 참조.

@@ -1,5 +1,7 @@
 # 발표 DP5: 위임을 위한 메모리 관리
 
+> **2026-10-22 현재 편집 위치:** 사용자 확인 후 이 자료를 [네 DP 통합 패키지의 현재 기준본](../current/dp05/README.md)으로 이관했다. 후속 수정은 새 위치에서 한다. 아래 내용과 기존 파일은 해당 판본의 출처 및 재현을 위해 보존하며 새 편집본과 동시에 갱신하지 않는다.
+
 2026-10-20. 사용자 요청에 따라 기존 발표 DP1과 DP4의 지식을 종합한 **두 기본안의 설계 비교**다. 구현, 모델 실행과 성능 측정은 수행하지 않았다. 기본안 선택, QA07의 우선순위와 점수 구간, accepted ADR 변경을 뜻하지 않는다.
 
 발표 DP1~4는 사용자가 지정한 [17장 v4 reference-style 발표](../../../../presentations_files/dp1-dp4-reference-style-20261019/VIA-DP1-DP4-reference-style-17slides-v4-windows.pptx)의 번호다. 발표 DP4는 저장소의 [05-agent-handoff.md](05-agent-handoff.md)이며, 여기의 발표 DP5와 다르다. 현재 최종 자료는 [DP5를 추가한 21장 v5](../../../../presentations_files/dp1-dp4-reference-style-20261019/dp5-v5-review.md)다. 최초 40장 산출물은 다른 기반 파일을 사용했으며 사용자 정정에 따라 이 v5로 바로잡았다.

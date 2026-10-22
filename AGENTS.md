@@ -1,5 +1,7 @@
 # VIA Repository Instructions for Agents
 
+> **Current four-DP workspace (2026-10-22):** For DP2, DP3, DP5 and DP44, start with the [current package rules](docs/architecture/12-decisions/decision-packages/current/AGENTS.md) and its README. The user confirmed the source files and requested consolidation including QA targets, scoring, PPTX and authoring instructions. Edit the current package; prior source locations remain provenance. This file and INTENT.md retain repository-wide authority. Older dated reading paths below do not override this scoped entrypoint.
+
 This file is the operating contract for LLMs and automation working in this repository. The Git repository is the persistent source of truth; a chat session is not.
 
 **Required reading and compliance:** Read and follow [INTENT.md](INTENT.md) before any Architecture design, QA/DP review, implementation, evaluation, documentation or presentation work. It defines the user's enduring SW Architect task intent, including problem discovery, meaningful alternatives, QA relationships, priority-based selection, basic designs versus tactics, and the QA02/new QA07 boundary. Apply it together with this file and the relevant current contracts. Do not revive superseded instructions from dated checkpoints below.
@@ -252,4 +254,4 @@ The user specified these requirements on 2026-10-12 for all future PPTX work:
 - Run `python3 scripts/presentations/presentation_windows_policy.py check NEW.pptx`, then render and inspect all affected slides. Package validation does not establish native Windows rendering.
 - Where Windows cloud validation is available, open and validate the final package with Microsoft's Open XML SDK using `.github/workflows/presentation-windows-check.yml`. State whether PowerPoint itself was installed and exercised; SDK success does not establish native rendering or GIF playback.
 
-See [the unified presentation guide](docs/presentations_files/full-presentation/README.md) for the latest deck, slide keys and editing workflow. Historical source decks and their reproducibility scripts keep their original settings unless the user requests an update.
+For the current four-DP deck, see [PPTX authoring rules](docs/architecture/12-decisions/decision-packages/current/presentation/PPTX-GUIDE.md) and [the current presentation](docs/architecture/12-decisions/decision-packages/current/presentation/README.md). The [earlier unified presentation guide](docs/presentations_files/full-presentation/README.md) remains a historical deck-family reference. Historical source decks and their reproducibility scripts keep their original settings unless the user requests an update.
