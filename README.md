@@ -1,5 +1,7 @@
 # VIA Software Architecture
 
+> **2026-10-23 공통 QA v5:** [네 DP 전체 비교](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v5/README.md)에 QA01 일반36사건 평균/점수와 대기6예정의 별도 결과, QA03 전체24목표의 완료/점수, QA08 추가 모델 메모리를 반영했다. U01~U24의 VIA 자체 처리와 Agent 위임 책임도 명시했다. 문서·JSON·Excel·HTML을 함께 갱신했으며 분석 가정의 계산값이다. QA02/07 실제 출력은 없어 미산출이다. v4/v3와 발표 v10은 보존하며 아래 과거 수치는 당시 계약으로 읽는다.
+
 > **2026-10-22 공통 QA v4:** [모든 DP와 방안의 전체 비교](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v4/README.md)는 동일한 24입력, 24목표, 33지칭, 6변경 과제와 공통 환경에 7구성을 적용한다. 한 번에 DP 하나만 변경하고 문서·JSON·Excel·HTML을 같은 원장에서 생성했다. QA01 화면과 첫 음성을 구별하며 정확도 QA02/QA07은 관측 출력이 없어 미산출이다. 시간·비용·RAM은 분석 모델, QA04는 설계 추정이며 실측이 아니다. v3와 발표 v10은 보존했다.
 
 > **2026-10-22 네 DP의 현재 작업 위치:** DP2, DP3, DP5, DP44의 설계와 QA 정의, 목표, 점수, 시나리오, 평가 및 PPTX와 제작 지침은 [통합 작업 패키지](docs/architecture/12-decisions/decision-packages/current/README.md)에서 관리한다. 해당 범위의 후속 편집은 이 패키지에서 한다. 아래 날짜별 설명과 다른 범위의 자료는 출처 및 당시 상태로 읽는다. 발표 v10과 공통 QA v3의 내용 미반영 항목은 새 패키지에 표시했다.

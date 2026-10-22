@@ -4,9 +4,9 @@
 
 ## 바로 열기
 
-**2026-10-23 QA 정의 합의:** QA01은 NORMAL 첫 음성 평균 2초와 별점, WAIT의 별도 보고로 구분했다. QA03은 전체 목표의 VIA 처리 완료 평균 5초다. 두 목표와 점수 구간을 확정했다. QA09는 제거했다. 사용자가 담당 세션의 평가 전체 갱신을 요청했다. [측정 계약과 전달 상태](qa/timing-measurement-contract.md)를 따른다. 아래 v4 숫자와 발표는 이 변경을 반영하지 않는다.
+**2026-10-23 QA 정의 합의:** QA01은 NORMAL 첫 음성 평균 2초와 별점, WAIT의 별도 보고로 구분했다. QA03은 전체 목표의 VIA 처리 완료 평균 5초다. 두 목표와 점수 구간을 확정했다. QA09는 제거했다. 사용자가 담당 세션의 평가 전체 갱신을 요청했다. [측정 계약과 전달 상태](qa/timing-measurement-contract.md)를 따른다. 새 공통 v5는 이 변경을 반영하며, v4 숫자와 발표는 당시 계약으로 보존한다.
 
-**네 DP의 숫자를 함께 보려면 [공통 QA v4](evaluation/common-qa-v4/README.md)의 Excel `전체비교` 또는 HTML을 연다.** 같은 24개 입력과 공통 환경에서 한 DP씩 바꾼 분석 모델이다. v3는 보존했으며 실제 관측 없는 QA02/QA07은 미산출이다.
+**네 DP의 숫자를 함께 보려면 [공통 QA v5](evaluation/common-qa-v5/README.md)의 Excel `전체비교` 또는 HTML을 연다.** 같은24입력과7구성에 QA01 NORMAL36/WAIT6예정, QA03 전체24목표와 QA08 추가 모델 메모리를 적용했다. 조건부 분석값과 점수이며 실측이 아니다. v4/v3는 보존했고 QA02/QA07은 관측이 없어 미산출이다.
 
 | 작업 | 현재 기준 |
 | --- | --- |
@@ -16,7 +16,7 @@
 | DP44 음성 실행과 전달 | [설계와 입력, 정정 및 재개](dp44/README.md) |
 | QA 정의, 목표, 점수와 출처 수정 | [QA 작업 기준](qa/README.md) |
 | 사례와 적용 모집단 확인 | [시나리오 안내](scenarios/README.md) |
-| 공통 QA v4 수치, Excel과 HTML 및 v3 보존본 | [평가 자료](evaluation/README.md) |
+| 공통 QA v5 수치, Excel과 HTML 및 v4/v3 보존본 | [평가 자료](evaluation/README.md) |
 | PPTX와 36쪽 미리보기 | [현재 발표 v10](presentation/README.md) |
 | PPTX 제작 | [PPTX-GUIDE.md](presentation/PPTX-GUIDE.md) |
 | 설계 그림 작성 | [그림 지침](guidelines/diagram-guide.md) |
@@ -28,21 +28,22 @@
 | 자료 | 가져온 판본 | 의미와 현재 한계 |
 | --- | --- | --- |
 | 네 DP 설계 | 사용자 확인 파일과 v8/v9/v10의 상세 계약 및 그림 보정 | 현재 설계 설명. 최종 대안의 사용자 채택과 구별한다. |
-| QA01/QA03 | [현재 QA](qa/README.md), 음성 첫 응답/전체 처리 완료 계약 | NORMAL/WAIT 분리, 목표 2초/5초와 점수 합의 완료. 담당 세션 평가 갱신 대상, v4 미반영 |
+| QA01/QA03 | [현재 QA](qa/README.md), 음성 첫 응답/전체 처리 완료 계약 | NORMAL/WAIT, 목표2초/5초와 점수 합의 완료. v5 새 경계에 반영, v4는 이전 계약 보존 |
 | QA02/QA04~06 | 기존 정의, 목표와 0~6점 기준 | 이번 시간 지표 개정으로 변경하지 않음 |
 | 확장 QA07 | [요청 해석 및 응답 적합성](qa/qa07-request-meaning-accuracy.md), `QA07-REQUEST-RESPONSE-v2` | 최초 해석과 후속 응답 구성/실제 전달의 사례별 전체 충족률. 목표/점수 미정, 상세 단위/종료와 우선순위 검토. |
-| 새 QA08 | [온디바이스 모델 추가 메모리](qa/qa08-on-device-model-memory.md), `QA08-LOCAL-MEM-v1` | 사용자 지정 1 GB 미만 요구. DP 공통 측정 조건과 0~6점은 제안, 미측정. |
-| 현재 공통 계산 | [COMMON-QA-MODEL-4.0](evaluation/common-qa-v4/README.md) | 같은 24입력과 환경, 7구성. 시간·비용·RAM 조건부 계산, QA04 설계 추정, QA02/07 관측 없음. 실측 아님. |
+| 새 QA08 | [온디바이스 모델 추가 메모리](qa/qa08-on-device-model-memory.md), `QA08-LOCAL-MEM-v1` | 사용자 지정 1 GB 미만 요구. v5에 자원 귀속 분석 추정 추가. 실제 계측과 점수는 미확정. |
+| 현재 공통 계산 | [COMMON-QA-MODEL-5.0](evaluation/common-qa-v5/README.md) | 24입력, 7구성. NORMAL/WAIT 음성 사건과 전체 목표 완료, 추가 모델 메모리 추정. QA04 설계 추정, QA02/07 관측 없음. 실측 아님. |
+| 보존 공통 계산 | [COMMON-QA-MODEL-4.0](evaluation/common-qa-v4/README.md) | 이전 화면 QA01 계약과 당시 원값·산출물을 그대로 보존 |
 | 보존 공통 평가 | COMMON-QA-SYN-3.0 / REVIEW-2 | 3개 profile, 9구성, 26개 사례군의 합성 평가. 서로 다른 profile의 수치를 합산하지 않는다. |
 | 발표 | 36쪽 reference-style v10 | 확인된 PPTX와 미리보기를 그대로 보존했다. 최신 공통 QA v3 전체를 반영한 발표본은 아니다. |
 
 **남아 있는 내용 동기화:** 발표 v10의 기존 PoC, 합성 예시와 미평가 표시는 유지했다. 공통 QA v3를 발표에 어떤 범위로 반영할지는 별도 내용 개정으로 처리한다. QA 목표나 점수가 바뀌어도 기존 원시 결과와 발표 숫자를 자동으로 새 정의의 결과로 바꾸지 않는다. DP44의 과거 음성 QA01과 v4의 화면 QA01은 당시 계약이며 새 QA01-VOICE 결과로 재명명하지 않는다.
 
-v4도 발표 v10에는 미반영이다. v4 전체 비교를 발표할 때는 네 DP의 수치·모집단·근거 표기를 함께 개정해야 한다. 이번 변경은 설계와 그림, 기존 점수표를 바꾸지 않았다.
+v4와 v5는 발표 v10에 미반영이다. 최신 전체 비교를 발표할 때는 네 DP의 수치·모집단·근거 표기를 함께 개정해야 한다. 이번 변경은 설계와 그림, 기존 점수표를 바꾸지 않았다.
 
 ## 폴더 책임
 
-**2026-10-22 QA08 신설:** [Galaxy Book 기본 탑재 제약](qa/targets-source-qa08-platform.md)을 근거로 추가 로컬 모델의 메모리 최고량을 평가한다. QA06의 전체 RAM 범위와 기존 적용 상태는 유지한다. 새 QA08은 v3/v4 계산과 발표 v10에 미반영이다. 현재 수치를 새 QA08로 재채점하지 않는다.
+**2026-10-22 QA08 신설:** [Galaxy Book 기본 탑재 제약](qa/targets-source-qa08-platform.md)을 근거로 추가 로컬 모델의 메모리 최고량을 평가한다. QA06의 전체 RAM 범위와 기존 적용 상태는 유지한다. 새 QA08은 v5에서 자원 귀속을 별도로 계산했다. v3/v4와 발표 v10은 보존하며 현재 추정은 제품 적합성 판정이 아니다.
 
 **2026-10-23 QA07 범위 확장:** [현재 명세](qa/qa07-request-meaning-accuracy.md)는 요청 해석과 후속 응답 구성/실제 전달의 적합성을 통합한다. 별도 QA는 추가하지 않았다. 기존 90% 목표/점수와 입력 단위 정의는 [보존본](qa/history/qa07-before-response-scope-20261023/README.md)으로 구별한다. 현재 설계/평가 자료의 이전 QA07 참조를 새 정의의 효과나 결과로 읽지 않는다. 이번 작업은 DP44 설계 변경, 모델 실행이나 재채점을 포함하지 않는다.
 
@@ -57,6 +58,7 @@ v4도 발표 v10에는 미반영이다. v4 전체 비교를 발표할 때는 네
 ```sh
 .venv/bin/python scripts/architecture/check_current_package.py
 .venv/bin/python scripts/architecture/check_common_qa_v4.py
+.venv/bin/python scripts/architecture/check_common_qa_v5.py
 .venv/bin/python scripts/architecture/check_active_markdown_links.py
 .venv/bin/python scripts/architecture/check_active_terminology.py
 git diff --check

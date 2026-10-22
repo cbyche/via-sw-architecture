@@ -1,0 +1,31 @@
+{
+  "version":"COMMON-QA-ORACLE-4.0",
+  "audience":"EVALUATOR_ONLY",
+  "status":"작성된 기능 정답. 후보 출력이나 모델 실행 결과가 아님",
+  "items":[
+    {"id":"U01","referents":[],"meaning":{"action":"explain","targets":["TCP","UDP"],"conditions":{"length":"brief"},"request_relation":"new"}},
+    {"id":"U02","referents":[["R1"]],"meaning":{"action":"summarize","targets":["R1"],"conditions":{"length":"one_sentence"},"request_relation":"follow_up"}},
+    {"id":"U03","referents":[["D1@v1"]],"meaning":{"action":"explain","targets":["D1@v1"],"conditions":{"section":"conclusion"},"request_relation":"new"}},
+    {"id":"U04","referents":[["T1"]],"meaning":{"action":"explain","targets":["TCP"],"conditions":{"keep_task":"T1"},"request_relation":"independent"}},
+    {"id":"U05","referents":[["D1"]],"meaning":{"action":"explain","targets":["TCP","UDP"],"conditions":{"keep_comparison":"D1"},"request_relation":"independent"}},
+    {"id":"U06","referents":[["D1"],["D2"]],"meaning":{"action":"explain","targets":["D2"],"conditions":{"section":"conclusion","keep_analysis":"D1"},"request_relation":"independent"}},
+    {"id":"U07","referents":[["D2"]],"meaning":{"action":"explain","targets":["D2"],"conditions":{"keep_existing_tasks":true},"request_relation":"independent"}},
+    {"id":"U08","referents":[["D1"]],"meaning":{"action":"revise","targets":["D1"],"conditions":{"scope":"cost_only","use_current_read":true},"request_relation":"revise_T1"}},
+    {"id":"U09","referents":[["Q1@v1","Q2@v1"]],"meaning":{"action":"compare","targets":["Q1@v1","Q2@v1"],"conditions":{},"request_relation":"new"}},
+    {"id":"U10","referents":[["Q1","Q2"]],"meaning":{"action":"compare","targets":["Q1","Q2"],"conditions":{"exclude_outside_circle":true},"request_relation":"new"}},
+    {"id":"U11","referents":[["Q1"],["Q2"]],"meaning":{"action":"compare","targets":["Q1","Q2"],"conditions":{"use_two_pointing_times":true},"request_relation":"new"}},
+    {"id":"U12","referents":[["Q1","Q2"]],"meaning":{"action":"compare","targets":["Q1","Q2"],"conditions":{"scope":"delivery_date_only"},"request_relation":"follow_up"}},
+    {"id":"U13","referents":[["D2"],["P"]],"meaning":{"action":"delegate_presentation","targets":["P"],"conditions":{"author_of":"D2"},"request_relation":"new"}},
+    {"id":"U14","referents":[["D2"]],"meaning":{"action":"organize_research","targets":["current_research"],"conditions":{"format_source":"D2","audience":"external_customer"},"request_relation":"new"}},
+    {"id":"U15","referents":[["D2"]],"meaning":{"action":"apply_format","targets":["current_material"],"conditions":{"format_source":"D2","reuse_confirmed_fact":true},"request_relation":"new"}},
+    {"id":"U16","referents":[["F1"]],"meaning":{"action":"revise","targets":["T1"],"conditions":{"audience":"internal_meeting","apply_D2_preference":false,"feedback":"latest_F1"},"request_relation":"revise_T1"}},
+    {"id":"U17","referents":[["Q1"]],"meaning":{"action":"read","targets":["Q1"],"conditions":{"priority":"first"},"request_relation":"new_delivery"}},
+    {"id":"U18","referents":[["R1"],["Q1"]],"meaning":{"action":"read","targets":["Q1"],"conditions":{"withdraw_audio":"R1","cancel_report_task":false},"request_relation":"new_delivery"}},
+    {"id":"U19","referents":[["Q1"],["R0"]],"meaning":{"action":"read_then_resume","targets":["Q1","R0"],"conditions":{"order":["Q1","R0"],"reuse_valid_audio":true},"request_relation":"new_delivery"}},
+    {"id":"U20","referents":[["R0"]],"meaning":{"action":"resume","targets":["R0"],"conditions":{"from_actual_stop":true},"request_relation":"new_delivery"}},
+    {"id":"U21","referents":[["Q1","Q2"],["D2"],["T1"]],"meaning":{"action":"compare","targets":["Q1","Q2"],"conditions":{"format_source":"D2","keep_task":"T1"},"request_relation":"independent"}},
+    {"id":"U22","referents":[["Q1","Q2"],["calendar_question"]],"meaning":{"action":"compare_and_read","targets":["Q1","Q2","calendar_question"],"conditions":{"read_first":"calendar_question"},"request_relation":"new"}},
+    {"id":"U23","referents":[["D2"],["mail_question"]],"meaning":{"action":"create_and_read","targets":["new_material","mail_question"],"conditions":{"format_source":"D2","read_first":"mail_question"},"request_relation":"new"}},
+    {"id":"U24","referents":[["Q1","Q2"],["F1"]],"meaning":{"action":"compare","targets":["Q1","Q2"],"conditions":{"feedback":"latest_F1","use_two_pointing_times":true},"request_relation":"revise_T1"}}
+  ]
+}
