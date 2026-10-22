@@ -1,5 +1,7 @@
 # 평가 계약, 수치와 근거의 현재 진입점
 
+> **현재 QA 정의와의 차이:** [QA01/QA03 개정 계약](../qa/timing-measurement-contract.md)은 합의 중이다. 아래 기존 데이터는 당시 경계 그대로이며 새 음성 QA01이나 완료 경계 권고안의 결과가 아니다. 수치 담당 세션에는 아직 갱신을 요청하지 않았다.
+
 현재 DP2, DP3, DP5, DP44의 같은 입력·환경 비교는 [공통 QA v4](common-qa-v4/README.md)에서 읽는다. [Excel 전체비교](common-qa-v4/artifacts/outputs/01a15dfe-v4/VIA-QA-common-v4.xlsx), [HTML 사례 비교](common-qa-v4/artifacts/outputs/01a15dfe-v4/guide.html), [모든 수치](common-qa-v4/03-results-and-ranges.md)를 제공한다. 정의, 목표, 점수의 편집 기준은 [QA](../qa/README.md), corpus 구분은 [시나리오](../scenarios/README.md)다.
 
 | 근거 | 현재 읽을 자료 | 말할 수 있는 범위 |

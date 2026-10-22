@@ -21,13 +21,12 @@
 | 06 | [RAM 사용량 조사](qa06-memory-research.md) | [QA06](../qa06-local-memory.md) | 사용자 지정 512 MB 요구사항과 기존 조사 이력 및 Windows 계측 한계 |
 | 새 07 | [요청 의미 해석 조사](qa07-meaning-research.md) | [QA07 요청 의미 해석 정확도](../qa07-request-meaning-accuracy.md) | TreeDST 90.8% 참조와 90% 개발 목표 제안, 전체 의미 판정과 한계 |
 | 08 | [Galaxy Book 시스템 요구](../targets-source-qa08-platform.md) | [QA08](../qa08-on-device-model-memory.md) | 1 GB 미만의 사용자 지정 상한과 추가 모델 메모리 측정 조건 |
-| 09 | 기존 음성 출력 자료와 관측 계약 유지 | [QA09](../qa09-audio-delivery-lag.md) | 재생 가능한 시간만 누적하는 음성 타임라인 |
 
-QA07은 의미 해석 연구를 참조한 목표 제안이며 QA08은 사용자 지정 시스템 요구다. QA09의 목표는 음성 전달 경로의 설계 예산 제안이다. 발표자료는 별도 작업 범위다.
+QA07은 의미 해석 연구를 참조한 목표 제안이며 QA08은 사용자 지정 시스템 요구다. QA01/QA03의 기존 조사 수치는 개정 계약에 자동 적용하지 않는다. 발표자료는 별도 작업 범위다.
 
 ## 발표 제작의 진입점
 
-- [QA별 한 장 설명 페이지 구성](../slide-page-plan.md): QA01~09의 제목과 본문 블록 및 예시와 출처 배치
+- [QA별 한 장 설명 페이지 구성](../slide-page-plan.md): 현재 정의와 발표 원고의 반영 상태
 - [목표 수치 도출 논리](../target-rationale.md): 핵심 여섯 QA의 요구에서 수치까지 이어지는 설명
 - [발표용 축약 표](../quality-requirements-table.md#presentation-table): 전체 QA를 한 표에 넣는 문구
 - [이관 전 QA와 DP 대응](../history/source-package-overview-20261015.md#4-qadp-대응과-예상-우열): 당시 구조 차이와 예상 우열 및 커버리지

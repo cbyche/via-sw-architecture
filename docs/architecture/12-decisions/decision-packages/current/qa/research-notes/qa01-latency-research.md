@@ -1,5 +1,7 @@
 # QA01 첫 응답 지연시간 조사 부록
 
+> **적용 상태 정정:** 아래는 화면 첫 응답 1초 목표의 조사 이력이다. [개정 계약](../timing-measurement-contract.md)의 새 목표와 점수로 자동 적용하지 않는다. 음성 QA01/전체 처리 QA03의 목표는 합의 전이다.
+
 > **현재 편집 기준 이관 (2026-10-22):** 이 문서의 QA 정의, 목표, 점수와 출처는 기존 값을 유지한 현재 편집본이다. 본문에 날짜가 붙은 이전 DP 적용표와 사고 실험은 해당 세대의 이력이며 현재 DP2, DP3, DP5, DP44의 수치와 판정은 [공통 QA v3](../../evaluation/common-qa-v3/README.md)를 따른다. [QA 기준 안내](../README.md).
 
 
@@ -61,6 +63,6 @@ VIA의 현재 결론은 유지한다. **QA01은 요청을 이해했다는 구체
 
 ## 6. 발표와 후속 검증에 넘길 자료
 
-슬라이드에는 정의와 1초 목표 및 위 타임라인을 크게 두고 Nielsen과 Microsoft를 각주로 단다. Miller와 Stivers 및 VR 연구는 질문이 나왔을 때 설명하는 보조 자료로 둔다. 0~6점 구간은 [현재 명세 §7](../qa01-first-response-latency.md#7-06점--qa-c01-score-v3)에서 가져온다.
+슬라이드에는 정의와 1초 목표 및 위 타임라인을 크게 두고 Nielsen과 Microsoft를 각주로 단다. Miller와 Stivers 및 VR 연구는 질문이 나왔을 때 설명하는 보조 자료로 둔다. 0~6점 구간은 [현재 명세 §7](../history/timing-before-voice-20261022/qa01-first-response-latency.md#7-06점--qa-c01-score-v3)에서 가져온다.
 
 첫 내용의 정답 판정표, 실제 UI 프레임과 response revision의 연결, source 시계의 오차, 실제 음성 전달 누락 여부는 PoC 준비에서 확인한다. DP45는 반복 조회뿐 아니라 갱신 사건도 같은 모집단의 평균에 포함한다.

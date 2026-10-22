@@ -31,14 +31,14 @@
 
 ## M-04 · P2 — QA9의 좋은 평균 점수로 필수 음성 누락이 가려질 수 있다
 
-- **위치:** [QA9 §6](../qa09-audio-delivery-lag.md), 검토 시점 114~116행 및 §8의 120회 구성.
+- **위치:** [QA9 §6](../history/timing-before-voice-20261022/qa09-audio-delivery-lag.md), 검토 시점 114~116행 및 §8의 120회 구성.
 - **문제:** 음성 미전달을 5,000ms로 두면 119건이 100ms이고 1건이 미전달인 경우 평균은 약 140.8ms로 5점이다. 잘못된 요약은 회귀 위반이라고 하지만 필수 음성 미전달에 대해서는 그와 별개의 기능 실패 판정이 명시되어 있지 않다. “음성을 끝없이 미뤄도 좋은 평가를 받는 빈틈을 막는다”는 목적을 평균만으로는 충족하지 못한다.
 - **최소 수정:** 상한 적용 평균과 점수는 유지할 수 있다. 다만 `필수 음성 1건 이상 미전달 = 공통 기능 회귀 실패`를 독립 조건으로 명시하고, 원값·점수 옆에 항상 표시한다. 실패가 있는 안을 “음성 전달 요구 충족”이나 유효한 지연 우세로 선언하지 않는다. 점수를 새 복합 지표로 바꿀 필요는 없다.
 - **검토 중 보완 재확인 — 해결:** 최신 §6은 필수 음성 미전달을 `+∞` 판정·전체 0점으로 바꾸고 원시 관측 시간과 `AUDIO_NOT_DELIVERED`를 보존한다. 위의 119+1 반례로도 성공 점수를 얻지 못한다. 잘못된 의미의 음성도 유한 지연만으로 성공하지 못한다고 명시했다. 최초 검토 때부터 `t_adopted`의 첫 내용 채택을 시작으로 읽었으며, 최신 본문에서도 이 경계가 유지됨을 확인했다.
 
 ## M-05 · P2 — Windows 소프트웨어 loopback을 실제 음향 출력으로 오인할 수 있다
 
-- **위치:** [QA9 §3와 §8](../qa09-audio-delivery-lag.md), 검토 시점 47행 및 133~139행.
+- **위치:** [QA9 §3와 §8](../history/timing-before-voice-20261022/qa09-audio-delivery-lag.md), 검토 시점 47행 및 133~139행.
 - **문제:** 종료점은 실제 들리는 첫 sample인데 PoC는 종류를 구별하지 않고 Windows audio 출력과 loopback onset을 연결한다. WASAPI loopback은 하드웨어 지원에 따라 audio engine 출력 stream을 capture buffer로 복사할 수 있다. 이 시각이 DAC·장치·스피커를 지난 실제 음향 시작과 같다는 보장은 없다. callback과 loopback을 대조해도 남은 장치 지연을 입증하지는 못한다.
 - **확인한 공식 근거:** [Microsoft Loopback Recording](https://learn.microsoft.com/en-us/windows/win32/coreaudio/loopback-recording)은 하드웨어 loopback pin과 audio-engine stream 복사를 구별한다. [Low Latency Audio](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/low-latency-audio)는 application 제출과 실제 스피커 출력 사이의 render latency를 별도로 정의한다.
 - **최소 수정:** 실제 acoustic onset은 보정한 외부 마이크 또는 적절한 물리 loopback 경로로 검증하도록 하고 capture·device 지연 및 관측 오차를 기록한다. WASAPI/system-mix loopback만 쓴 최소 PoC는 소프트웨어 출력 proxy로 명명하고 실제 청취 지연으로 보고하지 않는다. 현재 fixture 기반 PoC를 제품 전체 음향 시험으로 확대할 필요는 없다.

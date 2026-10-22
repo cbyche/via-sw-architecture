@@ -104,6 +104,15 @@ def main():
     for number in range(1, 7):
         candidates = list(qa.glob(f"qa{number:02d}-*.md"))
         assert len(candidates) == 1, f"QA{number:02d} needs exactly one editable definition"
+        if number in (1, 3):
+            body = candidates[0].read_text()
+            version = "QA01-VOICE-v1" if number == 1 else "QA03-COMPLETION-v1"
+            assert version in body and "TARGET_PENDING_REVIEW" in body
+            assert "SCORE_BANDS_PENDING" in body and "timing-measurement-contract.md" in body
+            assert not re.search(r"^\|\s*[0-6]\s*\|", body, re.M), (
+                "Pending timing targets must not inherit prior score bands"
+            )
+            continue
         bands += check_scores(candidates[0])
     meaning = (qa / "qa07-request-meaning-accuracy.md").read_text()
     assert any(
@@ -112,7 +121,11 @@ def main():
     assert "QA07-REQ-v1" in meaning and "QA07-REQ-score-v1" in meaning
     assert "제안" in meaning and "미측정" in meaning
     bands += check_scores(qa / "qa07-request-meaning-accuracy.md")
-    for path in [*qa.glob("qa08-*.md"), *qa.glob("qa09-*.md")]:
+    assert not list(qa.glob("qa09-*.md")), "QA09 is no longer a standalone active QA"
+    timing = (qa / "timing-measurement-contract.md").read_text()
+    assert "01a15dfe-8b3c-7fe3-87ab-750cd0e2db99" in timing
+    assert "NOT_SENT" in timing and "합의" in timing
+    for path in qa.glob("qa08-*.md"):
         bands += check_scores(path)
     common28 = within_root(required["common28_dataset"])
     counts = validate_common28(json.loads(common28.read_text()))
