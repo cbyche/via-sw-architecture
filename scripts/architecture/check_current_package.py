@@ -119,9 +119,11 @@ def main():
     assert any(
         term in meaning for term in ("미정", "미확정", "미합의")
     ), "QA07 must retain unagreed adoption/priority"
-    assert "QA07-REQ-v1" in meaning and "QA07-REQ-score-v1" in meaning
+    assert "QA07-REQUEST-RESPONSE-v2" in meaning
+    assert "TARGET_PENDING_REVIEW" in meaning and "SCORE_BANDS_PENDING" in meaning
+    assert all(term in meaning for term in ("REQUEST_INTERPRETATION", "RESPONSE_COMPOSITION", "ACTUAL_DELIVERY"))
+    assert not re.search(r"^\|\s*[0-6]\s*\|", meaning, re.M), "Expanded QA07 must not inherit prior bands"
     assert "제안" in meaning and "미측정" in meaning
-    bands += check_scores(qa / "qa07-request-meaning-accuracy.md")
     assert not list(qa.glob("qa09-*.md")), "QA09 is no longer a standalone active QA"
     timing = (qa / "timing-measurement-contract.md").read_text()
     assert "01a15dfe-8b3c-7fe3-87ab-750cd0e2db99" in timing

@@ -15,7 +15,7 @@
 | [QA04](qa04-change-scope.md) | 변경 범위 | 변경 과제당 실제 운영 Rust 모듈 변경 수의 평균 | 3개 이하 제안 |
 | [QA05](qa05-model-cost.md) | 모델 사용 비용 | 지정 활동 묶음의 전체 모델 사용 비용 | COMMON-28 묶음 $2.55 이하 제안. 다른 묶음에 자동 적용하지 않음 |
 | [QA06](qa06-local-memory.md) | 최대 RAM 사용량 | VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB 이하. DP별 적용 상태는 상세 계약 참조 |
-| [QA07](qa07-request-meaning-accuracy.md) | 요청 의미 해석 정확도 | 입력별 최초 필수 의미 전체 일치율 | 90% 이상 제안 |
+| [QA07](qa07-request-meaning-accuracy.md) | 요청 해석 및 응답 적합성 | 요청 처리 사례별 최초 해석, 응답 구성과 실제 전달의 전체 충족률 | **목표/점수 재검토**, 상세 평가 계약 제안 |
 | [QA08](qa08-on-device-model-memory.md) | 온디바이스 모델 추가 메모리 최소화 | 추가 모델 실행에 필요한 동시 메모리 관측 최고량 | 사용자 지정 1 GB 미만 |
 
 <a id="presentation-table"></a>

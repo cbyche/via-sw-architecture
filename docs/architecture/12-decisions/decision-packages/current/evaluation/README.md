@@ -1,5 +1,7 @@
 # 평가 계약, 수치와 근거의 현재 진입점
 
+> **QA07 판본 구분:** 현재 [QA07-REQUEST-RESPONSE-v2](../qa/qa07-request-meaning-accuracy.md)는 요청 해석과 응답 구성/실제 전달까지 확장됐다. 아래 기존 판본의 입력 단위 QA07 값/정답은 당시 계약으로 보존하며 새 사례별 전체 충족률로 재명명하지 않는다. 새 분모와 관측 종료 및 목표/점수는 검토 중이다.
+
 > **현재 QA 정의와의 차이:** [QA01/QA03 개정 계약](../qa/timing-measurement-contract.md)은 2026-10-23 NORMAL/WAIT 분리와 목표/점수까지 합의됐다. 아래 기존 데이터는 당시 경계 그대로이며 새 음성 QA01이나 완료 경계의 결과가 아니다. 사용자가 담당 세션의 새 판본 갱신을 요청했으며 전달 및 진행 상태는 해당 계약을 따른다.
 
 현재 DP2, DP3, DP5, DP44의 같은 입력·환경 비교는 [공통 QA v4](common-qa-v4/README.md)에서 읽는다. [Excel 전체비교](common-qa-v4/artifacts/outputs/01a15dfe-v4/VIA-QA-common-v4.xlsx), [HTML 사례 비교](common-qa-v4/artifacts/outputs/01a15dfe-v4/guide.html), [모든 수치](common-qa-v4/03-results-and-ranges.md)를 제공한다. 정의, 목표, 점수의 편집 기준은 [QA](../qa/README.md), corpus 구분은 [시나리오](../scenarios/README.md)다.

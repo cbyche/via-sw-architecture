@@ -4,7 +4,7 @@
 
 > **2026-10-22 새 QA08:** [온디바이스 모델 추가 메모리](qa08-on-device-model-memory.md)의 1 GB 미만 목표는 [Galaxy Book 기본 탑재 제약](targets-source-qa08-platform.md)으로 사용자가 지정했다. 중간 점수와 세부 측정 조건은 제안이다.
 
-> **2026-10-22 새 QA07:** 요청 의미 해석 정확도의 [상세 목표와 측정 제안](qa07-request-meaning-accuracy.md), [출처 조사](research-notes/qa07-meaning-research.md)를 추가했다. 90% 목표와 0~6점은 검토용 제안이며 우선순위는 미정이다. 아래는 QA01~06의 도출 이력이다.
+> **2026-10-23 QA07 확장:** [요청 해석 및 응답 적합성](qa07-request-meaning-accuracy.md)으로 범위가 넓어졌다. [목표 재검토](research-notes/qa07-meaning-research.md)에 따라 기존 90%와 점수는 자동 승계하지 않는다. 목표/점수는 미정이며 아래는 QA01~06의 도출 이력이다.
 
 > **현재 QA 자료의 이관본 (2026-10-22):** 출처, 원값, 목표 도출과 기존 검토 내용을 유지한다. 문서 안의 이전 DP, 모집단, 검토 상태는 해당 작성 세대에 한정한다. [현재 QA 기준과 적용 범위](README.md).
 
