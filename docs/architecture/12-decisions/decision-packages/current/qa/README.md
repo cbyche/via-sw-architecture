@@ -14,7 +14,7 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 | [QA04 기능 및 연동 변경의 파급 범위](qa04-change-scope.md) | 공통 8개 변경 과제당 실제 운영 모듈 수의 평균; Rust/Python 등 포함 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
-| [QA07 요청 해석 및 응답 적합성](qa07-request-meaning-accuracy.md) | 요청 처리 사례의 최초 해석/응답 구성/실제 전달 전체 충족률 | **목표/점수 미정**, 상세 단위/종료와 우선순위 검토 | [목표 재검토](research-notes/qa07-meaning-research.md), [사례 평가 계획](qa07-evaluation-plan.md) |
+| [QA07 요청 해석 및 응답 적합성](qa07-request-meaning-accuracy.md) | 요청 처리 사례의 최초 해석/응답 구성/실제 전달 전체 충족률 | **90% 이상 목표 제안**, 32사례 × 5회와 0~6점 구체화 완료. 우선순위 미합의 | [90% 목표 근거](research-notes/qa07-meaning-research.md), [사례 평가 계획](qa07-evaluation-plan.md) |
 | [QA08 온디바이스(로컬) 모델 추가 메모리 최소화](qa08-on-device-model-memory.md) | 추가 모델 실행 경로의 같은 시점 메모리 합계 중 최고량 | **사용자 지정 1 GB 미만**, 측정 조건과 점수는 제안, 미측정 | [Galaxy Book 시스템 요구 출처](targets-source-qa08-platform.md) |
 
 선택 우선순위는 기존 **QA01 → QA02 → QA03 → QA04 → QA05 → QA06**을 유지한다. 새 QA07/QA08을 임의로 끼워 넣거나 QA02/QA06을 대체하지 않는다. QA08의 호스트 RAM은 QA06 전체 RAM에도 포함되므로 두 값이나 같은 메모리 절감 효과를 합산하지 않는다. 가중 총점으로 합산하지 않으며 원값, 분모, 단위, 실패와 근거 종류를 함께 남긴다.
@@ -50,6 +50,6 @@ v5는 [새 공통 계약](../evaluation/common-qa-v5/01-common-contract.md)에�
 
 ## 편집과 검증
 
-새 QA 편집은 이 폴더에서 수행하고 정의, 목표, 점수의 변경 이유와 버전을 기록한다. 이관 전 원본과 과거 동결 corpus는 수정하지 않는다. 이관 작업에서는 숫자를 유지했으며 후속 사용자 요청에 따라 QA07의 90% 목표, 점수와 세부 평가 절차를 `QA07-REQ-v1` 제안으로 추가했다. `v1.1`에서는 TreeDST의 정체, 의미 항목별 판정 범위와 80개 후보의 도출 출처를 보완했다. 80건은 전체 의미가 명확하다고 검증된 집합이 아니며 현재 공통 v4의 24입력과 구별한다. 이후 `QA07-REQUEST-RESPONSE-v2`에서 응답 구성/실제 전달까지 범위를 확장하고 사례별 전체 충족률을 제안했다. 이전 v1.1과 목표 90%/점수는 보존본으로 옮겼으며 새 목표/점수는 미정이다. 실제 측정과 기존 결과의 재채점은 수행하지 않았다.
+새 QA 편집은 이 폴더에서 수행하고 정의, 목표, 점수의 변경 이유와 버전을 기록한다. 이관 전 원본과 과거 동결 corpus는 수정하지 않는다. 이관 작업에서는 숫자를 유지했으며 후속 사용자 요청에 따라 QA07의 90% 목표, 점수와 세부 평가 절차를 `QA07-REQ-v1` 제안으로 추가했다. `v1.1`에서는 TreeDST의 정체, 의미 항목별 판정 범위와 80개 후보의 도출 출처를 보완했다. 80건은 전체 의미가 명확하다고 검증된 집합이 아니며 현재 공통 v4의 24입력과 구별한다. 이후 `QA07-REQUEST-RESPONSE-v2`에서 응답 구성/실제 전달까지 범위를 확장하고 사례별 전체 충족률을 제안했다. 이전 v1.1과 목표 90%/점수는 보존본으로 옮겼다. 이후 사용자 구체화 지시에 따라 `QA07-REQUEST-RESPONSE-v3`에서 대화 성공률 연구를 참조한 목표 90%, 32사례와 5회 반복, 기능 기한 및 새 0~6점 제안을 완성했다. [사례별 입력과 정답](qa07-evaluation-cases.md)은 측정 담당의 구현 기준이다. 실제 측정과 기존 결과의 재채점은 수행하지 않았다.
 
 [이관 원장](../qa-migration.json)은 원래 경로, 현재 경로와 원본 SHA256을 기록한다. 원래 문서에 적힌 `check_qa_candidate_package.py` 및 `qa_candidate_population.py`의 명령은 **기존 패키지와 원전 생성 규칙의 검증/재생성 명령**이다. 현재 파일을 갱신하는 명령으로 실행하지 않는다. 현재 패키지의 이관, 링크, 점수 일관성 검사는 `python3 scripts/architecture/check_current_package.py`로 수행하며 제품, 모델, 장치 측정은 아니다. 시나리오나 출력의 후속 편집은 [평가 보존과 편집 규칙](../evaluation/common-qa-v3/migration-and-editing.md)을 따른다.

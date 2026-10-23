@@ -83,7 +83,7 @@ Downstream Agent의 도메인 업무 품질과 일반적인 인계/도구 실행
 
 ### 4.2 QA07의 상태
 
-범위 확장 방향을 반영한 상세 정의는 [QA07-REQUEST-RESPONSE-v2](docs/architecture/12-decisions/decision-packages/current/qa/qa07-request-meaning-accuracy.md)다. 요청 처리 사례의 묶음, 분모와 관측 종료 및 경합 정책은 구체 검토안이며 실행 전에 동결해야 한다. 목표, 0~6점, 핵심 QA 선정과 우선순위는 미정이다. 이전 최초 의미 해석의 90%와 점수 구간은 자동 승계하지 않는다. QA07 번호를 우선순위로 해석하지 않는다.
+사용자의 목표/측정 조건/근거 구체화 지시에 따라 [QA07-REQUEST-RESPONSE-v3](docs/architecture/12-decisions/decision-packages/current/qa/qa07-request-meaning-accuracy.md)를 작성했다. 사례 전체 충족률 90% 이상, 32사례와 5회 반복의 160회, 응답 의무 60초와 사례 300초 및 후속 10초, 100% 우수선과 2%p 0~6점을 작성자 제안으로 완성했다. 숫자와 상세 평가 구성의 사용자 채택 및 핵심 선정/우선순위는 아직 미합의다. 대화 성공률 연구와 중간 오류 평가 연구를 구별하여 근거로 삼으며 이전 TreeDST 파싱 수치를 새 범위에 자동 승계하지 않는다. QA07 번호를 우선순위로 해석하지 않는다.
 
 기존 QA07 명세/목표 제안과 입력 단위 평가/결과는 판본을 구별해 보존하고 새 의미로 재명명하거나 근거 없이 재채점하지 않는다. 현재 총 QA 수는 8개를 유지한다.
 

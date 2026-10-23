@@ -21,10 +21,10 @@
 | 04 | [변경 범위 조사](qa04-change-research.md) | [QA04](../qa04-change-scope.md) | ARGO 145건 집계와 40% 개선 요구 및 Rust 모듈 집계 단위 |
 | 05 | [모델 비용 조사](qa05-cost-research.md) | [QA05](../qa05-model-cost.md) | gpt-realtime 공개 단가와 공통 28개 묶음의 상세 견적 |
 | 06 | [RAM 사용량 조사](qa06-memory-research.md) | [QA06](../qa06-local-memory.md) | 사용자 지정 512 MB 요구사항과 기존 조사 이력 및 Windows 계측 한계 |
-| 07 | [확장 범위의 목표 재검토](qa07-meaning-research.md) | [QA07 요청 해석 및 응답 적합성](../qa07-request-meaning-accuracy.md) | 사례별 전체 충족률. 이전 TreeDST 참조의 역할과 90%/점수 미승계 |
+| 07 | [확장 범위의 90% 목표와 평가 근거](qa07-meaning-research.md) | [QA07 요청 해석 및 응답 적합성](../qa07-request-meaning-accuracy.md) | 사례 전체 충족률 90% 제안. 대화 성공률 연구, 중간 오류 평가 연구, 32사례와 5회 반복의 출처 |
 | 08 | [Galaxy Book 시스템 요구](../targets-source-qa08-platform.md) | [QA08](../qa08-on-device-model-memory.md) | 1 GB 미만의 사용자 지정 상한과 추가 모델 메모리 측정 조건 |
 
-QA07은 요청 해석과 응답 구성/실제 전달로 확장하여 목표/점수를 재검토하며 QA08은 사용자 지정 시스템 요구다. QA01/QA03의 기존 조사 수치는 개정 계약에 자동 적용하지 않는다. 발표자료는 별도 작업 범위다.
+QA07은 요청 해석과 응답 구성/실제 전달을 포함한 목표 90%와 평가 절차 및 점수 제안을 완성했으며 QA08은 사용자 지정 시스템 요구다. QA01/QA03의 기존 조사 수치는 개정 계약에 자동 적용하지 않는다. 발표자료는 별도 작업 범위다.
 
 ## 발표 제작의 진입점
 

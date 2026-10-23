@@ -119,10 +119,20 @@ def main():
     assert any(
         term in meaning for term in ("미정", "미확정", "미합의")
     ), "QA07 must retain unagreed adoption/priority"
-    assert "QA07-REQUEST-RESPONSE-v2" in meaning
-    assert "TARGET_PENDING_REVIEW" in meaning and "SCORE_BANDS_PENDING" in meaning
+    assert "QA07-REQUEST-RESPONSE-v3" in meaning
+    assert "AUTHOR_DEFINED_COMPLETE" in meaning
+    assert "TARGET_PENDING_REVIEW" not in meaning and "SCORE_BANDS_PENDING" not in meaning
     assert all(term in meaning for term in ("REQUEST_INTERPRETATION", "RESPONSE_COMPOSITION", "ACTUAL_DELIVERY"))
-    assert not re.search(r"^\|\s*[0-6]\s*\|", meaning, re.M), "Expanded QA07 must not inherit prior bands"
+    bands += check_scores(qa / "qa07-request-meaning-accuracy.md")
+    case_body = (qa / "qa07-evaluation-cases.md").read_text()
+    cases = re.findall(r"^\| (Q7-C\d{2}) \|", case_body, re.M)
+    assert cases == [f"Q7-C{i:02d}" for i in range(1, 33)], "QA07 needs 32 unique ordered case definitions"
+    groups = re.split(r"^### [A-H]\.", case_body, flags=re.M)[1:]
+    assert len(groups) == 8 and all(len(re.findall(r"^\| Q7-C\d{2} \|", g, re.M)) == 4 for g in groups)
+    assert "32 × 5 = 160" in case_body and "144" in meaning
+    snapshot = qa / "history/qa07-before-target-completion-20261023"
+    for item in json.loads((snapshot / "manifest.json").read_text()):
+        assert digest(snapshot / item["snapshot"]) == item["sha256"], "QA07 v2 snapshot changed"
     assert "제안" in meaning and "미측정" in meaning
     assert not list(qa.glob("qa09-*.md")), "QA09 is no longer a standalone active QA"
     timing = (qa / "timing-measurement-contract.md").read_text()
