@@ -1,5 +1,7 @@
 # QA01~06 목표 수치 도출 논리
 
+> **2026-10-23 QA04 개정 안내:** 현재 정의는 [QA04-CHANGE-v4](qa04-change-scope.md), 적용 과제는 [Q4-CHANGES-v4](change-scenarios.md)다. 8개 변경 과제에 Rust/Python 등 실제 운영 모듈을 센다. 아래 이전 6과제/Rust 기준과 ARGO 통계는 당시 도출 이력이며 새 모집단의 측정 결과가 아니다. 평균 3개 이하와 점수 간격은 제안으로 유지하고, ARGO와의 단위/범위 비교 가능성은 별도 확인한다. 발표 파일은 변경하지 않았다.
+
 > **2026-10-23 시간 QA 확정:** 현재는 [QA01 일반 상황 평균 2초와 50% 단축 근거](research-notes/qa01-voice-target-rationale.md), [QA03 평균 5초 처리 예산](research-notes/qa03-completion-target-rationale.md)을 따른다. 목표/우수선/균등 점수 구간이 합의됐다. 아래 시간 QA 설명은 이전 세대의 도출 이력이다.
 
 > **2026-10-22 새 QA08:** [온디바이스 모델 추가 메모리](qa08-on-device-model-memory.md)의 1 GB 미만 목표는 [Galaxy Book 기본 탑재 제약](targets-source-qa08-platform.md)으로 사용자가 지정했다. 중간 점수와 세부 측정 조건은 제안이다.

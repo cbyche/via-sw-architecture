@@ -20,8 +20,14 @@ def main():
     assert d['parent_ledger_sha256']==m.digest(m.BASE/'artifacts/ledger.json')
     for key in ['cases','scenarios','configs','changes','summary','deltas','profile','evidence_kind']:
         assert d[key]==base[key],('v5 changed',key)
-    for index in ['preserved-v5-sha256.json','definition-sources.json']:
-        for p,h in m.read(m.OUT/index).items():assert m.digest(ROOT/p)==h,p
+    for p,h in m.read(m.OUT/'preserved-v5-sha256.json').items():
+        assert m.digest(ROOT/p)==h,p
+    # v6 pins its original definitions; active QA prose may evolve independently.
+    # Exact-byte copies keep the existing hashes and all evaluation artifacts intact.
+    snapshots=m.PARENT/'qa/history/common-v6-definition-snapshot'
+    for p,h in m.read(m.OUT/'definition-sources.json').items():
+        snapshot=snapshots/(Path(p).name+'.txt')
+        assert m.digest(snapshot)==h,('v6 definition snapshot changed',p)
     assert manifest['status']=='PROPOSED_NOT_FROZEN' and manifest['frozen_denominator'] is None
     assert manifest['target'] is manifest['score_bands'] is manifest['repeat_count'] is None
     assert len(manifest['cases'])==24

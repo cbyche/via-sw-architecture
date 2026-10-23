@@ -1,5 +1,7 @@
 # 공통 QA 정의, 목표와 점수의 현재 편집 기준
 
+> **2026-10-23 기존 8개 QA 구체화:** [대표값과 부록 계약](measurement-appendix.md)을 추가했다. QA01은 P95 없이 NORMAL 산술평균과 WAIT 보조 결과를 유지한다. QA02/QA07은 각각 대표 비율 하나로 별도 유지한다. QA04는 [8개 구체 변경 과제](change-scenarios.md)와 실제 운영 모듈 기준 `QA04-CHANGE-v4`로 개정했다. v6에 남아 있는 이전 6과제의 추정값은 새 QA04 결과가 아니다. QA06은 전체 제품 예산이다. 추가 QA와 발표자료는 이번 변경에 포함하지 않는다.
+
 2026-10-23 QA01/QA03 정의, 목표와 점수 합의 / QA01 일반/대기 상황 분리 / QA09 독립 지표 제거 / 담당 세션 평가 갱신 요청 승인
 
 DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점수표를 이 폴더에서 관리한다. 이전 `qa-candidate-package`의 내용은 보존하고 이관한 문서를 앞으로의 편집 기준으로 삼는다. 현재 동일 조건의 계산과 QA07 판정표는 [공통 QA v6](../evaluation/common-qa-v6/README.md), 이전 수치는 [v3 보존본](../evaluation/common-qa-v3/README.md), 입력과 관측 모집단은 [시나리오 안내](../scenarios/README.md)에서 확인한다. 정의 문서에 남은 2026-10-15의 DP별 예상표와 검토 상태는 해당 세대의 이력이다.
@@ -9,7 +11,7 @@ DP2, DP3, DP5와 DP44가 함께 참조하는 QA의 정의와 목표 도출, 점�
 | [QA01 첫 응답 지연시간](qa01-first-response-latency.md) | NORMAL의 첫 실질적 음성 시작까지 평균. WAIT는 해당 DP에 별도 표시 | **평균 2초 이하, 0~6점 합의** | [4초 대비 50% 단축 근거](research-notes/qa01-voice-target-rationale.md) |
 | [QA02 지칭 대상 식별 정확도](qa02-referent-accuracy.md) | 표현/revision별 최초 채택 대상 집합의 완전 일치율 | 93% 이상 목표 제안, 기존 0~6점 유지 | [정확도 조사](research-notes/qa02-accuracy-research.md) |
 | [QA03 VIA 처리시간](qa03-via-processing-time.md) | 전체 목표의 필수 상태/연동/최종 응답 준비까지 VIA 경로 평균 | **평균 5초 이하, 0~6점 합의** | [Windows 지침과 처리 예산](research-notes/qa03-completion-target-rationale.md) |
-| [QA04 변경 범위](qa04-change-scope.md) | 변경 과제당 평균 실제 운영 Rust 모듈 수 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
+| [QA04 기능 및 연동 변경의 파급 범위](qa04-change-scope.md) | 공통 8개 변경 과제당 실제 운영 모듈 수의 평균; Rust/Python 등 포함 | 3개 이하 목표 제안, 기존 0~6점 유지 | [ARGO 145건과 산식](targets-source-qa04-argo.md), [조사](research-notes/qa04-change-research.md) |
 | [QA05 모델 사용 비용](qa05-model-cost.md) | COMMON-28 전체 묶음당 평균 모델 비용 | $2.55 이하 목표 제안, 기존 0~6점 유지 | [공통 견적](common-model-cost-quote.md), [조사](research-notes/qa05-cost-research.md) |
 | [QA06 최대 RAM 사용량](qa06-local-memory.md) | 평가 범위의 VIA 전체 RAM 관측 최고량 | 사용자 지정 512 MB, RAM-v3-MB 점수 유지 | [시스템 요구 출처](targets-source-qa06-platform.md), [조사](research-notes/qa06-memory-research.md) |
 | [QA07 요청 해석 및 응답 적합성](qa07-request-meaning-accuracy.md) | 요청 처리 사례의 최초 해석/응답 구성/실제 전달 전체 충족률 | **목표/점수 미정**, 상세 단위/종료와 우선순위 검토 | [목표 재검토](research-notes/qa07-meaning-research.md), [사례 평가 계획](qa07-evaluation-plan.md) |
@@ -31,7 +33,7 @@ QA03은 전체 필수 처리와 최종 응답 준비의 VIA 경로 평균 5초�
 
 [v6 QA07 매핑](../evaluation/common-qa-v6/02-qa07-case-mapping.md)은 최초 해석, 응답 구성과 실제 전달 의무를 연결했다. 24묶음은 검토안이고 반복/종료 정책과 관측이 없어 전체 충족률과 점수는 미산출이다. v5의 다른 QA 수치를 보존했다.
 
-v5는 [새 공통 계약](../evaluation/common-qa-v5/01-common-contract.md)에서 QA01/03의 새 경계·목표·점수와 QA08 자원 귀속 추정을 반영했다. 기존 동일 사례 비교는 [v4 공통 계약](../evaluation/common-qa-v4/01-common-contract.md)에 보존되어 있다. v4에는 QA01/QA03 개정과 QA07 응답 범위 확장이 미반영이며 24입력과 기존 경계의 계산값을 새 QA 값으로 사용하지 않는다. QA02/QA07은 관측 출력이 없어 미산출이다. QA04는 설계 추정이고 기존 목표·점수나 새 QA07 평가 제안을 자동 적용하지 않는다. 아래 v3는 보존 판본의 역할이다.
+v5는 [새 공통 계약](../evaluation/common-qa-v5/01-common-contract.md)에서 QA01/03의 새 경계·목표·점수와 QA08 자원 귀속 추정을 반영했다. 기존 동일 사례 비교는 [v4 공통 계약](../evaluation/common-qa-v4/01-common-contract.md)에 보존되어 있다. v4에는 QA01/QA03 개정과 QA07 응답 범위 확장이 미반영이며 24입력과 기존 경계의 계산값을 새 QA 값으로 사용하지 않는다. QA02/QA07은 관측 출력이 없어 미산출이다. QA04는 이전 6과제의 설계 추정이며 새 Q4-CHANGES-v4의 8과제 평균/점수로 재사용하지 않는다. 새 QA07 평가 제안도 과거 값에 자동 적용하지 않는다. 아래 v3는 보존 판본의 역할이다.
 
 1. 이 폴더의 명세는 QA의 의미와 원래 목표, 점수, 출처를 관리한다.
 2. [v3 공통 계약](../evaluation/common-qa-v3/01-common-contract.md)은 같은 의미를 Text, Voice/Screen, Delivery의 입력, 목표, 시간, 비용, 메모리 가정에 적용한다. 서로 다른 profile의 값은 합산하거나 DP 간 절대 순위로 읽지 않는다.

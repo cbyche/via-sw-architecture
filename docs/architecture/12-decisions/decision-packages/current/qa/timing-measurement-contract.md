@@ -1,5 +1,7 @@
 # QA01/QA03 시간 측정 계약과 담당 세션 전달
 
+> **2026-10-23 표현/보고 구체화:** 시간 경계와 목표/점수의 판본은 그대로 유지한다. QA01은 P95 없이 산술평균과 NORMAL/WAIT 분리, 요청 종류별 상세는 [부록](measurement-appendix.md)에 둔다. QA03은 첫 응답 이후 남은 필수 처리와 최종 응답 준비까지 포함한다. 이번 QA01~08 정리의 후속 전달은 [구체화 전달 계약](refinement-handoff.md)에서 관리한다.
+
 2026-10-23 / `VIA-TIMING-CONTRACT-v2` / **USER_AGREED_2026-10-23 / 일반/대기 상황 분리, 목표와 점수 합의, 평가 갱신 요청 승인**
 
 [QA01 음성 첫 응답](qa01-first-response-latency.md) / [QA03 전체 처리 완료](qa03-via-processing-time.md) / [현재 목록](README.md)

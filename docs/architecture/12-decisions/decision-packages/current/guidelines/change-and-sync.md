@@ -1,5 +1,7 @@
 # 변경 영향과 동기화
 
+> **2026-10-23 QA 구체화:** [대표값/부록 계약](../qa/measurement-appendix.md)과 [QA04의 8개 변경 과제](../qa/change-scenarios.md)를 적용한다. QA01은 P95 없이 평균 2초와 NORMAL/WAIT 분리, QA02/QA07은 각각 단일 비율로 별도 유지한다. QA06은 전체 제품 예산이다. QA04-CHANGE-v4는 Rust/Python 등 실제 운영 모듈을 세며 v6에 보존된 기존 6과제의 추정값과 호환되지 않는다. 새 QA04 값은 미산출이며 기존 평가 파일과 PPTX는 보존한다. 후속 담당 작업은 [구체화 전달 계약](../qa/refinement-handoff.md)을 따른다.
+
 > **2026-10-23 최신 시간 계약:** QA01-VOICE-v2, QA03-COMPLETION-v1과 [측정/전달 계약 v2](../qa/timing-measurement-contract.md)를 따른다. QA01 NORMAL 평균 2초와 WAIT 별도 표시, QA03 평균 5초 및 0~6점이 합의됐다. 계약, 원장, 계산기, JSON/Excel/HTML과 해설을 새 판본으로 갱신하고 기존 결과와 PPTX는 보존한다.
 
 ## 자료별 변경 순서
