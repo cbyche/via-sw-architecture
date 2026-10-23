@@ -1,6 +1,12 @@
 # VIA Software Architecture
 
-> **2026-10-23 공통 QA v6:** [QA07 사례와 응답 의무](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v6/README.md)를 문서/JSON/Excel/HTML에 반영했다. 해석/구성/실제 전달의 전체 충족 판정이며 분모와 관측은 미완료다. v5 수치는 보존한다.
+**현재 전체 비교:** [공통 QA v9 문서·Excel·HTML](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v9/README.md). QA07 순서 있음 2입력/없음 26입력과 제외 56입력, 다른 QA의 기존 분석 모집단을 구별한다.
+
+> **2026-10-23 QA07 v4 반영:** 현재 QA07은 **업무 순서 및 연결 정확도**다. 사용자 지정 선후 관계와 NEW/EXISTING 및 기존 업무 ID의 최초 판단을 평가한다. 이름과 범위는 사용자 확정, **85%·28입력 × 5회(140회)·3%p 점수는 작성자 제안**이다. 공통 v9에 별도 매핑과 관측 전 평가표를 두었다. 실제 실행 0회, 결과 미산출이며 기존 v7/v8은 보존한다. v8의 응답 구성·전달 범위와 90%·160회는 이전 제안이다.
+
+> **2026-10-23 보존 공통 QA v8:** [전체 비교와 QA07 새 평가표](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v8/README.md)에 QA04 실제 8과제 미측정과 QA07의 32사례 × 5회 계획을 반영했다. QA07 목표 90%와 점수는 작성 완료 제안이며 실제 실행은 0회다. v7과 이전 수치는 보존한다.
+
+> **2026-10-23 보존 공통 QA v6:** [QA07 사례와 응답 의무](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v6/README.md)를 문서/JSON/Excel/HTML에 반영했다. 해석/구성/실제 전달의 전체 충족 판정이며 분모와 관측은 미완료다. v5 수치는 보존한다.
 
 > **2026-10-23 보존 공통 QA v5:** [네 DP 전체 비교](docs/architecture/12-decisions/decision-packages/current/evaluation/common-qa-v5/README.md)에 QA01 일반36사건 평균/점수와 대기6예정의 별도 결과, QA03 전체24목표의 완료/점수, QA08 추가 모델 메모리를 반영했다. U01~U24의 VIA 자체 처리와 Agent 위임 책임도 명시했다. 문서·JSON·Excel·HTML을 함께 갱신했으며 분석 가정의 계산값이다. QA02/07 실제 출력은 없어 미산출이다. v4/v3와 발표 v10은 보존하며 아래 과거 수치는 당시 계약으로 읽는다.
 

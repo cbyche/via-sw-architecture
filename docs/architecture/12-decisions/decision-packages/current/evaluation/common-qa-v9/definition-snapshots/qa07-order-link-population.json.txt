@@ -1,0 +1,727 @@
+{
+  "version": "QA07-ORDER-LINK-POP-v4",
+  "status": "AUTHOR_PROPOSAL_NOT_MEASURED",
+  "source": "docs/architecture/12-decisions/decision-packages/current/scenarios/common-28-v1/common-scenarios.json",
+  "source_sha256": "5d4840a5181f3fcfbdebbf58d1cbb850ae59249280f08022532428bd065cbec1",
+  "selection": "delegated work creation or existing work follow-up; explicit sequence/dependency and independence",
+  "repetitions": 5,
+  "case_count": 28,
+  "trial_count": 140,
+  "target_percent": 85,
+  "required_successes": 119,
+  "observation_timeout_seconds": 60,
+  "cases": [
+    {
+      "source_event_id": "S08-U01",
+      "source_scenario_id": "S08",
+      "input": "이 표들은 그대로 두고 이 문단 아니 저 문단만 고쳐줘.",
+      "source_input_mode": "voice",
+      "initial_state": "표 T1/T2와 문단 P1/P2. 한 발화에서 P1을 가리킨 뒤 P2로 정정. 수정은 Agent에게 위임 첫 수행 안내 채택 후 후속 발화에서 T3를 가리켜 보존 집합 일부만 정정",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "문단 수정",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S08-U02",
+      "source_scenario_id": "S08",
+      "input": "보존할 표는 첫째와 이 표로 바꿔. 문단 수정은 유지해.",
+      "source_input_mode": "voice",
+      "initial_state": "표 T1/T2와 문단 P1/P2. 한 발화에서 P1을 가리킨 뒤 P2로 정정. 수정은 Agent에게 위임 첫 수행 안내 채택 후 후속 발화에서 T3를 가리켜 보존 집합 일부만 정정",
+      "context_note": "T08은 S08-U01에서 시작한 문단 수정 업무다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "수정 업무의 보존 대상 정정",
+          "link": "EXISTING:T08"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S15-U03",
+      "source_scenario_id": "S15",
+      "input": "아까 문단 설명으로 발표자료 파일을 만들어줘.",
+      "source_input_mode": "text",
+      "initial_state": "선택 DOC-A P1 설명 후 관계없는 질문을 하고 Voice OFF. 이후 Text로 파일 요청",
+      "context_note": "이전 문단 설명은 자료 참조다. 그 설명을 다시 이어가는 요청이 아니라 새로운 파일 생성 업무다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "발표자료 파일 생성",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S16-U01",
+      "source_scenario_id": "S16",
+      "input": "공개 자료를 조사해 제품을 비교해줘. 유료 자료는 제외해.",
+      "source_input_mode": "voice",
+      "initial_state": "조사 Agent AG1과 문서 및 메일 Agent AG2 및 앱 Agent AG3. 승인 필요 동작은 이 시나리오에서 사전 허용",
+      "context_note": "조사와 비교의 내부 도구 순서는 채점하지 않는다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "제품 조사와 비교",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S16-U02",
+      "source_scenario_id": "S16",
+      "input": "F01을 요약한 파일을 만들어줘.",
+      "source_input_mode": "voice",
+      "initial_state": "조사 Agent AG1과 문서 및 메일 Agent AG2 및 앱 Agent AG3. 승인 필요 동작은 이 시나리오에서 사전 허용",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "요약 파일 생성",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S16-U03",
+      "source_scenario_id": "S16",
+      "input": "승인해 둔 M03 메일을 민수에게 보내줘.",
+      "source_input_mode": "voice",
+      "initial_state": "조사 Agent AG1과 문서 및 메일 Agent AG2 및 앱 Agent AG3. 승인 필요 동작은 이 시나리오에서 사전 허용",
+      "context_note": "사전 승인은 제공된 권한이다. 진행 중인 발송 Task가 없는 초기 상태다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "승인된 메일 발송",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S17-U01",
+      "source_scenario_id": "S17",
+      "input": "보고서를 만들고 별도로 메일도 찾아줘.",
+      "source_input_mode": "voice",
+      "initial_state": "외부 결과는 순서와 데이터 의존 및 조건 참/거짓을 검증할 고정 값. 각 복합 입력은 별도 goal 다섯 번째 입력 전에 기존 보고서 TR 실행 중과 메일 TM 승인 대기 및 DOC-A P1 선택을 제공",
+      "context_note": "두 업무는 독립적이다. 원문에 별도로라고 명시됐다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 작성",
+          "link": "NEW"
+        },
+        {
+          "anchor": "메일 검색",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S17-U02",
+      "source_scenario_id": "S17",
+      "input": "파일을 만든 다음 그 파일 이름을 바꿔줘.",
+      "source_input_mode": "voice",
+      "initial_state": "외부 결과는 순서와 데이터 의존 및 조건 참/거짓을 검증할 고정 값. 각 복합 입력은 별도 goal 다섯 번째 입력 전에 기존 보고서 TR 실행 중과 메일 TM 승인 대기 및 DOC-A P1 선택을 제공",
+      "context_note": "이름 변경을 이미 존재하는 무관한 파일 업무에 연결하지 않는다. 내부 Task 개수는 강제하지 않는다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "파일 작성",
+          "link": "NEW"
+        },
+        {
+          "anchor": "파일 이름 변경",
+          "link": "NEW"
+        }
+      ],
+      "before": [
+        [
+          "파일 작성",
+          "파일 이름 변경"
+        ]
+      ]
+    },
+    {
+      "source_event_id": "S17-U03",
+      "source_scenario_id": "S17",
+      "input": "메일 검색 결과로 요약 파일을 만들어줘.",
+      "source_input_mode": "voice",
+      "initial_state": "외부 결과는 순서와 데이터 의존 및 조건 참/거짓을 검증할 고정 값. 각 복합 입력은 별도 goal 다섯 번째 입력 전에 기존 보고서 TR 실행 중과 메일 TM 승인 대기 및 DOC-A P1 선택을 제공",
+      "context_note": "QA07 문맥 보완: 이 입력이 참조하는 메일 검색 TS17은 진행 중이고 결과는 아직 없다. 이전 S17-G01의 검색 결과는 다른 대상이다. 원전의 새 search ingress 일정은 이 파생 fixture에 재사용하지 않는다.",
+      "context_adapted": true,
+      "units": [
+        {
+          "anchor": "메일 검색 결과를 기다리는 업무",
+          "link": "EXISTING:TS17"
+        },
+        {
+          "anchor": "요약 파일 작성",
+          "link": "NEW"
+        }
+      ],
+      "before": [
+        [
+          "메일 검색 결과를 기다리는 업무",
+          "요약 파일 작성"
+        ]
+      ]
+    },
+    {
+      "source_event_id": "S17-U05",
+      "source_scenario_id": "S17",
+      "input": "보고서는 계속 만들고 메일 보내는 건 취소하고 이 문단은 설명해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "외부 결과는 순서와 데이터 의존 및 조건 참/거짓을 검증할 고정 값. 각 복합 입력은 별도 goal 다섯 번째 입력 전에 기존 보고서 TR 실행 중과 메일 TM 승인 대기 및 DOC-A P1 선택을 제공",
+      "context_note": "문단 설명은 직접 응답으로 QA07 업무 연결 채점 밖이다. TR/TM에는 새 선후 관계가 없다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 계속",
+          "link": "EXISTING:TR"
+        },
+        {
+          "anchor": "메일 발송 취소",
+          "link": "EXISTING:TM"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S18-U01",
+      "source_scenario_id": "S18",
+      "input": "보고서 작업은 어디까지 됐어?",
+      "source_input_mode": "voice",
+      "initial_state": "TA의 보고서 2장 결과는 완료됨. 이후 TB 메일 검색 대화가 끼어듦. TA와 실행 중 TB는 같은 Agent의 서로 다른 실행. 현재 입력은 이전 TA를 재참조",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 상태 조회",
+          "link": "EXISTING:TA"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S18-U02",
+      "source_scenario_id": "S18",
+      "input": "그 보고서는 결론을 먼저 놓고 두 장으로 줄여줘.",
+      "source_input_mode": "voice",
+      "initial_state": "TA의 보고서 2장 결과는 완료됨. 이후 TB 메일 검색 대화가 끼어듦. TA와 실행 중 TB는 같은 Agent의 서로 다른 실행. 현재 입력은 이전 TA를 재참조",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 수정",
+          "link": "EXISTING:TA"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S18-U03",
+      "source_scenario_id": "S18",
+      "input": "그 수정본을 자료로 별도의 발표자료 파일을 만들어줘.",
+      "source_input_mode": "voice",
+      "initial_state": "TA의 보고서 2장 결과는 완료됨. 이후 TB 메일 검색 대화가 끼어듦. TA와 실행 중 TB는 같은 Agent의 서로 다른 실행. 현재 입력은 이전 TA를 재참조",
+      "context_note": "TA의 수정본을 자료로 재사용해도 별도 발표자료를 만드는 새 업무다. 완료된 TA를 다시 실행해야 한다는 선후 관계는 없다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "발표자료 파일 생성",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S20-U02",
+      "source_scenario_id": "S20",
+      "input": "보고서는 PDF로 만들어줘. 메일은 보내지 마.",
+      "source_input_mode": "voice",
+      "initial_state": "TA는 파일 형식, TB는 수신자 질문을 동시에 보낼 예정",
+      "context_note": "파일 형식 값이나 수신자 값 자체는 QA07 점수가 아니다. 각 절을 올바른 업무에 연결하는지만 확인한다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 형식 답변",
+          "link": "EXISTING:TA"
+        },
+        {
+          "anchor": "메일 발송 거부",
+          "link": "EXISTING:TB"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S22-U01",
+      "source_scenario_id": "S22",
+      "input": "대기 중인 T1은 실행하지 마.",
+      "source_input_mode": "voice",
+      "initial_state": "T1 전송 전 대기, T2 실행 중, T3 완료 직전, T4 이미 완료, T5 취소 미지원. 다른 Task는 유지",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "대기 업무 취소",
+          "link": "EXISTING:T1"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S22-U02",
+      "source_scenario_id": "S22",
+      "input": "진행 중인 T2를 취소해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "T1 전송 전 대기, T2 실행 중, T3 완료 직전, T4 이미 완료, T5 취소 미지원. 다른 Task는 유지",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "진행 업무 취소",
+          "link": "EXISTING:T2"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S22-U03",
+      "source_scenario_id": "S22",
+      "input": "T3를 취소해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "T1 전송 전 대기, T2 실행 중, T3 완료 직전, T4 이미 완료, T5 취소 미지원. 다른 Task는 유지",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "완료 직전 업무 취소",
+          "link": "EXISTING:T3"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S22-U04",
+      "source_scenario_id": "S22",
+      "input": "완료한 T4를 취소해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "T1 전송 전 대기, T2 실행 중, T3 완료 직전, T4 이미 완료, T5 취소 미지원. 다른 Task는 유지",
+      "context_note": "실제 취소 가능 여부나 성공 안내는 별도 기능 평가다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "완료 업무 취소 요청",
+          "link": "EXISTING:T4"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S22-U05",
+      "source_scenario_id": "S22",
+      "input": "T5를 취소해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "T1 전송 전 대기, T2 실행 중, T3 완료 직전, T4 이미 완료, T5 취소 미지원. 다른 Task는 유지",
+      "context_note": "실제 취소 가능 여부나 성공 안내는 별도 기능 평가다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "취소 미지원 업무 취소 요청",
+          "link": "EXISTING:T5"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S23-U01",
+      "source_scenario_id": "S23",
+      "input": "TA와 TB의 결과가 나오면 알려줘.",
+      "source_input_mode": "voice",
+      "initial_state": "TA는 AG1에서 먼저 시작했고 TB는 AG2에서 2초 뒤 시작했다. TB 결과가 먼저, TA 결과가 나중 도착한다. 사용자 foreground는 편집기",
+      "context_note": "Agent 사건의 도착 순서를 사용자 지정 업무 순서로 만들지 않는다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "TA 결과 통지 요청",
+          "link": "EXISTING:TA"
+        },
+        {
+          "anchor": "TB 결과 통지 요청",
+          "link": "EXISTING:TB"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S24-U01",
+      "source_scenario_id": "S24",
+      "input": "F01로 보고서를 만들어줘.",
+      "source_input_mode": "voice",
+      "initial_state": "새 Task 요청 후 Voice OFF 상태에서 Text 조회. Voice 재연결 후 기존 Task 정정",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 생성",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S24-U02",
+      "source_scenario_id": "S24",
+      "input": "보고서 진행 상태 알려줘.",
+      "source_input_mode": "text",
+      "initial_state": "새 Task 요청 후 Voice OFF 상태에서 Text 조회. Voice 재연결 후 기존 Task 정정",
+      "context_note": "T24는 S24-U01에서 시작한 보고서 업무다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 상태 조회",
+          "link": "EXISTING:T24"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S24-U03",
+      "source_scenario_id": "S24",
+      "input": "다시 말할게. 그 보고서는 표를 먼저 보여줘.",
+      "source_input_mode": "voice",
+      "initial_state": "새 Task 요청 후 Voice OFF 상태에서 Text 조회. Voice 재연결 후 기존 Task 정정",
+      "context_note": "표를 먼저 보여달라는 말은 결과 표시 형식이다. 별도 업무의 실행 순서로 채점하지 않는다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "보고서 수정",
+          "link": "EXISTING:T24"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S25-U02",
+      "source_scenario_id": "S25",
+      "input": "이전 대화의 TA 작업 상태만 확인해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "TA가 Conversation OLD에서 실행 중. NEW Conversation을 명시적으로 생성",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "이전 대화 업무 조회",
+          "link": "EXISTING:TA"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S26-U03",
+      "source_scenario_id": "S26",
+      "input": "이 요약으로 Agent에게 파일을 만들어 달라고 해.",
+      "source_input_mode": "voice",
+      "initial_state": "F-PRIVATE 접근 미허용. 외부 전달 범위 제한. Task TA/TB 승인 대기",
+      "context_note": "앞선 요약은 자료 참조다. 이번 파일 생성은 새 업무다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "요약으로 파일 생성",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S26-U06",
+      "source_scenario_id": "S26",
+      "input": "TA만 승인해. TB는 보내지 마.",
+      "source_input_mode": "voice",
+      "initial_state": "F-PRIVATE 접근 미허용. 외부 전달 범위 제한. Task TA/TB 승인 대기",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "TA 승인",
+          "link": "EXISTING:TA"
+        },
+        {
+          "anchor": "TB 발송 거부",
+          "link": "EXISTING:TB"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S28-U03",
+      "source_scenario_id": "S28",
+      "input": "AG-OFF에게 파일을 만들어 달라고 해.",
+      "source_input_mode": "voice",
+      "initial_state": "F404 없음. 읽기 금지 F403. AG-OFF 미접속. TA 외부 결과 미확인",
+      "context_note": "Agent 미접속 자체는 업무 연결 판단의 오류가 아니다.",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "파일 생성 위임",
+          "link": "NEW"
+        }
+      ],
+      "before": []
+    },
+    {
+      "source_event_id": "S28-U04",
+      "source_scenario_id": "S28",
+      "input": "TA 취소가 끝났는지 확인해줘.",
+      "source_input_mode": "voice",
+      "initial_state": "F404 없음. 읽기 금지 F403. AG-OFF 미접속. TA 외부 결과 미확인",
+      "context_note": "",
+      "context_adapted": false,
+      "units": [
+        {
+          "anchor": "취소 완료 여부 조회",
+          "link": "EXISTING:TA"
+        }
+      ],
+      "before": []
+    }
+  ],
+  "excluded_user_events": [
+    {
+      "source_event_id": "S01-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S01-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S01-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S01-U04",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S02-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S02-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S02-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S02-U04",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S02-U05",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S02-U06",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S03-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S03-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S03-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S03-U04",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S04-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S04-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S05-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S06-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S06-U02",
+      "reason": "단독 입력과 당시 문맥으로 업무 연결 정답이 하나로 정해지지 않음. 확인 동작은 기능 회귀로 유지"
+    },
+    {
+      "source_event_id": "S06-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S07-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S07-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S09-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S09-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S10-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S10-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S11-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S11-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S11-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S12-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S12-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S13-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S13-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S14-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S14-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S14-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S15-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S15-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S16-U04",
+      "reason": "앱 앞으로 띄우기는 단발 UI 제어. 지속 업무 연결 대신 기능 회귀로 유지"
+    },
+    {
+      "source_event_id": "S17-U04",
+      "reason": "조건부 실행 정책이 중심인 원전. 이번 범위는 명시된 선후와 신규/기존 연결에 한정하여 기본 모집단에서 제외"
+    },
+    {
+      "source_event_id": "S19-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S20-U01",
+      "reason": "단독 입력과 당시 문맥으로 업무 연결 정답이 하나로 정해지지 않음. 확인 동작은 기능 회귀로 유지"
+    },
+    {
+      "source_event_id": "S21-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S21-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S25-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S26-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S26-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S26-U04",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S26-U05",
+      "reason": "단독 입력과 당시 문맥으로 업무 연결 정답이 하나로 정해지지 않음. 확인 동작은 기능 회귀로 유지"
+    },
+    {
+      "source_event_id": "S27-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S27-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S27-U03",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S27-U04",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S27-U05",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S28-U01",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    },
+    {
+      "source_event_id": "S28-U02",
+      "reason": "자료/화면/응답 참조, 직접 질의, 음성 제어 또는 접근/선호 관리가 중심이며 이번 업무 요청 모집단 밖"
+    }
+  ]
+}
