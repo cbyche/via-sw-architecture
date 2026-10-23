@@ -119,20 +119,59 @@ def main():
     assert any(
         term in meaning for term in ("미정", "미확정", "미합의")
     ), "QA07 must retain unagreed adoption/priority"
-    assert "QA07-REQUEST-RESPONSE-v3" in meaning
-    assert "AUTHOR_DEFINED_COMPLETE" in meaning
+    assert "QA07-ORDER-LINK-v4" in meaning
+    assert "QA07-ORDER-LINK-score-v4" in meaning
+    assert "업무 순서 및 연결 정확도" in meaning
     assert "TARGET_PENDING_REVIEW" not in meaning and "SCORE_BANDS_PENDING" not in meaning
-    assert all(term in meaning for term in ("REQUEST_INTERPRETATION", "RESPONSE_COMPOSITION", "ACTUAL_DELIVERY"))
     bands += check_scores(qa / "qa07-request-meaning-accuracy.md")
+    population = json.loads((qa / "qa07-order-link-population.json").read_text())
+    assert population["version"] == "QA07-ORDER-LINK-POP-v4"
+    source_path = within_root(population["source"])
+    assert digest(source_path) == population["source_sha256"], "QA07 source population changed"
+    source = json.loads(source_path.read_text())
+    user_events = {
+        event["id"]: event
+        for scenario in source["scenarios"] for event in scenario["events"]
+        if event["kind"] == "user"
+    }
+    cases = population["cases"]
+    ids = [case["source_event_id"] for case in cases]
+    excluded = population["excluded_user_events"]
+    excluded_ids = [item["source_event_id"] for item in excluded]
+    assert len(ids) == len(set(ids)) == population["case_count"] == 28
+    assert len(excluded_ids) == len(set(excluded_ids)) == 56
+    assert not set(ids) & set(excluded_ids)
+    assert set(ids) | set(excluded_ids) == set(user_events), "QA07 selection must account for every source input"
+    assert all(item["reason"] for item in excluded)
+    assert population["trial_count"] == len(cases) * population["repetitions"] == 140
+    assert population["required_successes"] * 100 / population["trial_count"] == population["target_percent"] == 85
+    assert population["observation_timeout_seconds"] == 60
+    assert [c["source_event_id"] for c in cases if c["context_adapted"]] == ["S17-U03"]
+    assert sum(bool(c["before"]) for c in cases) == 2, "Disclose precedence-positive population count"
+    for case in cases:
+        assert case["input"] == user_events[case["source_event_id"]]["input"]
+        unit_anchors = [unit["anchor"] for unit in case["units"]]
+        assert unit_anchors and len(unit_anchors) == len(set(unit_anchors))
+        assert all(re.fullmatch(r"NEW|EXISTING:[^\s:]+", unit["link"]) for unit in case["units"])
+        edges = {tuple(edge) for edge in case["before"]}
+        assert len(edges) == len(case["before"])
+        assert all(len(edge) == 2 and set(edge) <= set(unit_anchors) for edge in edges)
+        closure = set(edges)
+        while True:
+            expanded = closure | {(a, c) for a, b in closure for b2, c in closure if b == b2}
+            if expanded == closure:
+                break
+            closure = expanded
+        assert all(a != b for a, b in closure), "QA07 oracle contains cyclic precedence"
     case_body = (qa / "qa07-evaluation-cases.md").read_text()
-    cases = re.findall(r"^\| (Q7-C\d{2}) \|", case_body, re.M)
-    assert cases == [f"Q7-C{i:02d}" for i in range(1, 33)], "QA07 needs 32 unique ordered case definitions"
-    groups = re.split(r"^### [A-H]\.", case_body, flags=re.M)[1:]
-    assert len(groups) == 8 and all(len(re.findall(r"^\| Q7-C\d{2} \|", g, re.M)) == 4 for g in groups)
-    assert "32 × 5 = 160" in case_body and "144" in meaning
-    snapshot = qa / "history/qa07-before-target-completion-20261023"
-    for item in json.loads((snapshot / "manifest.json").read_text()):
-        assert digest(snapshot / item["snapshot"]) == item["sha256"], "QA07 v2 snapshot changed"
+    assert re.findall(r"^\| (S\d{2}-U\d{2}) \|", case_body, re.M) == ids
+    for directory, version in (
+        ("qa07-before-target-completion-20261023", "v2"),
+        ("qa07-before-order-connection-20261023", "v3"),
+    ):
+        snapshot = qa / "history" / directory
+        for item in json.loads((snapshot / "manifest.json").read_text()):
+            assert digest(snapshot / item["snapshot"]) == item["sha256"], f"QA07 {version} snapshot changed"
     assert "제안" in meaning and "미측정" in meaning
     assert not list(qa.glob("qa09-*.md")), "QA09 is no longer a standalone active QA"
     timing = (qa / "timing-measurement-contract.md").read_text()
